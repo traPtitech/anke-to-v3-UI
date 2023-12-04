@@ -1,0 +1,48 @@
+{
+  "name": "nuxt3-template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "npx nuxi typecheck",
+    "format": "prettier --write --ignore-path .gitignore \"**/*.{js,ts,vue,json,md}\"",
+    "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ext .js,.ts,.vue --ignore-path .gitignore .",
+    "test": "npx nuxi test"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxt/test-utils": "^3.8.1",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@nuxtjs/eslint-module": "^4.1.0",
+    "@nuxtjs/google-fonts": "^3.1.0",
+    "@nuxtjs/stylelint-module": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "eslint-plugin-vue": "^9.19.2",
+    "happy-dom": "^12.10.3",
+    "nuxt": "^3.8.2",
+    "nuxt-vitest": "^0.11.5",
+    "postcss-html": "^1.5.0",
+    "prettier": "^3.1.0",
+    "stylelint": "^15.11.0",
+    "stylelint-config-recess-order": "^4.4.0",
+    "typescript": "^5.3.2",
+    "vitest": "^0.33.0",
+    "vue": "^3.3.8",
+    "vue-router": "^4.2.5",
+    "vue-tsc": "^1.8.24"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
+    "pinia": "^2.1.7",
+    "ress": "^5.0.2"
+  }
+}
