@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     'nuxt-vitest',
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
+    'nuxt-icon',
   ],
   eslint: {
     cache: false,
@@ -26,5 +27,14 @@ export default defineNuxtConfig({
     },
     preload: true,
     download: false,
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "~/assets/style/variable.scss";',
+        },
+      },
+    },
   },
 });
