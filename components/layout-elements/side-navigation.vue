@@ -22,6 +22,7 @@ watch(
       activeIndex.value = prevIndex;
     }
   },
+  { immediate: true },
 );
 </script>
 
