@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
+    "nuxt-icon": "^0.6.6",
     "pinia": "^2.1.7",
     "ress": "^5.0.2"
   }

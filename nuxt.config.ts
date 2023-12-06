@@ -6,6 +6,11 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
+  components: [
+    '~/components/layout-elements',
+    '~/components/ui',
+    '~/components',
+  ],
   modules: [
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
