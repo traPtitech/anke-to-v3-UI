@@ -2,22 +2,29 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ['ress'],
+  css: [
+    'ress',
+    '~/assets/style/theme.css',
+    'primeicons/primeicons.css',
+    '~/assets/style/global.css',
+  ],
   typescript: {
     typeCheck: true,
   },
   components: [
     '~/components/layout-elements',
     '~/components/ui',
+    '~/components/new-questionnaire-form',
     '~/components',
   ],
   modules: [
+    'nuxt-icon',
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     'nuxt-vitest',
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
-    'nuxt-icon',
+    'nuxt-primevue',
   ],
   eslint: {
     cache: false,
@@ -32,6 +39,12 @@ export default defineNuxtConfig({
     },
     preload: true,
     download: false,
+  },
+  pinia: {
+    storesDirs: ['./stores/**'],
+  },
+  appConfig: {
+    nuxtIcon: {},
   },
   vite: {
     css: {
