@@ -19,7 +19,7 @@ const userIds = computed(
   () =>
     users.value
       ?.filter((user) => !user.bot)
-      .map((user) => ({ label: user.name, value: user.id }))
+      .map((user) => ({ label: user.name, value: user.name }))
       .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
 
