@@ -1,0 +1,29 @@
+.p-inputtext::placeholder, .p-multiselect .p-multiselect-label.p-placeholder {
+  color: #d1c7c8;
+}
+
+.p-button.p-button-icon-only {
+  height: 3rem;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  padding: 8px 16px;
+}
+
+.p-calendar .p-datepicker-trigger-icon, .p-multiselect-filter-container .p-multiselect-filter-icon {
+  transform: translateY(-50%);
+  right: 16px;
+}
+
+.p-multiselect-header .p-multiselect-close {
+  display: none;
+}
+
+.p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
+  padding: 8px;
+}
+
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item {
+  height: 2.5rem !important;
+  padding: 0 16px;
+}

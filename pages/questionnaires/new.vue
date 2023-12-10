@@ -1,7 +1,9 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div></div>
+  <div>
+    <NewQuestionnaireForm></NewQuestionnaireForm>
+  </div>
 </template>
 
 <style></style>
