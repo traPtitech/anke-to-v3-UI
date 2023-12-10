@@ -12,12 +12,13 @@ export default defineNuxtConfig({
     '~/components',
   ],
   modules: [
+    'nuxt-icon',
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     'nuxt-vitest',
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
-    'nuxt-icon',
+    'nuxt-primevue',
   ],
   eslint: {
     cache: false,
@@ -32,6 +33,9 @@ export default defineNuxtConfig({
     },
     preload: true,
     download: false,
+  },
+  appConfig: {
+    nuxtIcon: {},
   },
   vite: {
     css: {
