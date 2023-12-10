@@ -15,7 +15,7 @@ const route = useRoute();
         :open="menuOpen"
         class="menu-button"
         @click="menuOpen = !menuOpen"
-      ></MenuIconButton>
+      />
 
       <nuxt-link class="header-logo" href="/">
         <img src="~/assets/img/logo.svg" alt="anke-to" />
@@ -44,7 +44,6 @@ const route = useRoute();
 
 <style lang="scss" scoped>
 $layout-header-background-color: hsl(0, 100%, 98%);
-$layout-header-text-color: #333;
 $side-navigation-accent-color: hsl(0, 70%, 90%);
 
 .container {
@@ -75,6 +74,7 @@ $side-navigation-accent-color: hsl(0, 70%, 90%);
 }
 
 .navigation-menu-container {
+  z-index: 10;
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.2s cubic-bezier(0.19, 1, 0.22, 1);
@@ -98,7 +98,7 @@ $side-navigation-accent-color: hsl(0, 70%, 90%);
 .navigation-menu-link {
   display: inline-flex;
   padding: 8px 16px;
-  color: $layout-header-text-color;
+  color: inherit;
   text-decoration: none;
   font-weight: bold;
   gap: 8px;

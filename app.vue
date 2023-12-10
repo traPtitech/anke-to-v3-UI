@@ -6,21 +6,8 @@
 
 <style lang="scss">
 html {
-  font-family:
-    Inter,
-    'M PLUS 1p',
-    Avenir,
-    Helvetica Neue,
-    Helvetica,
-    Arial,
-    Hiragino Sans,
-    ヒラギノ角ゴシック,
-    YuGothic,
-    Yu Gothic,
-    メイリオ,
-    Meiryo,
-    ＭＳ Ｐゴシック,
-    MS PGothic,
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  color: #4a3c3e;
 }
 </style>
