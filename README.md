@@ -21,6 +21,12 @@ npm run build
 npm run start
 ```
 
+### VSCodeの設定
+
+`.vscode/settings.template.json` を `.vscode/settings.json` にコピーしてください。
+
+また推奨の拡張機能をインストールすることをオススメします。
+
 ### コミットメッセージ
 
 以下のように書いてください。
