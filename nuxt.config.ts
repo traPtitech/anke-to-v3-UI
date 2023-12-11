@@ -2,23 +2,30 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ['ress'],
+  css: ['ress', '~/assets/style/theme.css', '~/assets/style/global.css'],
   typescript: {
     typeCheck: true,
+  },
+  runtimeConfig: {
+    public: {
+      traQClientId: process.env.TRAQ_CLIENT_ID ?? '',
+    },
   },
   components: [
     '~/components/layout-elements',
     '~/components/ui',
+    '~/components/new-questionnaire-form',
     '~/components',
   ],
   modules: [
-    'nuxt-icon',
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     'nuxt-vitest',
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
+    'nuxt-icon',
     'nuxt-primevue',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
   eslint: {
     cache: false,
@@ -33,6 +40,9 @@ export default defineNuxtConfig({
     },
     preload: true,
     download: false,
+  },
+  pinia: {
+    storesDirs: ['./stores/**'],
   },
   appConfig: {
     nuxtIcon: {},

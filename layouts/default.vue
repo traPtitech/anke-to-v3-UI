@@ -22,7 +22,8 @@
 
 main {
   flex: 1;
-  padding: 16px;
+  padding: 32px;
+  overflow-y: auto;
 }
 
 .layout-header {
@@ -40,6 +41,10 @@ main {
 
   .layout-header {
     display: block;
+  }
+
+  main {
+    padding: 16px;
   }
 }
 </style>
