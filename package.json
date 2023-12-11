@@ -13,7 +13,9 @@
     "format": "prettier --write --ignore-path .gitignore \"**/*.{js,ts,vue,json,md}\"",
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue --ignore-path .gitignore .",
-    "test": "npx nuxi test"
+    "test": "npx nuxi test",
+    "openapi:traq": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/traQ/master/docs/v3-api.yaml --output ./utils/type-fetch/traq/openapi.ts",
+    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./utils/type-fetch/anke-to/openapi.ts"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
@@ -22,31 +24,38 @@
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/google-fonts": "^3.1.0",
     "@nuxtjs/stylelint-module": "^5.1.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.1",
-    "@typescript-eslint/parser": "^6.13.1",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
+    "@pinia/nuxt": "^0.5.1",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-unused-imports": "^3.0.0",
     "eslint-plugin-vue": "^9.19.2",
     "happy-dom": "^12.10.3",
     "nuxt": "^3.8.2",
+    "nuxt-icon": "^0.6.7",
     "nuxt-primevue": "^0.2.2",
     "nuxt-vitest": "^0.11.5",
+    "openapi-typescript": "^6.7.2",
+    "pinia": "^2.1.7",
     "postcss-html": "^1.5.0",
     "prettier": "^3.1.0",
+    "primevue": "^3.43.0",
+    "ress": "^5.0.2",
     "sass": "^1.69.5",
+    "smooth-dnd": "^0.12.1",
     "stylelint": "^15.11.0",
     "stylelint-config-recess-order": "^4.4.0",
-    "typescript": "^5.3.2",
+    "type-fest": "^4.8.3",
+    "typescript": "^5.3.3",
     "vitest": "^0.33.0",
-    "vue": "^3.3.8",
+    "vue": "^3.3.10",
     "vue-router": "^4.2.5",
-    "vue-tsc": "^1.8.24"
+    "vue-tsc": "^1.8.25",
+    "vue3-smooth-dnd": "^0.0.6"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.5.1",
-    "nuxt-icon": "^0.6.6",
-    "pinia": "^2.1.7",
-    "ress": "^5.0.2"
+    "js-sha256": "^0.10.1"
   }
 }
