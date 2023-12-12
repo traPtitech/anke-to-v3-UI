@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import MultipleChoiceInput from './multiple-choice-input.vue';
-import NumberInput from './number-input.vue';
-import ScaleInput from './scale-input.vue';
-import SingleChoiceInput from './single-choice-input.vue';
-import TextInput from './text-input.vue';
-import TextLongInput from './text-long-input.vue';
+import MultipleChoiceInput from './form-control-element/multiple-choice-input.vue';
+import NumberInput from './form-control-element/number-input.vue';
+import ScaleInput from './form-control-element/scale-input.vue';
+import SingleChoiceInput from './form-control-element/single-choice-input.vue';
+import TextInput from './form-control-element/text-input.vue';
+import TextLongInput from './form-control-element/text-long-input.vue';
 
 const props = defineProps<{
   modelValue: QuestionSettings;
