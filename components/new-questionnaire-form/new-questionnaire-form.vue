@@ -347,6 +347,7 @@ const isResponseDueDateTimeInvalidForDate = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-height: 32px;
 }
 
 /* smooth-dndのスタイルを上書きするために詳細度を上げる */
