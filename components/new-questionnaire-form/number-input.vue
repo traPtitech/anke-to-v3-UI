@@ -9,7 +9,7 @@ defineEmits<{
 </script>
 
 <template>
-  <InputNumber placeholder="回答 (数値)" :disabled="true" />
+  <InputNumber placeholder="回答 (数値)" disabled />
 </template>
 
 <style lang="scss" scoped></style>

@@ -16,7 +16,7 @@ const options = computed({
 
 <template>
   <ChoiceGroup v-model="options">
-    <RadioButton :model-value="false" :disabled="true" />
+    <RadioButton :model-value="false" disabled />
   </ChoiceGroup>
 </template>
 

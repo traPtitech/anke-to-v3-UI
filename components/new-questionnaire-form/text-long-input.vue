@@ -9,7 +9,7 @@ defineEmits<{
 </script>
 
 <template>
-  <Textarea placeholder="回答 (長文テキスト)" :disabled="true" />
+  <Textarea placeholder="回答 (長文テキスト)" disabled />
 </template>
 
 <style lang="scss" scoped></style>
