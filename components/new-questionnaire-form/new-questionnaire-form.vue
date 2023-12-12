@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import { Container, Draggable } from 'vue3-smooth-dnd';
+
+defineEmits<{
+  (e: 'save', value: QuestionnaireFormSettings): void;
+  (e: 'send', value: QuestionnaireFormSettings): void;
+}>();
+
 const { state, addQuestion, copyQuestion, removeQuestion } =
   useStoreNewQuestionnaireForm();
 
@@ -118,11 +124,11 @@ watch(
           <UserSpecifierInput v-model="state.administrators" />
         </div>
         <div class="form-element form-bottom-switch">
-          <p class="form-label">複数回答可</p>
+          <p class="form-label">1人が複数回答できるか</p>
           <InputSwitch v-model="state.allowMultiResponse" />
         </div>
         <div class="form-element form-bottom-switch">
-          <p class="form-label">匿名投稿</p>
+          <p class="form-label">回答を匿名にするか</p>
           <InputSwitch v-model="state.isAnonymous" />
         </div>
       </div>
@@ -222,6 +228,17 @@ watch(
         </Button>
       </div>
     </Panel>
+
+    <div class="form-action-buttons">
+      <Button outlined class="form-action-button" @click="$emit('save', state)">
+        <Icon name="mdi:content-save" size="24px" />
+        <span>一時保存</span>
+      </Button>
+      <Button class="form-action-button" @click="$emit('send', state)">
+        <Icon name="mdi:send" size="24px" />
+        <span>送信</span>
+      </Button>
+    </div>
   </div>
 </template>
 
@@ -233,6 +250,8 @@ watch(
   max-width: 1024px;
   padding-bottom: 320px;
   margin: 0 auto;
+  padding-right: 176px;
+  box-sizing: content-box;
 }
 
 .questionnaire-metadata-input-container {
@@ -248,6 +267,7 @@ watch(
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px 16px;
+  margin-top: 16px;
 }
 
 @media screen and (max-width: $breakpoint-lg) {
@@ -351,5 +371,41 @@ watch(
   display: flex;
   gap: 8px;
   padding: 8px 12px;
+}
+
+.form-action-buttons {
+  position: fixed;
+  top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateX(1056px);
+}
+
+@media screen and (max-width: 1600px) {
+  .form-action-buttons {
+    position: static;
+    transform: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .new-questionnaire-form-container {
+    padding-right: 0;
+  }
+}
+
+.form-action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+@media screen and (max-width: $breakpoint-sm) {
+  .form-action-buttons {
+    flex-direction: column;
+  }
 }
 </style>
