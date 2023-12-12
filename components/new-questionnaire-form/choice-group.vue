@@ -72,6 +72,7 @@ watch(
         <InputText
           :model-value="option.label"
           class="choice-group-label-input"
+          required
           placeholder="選択肢"
           @update:model-value="
             $emit(

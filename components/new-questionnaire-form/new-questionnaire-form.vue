@@ -98,6 +98,7 @@ const isResponseDueDateTimeInvalidForDate = computed(() => {
       <InputText
         v-model="state.title"
         size="large"
+        required
         placeholder="アンケートのタイトル"
       />
       <Textarea v-model="state.description" placeholder="アンケートの説明" />

@@ -35,7 +35,7 @@ const formComponent = computed(() => formComponents[question.value.type]);
 
 <template>
   <div class="form-control-container">
-    <InputText v-model="question.title" placeholder="質問" />
+    <InputText v-model="question.title" required placeholder="質問" />
     <Textarea
       v-model="question.description"
       placeholder="詳細な説明 (任意)"
