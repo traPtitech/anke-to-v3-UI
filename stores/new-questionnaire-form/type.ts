@@ -54,10 +54,10 @@ export type QuestionnaireFormSettings = {
   title: string;
   description: string;
   responseDueDateTime: string | null;
-  responseViewableBy: 'public' | 'respondents' | 'administrators';
+  responseViewableBy: 'anyone' | 'respondents' | 'admins';
   isAnonymous: boolean;
-  allowMultiResponse: boolean;
+  isAllowingMultipleResponses: boolean;
   targets: UserSpecifier;
-  administrators: UserSpecifier;
+  admins: UserSpecifier;
   questions: QuestionSettings[];
 };

@@ -4,14 +4,14 @@ const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
   title: '',
   description: '',
   responseDueDateTime: null,
-  responseViewableBy: 'public',
+  responseViewableBy: 'anyone',
   isAnonymous: false,
-  allowMultiResponse: false,
+  isAllowingMultipleResponses: false,
   targets: {
     users: [],
     groups: [],
   },
-  administrators: {
+  admins: {
     users: [],
     groups: [],
   },

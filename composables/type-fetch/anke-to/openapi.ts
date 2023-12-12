@@ -110,12 +110,12 @@ export interface components {
      */
     ResponseSortType: "submitted_at" | "-submitted_at" | "title" | "-title" | "modified_at" | "-modified_at";
     /**
-     * @description アンケートの結果を, 運営は見られる ("administrators"), 回答済みの人は見られる ("respondents") 誰でも見られる ("public")
+     * @description アンケートの結果を, 運営は見られる ("admins"), 回答済みの人は見られる ("respondents") 誰でも見られる ("public")
      *
      * @example public
      * @enum {string}
      */
-    ResShareType: "administrators" | "respondents" | "public";
+    ResShareType: "admins" | "respondents" | "public";
     NewQuestionnaire: {
       /** @example 第1回集会らん☆ぷろ募集アンケート */
       title: string;
@@ -125,7 +125,7 @@ export interface components {
       res_time_limit: string;
       res_shared_to: components["schemas"]["ResShareType"];
       targets: components["schemas"]["Users"];
-      administrators: components["schemas"]["Users"];
+      admins: components["schemas"]["Users"];
     };
     NewQuestionnaireResponse: components["schemas"]["QuestionnaireUser"];
     Questionnaire: {
@@ -176,7 +176,7 @@ export interface components {
     };
     QuestionnaireUser: components["schemas"]["Questionnaire"] & {
       targets: components["schemas"]["Users"];
-      administrators: components["schemas"]["Users"];
+      admins: components["schemas"]["Users"];
     };
     /**
      * @description どのタイプの質問か ("Text", "TextArea", "Number", "MultipleChoice", "Checkbox", "LinearScale")

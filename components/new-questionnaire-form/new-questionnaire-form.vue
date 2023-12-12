@@ -12,7 +12,7 @@ const { state, addQuestion, copyQuestion, removeQuestion } =
 const responseViewableByOptions = [
   {
     label: '全体',
-    value: 'public',
+    value: 'anyone',
   },
   {
     label: '回答した人のみ',
@@ -20,7 +20,7 @@ const responseViewableByOptions = [
   },
   {
     label: '管理者のみ',
-    value: 'administrators',
+    value: 'admins',
   },
 ] satisfies {
   label: string;
@@ -164,11 +164,11 @@ const isResponseDueDateTimeInvalidForDate = computed(() => {
         <div class="form-element">
           <p class="form-label">管理者</p>
           <small>管理者はアンケートを編集できます</small>
-          <UserSpecifierInput v-model="state.administrators" />
+          <UserSpecifierInput v-model="state.admins" />
         </div>
         <div class="form-element form-bottom-switch">
           <p class="form-label">1人が複数回答できるか</p>
-          <InputSwitch v-model="state.allowMultiResponse" />
+          <InputSwitch v-model="state.isAllowingMultipleResponses" />
         </div>
         <div class="form-element form-bottom-switch">
           <p class="form-label">回答を匿名にするか</p>
