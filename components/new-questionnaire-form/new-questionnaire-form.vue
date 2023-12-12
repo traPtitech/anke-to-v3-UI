@@ -124,11 +124,11 @@ watch(
           <UserSpecifierInput v-model="state.administrators" />
         </div>
         <div class="form-element form-bottom-switch">
-          <p class="form-label">複数回答可</p>
+          <p class="form-label">1人が複数回答できるか</p>
           <InputSwitch v-model="state.allowMultiResponse" />
         </div>
         <div class="form-element form-bottom-switch">
-          <p class="form-label">匿名投稿</p>
+          <p class="form-label">回答を匿名にするか</p>
           <InputSwitch v-model="state.isAnonymous" />
         </div>
       </div>
