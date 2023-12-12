@@ -267,6 +267,7 @@ watch(
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px 16px;
+  margin-top: 16px;
 }
 
 @media screen and (max-width: $breakpoint-lg) {
