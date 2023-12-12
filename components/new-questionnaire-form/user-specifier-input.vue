@@ -19,7 +19,7 @@ const userIds = computed(
   () =>
     users.value
       ?.filter((user) => !user.bot)
-      .map((user) => ({ label: user.name, value: user.name }))
+      .map((user) => ({ label: user.name, value: user.name, id: user.id }))
       .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
 
@@ -42,7 +42,7 @@ const groupIds = computed(
     >
       <template #option="{ option }">
         <div class="user-option">
-          <UserIcon :user-id="option.value" class="user-icon" />
+          <UserIcon :user-id="option.id" class="user-icon" />
           <div>{{ option.label }}</div>
         </div>
       </template>
