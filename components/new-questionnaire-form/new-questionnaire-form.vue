@@ -54,6 +54,9 @@ watch(
   responseDueDateTimeDropdown,
   (value) => {
     switch (value) {
+      case 'no-due':
+        state.responseDueDateTime = null;
+        break;
       case '1days':
         responseDueDateTimeInput.value = addDays(today, 1);
         break;
@@ -62,6 +65,10 @@ watch(
         break;
       case '1week':
         responseDueDateTimeInput.value = addDays(today, 7);
+        break;
+      case 'custom':
+        state.responseDueDateTime =
+          responseDueDateTimeInput.value.toISOString();
         break;
     }
   },
@@ -72,10 +79,21 @@ watch(
   responseDueDateTimeInput,
   (value) => (state.responseDueDateTime = value.toISOString()),
 );
+
+const isResponseDueDateTimeInvalidForTargets = computed(() => {
+  if (state.responseDueDateTime !== null) return false;
+
+  return state.targets.users.length > 0 || state.targets.groups.length > 0;
+});
+const isResponseDueDateTimeInvalidForDate = computed(() => {
+  if (state.responseDueDateTime === null) return false;
+
+  return new Date(state.responseDueDateTime) < new Date();
+});
 </script>
 
 <template>
-  <div class="new-questionnaire-form-container">
+  <form class="new-questionnaire-form-container">
     <div class="questionnaire-metadata-input-container">
       <InputText
         v-model="state.title"
@@ -98,6 +116,12 @@ watch(
           <p class="form-label">回答期限</p>
           <Dropdown
             v-model="responseDueDateTimeDropdown"
+            :class="{
+              'p-invalid': isResponseDueDateTimeInvalidForTargets,
+            }"
+            :aria-invalid="
+              isResponseDueDateTimeInvalidForDate ? 'true' : 'false'
+            "
             :options="responseDueDateTimeOptions"
             option-label="label"
             option-value="value"
@@ -105,6 +129,12 @@ watch(
           />
           <Calendar
             v-model="responseDueDateTimeInput"
+            :class="{
+              'p-invalid': isResponseDueDateTimeInvalidForDate,
+            }"
+            :aria-invalid="
+              isResponseDueDateTimeInvalidForDate ? 'true' : 'false'
+            "
             date-format="yy/mm/dd"
             show-time
             hour-format="24"
@@ -112,6 +142,18 @@ watch(
             icon-display="input"
             :disabled="responseDueDateTimeInputDisabled"
           />
+          <small
+            v-if="isResponseDueDateTimeInvalidForTargets"
+            class="invalid-message"
+          >
+            対象者を設定する場合「期限なし」にすることはできません
+          </small>
+          <small
+            v-if="isResponseDueDateTimeInvalidForDate"
+            class="invalid-message"
+          >
+            過去の日時を設定することはできません
+          </small>
         </div>
         <div class="form-element">
           <p class="form-label">対象者</p>
@@ -239,7 +281,7 @@ watch(
         <span>送信</span>
       </Button>
     </div>
-  </div>
+  </form>
 </template>
 
 <style lang="scss" scoped>
@@ -407,5 +449,9 @@ watch(
   .form-action-buttons {
     flex-direction: column;
   }
+}
+
+.invalid-message {
+  color: #f26451;
 }
 </style>
