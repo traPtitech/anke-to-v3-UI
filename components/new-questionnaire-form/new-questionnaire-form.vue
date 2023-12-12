@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { Container, Draggable } from 'vue3-smooth-dnd';
 
-defineEmits<{
+const form = ref<HTMLFormElement | null>(null);
+
+const emit = defineEmits<{
   (e: 'save', value: QuestionnaireFormSettings): void;
   (e: 'send', value: QuestionnaireFormSettings): void;
 }>();
@@ -90,10 +92,32 @@ const isResponseDueDateTimeInvalidForDate = computed(() => {
 
   return new Date(state.responseDueDateTime) < new Date();
 });
+
+const checkValidity = () => {
+  if (form.value === null) return false;
+
+  form.value.reportValidity();
+  if (!form.value.checkValidity()) return false;
+
+  if (isResponseDueDateTimeInvalidForTargets.value) return false;
+  if (isResponseDueDateTimeInvalidForDate.value) return false;
+  if (state.questions.length === 0) return false;
+
+  return true;
+};
+
+const handleSend = () => {
+  if (!checkValidity()) return;
+  emit('send', state);
+};
+
+const handleSave = () => {
+  emit('save', state);
+};
 </script>
 
 <template>
-  <form class="new-questionnaire-form-container">
+  <form ref="form" class="new-questionnaire-form-container">
     <div class="questionnaire-metadata-input-container">
       <InputText
         v-model="state.title"
@@ -273,11 +297,11 @@ const isResponseDueDateTimeInvalidForDate = computed(() => {
     </Panel>
 
     <div class="form-action-buttons">
-      <Button outlined class="form-action-button" @click="$emit('save', state)">
+      <Button outlined class="form-action-button" @click="handleSave">
         <Icon name="mdi:content-save" size="24px" />
         <span>一時保存</span>
       </Button>
-      <Button class="form-action-button" @click="$emit('send', state)">
+      <Button class="form-action-button" @click="handleSend">
         <Icon name="mdi:send" size="24px" />
         <span>送信</span>
       </Button>
