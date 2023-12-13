@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from 'vue';
 const products = ref();
 defineProps({
   id: String,
@@ -33,10 +33,10 @@ products.value = [
   <div class="card">
     <div>
       <h3 class="header">下書き一覧</h3>
-      <DataTable :value="products" removableSort>
+      <DataTable :value="products" removable-sort>
         <Column
           field="code"
-          header="anke-to名"
+          header="アンケート名"
           sortable
           style="width: 41%"
         ></Column>
@@ -56,11 +56,11 @@ products.value = [
       </DataTable>
     </div>
     <div>
-      <h3 class="header">回答済み一覧</h3>
-      <DataTable :value="products" removableSort >
+      <h3 class="header answered">回答済み一覧</h3>
+      <DataTable :value="products" removable-sort>
         <Column
           field="code"
-          header="anke-to名"
+          header="アンケート名"
           sortable
           style="width: 41%"
         ></Column>
@@ -85,9 +85,12 @@ products.value = [
 <style>
 .card {
   width: 90%;
-  margin-left:5%;
+  margin-left: 5%;
 }
 .header {
   padding: 20px;
+}
+.answered {
+  margin-top: 44px;
 }
 </style>
