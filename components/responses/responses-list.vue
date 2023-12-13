@@ -33,7 +33,7 @@ products.value = [
   <div class="card">
     <div>
       <h3 class="header">下書き一覧</h3>
-      <DataTable :value="products" removableSort tableStyle="min-width: 50rem">
+      <DataTable :value="products" removableSort>
         <Column
           field="code"
           header="anke-to名"
@@ -57,7 +57,7 @@ products.value = [
     </div>
     <div>
       <h3 class="header">回答済み一覧</h3>
-      <DataTable :value="products" removableSort tableStyle="min-width: 50rem">
+      <DataTable :value="products" removableSort >
         <Column
           field="code"
           header="anke-to名"
@@ -85,6 +85,7 @@ products.value = [
 <style>
 .card {
   width: 90%;
+  margin-left:5%;
 }
 .header {
   padding: 20px;
