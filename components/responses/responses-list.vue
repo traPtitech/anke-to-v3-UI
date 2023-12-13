@@ -1,32 +1,12 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-const products = ref();
-defineProps({
-  id: String,
-  code: String,
-  name: String,
-  description: String,
-  image: String,
-  price: Number,
-  category: String,
-  quantity: Number,
-  inventoryStatus: String,
-  rating: Number,
-});
-products.value = [
-  {
-    id: '1000',
-    code: 'f230fh0g3',
-    name: 'Bamboo Watch',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    price: 65,
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
-    rating: 5,
-  },
-];
+const props = defineProps<{
+  products: {
+    questionnaire_id: number;
+    submitted_at: string;
+    modified_at: string;
+    response_id: number;
+  }[];
+}>();
 </script>
 
 <template>
@@ -35,7 +15,7 @@ products.value = [
       <h3 class="header">下書き一覧</h3>
       <DataTable :value="products" removable-sort>
         <Column
-          field="code"
+          field="questionnaire_id"
           header="アンケート名"
           sortable
           style="width: 41%"
@@ -47,12 +27,14 @@ products.value = [
           style="width: 22%"
         ></Column>
         <Column
-          field="category"
+          field="modified_at"
           header="最終更新日時"
           sortable
           style="width: 22%"
         ></Column>
-        <Column field="quantity" header="回答" style="width: 15%"></Column>
+        <button>
+        <Column field='response_id' header="回答" style="width: 15%"></Column>
+        </button>
       </DataTable>
     </div>
     <div>
@@ -76,7 +58,7 @@ products.value = [
           sortable
           style="width: 22%"
         ></Column>
-        <Column field="quantity" header="回答" style="width: 15%"></Column>
+        <Column field="https://anke-to.trap.jp/responses/" + responses_id header="回答" style="width: 15%"></Column>
       </DataTable>
     </div>
   </div>
