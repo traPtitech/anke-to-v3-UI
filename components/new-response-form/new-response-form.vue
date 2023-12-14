@@ -157,12 +157,6 @@ const handleSave = () => {
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
 };
-
-watch(
-  () => responseSettings.value,
-  (settings) => console.log(settings),
-  { deep: true },
-);
 </script>
 
 <template>
