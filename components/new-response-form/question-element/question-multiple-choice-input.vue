@@ -40,7 +40,11 @@ const name = computed(() => `multiple-choice-input-${createId()}`);
         :input-id="optionIds[i]"
         :name="name"
         :aria-required="question.required"
-        :pt="{ hiddenInput: { required: question.required } }"
+        :pt="{
+          hiddenInput: {
+            required: question.required && question.indexes.length === 0,
+          },
+        }"
         :class="{ 'p-invalid': question.isInvalid }"
       />
       <label :for="optionIds[i]" class="question-multiple-choice-input-label">
