@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <NewQuestionnaireForm></NewQuestionnaireForm>
+    <NewQuestionnaireForm/>
   </div>
 </template>
 

@@ -9,7 +9,7 @@ const route = useRoute();
 <template>
   <header>
     <div class="container">
-      <div class="navigation-menu-background"></div>
+      <div class="navigation-menu-background" />
 
       <MenuIconButton
         :open="menuOpen"
