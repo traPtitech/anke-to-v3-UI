@@ -74,45 +74,53 @@ const questionnaireResult: QuestionnaireResult = {
   body: [
     {
       question_type: 'Text',
-      answers: [
-        'こっちは結構短めでもいいかも',
-        'テスト回答テスト回答テスト回答テスト回答',
+      aggregated_answers: [
+        { answer: 'こっちは結構短めでもいいかも', answer_count: 1 },
+        { answer: 'テスト回答テスト回答テスト回答テスト回答', answer_count: 1 },
       ],
     },
     {
       question_type: 'TextLong',
-      answers: [
-        'けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～',
-        '改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト',
+      aggregated_answers: [
+        {
+          answer:
+            'けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～',
+          answer_count: 1,
+        },
+        {
+          answer:
+            '改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト',
+          answer_count: 1,
+        },
       ],
     },
     {
       question_type: 'Number',
-      answer_counts_per_number: [
-        { number: 100, answer_count: 1 },
-        { number: 50, answer_count: 1 },
+      aggregated_answers: [
+        { answer: 100, answer_count: 1 },
+        { answer: 50, answer_count: 1 },
       ],
     },
     {
       question_type: 'SingleChoice',
-      answer_counts_per_index: [
-        { index: 0, answer_count: 1 },
-        { index: 1, answer_count: 1 },
+      aggregated_answers: [
+        { answer: 0, answer_count: 1 },
+        { answer: 1, answer_count: 1 },
       ],
     },
     {
       question_type: 'MultipleChoice',
-      answer_counts_per_index: [
-        { index: 0, answer_count: 1 },
-        { index: 1, answer_count: 1 },
-        { index: 2, answer_count: 2 },
+      aggregated_answers: [
+        { answer: 0, answer_count: 1 },
+        { answer: 1, answer_count: 1 },
+        { answer: 2, answer_count: 2 },
       ],
     },
     {
       question_type: 'Scale',
-      answer_counts_per_number: [
+      aggregated_answers: [
         {
-          number: 3,
+          answer: 3,
           answer_count: 2,
         },
       ],
@@ -124,32 +132,33 @@ const questionnaireResponses: QuestionnaireResponses = [
   {
     response_id: 1,
     questionnaire_id: 1,
+    respondent: 'cp20',
     is_draft: false,
     body: [
       {
         question_type: 'Text',
-        text: 'こっちは結構短めでもいいかも',
+        answer: 'こっちは結構短めでもいいかも',
       },
       {
         question_type: 'TextLong',
-        textLong:
+        answer:
           'けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～',
       },
       {
         question_type: 'Number',
-        number: 100,
+        answer: 100,
       },
       {
         question_type: 'SingleChoice',
-        index: 0,
+        answer: 0,
       },
       {
         question_type: 'MultipleChoice',
-        indexes: [0, 2],
+        answer: [0, 2],
       },
       {
         question_type: 'Scale',
-        number: 3,
+        answer: 3,
       },
     ],
     submitted_at: '2023-12-15T00:00:00+09:00',
@@ -158,32 +167,33 @@ const questionnaireResponses: QuestionnaireResponses = [
   {
     response_id: 2,
     questionnaire_id: 1,
+    respondent: 'cp20',
     is_draft: false,
     body: [
       {
         question_type: 'Text',
-        text: 'テスト回答テスト回答テスト回答テスト回答',
+        answer: 'テスト回答テスト回答テスト回答テスト回答',
       },
       {
         question_type: 'TextLong',
-        textLong:
+        answer:
           '改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト',
       },
       {
         question_type: 'Number',
-        number: 50,
+        answer: 50,
       },
       {
         question_type: 'SingleChoice',
-        index: 1,
+        answer: 1,
       },
       {
         question_type: 'MultipleChoice',
-        indexes: [1, 2],
+        answer: [1, 2],
       },
       {
         question_type: 'Scale',
-        number: 3,
+        answer: 3,
       },
     ],
     submitted_at: '2023-12-15T00:00:00+09:00',

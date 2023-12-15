@@ -12,28 +12,12 @@ const props = defineProps<{
   detail: QuestionnaireDetail;
 }>();
 
-const getAnswerFromResponse = (
-  response: QuestionnaireResponses[number]['body'][number],
-) => {
-  const { question_type: type } = response;
-  if (type === 'Text') return response.text;
-  if (type === 'TextLong') return response.textLong;
-  if (type === 'Number') return response.number;
-  if (type === 'SingleChoice') return response.index;
-  if (type === 'MultipleChoice') return response.indexes;
-  if (type === 'Scale') return response.number;
-
-  const _: never = response;
-  throw new Error("This line shouldn't be reached");
-};
-
 const getResponseByQuestionIndex = (questionIndex: number) => {
   return props.responses
     .filter((res) => !res.is_draft)
     .map((res) => ({
-      answer: getAnswerFromResponse(res.body[questionIndex]),
-      // TODO: API定義が修正され次第直す
-      user: 'cp20',
+      answer: res.body[questionIndex].answer,
+      user: res.respondent,
     }));
 };
 
