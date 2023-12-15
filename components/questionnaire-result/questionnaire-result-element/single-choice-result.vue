@@ -8,22 +8,22 @@ const props = defineProps<{
   resultInfo: ResultInfoByType<'SingleChoice', boolean> & QuestionBase;
 }>();
 
-const accumulatedResponses = computed(() => {
+const aggregatedResponses = computed(() => {
   const responses = props.resultInfo.responses.map((res) => res.answer);
-  const accumulated: Map<number, number> = new Map();
+  const aggregated: Map<number, number> = new Map();
   responses.forEach((res) => {
-    if (!accumulated.has(res)) {
-      accumulated.set(res, 1);
+    if (!aggregated.has(res)) {
+      aggregated.set(res, 1);
       return;
     }
 
-    accumulated.set(res, accumulated.get(res)! + 1);
+    aggregated.set(res, aggregated.get(res)! + 1);
   });
 
-  const accumulatedResponses = [...accumulated.keys()].map((key) => ({
+  const aggregatedResponses = [...aggregated.keys()].map((key) => ({
     value: props.resultInfo.options[key],
-    count: accumulated.get(key)!,
-    rate: `${((accumulated.get(key)! / responses.length) * 100).toFixed(1)}%`,
+    count: aggregated.get(key)!,
+    rate: `${((aggregated.get(key)! / responses.length) * 100).toFixed(1)}%`,
     respondents: props.resultInfo.isAnonymous
       ? undefined
       : props.resultInfo.responses
@@ -32,12 +32,12 @@ const accumulatedResponses = computed(() => {
           .join(' '),
   }));
 
-  return accumulatedResponses;
+  return aggregatedResponses;
 });
 </script>
 
 <template>
-  <DataTable :value="accumulatedResponses" sort-field="count" :sort-order="-1">
+  <DataTable :value="aggregatedResponses" sort-field="count" :sort-order="-1">
     <Column field="value" header="回答" sortable />
     <Column field="count" header="回答数" sortable />
     <Column field="rate" header="回答率" sortable />
