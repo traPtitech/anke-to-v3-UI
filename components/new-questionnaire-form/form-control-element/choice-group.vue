@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Container, Draggable } from 'vue3-smooth-dnd';
+import type { QuestionSettingsMultipleChoice } from '~/components/new-questionnaire-form/type';
 
 const props = defineProps<{
   modelValue: QuestionSettingsMultipleChoice['options'];

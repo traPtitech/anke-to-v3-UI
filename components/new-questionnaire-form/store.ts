@@ -1,4 +1,15 @@
-import { defineStore } from 'pinia';
+import type {
+  QuestionSettings,
+  QuestionSettingsBase,
+  QuestionSettingsByType,
+  QuestionSettingsMultipleChoice,
+  QuestionSettingsNumber,
+  QuestionSettingsScale,
+  QuestionSettingsSingleChoice,
+  QuestionSettingsText,
+  QuestionSettingsTextLong,
+  QuestionnaireFormSettings,
+} from '~/components/new-questionnaire-form/type';
 
 const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
   title: '',

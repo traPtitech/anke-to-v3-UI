@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { Container, Draggable } from 'vue3-smooth-dnd';
+import { useStoreNewQuestionnaireForm } from '~/components/new-questionnaire-form/store';
+import type { QuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
 
 const form = ref<HTMLFormElement | null>(null);
 

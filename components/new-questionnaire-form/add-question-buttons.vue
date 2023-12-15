@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { QuestionSettings } from '~/components/new-questionnaire-form/type';
+
 defineEmits<{
   (e: 'add-question', type: QuestionSettings['type']): void;
 }>();

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { QuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
+
 const props = defineProps<{
   modelValue: QuestionnaireFormSettings;
   isResponseDueDateTimeInvalidForTargets: boolean;

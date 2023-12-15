@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { QuestionSettingsTextLong } from '~/components/new-questionnaire-form/type';
+
 defineProps<{
   modelValue: QuestionSettingsTextLong;
 }>();

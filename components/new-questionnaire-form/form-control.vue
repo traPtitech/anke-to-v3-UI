@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { QuestionSettings } from '~/components/new-questionnaire-form/type';
 import MultipleChoiceInput from './form-control-element/multiple-choice-input.vue';
 import NumberInput from './form-control-element/number-input.vue';
 import ScaleInput from './form-control-element/scale-input.vue';
