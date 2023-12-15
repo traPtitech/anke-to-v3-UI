@@ -28,3 +28,71 @@ export const formatDate = (date: Date) => {
 
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
+
+const formatPastRelativeDate = (diff: number) => {
+  const minute = 1000 * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  const week = day * 7;
+  const month = day * 30;
+  const year = day * 365;
+
+  if (diff < minute) {
+    return '今さっき';
+  }
+
+  if (diff < hour) {
+    return `${Math.floor(diff / minute)}分前`;
+  }
+
+  if (diff < day) {
+    return `${Math.floor(diff / hour)}時間前`;
+  }
+
+  if (diff < week) {
+    return `${Math.floor(diff / day)}日前`;
+  }
+
+  if (diff < month) {
+    return `${Math.floor(diff / week)}週間前`;
+  }
+
+  if (diff < year) {
+    return `${Math.floor(diff / month)}ヶ月前`;
+  }
+
+  return `${Math.floor(diff / year)}年前`;
+};
+
+export const formatFutureRelativeDate = (diff: number) => {
+  const minute = 1000 * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  const week = day * 7;
+
+  if (diff < minute) {
+    return '1分以内';
+  }
+
+  if (diff < hour) {
+    return `${Math.floor(diff / minute)}分後`;
+  }
+
+  if (diff < day) {
+    return `${Math.floor(diff / hour)}時間後`;
+  }
+
+  if (diff < week) {
+    return `${Math.floor(diff / day)}日後`;
+  }
+
+  return `${Math.floor(diff / week)}週間後`;
+};
+
+export const formatRelativeDate = (date: Date) => {
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  return diff > 0
+    ? formatPastRelativeDate(diff)
+    : formatFutureRelativeDate(-diff);
+};
