@@ -14,11 +14,10 @@ export default defineNuxtConfig({
   components: [
     '~/components/layout-elements',
     '~/components/ui',
-    {
-      path: '~/components/new-questionnaire-form',
-      pathPrefix: false,
-    },
-      '~/components',
+    '~/components/new-questionnaire-form',
+    { path: '~/components/new-response-form', pathPrefix: false },
+    { path: '~/components/questionnaire-result', pathPrefix: false },
+    '~/components',
   ],
   modules: [
     '@nuxtjs/google-fonts',

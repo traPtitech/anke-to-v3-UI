@@ -14,8 +14,8 @@
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue --ignore-path .gitignore .",
     "test": "npx nuxi test",
-    "openapi:traq": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/traQ/master/docs/v3-api.yaml --output ./utils/type-fetch/traq/openapi.ts",
-    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./utils/type-fetch/anke-to/openapi.ts"
+    "openapi:traq": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/traQ/master/docs/v3-api.yaml --output ./composables/type-fetch/traq/openapi.ts",
+    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",

@@ -18,7 +18,7 @@ const options = computed({
 
 <template>
   <ChoiceGroup v-model="options">
-    <Checkbox :model-value="false" disabled></Checkbox>
+    <Checkbox :model-value="false" disabled />
   </ChoiceGroup>
 </template>
 
