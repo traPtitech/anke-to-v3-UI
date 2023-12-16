@@ -15,3 +15,7 @@ export const moveInArray = <T>(array: T[], from: number, to: number) => {
   const newArray = removeFromArray(array, from);
   return insertToArray(newArray, to, item);
 };
+
+export const excludeFalsy = <T>(array: (T | null | undefined)[]): T[] => {
+  return array.filter((item): item is T => !!item);
+};
