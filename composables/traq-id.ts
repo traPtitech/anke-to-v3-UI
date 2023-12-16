@@ -11,7 +11,16 @@ export const useTraqId = async () => {
     return userID;
   };
 
+  const getTraqIDFromUserID = (userID: string) => {
+    if (users.value === null) return undefined;
+
+    const user = users.value.find((user) => user.id === userID);
+    const traqID = user?.name;
+    return traqID;
+  };
+
   return {
     getUserIDFromTraqID,
+    getTraqIDFromUserID,
   };
 };
