@@ -13,7 +13,7 @@ const { getGroupMembersFromGroupID, getGroupNameFromUserID } =
   await useTraqGroup();
 const { getTraqIDFromUserID } = await useTraqId();
 
-const { users } = await useResolveUserSpecifier(props.detail.targets, {
+const { users } = useResolveUserSpecifier(props.detail.targets, {
   getGroupMembersFromGroupID,
   getGroupNameFromUserID,
   getTraqIDFromUserID,
