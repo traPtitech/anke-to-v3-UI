@@ -46,7 +46,7 @@ const formComponent = computed(() => formComponents[question.value.type]);
     <div class="form-control-footer">
       <div class="form-control-required-switch">
         <label>必須</label>
-        <InputSwitch v-model="question.required"></InputSwitch>
+        <InputSwitch v-model="question.required" />
       </div>
       <div class="form-control-footer-buttons">
         <Button
