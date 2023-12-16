@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-const date = new Date("2023-12-23T00:00:00").getTime();
+const date = new Date('2023-12-17T00:00:00').getTime();
 const now = new Date().getTime();
 const remainingTime = date - now;
-const remainingDays = Math.floor(remainingTime / (1000*60*60*24));
+const test = formatRelativeDate(new Date('2023-12-17T00:00:00'));
 const props = defineProps<{
   products: {
     title: string;
@@ -25,20 +25,21 @@ const props = defineProps<{
           </div>
           <p id="deadline">回答期限：{{ product.response_due_date_time }}</p>
           <div id="remaining">
-          <div v-if="remainingTime>= 0">
-          <p>残り{{ remainingDays }}日</p></div>
-          <div v-else class="closed">
-            <p>回答期間終了</p>
-          </div>
+            <div v-if="remainingTime >= 0">
+              <p>{{ test }}</p>
+            </div>
+            <div v-else class="closed">
+              <p>回答期間終了</p>
+            </div>
           </div>
           <p id="last_modified">最終更新日：{{ product.modified_at }}</p>
           <p id="description">
             {{ product.description }}
           </p>
-          <p id="all_responded">
-            <div v-if="product.all_responded == true">未回答者：なし</div>
-            <div v-else class="remaining_unresponded" >未回答者：あり</div>
-          </p>
+          <div id="all_responded">
+          <div v-if="product.all_responded == true"><p>未回答者：なし</p></div>
+          <div v-else class="remaining_unresponded"><p>未回答者：あり</p></div>
+          </div>
           <button id="show_answer">></button>
         </div>
       </ul>
@@ -48,7 +49,7 @@ const props = defineProps<{
 
 <style scoped>
 .card-content {
-  margin-bottom:2000px ;  
+  margin-bottom: 2000px;
 }
 #container {
   display: grid;
@@ -105,7 +106,7 @@ const props = defineProps<{
 .remaining_unresponded {
   font-weight: bold;
 }
-.closed{
+.closed {
   font-weight: normal;
 }
 </style>
