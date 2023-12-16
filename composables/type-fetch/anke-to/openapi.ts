@@ -3,49 +3,48 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/questionnaires": {
+  '/questionnaires': {
     /** @description 与えられた条件を満たす20件以下のアンケートのリストを取得します。 */
-    get: operations["getQuestionnaires"];
+    get: operations['getQuestionnaires'];
     /** @description 新しいアンケートを作成します。 */
-    post: operations["postQuestionnaire"];
+    post: operations['postQuestionnaire'];
   };
-  "/questionnaires/{questionnaireID}": {
+  '/questionnaires/{questionnaireID}': {
     /** @description アンケートの情報を取得します。 */
-    get: operations["getQuestionnaire"];
+    get: operations['getQuestionnaire'];
     /** @description アンケートを削除します。 */
-    delete: operations["deleteQuestionnaire"];
+    delete: operations['deleteQuestionnaire'];
     /** @description アンケートの情報を変更します。 */
-    patch: operations["editQuestionnaire"];
+    patch: operations['editQuestionnaire'];
   };
-  "/questionnaires/{questionnaireID}/myRemindStatus": {
+  '/questionnaires/{questionnaireID}/myRemindStatus': {
     /** @description 自分に対するリマインドが有効かどうかを取得します。 */
-    get: operations["getQuestionnaireMyRemindStatus"];
+    get: operations['getQuestionnaireMyRemindStatus'];
     /** @description 自分に対するリマインドが有効かどうかを変更します。 */
-    patch: operations["editQuestionnaireMyRemindStatus"];
+    patch: operations['editQuestionnaireMyRemindStatus'];
   };
-  "/questionnaires/{questionnaireID}/responses": {
+  '/questionnaires/{questionnaireID}/responses': {
     /** @description アンケートの全ての回答を取得します。アンケートが匿名回答の場合、取得できません。 */
-    get: operations["getQuestionnaireResponses"];
+    get: operations['getQuestionnaireResponses'];
     /** @description 新しい回答を作成します。アンケートが複数回答可能でない場合、過去の回答が削除されます。 */
-    post: operations["postQuestionnaireResponse"];
+    post: operations['postQuestionnaireResponse'];
   };
-  "/questionnaires/{questionnaireID}/result": {
+  '/questionnaires/{questionnaireID}/result': {
     /** @description アンケートの回答を集計した結果を取得します。回答者の情報は含まれず、アンケートが匿名回答であっても取得できます。 */
-    get: operations["getQuestionnaireResult"];
+    get: operations['getQuestionnaireResult'];
   };
-  "/responses/{responseID}": {
+  '/responses/{responseID}': {
     /** @description 回答を取得します。 */
-    get: operations["getResponse"];
+    get: operations['getResponse'];
     /** @description 回答を削除します */
-    delete: operations["deleteResponse"];
+    delete: operations['deleteResponse'];
     /** @description 回答を変更します。 */
-    patch: operations["editResponse"];
+    patch: operations['editResponse'];
   };
-  "/responses/myResponses": {
+  '/responses/myResponses': {
     /** @description 自分のすべての回答のリストを取得します。 */
-    get: operations["getMyResponses"];
+    get: operations['getMyResponses'];
   };
 }
 
@@ -57,48 +56,78 @@ export interface components {
      * @description アンケート検索時に回答済みかの状態での絞り込み
      * @enum {string}
      */
-    AnsweredType: "answered" | "unanswered";
+    AnsweredType: 'answered' | 'unanswered';
     /**
      * @description question、questionnaire用のソートの種類
      * @enum {string}
      */
-    SortType: "created_at" | "-created_at" | "title" | "-title" | "modified_at" | "-modified_at";
+    SortType:
+      | 'created_at'
+      | '-created_at'
+      | 'title'
+      | '-title'
+      | 'modified_at'
+      | '-modified_at';
     /**
      * @description response用のsortの種類
      * @enum {string}
      */
-    ResponseSortType: "submitted_at" | "-submitted_at" | "title" | "-title" | "modified_at" | "-modified_at";
+    ResponseSortType:
+      | 'submitted_at'
+      | '-submitted_at'
+      | 'title'
+      | '-title'
+      | 'modified_at'
+      | '-modified_at';
     /**
      * @description アンケートの結果を, 運営は見られる ("admins"), 回答済みの人は見られる ("respondents") 誰でも見られる ("anyone")
      *
      * @example anyone
      * @enum {string}
      */
-    ResShareType: "admins" | "respondents" | "anyone";
-    NewQuestionnaire: components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsAllowingMultipleResponses"] & components["schemas"]["QuestionnaireIsPublished"] & components["schemas"]["QuestionnaireTargetsAndAdmins"] & {
-      questions: components["schemas"]["NewQuestion"][];
-    };
-    QuestionnaireDetail: components["schemas"]["QuestionnaireID"] & components["schemas"]["NewQuestionnaire"] & components["schemas"]["QuestionnaireRespondents"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"];
-    QuestionnaireSummary: components["schemas"]["QuestionnaireID"] & components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsAllowingMultipleResponses"] & components["schemas"]["QuestionnaireIsPublished"] & {
-      /**
-       * @description 自分がターゲットになっているかどうか
-       *
-       * @example true
-       */
-      is_targeting_me: boolean;
-      /** Format: date-time */
-      responded_at: string;
-      /** @description 下書きが存在する */
-      has_my_draft: boolean;
-      /** @description 回答が存在する */
-      has_my_response: boolean;
-      /**
-       * @description すべての対象者が回答済みの場合 true を返す。それ以外は false を返す。 (対象者が存在しない場合は true を返す)
-       *
-       * @example true
-       */
-      all_responded: boolean;
-    };
+    ResShareType: 'admins' | 'respondents' | 'anyone';
+    NewQuestionnaire: components['schemas']['QuestionnaireTitle'] &
+      components['schemas']['QuestionnaireDescription'] &
+      components['schemas']['QuestionnaireResponseDueDateTime'] &
+      components['schemas']['QuestionnaireResponseViewableBy'] &
+      components['schemas']['QuestionnaireIsAnonymous'] &
+      components['schemas']['QuestionnaireIsAllowingMultipleResponses'] &
+      components['schemas']['QuestionnaireIsPublished'] &
+      components['schemas']['QuestionnaireTargetsAndAdmins'] & {
+        questions: components['schemas']['NewQuestion'][];
+      };
+    QuestionnaireDetail: components['schemas']['QuestionnaireID'] &
+      components['schemas']['NewQuestionnaire'] &
+      components['schemas']['QuestionnaireRespondents'] &
+      components['schemas']['QuestionnaireCreatedAt'] &
+      components['schemas']['QuestionnaireModifiedAt'];
+    QuestionnaireSummary: components['schemas']['QuestionnaireID'] &
+      components['schemas']['QuestionnaireTitle'] &
+      components['schemas']['QuestionnaireDescription'] &
+      components['schemas']['QuestionnaireResponseDueDateTime'] &
+      components['schemas']['QuestionnaireResponseViewableBy'] &
+      components['schemas']['QuestionnaireIsAnonymous'] &
+      components['schemas']['QuestionnaireIsAllowingMultipleResponses'] &
+      components['schemas']['QuestionnaireIsPublished'] & {
+        /**
+         * @description 自分がターゲットになっているかどうか
+         *
+         * @example true
+         */
+        is_targeting_me: boolean;
+        /** Format: date-time */
+        responded_at: string;
+        /** @description 下書きが存在する */
+        has_my_draft: boolean;
+        /** @description 回答が存在する */
+        has_my_response: boolean;
+        /**
+         * @description すべての対象者が回答済みの場合 true を返す。それ以外は false を返す。 (対象者が存在しない場合は true を返す)
+         *
+         * @example true
+         */
+        all_responded: boolean;
+      };
     QuestionnaireList: {
       /**
        * @description 合計のページ数
@@ -106,7 +135,7 @@ export interface components {
        * @example 1
        */
       page_max: number;
-      questionnaires: components["schemas"]["QuestionnaireSummary"][];
+      questionnaires: components['schemas']['QuestionnaireSummary'][];
     };
     QuestionnaireID: {
       /** @example 1 */
@@ -125,7 +154,7 @@ export interface components {
       response_due_date_time: string;
     };
     QuestionnaireResponseViewableBy: {
-      response_viewable_by: components["schemas"]["ResShareType"];
+      response_viewable_by: components['schemas']['ResShareType'];
     };
     QuestionnaireIsAnonymous: {
       /**
@@ -160,11 +189,11 @@ export interface components {
       modified_at: string;
     };
     QuestionnaireTargetsAndAdmins: {
-      targets: components["schemas"]["UsersAndGroups"];
-      admins: components["schemas"]["UsersAndGroups"];
+      targets: components['schemas']['UsersAndGroups'];
+      admins: components['schemas']['UsersAndGroups'];
     };
     QuestionnaireRespondents: {
-      respondents: components["schemas"]["Users"];
+      respondents: components['schemas']['Users'];
     };
     QuestionnaireHasMyResponse: {
       /** @description 回答済みあるいは下書きが存在する */
@@ -174,14 +203,16 @@ export interface components {
       /** @description 自分に対するリマインドが有効かどうか。ユーザーが対象者でありかつ回答していない場合、この値がtrueであればリマインドが送信される。 */
       is_remind_enabled: boolean;
     };
-    NewQuestion: components["schemas"]["QuestionBase"] & components["schemas"]["QuestionSettingsByType"];
-    Question: components["schemas"]["QuestionBase"] & components["schemas"]["QuestionSettingsByType"] & {
-      /** @example 1 */
-      question_id: number;
-      /** Format: date-time */
-      created_at: string;
-    };
-    Questions: components["schemas"]["Question"][];
+    NewQuestion: components['schemas']['QuestionBase'] &
+      components['schemas']['QuestionSettingsByType'];
+    Question: components['schemas']['QuestionBase'] &
+      components['schemas']['QuestionSettingsByType'] & {
+        /** @example 1 */
+        question_id: number;
+        /** Format: date-time */
+        created_at: string;
+      };
+    Questions: components['schemas']['Question'][];
     QuestionBase: {
       /** @example 1 */
       questionnaire_id: number;
@@ -189,121 +220,143 @@ export interface components {
       description: string;
       is_required: boolean;
     };
-    QuestionSettingsByType: components["schemas"]["QuestionSettingsText"] | components["schemas"]["QuestionSettingsTextLong"] | components["schemas"]["QuestionSettingsNumber"] | components["schemas"]["QuestionSettingsSingleChoice"] | components["schemas"]["QuestionSettingsMultipleChoice"] | components["schemas"]["QuestionSettingsScale"];
-    QuestionSettingsText: components["schemas"]["QuestionTypeText"] & {
+    QuestionSettingsByType:
+      | components['schemas']['QuestionSettingsText']
+      | components['schemas']['QuestionSettingsTextLong']
+      | components['schemas']['QuestionSettingsNumber']
+      | components['schemas']['QuestionSettingsSingleChoice']
+      | components['schemas']['QuestionSettingsMultipleChoice']
+      | components['schemas']['QuestionSettingsScale'];
+    QuestionSettingsText: components['schemas']['QuestionTypeText'] & {
       max_length?: number;
     };
-    QuestionSettingsTextLong: components["schemas"]["QuestionTypeTextLong"] & {
+    QuestionSettingsTextLong: components['schemas']['QuestionTypeTextLong'] & {
       max_length?: number;
     };
-    QuestionSettingsNumber: components["schemas"]["QuestionTypeNumber"] & {
+    QuestionSettingsNumber: components['schemas']['QuestionTypeNumber'] & {
       min_value?: number;
       max_value?: number;
     };
-    QuestionSettingsSingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & {
+    QuestionSettingsSingleChoice: components['schemas']['QuestionTypeSingleChoice'] & {
       options: string[];
     };
-    QuestionSettingsMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & {
+    QuestionSettingsMultipleChoice: components['schemas']['QuestionTypeMultipleChoice'] & {
       options: string[];
     };
-    QuestionSettingsScale: components["schemas"]["QuestionTypeScale"] & {
+    QuestionSettingsScale: components['schemas']['QuestionTypeScale'] & {
       min_value: number;
       max_value: number;
     };
     NewResponse: {
       /** @example true */
       is_draft: boolean;
-      body: components["schemas"]["ResponseBody"][];
+      body: components['schemas']['ResponseBody'][];
     };
-    Response: components["schemas"]["QuestionnaireID"] & {
+    Response: components['schemas']['QuestionnaireID'] & {
       /** @example 1 */
       response_id: number;
       /** Format: date-time */
       submitted_at: string;
       /** Format: date-time */
       modified_at: string;
-    } & components["schemas"]["NewResponse"];
-    Responses: components["schemas"]["Response"][];
-    ResponseBody: components["schemas"]["ResponseSettingsText"] | components["schemas"]["ResponseSettingsTextLong"] | components["schemas"]["ResponseSettingsNumber"] | components["schemas"]["ResponseSettingsSingleChoice"] | components["schemas"]["ResponseSettingsMultipleChoice"] | components["schemas"]["ResponseSettingsScale"];
-    ResponseSettingsText: components["schemas"]["QuestionTypeText"] & {
+    } & components['schemas']['NewResponse'];
+    Responses: components['schemas']['Response'][];
+    ResponseBody:
+      | components['schemas']['ResponseSettingsText']
+      | components['schemas']['ResponseSettingsTextLong']
+      | components['schemas']['ResponseSettingsNumber']
+      | components['schemas']['ResponseSettingsSingleChoice']
+      | components['schemas']['ResponseSettingsMultipleChoice']
+      | components['schemas']['ResponseSettingsScale'];
+    ResponseSettingsText: components['schemas']['QuestionTypeText'] & {
       text: string;
     };
-    ResponseSettingsTextLong: components["schemas"]["QuestionTypeTextLong"] & {
+    ResponseSettingsTextLong: components['schemas']['QuestionTypeTextLong'] & {
       textLong: string;
     };
-    ResponseSettingsNumber: components["schemas"]["QuestionTypeNumber"] & {
+    ResponseSettingsNumber: components['schemas']['QuestionTypeNumber'] & {
       number: number;
     };
-    ResponseSettingsSingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & {
+    ResponseSettingsSingleChoice: components['schemas']['QuestionTypeSingleChoice'] & {
       /** @description 選択肢のインデックス */
       index: number;
     };
-    ResponseSettingsMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & {
+    ResponseSettingsMultipleChoice: components['schemas']['QuestionTypeMultipleChoice'] & {
       /** @description 選択肢のインデックスの配列 */
       indexes: number[];
     };
-    ResponseSettingsScale: components["schemas"]["QuestionTypeScale"] & {
+    ResponseSettingsScale: components['schemas']['QuestionTypeScale'] & {
       number: number;
     };
     QuestionTypeText: {
       /** @enum {string} */
-      question_type: "Text";
+      question_type: 'Text';
     };
     QuestionTypeTextLong: {
       /** @enum {string} */
-      question_type: "TextLong";
+      question_type: 'TextLong';
     };
     QuestionTypeNumber: {
       /** @enum {string} */
-      question_type: "Number";
+      question_type: 'Number';
     };
     QuestionTypeSingleChoice: {
       /** @enum {string} */
-      question_type: "SingleChoice";
+      question_type: 'SingleChoice';
     };
     QuestionTypeMultipleChoice: {
       /** @enum {string} */
-      question_type: "MultipleChoice";
+      question_type: 'MultipleChoice';
     };
     QuestionTypeScale: {
       /** @enum {string} */
-      question_type: "Scale";
+      question_type: 'Scale';
     };
     Result: {
       /** @example 1 */
       questionnaire_id: number;
       /** @example 1 */
       response_count: number;
-      body: components["schemas"]["ResultBody"][];
+      body: components['schemas']['ResultBody'][];
     };
-    ResultBody: components["schemas"]["ResultSettingsText"] | components["schemas"]["ResultSettingsTextLong"] | components["schemas"]["ResultSettingsNumber"] | components["schemas"]["ResultSettingsSingleChoice"] | components["schemas"]["ResultSettingsMultipleChoice"] | components["schemas"]["ResultSettingsScale"];
-    ResultSettingsText: components["schemas"]["QuestionTypeText"] & {
+    ResultBody:
+      | components['schemas']['ResultSettingsText']
+      | components['schemas']['ResultSettingsTextLong']
+      | components['schemas']['ResultSettingsNumber']
+      | components['schemas']['ResultSettingsSingleChoice']
+      | components['schemas']['ResultSettingsMultipleChoice']
+      | components['schemas']['ResultSettingsScale'];
+    ResultSettingsText: components['schemas']['QuestionTypeText'] & {
       /** @description 回答文の配列 */
       answers: string[];
     };
-    ResultSettingsTextLong: components["schemas"]["QuestionTypeTextLong"] & {
+    ResultSettingsTextLong: components['schemas']['QuestionTypeTextLong'] & {
       /** @description 回答文の配列 */
       answers: string[];
     };
-    ResultSettingsNumber: components["schemas"]["QuestionTypeNumber"] & components["schemas"]["ResultSettingsAnswerCountsPerNumber"];
-    ResultSettingsSingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & components["schemas"]["ResultSettingsAnswerCountsPerIndex"];
-    ResultSettingsMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & components["schemas"]["ResultSettingsAnswerCountsPerIndex"];
-    ResultSettingsScale: components["schemas"]["QuestionTypeScale"] & components["schemas"]["ResultSettingsAnswerCountsPerNumber"];
+    ResultSettingsNumber: components['schemas']['QuestionTypeNumber'] &
+      components['schemas']['ResultSettingsAnswerCountsPerNumber'];
+    ResultSettingsSingleChoice: components['schemas']['QuestionTypeSingleChoice'] &
+      components['schemas']['ResultSettingsAnswerCountsPerIndex'];
+    ResultSettingsMultipleChoice: components['schemas']['QuestionTypeMultipleChoice'] &
+      components['schemas']['ResultSettingsAnswerCountsPerIndex'];
+    ResultSettingsScale: components['schemas']['QuestionTypeScale'] &
+      components['schemas']['ResultSettingsAnswerCountsPerNumber'];
     ResultSettingsAnswerCountsPerNumber: {
       answer_counts_per_number: {
-          number: number;
-          answer_count: number;
-        }[];
+        number: number;
+        answer_count: number;
+      }[];
     };
     ResultSettingsAnswerCountsPerIndex: {
       answer_counts_per_index: {
-          index: number;
-          answer_count: number;
-        }[];
+        index: number;
+        answer_count: number;
+      }[];
     };
     UsersAndGroups: {
-      users: components["schemas"]["Users"];
-      groups: components["schemas"]["Groups"];
+      users: components['schemas']['Users'];
+      groups: components['schemas']['Groups'];
     };
     Users: string[];
     Groups: string[];
@@ -311,11 +364,11 @@ export interface components {
   responses: never;
   parameters: {
     /** @description 回答したもの(answered)か未回答のもの(unanswered)かを選別 */
-    answeredInQuery?: components["schemas"]["AnsweredType"];
+    answeredInQuery?: components['schemas']['AnsweredType'];
     /** @description 並び順 (作成日時が新しい "created_at", 作成日時が古い "-created_at", タイトルの昇順 "title", タイトルの降順 "-title", 更新日時が新しい "modified_at", 更新日時が古い "-modified_at" ) */
-    sortInQuery?: components["schemas"]["SortType"];
+    sortInQuery?: components['schemas']['SortType'];
     /** @description 並び順 (作成日時が新しい "submitted_at", 作成日時が古い "-submitted_at", タイトルの昇順 "title", タイトルの降順 "-title", 更新日時が新しい "modified_at", 更新日時が古い "-modified_at" ) */
-    responseSortInQuery?: components["schemas"]["ResponseSortType"];
+    responseSortInQuery?: components['schemas']['ResponseSortType'];
     /** @description タイトルの検索 */
     searchInQuery?: string;
     /** @description 何ページ目か (未定義の場合は1ページ目) */
@@ -345,23 +398,22 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
-
   /** @description 与えられた条件を満たす20件以下のアンケートのリストを取得します。 */
   getQuestionnaires: {
     parameters: {
       query?: {
-        sort?: components["parameters"]["sortInQuery"];
-        search?: components["parameters"]["searchInQuery"];
-        page?: components["parameters"]["pageInQuery"];
-        onlyTargetingMe?: components["parameters"]["onlyTargetingMeInQuery"];
-        onlyAdministratedByMe?: components["parameters"]["onlyAdministratedByMeInQuery"];
+        sort?: components['parameters']['sortInQuery'];
+        search?: components['parameters']['searchInQuery'];
+        page?: components['parameters']['pageInQuery'];
+        onlyTargetingMe?: components['parameters']['onlyTargetingMeInQuery'];
+        onlyAdministratedByMe?: components['parameters']['onlyAdministratedByMeInQuery'];
       };
     };
     responses: {
       /** @description 正常に取得できました。アンケートの配列を返します。 */
       200: {
         content: {
-          "application/json": components["schemas"]["QuestionnaireList"];
+          'application/json': components['schemas']['QuestionnaireList'];
         };
       };
       /** @description 与えられた情報の形式が異なります */
@@ -382,14 +434,14 @@ export interface operations {
   postQuestionnaire: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewQuestionnaire"];
+        'application/json': components['schemas']['NewQuestionnaire'];
       };
     };
     responses: {
       /** @description 正常にアンケートを作成できました。作成されたアンケートを返します。 */
       201: {
         content: {
-          "application/json": components["schemas"]["QuestionnaireDetail"];
+          'application/json': components['schemas']['QuestionnaireDetail'];
         };
       };
       /** @description 与えられた情報の形式が異なります */
@@ -406,14 +458,14 @@ export interface operations {
   getQuestionnaire: {
     parameters: {
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     responses: {
       /** @description 正常に取得できました。 */
       200: {
         content: {
-          "application/json": components["schemas"]["QuestionnaireDetail"];
+          'application/json': components['schemas']['QuestionnaireDetail'];
         };
       };
       /** @description アンケートのIDが無効です */
@@ -434,7 +486,7 @@ export interface operations {
   deleteQuestionnaire: {
     parameters: {
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     responses: {
@@ -456,12 +508,12 @@ export interface operations {
   editQuestionnaire: {
     parameters: {
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["QuestionnaireDetail"];
+        'application/json': components['schemas']['QuestionnaireDetail'];
       };
     };
     responses: {
@@ -483,14 +535,14 @@ export interface operations {
   getQuestionnaireMyRemindStatus: {
     parameters: {
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     responses: {
       /** @description 正常に取得できました。 */
       200: {
         content: {
-          "application/json": components["schemas"]["QuestionnaireIsRemindEnabled"];
+          'application/json': components['schemas']['QuestionnaireIsRemindEnabled'];
         };
       };
       /** @description アンケートのIDが無効です */
@@ -511,12 +563,12 @@ export interface operations {
   editQuestionnaireMyRemindStatus: {
     parameters: {
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["QuestionnaireIsRemindEnabled"];
+        'application/json': components['schemas']['QuestionnaireIsRemindEnabled'];
       };
     };
     responses: {
@@ -542,18 +594,18 @@ export interface operations {
   getQuestionnaireResponses: {
     parameters: {
       query?: {
-        sort?: components["parameters"]["responseSortInQuery"];
-        onlyMyResponse?: components["parameters"]["onlyMyResponseInQuery"];
+        sort?: components['parameters']['responseSortInQuery'];
+        onlyMyResponse?: components['parameters']['onlyMyResponseInQuery'];
       };
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     responses: {
       /** @description 正常に取得できました。 */
       200: {
         content: {
-          "application/json": components["schemas"]["Responses"];
+          'application/json': components['schemas']['Responses'];
         };
       };
       /** @description アンケートのIDが無効です */
@@ -578,19 +630,19 @@ export interface operations {
   postQuestionnaireResponse: {
     parameters: {
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewResponse"];
+        'application/json': components['schemas']['NewResponse'];
       };
     };
     responses: {
       /** @description 正常に回答を作成できました。作成された回答を返します。 */
       201: {
         content: {
-          "application/json": components["schemas"]["Response"];
+          'application/json': components['schemas']['Response'];
         };
       };
       /** @description 与えられた情報の形式が異なります */
@@ -615,14 +667,14 @@ export interface operations {
   getQuestionnaireResult: {
     parameters: {
       path: {
-        questionnaireID: components["parameters"]["questionnaireIDInPath"];
+        questionnaireID: components['parameters']['questionnaireIDInPath'];
       };
     };
     responses: {
       /** @description 正常に取得できました。 */
       200: {
         content: {
-          "application/json": components["schemas"]["Result"];
+          'application/json': components['schemas']['Result'];
         };
       };
       /** @description アンケートのIDが無効です */
@@ -647,14 +699,14 @@ export interface operations {
   getResponse: {
     parameters: {
       path: {
-        responseID: components["parameters"]["responseIDInPath"];
+        responseID: components['parameters']['responseIDInPath'];
       };
     };
     responses: {
       /** @description 正常に取得できました。 */
       200: {
         content: {
-          "application/json": components["schemas"]["Response"];
+          'application/json': components['schemas']['Response'];
         };
       };
       /** @description responseIDが無効です */
@@ -679,7 +731,7 @@ export interface operations {
   deleteResponse: {
     parameters: {
       path: {
-        responseID: components["parameters"]["responseIDInPath"];
+        responseID: components['parameters']['responseIDInPath'];
       };
     };
     responses: {
@@ -713,12 +765,12 @@ export interface operations {
   editResponse: {
     parameters: {
       path: {
-        responseID: components["parameters"]["responseIDInPath"];
+        responseID: components['parameters']['responseIDInPath'];
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Response"];
+        'application/json': components['schemas']['Response'];
       };
     };
     responses: {
@@ -752,14 +804,14 @@ export interface operations {
   getMyResponses: {
     parameters: {
       query?: {
-        sort?: components["parameters"]["responseSortInQuery"];
+        sort?: components['parameters']['responseSortInQuery'];
       };
     };
     responses: {
       /** @description 正常に取得できました。回答の配列を返します。 */
       200: {
         content: {
-          "application/json": components["schemas"]["Responses"][];
+          'application/json': components['schemas']['Responses'][];
         };
       };
       /** @description 自分の回答のリストを取得できませんでした */

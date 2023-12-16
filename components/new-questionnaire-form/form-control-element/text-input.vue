@@ -10,7 +10,7 @@ defineEmits<{
 </script>
 
 <template>
-  <InputText placeholder="回答 (1行テキスト)" :disabled="true" />
+  <InputText placeholder="回答 (1行テキスト)" disabled />
 </template>
 
 <style lang="scss" scoped></style>
