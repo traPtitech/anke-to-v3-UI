@@ -94,7 +94,7 @@ const loading = ref(false);
           />
         </template>
       </Column>
-      <Column field=" questionnaire_id " header="リンク">
+      <Column field="questionnaire_id" header="リンク">
         <template #body="{ data }">
           {{ data.questionnaire_id }}
         </template>
