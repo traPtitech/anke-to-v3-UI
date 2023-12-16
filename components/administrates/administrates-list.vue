@@ -48,8 +48,9 @@ const props = defineProps<{
 </template>
 
 <style scoped>
+
 .card-content {
-  margin-bottom: 2000px;
+  margin-bottom: 20px;
 }
 #container {
   display: grid;
@@ -108,5 +109,35 @@ const props = defineProps<{
 }
 .closed {
   font-weight: normal;
+}
+
+@media screen and (max-width: 1000px) {
+  #container {
+    grid-template-rows: 40px 60px 60px 100px;
+    grid-template-columns: 10px 1fr 1fr 70px;
+    row-gap: 5px;
+    column-gap: 5px;
+    align-items: center;
+    justify-content: left;
+    width: 90%;
+    margin-top: 20px;
+    margin-left: 2%;
+    border: 1px solid #000;
+    border-radius: 5px;
+  }
+}@media screen and (max-width: 600px) {
+  #container {
+    grid-template-rows: 40px 90px 90px 150px;
+    grid-template-columns: 10px 1fr 1fr 70px;
+    row-gap: 5px;
+    column-gap: 5px;
+    align-items: center;
+    justify-content: left;
+    width: 90%;
+    margin-top: 20px;
+    margin-left: 2%;
+    border: 1px solid #000;
+    border-radius: 5px;
+  }
 }
 </style>
