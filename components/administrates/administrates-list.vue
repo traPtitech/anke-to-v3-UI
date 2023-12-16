@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-const date = new Date('2023-12-17T00:00:00').getTime();
-const now = new Date().getTime();
-const remainingTime = date - now;
-const test = formatRelativeDate(new Date('2023-12-17T00:00:00'));
 const props = defineProps<{
   products: {
     title: string;
@@ -12,6 +8,10 @@ const props = defineProps<{
     all_responded: boolean;
   }[];
 }>();
+const date = new Date('2023-12-24T00:00:00').getTime();
+const now = new Date().getTime();
+const remainingTime = date - now;
+const test = formatRelativeDate(new Date('2023-12-24T00:00:00'));
 </script>
 
 <template>
@@ -37,8 +37,12 @@ const props = defineProps<{
             {{ product.description }}
           </p>
           <div id="all_responded">
-          <div v-if="product.all_responded == true"><p>未回答者：なし</p></div>
-          <div v-else class="remaining_unresponded"><p>未回答者：あり</p></div>
+            <div v-if="product.all_responded == true">
+              <p>未回答者：なし</p>
+            </div>
+            <div v-else class="remaining_unresponded">
+              <p>未回答者：あり</p>
+            </div>
           </div>
           <button id="show_answer">></button>
         </div>
@@ -48,7 +52,6 @@ const props = defineProps<{
 </template>
 
 <style scoped>
-
 .card-content {
   margin-bottom: 20px;
 }
@@ -75,12 +78,10 @@ const props = defineProps<{
 #deadline {
   grid-row: 2/3;
   grid-column: 2;
-  margin-top: 15px;
 }
 #remaining {
   grid-row: 2;
   grid-column: 3;
-  margin-top: 15px;
   font-weight: bold;
 }
 #description {
@@ -113,31 +114,53 @@ const props = defineProps<{
 
 @media screen and (max-width: 1000px) {
   #container {
-    grid-template-rows: 40px 60px 60px 100px;
-    grid-template-columns: 10px 1fr 1fr 70px;
-    row-gap: 5px;
-    column-gap: 5px;
-    align-items: center;
-    justify-content: left;
-    width: 90%;
-    margin-top: 20px;
-    margin-left: 2%;
-    border: 1px solid #000;
-    border-radius: 5px;
+    grid-template-rows: 40px 60px 60px 150px;
   }
-}@media screen and (max-width: 600px) {
+  #description {
+    -webkit-line-clamp: 5;
+  }
+}
+@media screen and (max-width: 600px) {
   #container {
-    grid-template-rows: 40px 90px 90px 150px;
-    grid-template-columns: 10px 1fr 1fr 70px;
-    row-gap: 5px;
-    column-gap: 5px;
-    align-items: center;
-    justify-content: left;
-    width: 90%;
-    margin-top: 20px;
-    margin-left: 2%;
-    border: 1px solid #000;
-    border-radius: 5px;
+    grid-template-rows: 40px 40px 40px 40px 40px 150px;
+    grid-template-columns: 10px 1fr 50px;
+  }
+  #questionnaire_name {
+    grid-row: 1;
+    grid-column: 2;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  #deadline {
+    grid-row: 2;
+    grid-column: 2;
+  }
+  #remaining {
+    grid-row: 4;
+    grid-column: 2;
+    font-weight: bold;
+  }
+  #description {
+    display: -webkit-box;
+    grid-row: 6;
+    grid-column: 2;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+  }
+  #last_modified {
+    grid-row: 3;
+    grid-column: 2;
+  }
+  #all_responded {
+    grid-row: 5;
+    grid-column: 2;
+  }
+  
+  #show_answer {
+    grid-row: 1 / 7;
+    grid-column: 3;
+    font-size: 2rem;
   }
 }
 </style>
