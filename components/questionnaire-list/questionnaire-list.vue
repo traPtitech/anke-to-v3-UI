@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <questionnaire-list />
+    hello
   </div>
 </template>
 
