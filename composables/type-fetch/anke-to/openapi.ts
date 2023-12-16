@@ -79,19 +79,13 @@ export interface components {
       questions: components["schemas"]["NewQuestion"][];
     };
     QuestionnaireDetail: components["schemas"]["QuestionnaireID"] & components["schemas"]["NewQuestionnaire"] & components["schemas"]["QuestionnaireRespondents"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"];
-    QuestionnaireSummary: components["schemas"]["QuestionnaireID"] & components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsAllowingMultipleResponses"] & components["schemas"]["QuestionnaireIsPublished"] & {
-      /**
-       * @description 自分がターゲットになっているかどうか
-       *
-       * @example true
-       */
-      is_targeting_me: boolean;
-      /** Format: date-time */
-      responded_at: string;
+    QuestionnaireSummary: components["schemas"]["QuestionnaireID"] & components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsAllowingMultipleResponses"] & components["schemas"]["QuestionnaireIsPublished"] & components["schemas"]["QuestionnaireIsTargetingMe"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & {
       /** @description 下書きが存在する */
       has_my_draft: boolean;
       /** @description 回答が存在する */
       has_my_response: boolean;
+      /** Format: date-time */
+      responded_date_time_by_me: string;
       /**
        * @description すべての対象者が回答済みの場合 true を返す。それ以外は false を返す。 (対象者が存在しない場合は true を返す)
        *
@@ -121,8 +115,13 @@ export interface components {
       description: string;
     };
     QuestionnaireResponseDueDateTime: {
-      /** Format: date-time */
-      response_due_date_time: string;
+      /**
+       * Format: date-time
+       * @description 回答期限。この日時を過ぎたら回答できなくなる。nullの場合は回答期限なし。
+       *
+       * @example "2019-12-31T15:00:00.000Z"
+       */
+      response_due_date_time?: string;
     };
     QuestionnaireResponseViewableBy: {
       response_viewable_by: components["schemas"]["ResShareType"];
@@ -151,12 +150,26 @@ export interface components {
        */
       is_published: boolean;
     };
+    QuestionnaireIsTargetingMe: {
+      /**
+       * @description 自分がターゲットになっているかどうか
+       *
+       * @example true
+       */
+      is_targeting_me: boolean;
+    };
     QuestionnaireCreatedAt: {
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @example "2019-12-31T15:00:00.000Z"
+       */
       created_at: string;
     };
     QuestionnaireModifiedAt: {
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @example "2019-12-31T15:00:00.000Z"
+       */
       modified_at: string;
     };
     QuestionnaireTargetsAndAdmins: {
@@ -178,7 +191,10 @@ export interface components {
     Question: components["schemas"]["QuestionBase"] & components["schemas"]["QuestionSettingsByType"] & {
       /** @example 1 */
       question_id: number;
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @example "2019-12-31T15:00:00.000Z"
+       */
       created_at: string;
     };
     Questions: components["schemas"]["Question"][];
@@ -187,6 +203,7 @@ export interface components {
       questionnaire_id: number;
       title: string;
       description: string;
+      /** @description 回答必須かどうか */
       is_required: boolean;
     };
     QuestionSettingsByType: components["schemas"]["QuestionSettingsText"] | components["schemas"]["QuestionSettingsTextLong"] | components["schemas"]["QuestionSettingsNumber"] | components["schemas"]["QuestionSettingsSingleChoice"] | components["schemas"]["QuestionSettingsMultipleChoice"] | components["schemas"]["QuestionSettingsScale"];
@@ -209,41 +226,8 @@ export interface components {
     QuestionSettingsScale: components["schemas"]["QuestionTypeScale"] & {
       min_value: number;
       max_value: number;
-    };
-    NewResponse: {
-      /** @example true */
-      is_draft: boolean;
-      body: components["schemas"]["ResponseBody"][];
-    };
-    Response: components["schemas"]["QuestionnaireID"] & {
-      /** @example 1 */
-      response_id: number;
-      /** Format: date-time */
-      submitted_at: string;
-      /** Format: date-time */
-      modified_at: string;
-    } & components["schemas"]["NewResponse"];
-    Responses: components["schemas"]["Response"][];
-    ResponseBody: components["schemas"]["ResponseSettingsText"] | components["schemas"]["ResponseSettingsTextLong"] | components["schemas"]["ResponseSettingsNumber"] | components["schemas"]["ResponseSettingsSingleChoice"] | components["schemas"]["ResponseSettingsMultipleChoice"] | components["schemas"]["ResponseSettingsScale"];
-    ResponseSettingsText: components["schemas"]["QuestionTypeText"] & {
-      text: string;
-    };
-    ResponseSettingsTextLong: components["schemas"]["QuestionTypeTextLong"] & {
-      textLong: string;
-    };
-    ResponseSettingsNumber: components["schemas"]["QuestionTypeNumber"] & {
-      number: number;
-    };
-    ResponseSettingsSingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & {
-      /** @description 選択肢のインデックス */
-      index: number;
-    };
-    ResponseSettingsMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & {
-      /** @description 選択肢のインデックスの配列 */
-      indexes: number[];
-    };
-    ResponseSettingsScale: components["schemas"]["QuestionTypeScale"] & {
-      number: number;
+      min_label?: string;
+      max_label?: string;
     };
     QuestionTypeText: {
       /** @enum {string} */
@@ -269,6 +253,48 @@ export interface components {
       /** @enum {string} */
       question_type: "Scale";
     };
+    NewResponse: {
+      /** @example true */
+      is_draft: boolean;
+      body: components["schemas"]["ResponseBody"][];
+    };
+    Response: components["schemas"]["QuestionnaireID"] & {
+      /** @example 1 */
+      response_id: number;
+      respondent: components["schemas"]["TraqId"];
+      /**
+       * Format: date-time
+       * @example "2019-12-31T15:00:00.000Z"
+       */
+      submitted_at: string;
+      /**
+       * Format: date-time
+       * @example "2019-12-31T15:00:00.000Z"
+       */
+      modified_at: string;
+    } & components["schemas"]["NewResponse"];
+    Responses: components["schemas"]["Response"][];
+    ResponsesWithQuestionnaireInfo: (components["schemas"]["Response"] & ({
+        questionnaire_info?: components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & components["schemas"]["QuestionnaireIsTargetingMe"];
+      }))[];
+    ResponseBody: components["schemas"]["ResponseBodyText"] | components["schemas"]["ResponseBodyTextLong"] | components["schemas"]["ResponseBodyNumber"] | components["schemas"]["ResponseBodySingleChoice"] | components["schemas"]["ResponseBodyMultipleChoice"] | components["schemas"]["ResponseBodyScale"];
+    ResponseBodyText: components["schemas"]["QuestionTypeText"] & components["schemas"]["ResponseBodyBaseString"];
+    ResponseBodyTextLong: components["schemas"]["QuestionTypeTextLong"] & components["schemas"]["ResponseBodyBaseString"];
+    ResponseBodyNumber: components["schemas"]["QuestionTypeNumber"] & components["schemas"]["ResponseBodyBaseNumber"];
+    ResponseBodySingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & components["schemas"]["ResponseBodyBaseInteger"];
+    ResponseBodyMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & {
+      answer: number[];
+    };
+    ResponseBodyScale: components["schemas"]["QuestionTypeScale"] & components["schemas"]["ResponseBodyBaseInteger"];
+    ResponseBodyBaseString: {
+      answer: string;
+    };
+    ResponseBodyBaseNumber: {
+      answer: number;
+    };
+    ResponseBodyBaseInteger: {
+      answer: number;
+    };
     Result: {
       /** @example 1 */
       questionnaire_id: number;
@@ -276,28 +302,34 @@ export interface components {
       response_count: number;
       body: components["schemas"]["ResultBody"][];
     };
-    ResultBody: components["schemas"]["ResultSettingsText"] | components["schemas"]["ResultSettingsTextLong"] | components["schemas"]["ResultSettingsNumber"] | components["schemas"]["ResultSettingsSingleChoice"] | components["schemas"]["ResultSettingsMultipleChoice"] | components["schemas"]["ResultSettingsScale"];
-    ResultSettingsText: components["schemas"]["QuestionTypeText"] & {
-      /** @description 回答文の配列 */
-      answers: string[];
-    };
-    ResultSettingsTextLong: components["schemas"]["QuestionTypeTextLong"] & {
-      /** @description 回答文の配列 */
-      answers: string[];
-    };
-    ResultSettingsNumber: components["schemas"]["QuestionTypeNumber"] & components["schemas"]["ResultSettingsAnswerCountsPerNumber"];
-    ResultSettingsSingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & components["schemas"]["ResultSettingsAnswerCountsPerIndex"];
-    ResultSettingsMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & components["schemas"]["ResultSettingsAnswerCountsPerIndex"];
-    ResultSettingsScale: components["schemas"]["QuestionTypeScale"] & components["schemas"]["ResultSettingsAnswerCountsPerNumber"];
-    ResultSettingsAnswerCountsPerNumber: {
-      answer_counts_per_number: {
-          number: number;
+    ResultBody: components["schemas"]["ResultBodyText"] | components["schemas"]["ResultBodyTextLong"] | components["schemas"]["ResultBodyNumber"] | components["schemas"]["ResultBodySingleChoice"] | components["schemas"]["ResultBodyMultipleChoice"] | components["schemas"]["ResultBodyScale"];
+    /** @description 回答文ごとの回答数の配列 */
+    ResultBodyText: components["schemas"]["QuestionTypeText"] & components["schemas"]["ResultBodyBaseStringAnswer"];
+    /** @description 回答文ごとの回答数の配列 */
+    ResultBodyTextLong: components["schemas"]["QuestionTypeTextLong"] & components["schemas"]["ResultBodyBaseStringAnswer"];
+    /** @description 数値ごとの回答数の配列 */
+    ResultBodyNumber: components["schemas"]["QuestionTypeNumber"] & components["schemas"]["ResultBodyBaseNumberAnswer"];
+    /** @description 選択肢ごとの回答数の配列 */
+    ResultBodySingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & components["schemas"]["ResultBodyBaseIntegerAnswer"];
+    /** @description 選択肢ごとの回答数の配列 */
+    ResultBodyMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & components["schemas"]["ResultBodyBaseIntegerAnswer"];
+    /** @description 数値ごとの回答数の配列 */
+    ResultBodyScale: components["schemas"]["QuestionTypeScale"] & components["schemas"]["ResultBodyBaseIntegerAnswer"];
+    ResultBodyBaseStringAnswer: {
+      aggregated_answers: {
+          answer: string;
           answer_count: number;
         }[];
     };
-    ResultSettingsAnswerCountsPerIndex: {
-      answer_counts_per_index: {
-          index: number;
+    ResultBodyBaseNumberAnswer: {
+      aggregated_answers: {
+          answer: number;
+          answer_count: number;
+        }[];
+    };
+    ResultBodyBaseIntegerAnswer: {
+      aggregated_answers: {
+          answer: number;
           answer_count: number;
         }[];
     };
@@ -305,7 +337,13 @@ export interface components {
       users: components["schemas"]["Users"];
       groups: components["schemas"]["Groups"];
     };
-    Users: string[];
+    Users: components["schemas"]["TraqId"][];
+    /**
+     * @description traQ ID
+     *
+     * @example cp20
+     */
+    TraqId: string;
     Groups: string[];
   };
   responses: never;
@@ -759,7 +797,7 @@ export interface operations {
       /** @description 正常に取得できました。回答の配列を返します。 */
       200: {
         content: {
-          "application/json": components["schemas"]["Responses"][];
+          "application/json": components["schemas"]["ResponsesWithQuestionnaireInfo"][];
         };
       };
       /** @description 自分の回答のリストを取得できませんでした */

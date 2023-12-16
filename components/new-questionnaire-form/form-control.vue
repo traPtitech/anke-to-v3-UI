@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import MultipleChoiceInput from './multiple-choice-input.vue';
-import NumberInput from './number-input.vue';
-import ScaleInput from './scale-input.vue';
-import SingleChoiceInput from './single-choice-input.vue';
-import TextInput from './text-input.vue';
-import TextLongInput from './text-long-input.vue';
+import type { QuestionSettings } from '~/components/new-questionnaire-form/type';
+import MultipleChoiceInput from './form-control-element/multiple-choice-input.vue';
+import NumberInput from './form-control-element/number-input.vue';
+import ScaleInput from './form-control-element/scale-input.vue';
+import SingleChoiceInput from './form-control-element/single-choice-input.vue';
+import TextInput from './form-control-element/text-input.vue';
+import TextLongInput from './form-control-element/text-long-input.vue';
 
 const props = defineProps<{
   modelValue: QuestionSettings;
@@ -35,7 +36,7 @@ const formComponent = computed(() => formComponents[question.value.type]);
 
 <template>
   <div class="form-control-container">
-    <InputText v-model="question.title" placeholder="質問" />
+    <InputText v-model="question.title" required placeholder="質問" />
     <Textarea
       v-model="question.description"
       placeholder="詳細な説明 (任意)"
@@ -46,7 +47,7 @@ const formComponent = computed(() => formComponents[question.value.type]);
     <div class="form-control-footer">
       <div class="form-control-required-switch">
         <label>必須</label>
-        <InputSwitch v-model="question.required"></InputSwitch>
+        <InputSwitch v-model="question.required" />
       </div>
       <div class="form-control-footer-buttons">
         <Button
