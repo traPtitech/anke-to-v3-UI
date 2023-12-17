@@ -9,7 +9,7 @@ const questionnaireDetail: QuestionnaireDetail = {
   is_anonymous: true,
   admins: {
     users: ['cp20'],
-    groups: ['46dde99b-59df-491f-ae08-ab883fe2d6ed'], // SysAd_Admin
+    groups: [], // SysAd_Admin
   },
   targets: {
     users: ['24take'],
@@ -63,11 +63,13 @@ const questionnaireDetail: QuestionnaireDetail = {
       question_type: 'Scale',
       is_required: true,
       min_value: 1,
+      min_label: '最小値',
       max_value: 5,
+      max_label: '最大値',
     },
   ],
   respondents: ['cp20'],
-  response_due_date_time: '2023-12-16T23:59:00+09:00',
+  response_due_date_time: '2023-12-17T23:59:00+09:00',
   response_viewable_by: 'anyone',
 };
 </script>

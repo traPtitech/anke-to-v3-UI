@@ -64,42 +64,7 @@ const nonAnsweredTargets = computed(() =>
       </div>
     </div>
 
-    <div class="questionnaire-action-container">
-      <router-link
-        :to="`/questionnaires/${detail.questionnaire_id}/responses/new`"
-        class="questionnaire-action-button-link"
-      >
-        <Button class="questionnaire-action-button">
-          <Icon name="mdi:send" size="24px" />
-          <span>回答する</span>
-        </Button>
-      </router-link>
-      <Button
-        class="questionnaire-action-button"
-        outlined
-        @click="console.log('TODO: 実装する')"
-      >
-        <Icon name="mdi:send-clock" size="24px" />
-        <span>後で回答する</span>
-      </Button>
-      <Button
-        class="questionnaire-action-button"
-        outlined
-        @click="console.log('TODO: 実装する')"
-      >
-        <Icon name="mdi:flag" size="24px" />
-        <span>回答しない</span>
-      </Button>
-      <router-link
-        :to="`/questionnaires/${detail.questionnaire_id}/result`"
-        class="questionnaire-action-button-link"
-      >
-        <Button class="questionnaire-action-button" outlined>
-          <Icon name="mdi:text-box-multiple-outline" size="24px" />
-          <span>結果を見る</span>
-        </Button>
-      </router-link>
-    </div>
+    <QuestionnaireActions :detail="detail" />
 
     <div
       class="questionnaire-detail-element-container questionnaire-target-container"
@@ -142,10 +107,12 @@ const nonAnsweredTargets = computed(() =>
         </div>
       </div>
     </div>
+
+    <QuestionnaireAdminActions :detail="detail" />
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .questionnaire-detail-container {
   max-width: 1080px;
   margin: 0 auto;
@@ -181,36 +148,6 @@ const nonAnsweredTargets = computed(() =>
 .questionnaire-detail-element-label {
   font-weight: bold;
   font-size: 14px;
-}
-
-.questionnaire-action-container {
-  display: grid;
-  gap: 16px;
-  padding: 16px 0;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-
-@container (max-width: 740px) {
-  .questionnaire-action-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@container (max-width: 360px) {
-  .questionnaire-action-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-.questionnaire-action-button-link {
-  text-decoration: none;
-}
-
-.questionnaire-action-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
 }
 
 .questionnaire-target-result {
