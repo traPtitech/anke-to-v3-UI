@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { QuestionSettingsSingleChoice } from '~/components/new-questionnaire-form/type';
+import ChoiceGroup from './choice-group.vue';
 
 const props = defineProps<{
   modelValue: QuestionSettingsSingleChoice;
