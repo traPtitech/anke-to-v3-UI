@@ -179,4 +179,7 @@ interface UseFetchWrap {
   ): AsyncData<ResponseData<PATH, METHOD> | null, ERROR | null>;
 }
 
-export const useFetchAnkeToApi = useFetch as UseFetchWrap;
+export const useFetchAnkeToApi = ((
+  url: string,
+  opts: Parameters<typeof useFetch>['1'],
+) => useFetch('/api' + url, opts)) as UseFetchWrap;
