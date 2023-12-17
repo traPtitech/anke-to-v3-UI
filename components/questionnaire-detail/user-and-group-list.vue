@@ -21,7 +21,9 @@ const groupString = computed(() =>
 <template>
   <div>
     <UserList :users="users" />
-    {{ `(${groupString})` }}
+    <span v-if="groupString !== ''">
+      {{ `(${groupString})` }}
+    </span>
   </div>
 </template>
 
