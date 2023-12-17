@@ -3,7 +3,7 @@ import {
   defaultQuestionSettingsByType,
   type ResponseFormBody,
   type ResponseSettings,
-} from '~/components/response-form/response-form-settings';
+} from '~/components/new-response-form/new-response-form-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionnaireFormSettings,
