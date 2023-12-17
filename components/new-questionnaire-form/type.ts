@@ -11,29 +11,29 @@ export type QuestionSettingsBase = {
 };
 
 export type QuestionSettingsText = {
-  type: 'text';
+  type: 'Text';
 };
 
 export type QuestionSettingsTextLong = {
-  type: 'text-long';
+  type: 'TextLong';
 };
 
 export type QuestionSettingsNumber = {
-  type: 'number';
+  type: 'Number';
 };
 
 export type QuestionSettingsSingleChoice = {
-  type: 'single-choice';
+  type: 'SingleChoice';
   options: { id: string; label: string }[];
 };
 
 export type QuestionSettingsMultipleChoice = {
-  type: 'multiple-choice';
+  type: 'MultipleChoice';
   options: { id: string; label: string }[];
 };
 
 export type QuestionSettingsScale = {
-  type: 'scale';
+  type: 'Scale';
   minValue: number;
   minLabel?: string;
   maxValue: number;

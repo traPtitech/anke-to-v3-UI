@@ -23,12 +23,12 @@ const question = computed({
 });
 
 const formComponents = {
-  text: TextInput,
-  'text-long': TextLongInput,
-  'multiple-choice': MultipleChoiceInput,
-  'single-choice': SingleChoiceInput,
-  number: NumberInput,
-  scale: ScaleInput,
+  Text: TextInput,
+  TextLong: TextLongInput,
+  MultipleChoice: MultipleChoiceInput,
+  SingleChoice: SingleChoiceInput,
+  Number: NumberInput,
+  Scale: ScaleInput,
 } satisfies Record<QuestionSettings['type'], unknown>;
 
 const formComponent = computed(() => formComponents[question.value.type]);
