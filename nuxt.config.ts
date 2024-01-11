@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
-    'nuxt-vitest',
+    '@nuxt/test-utils',
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
     'nuxt-icon',
