@@ -96,7 +96,7 @@ for (let i = 0; i < responseSettings.value.length; i++) {
 }
 
 const handleEdit = () => {
-  route.path = route.path + '/edit';
+  navigateTo('/responses/' + route.params.responseID + '/edit');
 };
 </script>
 
