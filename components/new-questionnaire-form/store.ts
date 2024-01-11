@@ -37,40 +37,40 @@ const defaultQuestionSettingsBase: QuestionSettingsBase = {
 };
 
 const defaultQuestionSettingsText: QuestionSettingsText = {
-  type: 'text',
+  type: 'Text',
 };
 
 const defaultQuestionSettingsTextLong: QuestionSettingsTextLong = {
-  type: 'text-long',
+  type: 'TextLong',
 };
 
 const defaultQuestionSettingsNumber: QuestionSettingsNumber = {
-  type: 'number',
+  type: 'Number',
 };
 
 const defaultQuestionSettingsSingleChoice: QuestionSettingsSingleChoice = {
-  type: 'single-choice',
+  type: 'SingleChoice',
   options: [],
 };
 
 const defaultQuestionSettingsMultipleChoice: QuestionSettingsMultipleChoice = {
-  type: 'multiple-choice',
+  type: 'MultipleChoice',
   options: [],
 };
 
 const defaultQuestionSettingsScale: QuestionSettingsScale = {
-  type: 'scale',
+  type: 'Scale',
   minValue: 1,
   maxValue: 5,
 };
 
 const defaultQuestionSettingsByType = {
-  text: defaultQuestionSettingsText,
-  'text-long': defaultQuestionSettingsTextLong,
-  number: defaultQuestionSettingsNumber,
-  'single-choice': defaultQuestionSettingsSingleChoice,
-  'multiple-choice': defaultQuestionSettingsMultipleChoice,
-  scale: defaultQuestionSettingsScale,
+  Text: defaultQuestionSettingsText,
+  TextLong: defaultQuestionSettingsTextLong,
+  Number: defaultQuestionSettingsNumber,
+  SingleChoice: defaultQuestionSettingsSingleChoice,
+  MultipleChoice: defaultQuestionSettingsMultipleChoice,
+  Scale: defaultQuestionSettingsScale,
 } satisfies Record<QuestionSettings['type'], QuestionSettingsByType>;
 
 export const useStoreNewQuestionnaireForm = defineStore(

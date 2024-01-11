@@ -51,8 +51,14 @@ const responseDueDateTimeOptions = [
   { label: 'カスタム', value: 'custom' },
 ] satisfies { label: string; value: ResponseDueDateTimeOption }[];
 
-const responseDueDateTimeDropdown = ref<ResponseDueDateTimeOption>('no-due');
-const responseDueDateTimeInput = ref<Date>(addDays(today, 7));
+const responseDueDateTimeDropdown = ref<ResponseDueDateTimeOption>(
+  state.value.responseDueDateTime === null ? 'no-due' : 'custom',
+);
+const responseDueDateTimeInput = ref<Date>(
+  state.value.responseDueDateTime === null
+    ? addDays(today, 7)
+    : new Date(state.value.responseDueDateTime),
+);
 const responseDueDateTimeInputDisabled = computed(() => {
   return responseDueDateTimeDropdown.value !== 'custom';
 });

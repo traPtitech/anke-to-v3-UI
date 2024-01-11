@@ -12,7 +12,7 @@ defineEmits<{
       <Button
         class="add-question-button"
         outlined
-        @click="$emit('add-question', 'text')"
+        @click="$emit('add-question', 'Text')"
       >
         <Icon size="24px" name="ic:outline-short-text" />
         <span>1行テキスト</span>
@@ -20,7 +20,7 @@ defineEmits<{
       <Button
         class="add-question-button"
         outlined
-        @click="$emit('add-question', 'text-long')"
+        @click="$emit('add-question', 'TextLong')"
       >
         <Icon size="24px" name="mdi:text" />
         <span>長文テキスト</span>
@@ -28,7 +28,7 @@ defineEmits<{
       <Button
         class="add-question-button"
         outlined
-        @click="$emit('add-question', 'number')"
+        @click="$emit('add-question', 'Number')"
       >
         <Icon size="24px" name="mdi:numeric" />
         <span>数値</span>
@@ -36,7 +36,7 @@ defineEmits<{
       <Button
         class="add-question-button"
         outlined
-        @click="$emit('add-question', 'multiple-choice')"
+        @click="$emit('add-question', 'MultipleChoice')"
       >
         <Icon size="24px" name="mdi:checkbox-outline" />
         <span>チェックボックス</span>
@@ -44,7 +44,7 @@ defineEmits<{
       <Button
         class="add-question-button"
         outlined
-        @click="$emit('add-question', 'single-choice')"
+        @click="$emit('add-question', 'SingleChoice')"
       >
         <Icon size="24px" name="mdi:radiobox-marked" />
         <span>ラジオボタン</span>
@@ -52,7 +52,7 @@ defineEmits<{
       <Button
         class="add-question-button"
         outlined
-        @click="$emit('add-question', 'scale')"
+        @click="$emit('add-question', 'Scale')"
       >
         <Icon size="24px" name="ic:outline-linear-scale" />
         <span>目盛り</span>
