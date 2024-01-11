@@ -1,26 +1,21 @@
 <script lang="ts" setup>
 import {
   defaultQuestionSettingsByType,
-  type ResponseFormBody,
   type ResponseSettings,
 } from '~/components/new-response-form/new-response-form-settings';
 import type {
   ResponseFormQuestionInvalid,
-  ResponseFormQuestionnaireFormSettings,
   ResponseFormQuestionSettings,
+  ResponseFormQuestionnaireFormSettings,
 } from '~/components/new-response-form/questionnaire-settings';
 
+const route = useRoute();
 const form = ref<HTMLFormElement | null>(null);
 
 const props = defineProps<{
   formSettings: Omit<ResponseFormQuestionnaireFormSettings, 'questions'> & {
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
-}>();
-
-const emit = defineEmits<{
-  (e: 'send', value: ResponseFormBody): void;
-  (e: 'save', value: ResponseFormBody): void;
 }>();
 
 const initialResponseSettings = props.formSettings.questions.map(
@@ -100,62 +95,8 @@ for (let i = 0; i < responseSettings.value.length; i++) {
   }
 }
 
-const checkValidity = () => {
-  if (form.value === null) return false;
-
-  responseSettings.value.forEach((question) => {
-    if (!question.required) return;
-
-    switch (question.type) {
-      case 'Text':
-        question.isInvalid = question.text === '';
-        break;
-      case 'TextLong':
-        question.isInvalid = question.textLong === '';
-        break;
-
-      case 'Number':
-        question.isInvalid = question.number === null;
-        break;
-      case 'SingleChoice':
-        question.isInvalid = question.index === -1;
-        break;
-      case 'MultipleChoice':
-        question.isInvalid = question.indexes.length === 0;
-        break;
-      case 'Scale':
-        question.isInvalid = question.number === -1;
-        break;
-      default:
-        {
-          const _: never = question;
-        }
-        break;
-    }
-  });
-
-  if (!form.value.reportValidity()) return false;
-
-  return true;
-};
-
-const convertResponseSettingsToResponseFormBody = (
-  res: (ResponseSettings & ResponseFormQuestionSettings)[],
-): ResponseFormBody => res;
-
-const handleSend = () => {
-  if (!checkValidity()) return;
-  emit(
-    'send',
-    convertResponseSettingsToResponseFormBody(responseSettings.value),
-  );
-};
-
-const handleSave = () => {
-  emit(
-    'save',
-    convertResponseSettingsToResponseFormBody(responseSettings.value),
-  );
+const handleEdit = () => {
+  route.path = route.path + '/edit';
 };
 </script>
 
@@ -186,13 +127,9 @@ const handleSave = () => {
       />
     </div>
     <div class="form-action-buttons">
-      <Button outlined class="form-action-button" @click="handleSave">
-        <Icon name="mdi:content-save" size="24px" />
-        <span>一時保存</span>
-      </Button>
-      <Button class="form-action-button" @click="handleSend">
-        <Icon name="mdi:send" size="24px" />
-        <span>送信</span>
+      <Button outlined class="form-action-button" @click="handleEdit">
+        <Icon name="mdi:pencil-outline" size="24px" />
+        <span>編集</span>
       </Button>
     </div>
   </form>
