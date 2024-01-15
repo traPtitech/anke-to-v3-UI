@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     { path: '~/components/new-response-form', pathPrefix: false },
     { path: '~/components/questionnaire-result', pathPrefix: false },
     { path: '~/components/questionnaire-detail', pathPrefix: false },
+    { path: '~/components/landing-page', pathPrefix: false },
     '~/components',
   ],
   modules: [

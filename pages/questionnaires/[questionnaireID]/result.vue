@@ -68,65 +68,76 @@ const questionnaireDetail: QuestionnaireDetail = {
   response_due_date_time: '2021-09-01T00:00:00+09:00',
   response_viewable_by: 'anyone',
 };
-const questionnaireResult: QuestionnaireResult = {
-  response_count: 1,
-  questionnaire_id: 1,
-  body: [
-    {
-      question_type: 'Text',
-      aggregated_answers: [
-        { answer: 'こっちは結構短めでもいいかも', answer_count: 1 },
-        { answer: 'テスト回答テスト回答テスト回答テスト回答', answer_count: 1 },
-      ],
-    },
-    {
-      question_type: 'TextLong',
-      aggregated_answers: [
-        {
-          answer:
-            'けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～',
-          answer_count: 1,
-        },
-        {
-          answer:
-            '改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト',
-          answer_count: 1,
-        },
-      ],
-    },
-    {
-      question_type: 'Number',
-      aggregated_answers: [
-        { answer: 100, answer_count: 1 },
-        { answer: 50, answer_count: 1 },
-      ],
-    },
-    {
-      question_type: 'SingleChoice',
-      aggregated_answers: [
-        { answer: 0, answer_count: 1 },
-        { answer: 1, answer_count: 1 },
-      ],
-    },
-    {
-      question_type: 'MultipleChoice',
-      aggregated_answers: [
-        { answer: 0, answer_count: 1 },
-        { answer: 1, answer_count: 1 },
-        { answer: 2, answer_count: 2 },
-      ],
-    },
-    {
-      question_type: 'Scale',
-      aggregated_answers: [
-        {
-          answer: 3,
-          answer_count: 2,
-        },
-      ],
-    },
-  ],
-};
+const questionnaireResult: QuestionnaireResult = [
+  {
+    response_id: 1,
+    questionnaire_id: 1,
+    is_draft: false,
+    body: [
+      {
+        question_type: 'Text',
+        answer: 'こっちは結構短めでもいいかも',
+      },
+      {
+        question_type: 'TextLong',
+        answer:
+          'けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～',
+      },
+      {
+        question_type: 'Number',
+        answer: 100,
+      },
+      {
+        question_type: 'SingleChoice',
+        answer: 0,
+      },
+      {
+        question_type: 'MultipleChoice',
+        answer: [0, 2],
+      },
+      {
+        question_type: 'Scale',
+        answer: 3,
+      },
+    ],
+    submitted_at: '2023-12-15T00:00:00+09:00',
+    modified_at: '2023-12-15T00:00:00+09:00',
+  },
+  {
+    response_id: 2,
+    questionnaire_id: 1,
+    is_draft: false,
+    body: [
+      {
+        question_type: 'Text',
+        answer: 'テスト回答テスト回答テスト回答テスト回答',
+      },
+      {
+        question_type: 'TextLong',
+        answer:
+          '改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト',
+      },
+      {
+        question_type: 'Number',
+        answer: 50,
+      },
+      {
+        question_type: 'SingleChoice',
+        answer: 1,
+      },
+      {
+        question_type: 'MultipleChoice',
+        answer: [1, 2],
+      },
+      {
+        question_type: 'Scale',
+        answer: 3,
+      },
+    ],
+    submitted_at: '2023-12-15T00:00:00+09:00',
+    modified_at: '2023-12-15T00:00:00+09:00',
+  },
+];
 
 const questionnaireResponses: QuestionnaireResponses = [
   {
