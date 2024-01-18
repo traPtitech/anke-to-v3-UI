@@ -62,7 +62,7 @@ const formSettings: ResponseFormQuestionnaireFormSettings = {
     },
   ],
 };
-const sending = '送信';
+const sending = '変更';
 </script>
 
 <template>

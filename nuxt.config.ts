@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     '~/components/layout-elements',
     '~/components/ui',
     '~/components/new-questionnaire-form',
-    { path: '~/components/new-response-form', pathPrefix: false },
+    { path: '~/components/based-response-form', pathPrefix: false },
     { path: '~/components/questionnaire-result', pathPrefix: false },
     { path: '~/components/questionnaire-detail', pathPrefix: false },
     '~/components',
@@ -32,9 +32,11 @@ export default defineNuxtConfig({
   ],
   eslint: {
     cache: false,
+    lintOnStart: false,
   },
   stylelint: {
     cache: false,
+    lintOnStart: false,
   },
   googleFonts: {
     families: {
