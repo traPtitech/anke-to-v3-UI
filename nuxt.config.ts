@@ -32,11 +32,9 @@ export default defineNuxtConfig({
   ],
   eslint: {
     cache: false,
-    lintOnStart: false,
   },
   stylelint: {
     cache: false,
-    lintOnStart: false,
   },
   googleFonts: {
     families: {
