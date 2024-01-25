@@ -3,12 +3,12 @@ import {
   defaultQuestionSettingsByType,
   type ResponseFormBody,
   type ResponseSettings,
-} from '~/components/new-response-form/new-response-form-settings';
+} from '~/components/form-response-base/form-response-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionnaireFormSettings,
   ResponseFormQuestionSettings,
-} from '~/components/new-response-form/questionnaire-settings';
+} from '~/components/form-response-base/questionnaire-settings';
 
 const form = ref<HTMLFormElement | null>(null);
 
@@ -16,6 +16,7 @@ const props = defineProps<{
   formSettings: Omit<ResponseFormQuestionnaireFormSettings, 'questions'> & {
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
+  sendSentence: string;
 }>();
 
 const emit = defineEmits<{
@@ -190,10 +191,9 @@ const handleSave = () => {
         <Icon name="mdi:content-save" size="24px" />
         <span>一時保存</span>
       </Button>
-      <Button class="form-action-button" @click="handleSend">
-        <Icon name="mdi:send" size="24px" />
-        <span>送信</span>
-      </Button>
+      <SendButton @click-button="handleSend">
+        {{ sendSentence }}
+      </SendButton>
     </div>
   </form>
 </template>

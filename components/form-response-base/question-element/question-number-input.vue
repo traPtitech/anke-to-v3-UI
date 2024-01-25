@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ResponseSettingsNumber } from '~/components/new-response-form/new-response-form-settings';
+import type { ResponseSettingsNumber } from '~/components/form-response-base/form-response-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
   ResponseFormQuestionSettingsNumber,
-} from '~/components/new-response-form/questionnaire-settings';
+} from '~/components/form-response-base/questionnaire-settings';
 
 type ModelValue = ResponseSettingsNumber &
   ResponseFormQuestionSettingsNumber &
@@ -40,3 +40,4 @@ const question = computed({
   width: 100%;
 }
 </style>
+~/components/form-response-base/questionnaire-settings
