@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     '~/components/layout-elements',
     '~/components/ui',
     '~/components/new-questionnaire-form',
-    { path: '~/components/based-response-form', pathPrefix: false },
+    { path: '~/components/form-response-base', pathPrefix: false },
     { path: '~/components/questionnaire-result', pathPrefix: false },
     { path: '~/components/questionnaire-detail', pathPrefix: false },
     '~/components',

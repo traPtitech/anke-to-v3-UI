@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ResponseSettingsSingleChoice } from '~/components/based-response-form/based-response-form-settings';
+import type { ResponseSettingsSingleChoice } from '~/components/form-response-base/form-response-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
   ResponseFormQuestionSettingsSingleChoice,
-} from '~/components/based-response-form/questionnaire-settings';
+} from '~/components/form-response-base/questionnaire-settings';
 
 type ModelValue = ResponseSettingsSingleChoice &
   ResponseFormQuestionSettingsSingleChoice &
@@ -70,3 +70,4 @@ const optionIds = question.value.options.map(() => createId());
   padding-left: 8px;
 }
 </style>
+~/components/form-response-base/questionnaire-settings

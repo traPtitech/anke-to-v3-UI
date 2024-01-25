@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { ResponseSettings } from '~/components/based-response-form/based-response-form-settings';
+import type { ResponseSettings } from '~/components/form-response-base/form-response-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettings,
-} from '~/components/based-response-form/questionnaire-settings';
+} from '~/components/form-response-base/questionnaire-settings';
 
 type ModelValue = ResponseSettings &
   ResponseFormQuestionSettings &
@@ -109,3 +109,4 @@ const modelValue = computed({
   color: #f26451;
 }
 </style>
+~/components/form-response-base/questionnaire-settings

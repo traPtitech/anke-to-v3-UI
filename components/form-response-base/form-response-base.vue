@@ -3,21 +3,20 @@ import {
   defaultQuestionSettingsByType,
   type ResponseFormBody,
   type ResponseSettings,
-} from '~/components/based-response-form/based-response-form-settings';
+} from '~/components/form-response-base/form-response-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionnaireFormSettings,
   ResponseFormQuestionSettings,
-} from '~/components/based-response-form/questionnaire-settings';
+} from '~/components/form-response-base/questionnaire-settings';
 
 const form = ref<HTMLFormElement | null>(null);
-
 
 const props = defineProps<{
   formSettings: Omit<ResponseFormQuestionnaireFormSettings, 'questions'> & {
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
-  sendSentence: string
+  sendSentence: string;
 }>();
 
 const emit = defineEmits<{
@@ -263,3 +262,4 @@ const handleSave = () => {
   }
 }
 </style>
+~/components/form-response-base/questionnaire-settings
