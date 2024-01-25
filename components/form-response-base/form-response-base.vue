@@ -144,7 +144,6 @@ const convertResponseSettingsToResponseFormBody = (
   res: (ResponseSettings & ResponseFormQuestionSettings)[],
 ): ResponseFormBody => res;
 
-
 const handleSend = () => {
   if (!checkValidity()) return;
   emit(
@@ -152,7 +151,6 @@ const handleSend = () => {
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
 };
-
 
 const handleSave = () => {
   emit(
@@ -193,7 +191,7 @@ const handleSave = () => {
         <Icon name="mdi:content-save" size="24px" />
         <span>一時保存</span>
       </Button>
-      <SendButton :form-settings="formSettings" @click-button="handleSend">
+      <SendButton @click-button="handleSend">
         {{ sendSentence }}
       </SendButton>
     </div>
