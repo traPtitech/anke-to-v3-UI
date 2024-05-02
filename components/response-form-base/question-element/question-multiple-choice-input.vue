@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ResponseSettingsMultipleChoice } from '~/components/form-response-base/form-response-base-settings';
+import type { ResponseSettingsMultipleChoice } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
   ResponseFormQuestionSettingsMultipleChoice,
-} from '~/components/form-response-base/questionnaire-settings';
+} from '~/components/response-form-base/questionnaire-settings';
 
 type ModelValue = ResponseSettingsMultipleChoice &
   ResponseFormQuestionSettingsMultipleChoice &
@@ -73,3 +73,4 @@ const name = computed(() => `multiple-choice-input-${createId()}`);
 }
 </style>
 ~/components/form-response-base/questionnaire-settings
+~/components/response-form-base/form-response-base-settings~/components/response-form-base/questionnaire-settings

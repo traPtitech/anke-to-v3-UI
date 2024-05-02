@@ -70,3 +70,4 @@ const sending = '変更';
 </template>
 
 <style lang="scss" scoped></style>
+~/components/response-form-base/questionnaire-settings

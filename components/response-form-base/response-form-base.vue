@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import {
-  defaultQuestionSettingsByType,
-  type ResponseFormBody,
-  type ResponseSettings,
-} from '~/components/form-response-base/form-response-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettings,
   ResponseFormQuestionnaireFormSettings,
-} from '~/components/form-response-base/questionnaire-settings';
+} from '~/components/response-form-base/questionnaire-settings';
+import {
+  defaultQuestionSettingsByType,
+  type ResponseFormBody,
+  type ResponseSettings,
+} from '~/components/response-form-base/response-form-base-settings';
 
 const form = ref<HTMLFormElement | null>(null);
 
@@ -145,13 +145,13 @@ const convertResponseSettingsToResponseFormBody = (
 ): ResponseFormBody => res;
 
 const handleSend = () => {
-  console.log("edit requested");
+  console.log('edit requested');
   if (!checkValidity()) return;
   emit(
     'send',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
-  console.log("edit completed");
+  console.log('edit completed');
 };
 
 const handleSave = () => {
@@ -263,3 +263,4 @@ const handleSave = () => {
   }
 }
 </style>
+~/components/response-form-base/form-response-base-settings~/components/response-form-base/questionnaire-settings
