@@ -19,6 +19,7 @@
     "gen:api-mock": "msw-auto-mock https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml -o ./mocks/handlers.ts --base-url http://localhost:3000/api"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nuxt/devtools": "latest",
     "@nuxt/test-utils": "^3.9.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
@@ -35,6 +36,7 @@
     "eslint-plugin-vue": "^9.19.2",
     "happy-dom": "^12.10.3",
     "msw": "^2.2.14",
+    "msw-auto-mock": "^0.18.0",
     "nuxt": "^3.8.2",
     "nuxt-icon": "^0.6.7",
     "nuxt-primevue": "^0.2.2",
@@ -57,7 +59,6 @@
     "vue3-smooth-dnd": "^0.0.6"
   },
   "dependencies": {
-    "js-sha256": "^0.10.1",
-    "msw-auto-mock": "^0.18.0"
+    "js-sha256": "^0.10.1"
   }
 }

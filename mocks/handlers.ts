@@ -10,7 +10,7 @@ import { setupWorker } from 'msw/browser';
 
 faker.seed(1);
 
-const baseURL = '';
+const baseURL = 'http://localhost:3000/api';
 const MAX_ARRAY_LENGTH = 20;
 
 let i = 0;
