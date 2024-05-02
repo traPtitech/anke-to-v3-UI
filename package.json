@@ -15,7 +15,8 @@
     "lint:fix": "eslint --fix --ext .js,.ts,.vue --ignore-path .gitignore .",
     "test": "npx nuxi test",
     "openapi:traq": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/traQ/master/docs/v3-api.yaml --output ./composables/type-fetch/traq/openapi.ts",
-    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
+    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts",
+    "gen:api-mock": "msw-auto-mock https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml -o ./mocks/handlers.ts --base-url http://localhost:3000/api"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
@@ -33,6 +34,7 @@
     "eslint-plugin-unused-imports": "^3.0.0",
     "eslint-plugin-vue": "^9.19.2",
     "happy-dom": "^12.10.3",
+    "msw": "^2.2.14",
     "nuxt": "^3.8.2",
     "nuxt-icon": "^0.6.7",
     "nuxt-primevue": "^0.2.2",
@@ -55,6 +57,7 @@
     "vue3-smooth-dnd": "^0.0.6"
   },
   "dependencies": {
-    "js-sha256": "^0.10.1"
+    "js-sha256": "^0.10.1",
+    "msw-auto-mock": "^0.18.0"
   }
 }
