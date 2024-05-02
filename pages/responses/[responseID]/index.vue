@@ -65,7 +65,7 @@ const formSettings: ResponseFormQuestionnaireFormSettings = {
 </script>
 
 <template>
-  <ResponseForm :form-settings="formSettings" />
+  <ResponsePage :form-settings="formSettings" />
 </template>
 
 <style lang="scss" scoped></style>

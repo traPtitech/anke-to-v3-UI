@@ -25,6 +25,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       description: '質問1の説明',
       question_type: 'Text',
       is_required: true,
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 1,
     },
     {
       questionnaire_id: 1,
@@ -32,6 +34,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       description: '質問2の説明',
       question_type: 'TextLong',
       is_required: true,
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 2,
     },
     {
       questionnaire_id: 1,
@@ -39,6 +43,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       description: '質問3の説明',
       question_type: 'Number',
       is_required: true,
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 3,
     },
     {
       questionnaire_id: 1,
@@ -47,6 +53,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       question_type: 'SingleChoice',
       is_required: true,
       options: ['選択肢1', '選択肢2', '選択肢3'],
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 4,
     },
     {
       questionnaire_id: 1,
@@ -55,6 +63,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       question_type: 'MultipleChoice',
       is_required: true,
       options: ['選択肢1', '選択肢2', '選択肢3'],
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 5,
     },
     {
       questionnaire_id: 1,
@@ -63,9 +73,9 @@ const questionnaireDetail: QuestionnaireDetail = {
       question_type: 'Scale',
       is_required: true,
       min_value: 1,
-      min_label: '最小値',
       max_value: 5,
-      max_label: '最大値',
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 6,
     },
   ],
   respondents: ['cp20'],
