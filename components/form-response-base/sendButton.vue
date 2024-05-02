@@ -9,7 +9,7 @@ const handleClick = () => {
 <template>
   <Button class="form-action-button" @click="handleClick">
     <Icon name="mdi:send" size="24px" />
-    <slot/>
+    <slot />
   </Button>
 </template>
 

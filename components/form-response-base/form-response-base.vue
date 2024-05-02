@@ -6,8 +6,8 @@ import {
 } from '~/components/form-response-base/form-response-base-settings';
 import type {
   ResponseFormQuestionInvalid,
-  ResponseFormQuestionnaireFormSettings,
   ResponseFormQuestionSettings,
+  ResponseFormQuestionnaireFormSettings,
 } from '~/components/form-response-base/questionnaire-settings';
 
 const form = ref<HTMLFormElement | null>(null);
@@ -145,11 +145,13 @@ const convertResponseSettingsToResponseFormBody = (
 ): ResponseFormBody => res;
 
 const handleSend = () => {
+  console.log("edit requested");
   if (!checkValidity()) return;
   emit(
     'send',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
+  console.log("edit completed");
 };
 
 const handleSave = () => {
