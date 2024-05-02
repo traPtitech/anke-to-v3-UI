@@ -23,6 +23,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       description: '質問1の説明',
       question_type: 'Text',
       is_required: true,
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 1,
     },
     {
       questionnaire_id: 1,
@@ -30,6 +32,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       description: '質問2の説明',
       question_type: 'TextLong',
       is_required: true,
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 2,
     },
     {
       questionnaire_id: 1,
@@ -37,6 +41,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       description: '質問3の説明',
       question_type: 'Number',
       is_required: true,
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 3,
     },
     {
       questionnaire_id: 1,
@@ -45,6 +51,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       question_type: 'SingleChoice',
       is_required: true,
       options: ['選択肢1', '選択肢2', '選択肢3'],
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 4,
     },
     {
       questionnaire_id: 1,
@@ -53,6 +61,8 @@ const questionnaireDetail: QuestionnaireDetail = {
       question_type: 'MultipleChoice',
       is_required: true,
       options: ['選択肢1', '選択肢2', '選択肢3'],
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 5,
     },
     {
       questionnaire_id: 1,
@@ -62,71 +72,81 @@ const questionnaireDetail: QuestionnaireDetail = {
       is_required: true,
       min_value: 1,
       max_value: 5,
+      created_at: '2021-09-01T00:00:00+09:00',
+      question_id: 6,
     },
   ],
   respondents: ['cp20'],
   response_due_date_time: '2021-09-01T00:00:00+09:00',
   response_viewable_by: 'anyone',
 };
-const questionnaireResult: QuestionnaireResult = {
-  response_count: 1,
-  questionnaire_id: 1,
-  body: [
-    {
-      question_type: 'Text',
-      aggregated_answers: [
-        { answer: 'こっちは結構短めでもいいかも', answer_count: 1 },
-        { answer: 'テスト回答テスト回答テスト回答テスト回答', answer_count: 1 },
-      ],
-    },
-    {
-      question_type: 'TextLong',
-      aggregated_answers: [
-        {
-          answer:
-            'けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～',
-          answer_count: 1,
-        },
-        {
-          answer:
-            '改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト',
-          answer_count: 1,
-        },
-      ],
-    },
-    {
-      question_type: 'Number',
-      aggregated_answers: [
-        { answer: 100, answer_count: 1 },
-        { answer: 50, answer_count: 1 },
-      ],
-    },
-    {
-      question_type: 'SingleChoice',
-      aggregated_answers: [
-        { answer: 0, answer_count: 1 },
-        { answer: 1, answer_count: 1 },
-      ],
-    },
-    {
-      question_type: 'MultipleChoice',
-      aggregated_answers: [
-        { answer: 0, answer_count: 1 },
-        { answer: 1, answer_count: 1 },
-        { answer: 2, answer_count: 2 },
-      ],
-    },
-    {
-      question_type: 'Scale',
-      aggregated_answers: [
-        {
-          answer: 3,
-          answer_count: 2,
-        },
-      ],
-    },
-  ],
-};
+const questionnaireResult: QuestionnaireResult = [
+  {
+    questionnaire_id: 1,
+    response_id: 1,
+    submitted_at: '2023-12-15T00:00:00+09:00',
+    modified_at: '2023-12-15T00:00:00+09:00',
+    is_draft: false,
+    body: [
+      {
+        question_type: 'Text',
+        aggregated_answers: [
+          { answer: 'こっちは結構短めでもいいかも', answer_count: 1 },
+          {
+            answer: 'テスト回答テスト回答テスト回答テスト回答',
+            answer_count: 1,
+          },
+        ],
+      },
+      {
+        question_type: 'TextLong',
+        aggregated_answers: [
+          {
+            answer:
+              'けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～けっこう長めの回答をする場合を考慮した方がいいんじゃないかな～',
+            answer_count: 1,
+          },
+          {
+            answer:
+              '改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト\n改行のテスト',
+            answer_count: 1,
+          },
+        ],
+      },
+      {
+        question_type: 'Number',
+        aggregated_answers: [
+          { answer: 100, answer_count: 1 },
+          { answer: 50, answer_count: 1 },
+        ],
+      },
+      {
+        question_type: 'SingleChoice',
+        aggregated_answers: [
+          { answer: 0, answer_count: 1 },
+          { answer: 1, answer_count: 1 },
+        ],
+      },
+      {
+        question_type: 'MultipleChoice',
+        aggregated_answers: [
+          { answer: 0, answer_count: 1 },
+          { answer: 1, answer_count: 1 },
+          { answer: 2, answer_count: 2 },
+        ],
+      },
+      {
+        question_type: 'Scale',
+        aggregated_answers: [
+          {
+            answer: 3,
+            answer_count: 2,
+          },
+        ],
+      },
+    ],
+  },
+];
 
 const questionnaireResponses: QuestionnaireResponses = [
   {

@@ -75,17 +75,22 @@ export interface components {
      * @enum {string}
      */
     ResShareType: "admins" | "respondents" | "anyone";
-    NewQuestionnaire: components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsAllowingMultipleResponses"] & components["schemas"]["QuestionnaireIsPublished"] & components["schemas"]["QuestionnaireTargetsAndAdmins"] & {
+    QuestionnaireBase: components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsAllowingMultipleResponses"] & components["schemas"]["QuestionnaireIsPublished"] & components["schemas"]["QuestionnaireTargetsAndAdmins"];
+    NewQuestionnaire: components["schemas"]["QuestionnaireBase"] & {
       questions: components["schemas"]["NewQuestion"][];
     };
-    QuestionnaireDetail: components["schemas"]["QuestionnaireID"] & components["schemas"]["NewQuestionnaire"] & components["schemas"]["QuestionnaireRespondents"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"];
+    QuestionnaireDetail: components["schemas"]["QuestionnaireID"] & components["schemas"]["QuestionnaireBase"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & {
+      questions: components["schemas"]["Question"][];
+      /** @description 回答者の一覧。匿名回答の場合はnull。 */
+      respondents: components["schemas"]["Users"];
+    };
     QuestionnaireSummary: components["schemas"]["QuestionnaireID"] & components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsAllowingMultipleResponses"] & components["schemas"]["QuestionnaireIsPublished"] & components["schemas"]["QuestionnaireIsTargetingMe"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & {
       /** @description 下書きが存在する */
       has_my_draft: boolean;
       /** @description 回答が存在する */
       has_my_response: boolean;
       /** Format: date-time */
-      responded_date_time_by_me: string;
+      responded_date_time_by_me?: string;
       /**
        * @description すべての対象者が回答済みの場合 true を返す。それ以外は false を返す。 (対象者が存在しない場合は true を返す)
        *
@@ -176,9 +181,6 @@ export interface components {
       targets: components["schemas"]["UsersAndGroups"];
       admins: components["schemas"]["UsersAndGroups"];
     };
-    QuestionnaireRespondents: {
-      respondents: components["schemas"]["Users"];
-    };
     QuestionnaireHasMyResponse: {
       /** @description 回答済みあるいは下書きが存在する */
       has_response: boolean;
@@ -197,7 +199,6 @@ export interface components {
        */
       created_at: string;
     };
-    Questions: components["schemas"]["Question"][];
     QuestionBase: {
       /** @example 1 */
       questionnaire_id: number;
@@ -295,44 +296,20 @@ export interface components {
     ResponseBodyBaseInteger: {
       answer: number;
     };
-    Result: {
-      /** @example 1 */
-      questionnaire_id: number;
-      /** @example 1 */
-      response_count: number;
-      body: components["schemas"]["ResultBody"][];
-    };
-    ResultBody: components["schemas"]["ResultBodyText"] | components["schemas"]["ResultBodyTextLong"] | components["schemas"]["ResultBodyNumber"] | components["schemas"]["ResultBodySingleChoice"] | components["schemas"]["ResultBodyMultipleChoice"] | components["schemas"]["ResultBodyScale"];
-    /** @description 回答文ごとの回答数の配列 */
-    ResultBodyText: components["schemas"]["QuestionTypeText"] & components["schemas"]["ResultBodyBaseStringAnswer"];
-    /** @description 回答文ごとの回答数の配列 */
-    ResultBodyTextLong: components["schemas"]["QuestionTypeTextLong"] & components["schemas"]["ResultBodyBaseStringAnswer"];
-    /** @description 数値ごとの回答数の配列 */
-    ResultBodyNumber: components["schemas"]["QuestionTypeNumber"] & components["schemas"]["ResultBodyBaseNumberAnswer"];
-    /** @description 選択肢ごとの回答数の配列 */
-    ResultBodySingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & components["schemas"]["ResultBodyBaseIntegerAnswer"];
-    /** @description 選択肢ごとの回答数の配列 */
-    ResultBodyMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & components["schemas"]["ResultBodyBaseIntegerAnswer"];
-    /** @description 数値ごとの回答数の配列 */
-    ResultBodyScale: components["schemas"]["QuestionTypeScale"] & components["schemas"]["ResultBodyBaseIntegerAnswer"];
-    ResultBodyBaseStringAnswer: {
-      aggregated_answers: {
-          answer: string;
-          answer_count: number;
-        }[];
-    };
-    ResultBodyBaseNumberAnswer: {
-      aggregated_answers: {
-          answer: number;
-          answer_count: number;
-        }[];
-    };
-    ResultBodyBaseIntegerAnswer: {
-      aggregated_answers: {
-          answer: number;
-          answer_count: number;
-        }[];
-    };
+    Result: (components["schemas"]["QuestionnaireID"] & {
+        /** @example 1 */
+        response_id: number;
+        /**
+         * Format: date-time
+         * @example "2019-12-31T15:00:00.000Z"
+         */
+        submitted_at: string;
+        /**
+         * Format: date-time
+         * @example "2019-12-31T15:00:00.000Z"
+         */
+        modified_at: string;
+      } & components["schemas"]["NewResponse"])[];
     UsersAndGroups: {
       users: components["schemas"]["Users"];
       groups: components["schemas"]["Groups"];
