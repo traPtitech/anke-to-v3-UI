@@ -263,4 +263,3 @@ const handleSave = () => {
   }
 }
 </style>
-~/components/response-form-base/form-response-base-settings~/components/response-form-base/questionnaire-settings

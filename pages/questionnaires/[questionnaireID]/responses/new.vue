@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ResponseFormQuestionnaireFormSettings } from '~/components/form-response-base/questionnaire-settings';
+import type { ResponseFormQuestionnaireFormSettings } from '~/components/response-form-base/questionnaire-settings';
 const formSettings: ResponseFormQuestionnaireFormSettings = {
   title: 'アンケートのタイトル',
   description: 'アンケートの説明',
@@ -65,9 +65,7 @@ const sending = '送信';
 </script>
 
 <template>
-  <FormResponseBase :form-settings="formSettings" :send-sentence="sending" />
+  <ResponseFormBase :form-settings="formSettings" :send-sentence="sending" />
 </template>
 
 <style lang="scss" scoped></style>
-~/components/form-response-base/questionnaire-settings
-~/components/response-form-base/questionnaire-settings
