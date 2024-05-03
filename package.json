@@ -60,5 +60,10 @@
   },
   "dependencies": {
     "js-sha256": "^0.10.1"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
