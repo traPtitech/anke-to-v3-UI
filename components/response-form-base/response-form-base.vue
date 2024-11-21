@@ -155,10 +155,12 @@ const handleSend = () => {
 };
 
 const handleSave = () => {
+  console.log('save requested')
   emit(
     'save',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
+  console.log('save requested')
 };
 </script>
 
