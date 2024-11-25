@@ -87,5 +87,4 @@ const name = computed(() => `scale-input-${createId()}`);
   }
 }
 </style>
-~/components/form-response-base/questionnaire-settings
-~/components/response-form-base/form-response-base-settings~/components/response-form-base/questionnaire-settings
+

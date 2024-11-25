@@ -70,5 +70,3 @@ const optionIds = question.value.options.map(() => createId());
   padding-left: 8px;
 }
 </style>
-~/components/form-response-base/questionnaire-settings
-~/components/response-form-base/form-response-base-settings~/components/response-form-base/questionnaire-settings

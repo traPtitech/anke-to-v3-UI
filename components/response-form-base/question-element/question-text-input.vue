@@ -39,5 +39,3 @@ const question = computed({
   width: 100%;
 }
 </style>
-~/components/form-response-base/questionnaire-settings
-~/components/response-form-base/form-response-base-settings~/components/response-form-base/questionnaire-settings

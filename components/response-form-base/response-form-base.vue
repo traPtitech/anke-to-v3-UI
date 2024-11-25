@@ -17,6 +17,7 @@ const props = defineProps<{
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
   sendSentence: string;
+  hasSaveButton: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -155,12 +156,12 @@ const handleSend = () => {
 };
 
 const handleSave = () => {
-  console.log('save requested')
+  console.log('save requested');
   emit(
     'save',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
-  console.log('save requested')
+  console.log('save completed');
 };
 </script>
 
@@ -191,10 +192,9 @@ const handleSave = () => {
       />
     </div>
     <div class="form-action-buttons">
-      <Button outlined class="form-action-button" @click="handleSave">
-        <Icon name="mdi:content-save" size="24px" />
-        <span>一時保存</span>
-      </Button>
+      <SaveButton v-if="hasSaveButton" @click-button="handleSave">
+        一時保存
+      </SaveButton>
       <SendButton @click-button="handleSend">
         {{ sendSentence }}
       </SendButton>

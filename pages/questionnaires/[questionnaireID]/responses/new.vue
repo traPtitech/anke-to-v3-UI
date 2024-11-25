@@ -65,7 +65,11 @@ const sending = '送信';
 </script>
 
 <template>
-  <ResponseFormBase :form-settings="formSettings" :send-sentence="sending" />
+  <ResponseFormBase
+    :form-settings="formSettings"
+    :send-sentence="sending"
+    :has-save-button="true"
+  />
 </template>
 
 <style lang="scss" scoped></style>

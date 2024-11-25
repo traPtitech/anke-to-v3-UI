@@ -7,8 +7,8 @@ const handleClick = () => {
 </script>
 
 <template>
-    <Button class="form-action-button" @click="handleClick">
-      <Icon name="mdi:send" size="24px" />
+  <Button outlined class="form-action-button" @click="handleClick">
+    <Icon name="mdi:content-save" size="24px" />
     <slot />
   </Button>
 </template>

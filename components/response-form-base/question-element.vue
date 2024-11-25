@@ -109,5 +109,3 @@ const modelValue = computed({
   color: #f26451;
 }
 </style>
-~/components/form-response-base/questionnaire-settings
-~/components/response-form-base/form-response-base-settings~/components/response-form-base/questionnaire-settings
