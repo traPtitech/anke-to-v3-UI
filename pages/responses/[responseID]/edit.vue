@@ -62,15 +62,13 @@ const formSettings: ResponseFormQuestionnaireFormSettings = {
     },
   ],
 };
-const sending = '変更';
 </script>
 
 <template>
-  <ResponseFormBase
-    :form-settings="formSettings"
-    :send-sentence="sending"
-    :has-save-button="false"
-  />
+  <ResponseFormBase :form-settings="formSettings">
+    <template #saveButton>一時保存</template>
+    <template #sendButton>変更</template>
+  </ResponseFormBase>
 </template>
 
 <style lang="scss" scoped></style>

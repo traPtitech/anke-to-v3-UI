@@ -16,8 +16,6 @@ const props = defineProps<{
   formSettings: Omit<ResponseFormQuestionnaireFormSettings, 'questions'> & {
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
-  sendSentence: string;
-  hasSaveButton: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -192,11 +190,11 @@ const handleSave = () => {
       />
     </div>
     <div class="form-action-buttons">
-      <SaveButton v-if="hasSaveButton" @click-button="handleSave">
-        一時保存
-      </SaveButton>
+        <SaveButton v-if="$slots.saveButton" @click-button="handleSave">
+          <slot name="saveButton"/>
+        </SaveButton>
       <SendButton @click-button="handleSend">
-        {{ sendSentence }}
+        <slot name="sendButton"/>
       </SendButton>
     </div>
   </form>
