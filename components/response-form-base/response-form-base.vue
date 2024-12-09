@@ -190,9 +190,9 @@ const handleSave = () => {
       />
     </div>
     <div class="form-action-buttons">
-        <SaveButton v-if="$slots.saveButton" @click-button="handleSave">
-          <slot name="saveButton"/>
-        </SaveButton>
+      <SaveButton v-if="$slots.saveButton" @click-button="handleSave">
+        <slot name="saveButton"/>
+      </SaveButton>
       <SendButton @click-button="handleSend">
         <slot name="sendButton"/>
       </SendButton>
