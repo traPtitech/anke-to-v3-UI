@@ -65,6 +65,7 @@ const formSettings: ResponseFormQuestionnaireFormSettings = {
 
 <template>
   <ResponseFormBase :form-settings="formSettings">
+    <template #saveButton>一時保存</template>
     <template #sendButton>送信</template>
   </ResponseFormBase>
 </template>
