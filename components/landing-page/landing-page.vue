@@ -28,7 +28,7 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
 <template>
   <div class="landing-page-container">
     <div class="title-logo">
-      <img src="~/assets/img/logo.svg" alt="anke-to" />
+      <img src="~/assets/img/logo.svg" alt="anke-to" width="320" />
     </div>
 
     <div class="questionnaire-list-containers">
