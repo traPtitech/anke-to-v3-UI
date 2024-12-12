@@ -62,7 +62,7 @@ const formSettings: ResponseFormQuestionnaireFormSettings = {
   ],
 };
 const newResponseAPI = (_responseSettings: ResponseFormQuestionnaireFormSettings) => {
-  console.log("response edited")
+  console.log("response created")
   console.log(_responseSettings)
 }
 </script>
