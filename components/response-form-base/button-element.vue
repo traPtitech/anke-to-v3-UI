@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 const emit = defineEmits<{ (e: 'clickButton'): void }>();
 
+const props = defineProps<{
+    isOutline: boolean
+}>();
 const handleClick = () => {
   emit('clickButton');
 };
 </script>
 
 <template>
-  <Button outlined class="form-action-button" @click="handleClick">
-    <Icon name="mdi:content-save" size="24px" />
+  <Button :outlined="props.isOutline" class="form-action-button" @click="handleClick">
     <slot />
   </Button>
 </template>

@@ -9,6 +9,7 @@ import {
   type ResponseFormBody,
   type ResponseSettings,
 } from '~/components/response-form-base/response-form-base-settings';
+import ButtonElement from './button-element.vue';
 
 const form = ref<HTMLFormElement | null>(null);
 
@@ -16,6 +17,7 @@ const props = defineProps<{
   formSettings: Omit<ResponseFormQuestionnaireFormSettings, 'questions'> & {
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
+  sendApi: Function
 }>();
 
 const emit = defineEmits<{
@@ -144,13 +146,13 @@ const convertResponseSettingsToResponseFormBody = (
 ): ResponseFormBody => res;
 
 const handleSend = () => {
-  console.log('edit requested');
+  console.log('send requested');
   if (!checkValidity()) return;
   emit(
     'send',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
-  console.log('edit completed');
+  props.sendApi(responseSettings.value)
 };
 
 const handleSave = () => {
@@ -159,7 +161,7 @@ const handleSave = () => {
     'save',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
-  console.log('save completed');
+  console.log('response saved');
 };
 </script>
 
@@ -190,12 +192,18 @@ const handleSave = () => {
       />
     </div>
     <div class="form-action-buttons">
-      <SaveButton v-if="$slots.saveButton" @click-button="handleSave">
-        <slot name="saveButton"/>
-      </SaveButton>
-      <SendButton @click-button="handleSend">
-        <slot name="sendButton"/>
-      </SendButton>
+      <ButtonElement
+        v-if="$slots.saveButton"
+        :is-outline="true"
+        @click-button="handleSave"
+      >
+        <Icon name="mdi:content-save" size="24px" />
+        <slot name="saveButton" />
+      </ButtonElement>
+      <ButtonElement :is-outline="false" @click-button="handleSend">
+        <Icon name="mdi:send" size="24px" />
+        <slot name="sendButton" />
+      </ButtonElement>
     </div>
   </form>
 </template>
@@ -234,6 +242,13 @@ const handleSave = () => {
   flex-direction: column;
   gap: 8px;
   transform: translateX(832px);
+}
+
+.form-action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 1300px) {

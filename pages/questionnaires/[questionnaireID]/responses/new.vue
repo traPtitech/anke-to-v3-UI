@@ -61,10 +61,14 @@ const formSettings: ResponseFormQuestionnaireFormSettings = {
     },
   ],
 };
+const newResponseAPI = (_responseSettings: ResponseFormQuestionnaireFormSettings) => {
+  console.log("response edited")
+  console.log(_responseSettings)
+}
 </script>
 
 <template>
-  <ResponseFormBase :form-settings="formSettings">
+  <ResponseFormBase :form-settings="formSettings" :send-api="newResponseAPI">
     <template #saveButton>一時保存</template>
     <template #sendButton>送信</template>
   </ResponseFormBase>
