@@ -1,16 +1,12 @@
 <script lang="ts" setup>
-const emit = defineEmits<{ (e: 'clickButton'): void }>();
 
 const props = defineProps<{
     isOutline: boolean
 }>();
-const handleClick = () => {
-  emit('clickButton');
-};
 </script>
 
 <template>
-  <Button :outlined="props.isOutline" class="form-action-button" @click="handleClick">
+  <Button :outlined="props.isOutline" class="form-action-button">
     <slot />
   </Button>
 </template>

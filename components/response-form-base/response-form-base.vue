@@ -152,7 +152,7 @@ const handleSend = () => {
     'send',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
-  props.sendApi(responseSettings.value)
+  props.sendApi(responseSettings.value);
 };
 
 const handleSave = () => {
@@ -195,12 +195,12 @@ const handleSave = () => {
       <ButtonElement
         v-if="$slots.saveButton"
         :is-outline="true"
-        @click-button="handleSave"
+        @click="handleSave"
       >
         <Icon name="mdi:content-save" size="24px" />
         <slot name="saveButton" />
       </ButtonElement>
-      <ButtonElement :is-outline="false" @click-button="handleSend">
+      <ButtonElement :is-outline="false" @click="handleSend">
         <Icon name="mdi:send" size="24px" />
         <slot name="sendButton" />
       </ButtonElement>
@@ -244,12 +244,7 @@ const handleSave = () => {
   transform: translateX(832px);
 }
 
-.form-action-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-}
+
 
 @media screen and (max-width: 1300px) {
   .form-action-buttons {
@@ -264,14 +259,6 @@ const handleSave = () => {
     padding-right: 0;
   }
 }
-
-.form-action-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-}
-
 @media screen and (max-width: $breakpoint-sm) {
   .form-action-buttons {
     flex-direction: column;
