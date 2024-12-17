@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ResponseFormQuestionnaireFormSettings } from '~/components/response-form-base/questionnaire-settings';
+
 const formSettings: ResponseFormQuestionnaireFormSettings = {
   title: 'アンケートのタイトル',
   description: 'アンケートの説明',
@@ -61,18 +62,18 @@ const formSettings: ResponseFormQuestionnaireFormSettings = {
     },
   ],
 };
-const newResponseAPI = (
+
+const editResponseAPI = (
   _responseSettings: ResponseFormQuestionnaireFormSettings,
 ) => {
-  console.log('response created');
+  console.log('response edited');
   console.log(_responseSettings);
 };
 </script>
 
 <template>
-  <ResponseFormBase :form-settings="formSettings" :send-api="newResponseAPI">
-    <template #saveButton>一時保存</template>
-    <template #sendButton>送信</template>
+  <ResponseFormBase :form-settings="formSettings" :send-api="editResponseAPI">
+    <template #sendButton>変更</template>
   </ResponseFormBase>
 </template>
 

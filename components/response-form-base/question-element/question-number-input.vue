@@ -1,19 +1,20 @@
 <script lang="ts" setup>
-import type { ResponseSettingsText } from '~/components/new-response-form/new-response-form-settings';
+import type { ResponseSettingsNumber } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
-  ResponseFormQuestionSettingsText,
-} from '~/components/new-response-form/questionnaire-settings';
+  ResponseFormQuestionSettingsNumber,
+} from '~/components/response-form-base/questionnaire-settings';
 
-type ModelValue = ResponseSettingsText &
-  ResponseFormQuestionSettingsText &
+type ModelValue = ResponseSettingsNumber &
+  ResponseFormQuestionSettingsNumber &
   ResponseFormQuestionSettingsBase &
   ResponseFormQuestionInvalid;
 
 const props = defineProps<{
   modelValue: ModelValue;
 }>();
+
 const emit = defineEmits<{
   (e: 'update:modelValue', value: ModelValue): void;
 }>();
@@ -25,17 +26,17 @@ const question = computed({
 </script>
 
 <template>
-  <InputText
-    v-model="question.text"
-    class="question-text-input"
+  <InputNumber
+    v-model="question.number"
+    class="question-number-input"
     :class="{ 'p-invalid': question.isInvalid }"
     placeholder="回答を入力"
-    :required="question.required"
+    :input-props="{ required: question.required }"
   />
 </template>
 
 <style lang="scss" scoped>
-.question-text-input {
+.question-number-input {
   width: 100%;
 }
 </style>

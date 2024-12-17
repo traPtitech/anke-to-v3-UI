@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ResponseSettingsScale } from '~/components/new-response-form/new-response-form-settings';
+import type { ResponseSettingsScale } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
   ResponseFormQuestionSettingsScale,
-} from '~/components/new-response-form/questionnaire-settings';
+} from '~/components/response-form-base/questionnaire-settings';
 
 type ModelValue = ResponseSettingsScale &
   ResponseFormQuestionSettingsScale &
@@ -87,3 +87,4 @@ const name = computed(() => `scale-input-${createId()}`);
   }
 }
 </style>
+

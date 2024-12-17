@@ -1,20 +1,19 @@
 <script lang="ts" setup>
-import type { ResponseSettingsTextLong } from '~/components/new-response-form/new-response-form-settings';
+import type { ResponseSettingsText } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
-  ResponseFormQuestionSettingsTextLong,
-} from '~/components/new-response-form/questionnaire-settings';
+  ResponseFormQuestionSettingsText,
+} from '~/components/response-form-base/questionnaire-settings';
 
-type ModelValue = ResponseSettingsTextLong &
-  ResponseFormQuestionSettingsTextLong &
+type ModelValue = ResponseSettingsText &
+  ResponseFormQuestionSettingsText &
   ResponseFormQuestionSettingsBase &
   ResponseFormQuestionInvalid;
 
 const props = defineProps<{
   modelValue: ModelValue;
 }>();
-
 const emit = defineEmits<{
   (e: 'update:modelValue', value: ModelValue): void;
 }>();
@@ -26,9 +25,9 @@ const question = computed({
 </script>
 
 <template>
-  <Textarea
-    v-model="question.textLong"
-    class="question-text-long-input"
+  <InputText
+    v-model="question.text"
+    class="question-text-input"
     :class="{ 'p-invalid': question.isInvalid }"
     placeholder="回答を入力"
     :required="question.required"
@@ -36,7 +35,7 @@ const question = computed({
 </template>
 
 <style lang="scss" scoped>
-.question-text-long-input {
+.question-text-input {
   width: 100%;
 }
 </style>

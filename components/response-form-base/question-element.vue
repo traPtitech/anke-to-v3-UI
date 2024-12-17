@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { ResponseSettings } from '~/components/new-response-form/new-response-form-settings';
+import type { ResponseSettings } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettings,
-} from '~/components/new-response-form/questionnaire-settings';
+} from '~/components/response-form-base/questionnaire-settings';
 
 type ModelValue = ResponseSettings &
   ResponseFormQuestionSettings &

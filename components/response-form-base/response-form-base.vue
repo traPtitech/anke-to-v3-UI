@@ -1,14 +1,15 @@
 <script lang="ts" setup>
+import type {
+  ResponseFormQuestionInvalid,
+  ResponseFormQuestionSettings,
+  ResponseFormQuestionnaireFormSettings,
+} from '~/components/response-form-base/questionnaire-settings';
 import {
   defaultQuestionSettingsByType,
   type ResponseFormBody,
   type ResponseSettings,
-} from '~/components/new-response-form/new-response-form-settings';
-import type {
-  ResponseFormQuestionInvalid,
-  ResponseFormQuestionnaireFormSettings,
-  ResponseFormQuestionSettings,
-} from '~/components/new-response-form/questionnaire-settings';
+} from '~/components/response-form-base/response-form-base-settings';
+import ButtonElement from './button-element.vue';
 
 const form = ref<HTMLFormElement | null>(null);
 
@@ -16,6 +17,7 @@ const props = defineProps<{
   formSettings: Omit<ResponseFormQuestionnaireFormSettings, 'questions'> & {
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
+  sendApi: Function
 }>();
 
 const emit = defineEmits<{
@@ -144,18 +146,22 @@ const convertResponseSettingsToResponseFormBody = (
 ): ResponseFormBody => res;
 
 const handleSend = () => {
+  console.log('send requested');
   if (!checkValidity()) return;
   emit(
     'send',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
+  props.sendApi(responseSettings.value);
 };
 
 const handleSave = () => {
+  console.log('save requested');
   emit(
     'save',
     convertResponseSettingsToResponseFormBody(responseSettings.value),
   );
+  console.log('response saved');
 };
 </script>
 
@@ -186,14 +192,18 @@ const handleSave = () => {
       />
     </div>
     <div class="form-action-buttons">
-      <Button outlined class="form-action-button" @click="handleSave">
+      <ButtonElement
+        v-if="$slots.saveButton"
+        :is-outline="true"
+        @click="handleSave"
+      >
         <Icon name="mdi:content-save" size="24px" />
-        <span>一時保存</span>
-      </Button>
-      <Button class="form-action-button" @click="handleSend">
+        <slot name="saveButton" />
+      </ButtonElement>
+      <ButtonElement :is-outline="false" @click="handleSend">
         <Icon name="mdi:send" size="24px" />
-        <span>送信</span>
-      </Button>
+        <slot name="sendButton" />
+      </ButtonElement>
     </div>
   </form>
 </template>
@@ -234,6 +244,8 @@ const handleSave = () => {
   transform: translateX(832px);
 }
 
+
+
 @media screen and (max-width: 1300px) {
   .form-action-buttons {
     position: static;
@@ -247,14 +259,6 @@ const handleSave = () => {
     padding-right: 0;
   }
 }
-
-.form-action-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-}
-
 @media screen and (max-width: $breakpoint-sm) {
   .form-action-buttons {
     flex-direction: column;
