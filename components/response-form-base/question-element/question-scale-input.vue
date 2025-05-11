@@ -87,3 +87,4 @@ const name = computed(() => `scale-input-${createId()}`);
   }
 }
 </style>
+

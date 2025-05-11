@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+
 const props = defineProps<{
-  isOutline: boolean;
+    isOutline: boolean
 }>();
 </script>
 
