@@ -17,7 +17,7 @@ const props = defineProps<{
   formSettings: Omit<ResponseFormQuestionnaireFormSettings, 'questions'> & {
     questions: Omit<ResponseFormQuestionSettings, 'invalid'>[];
   };
-  sendApi: Function
+  sendApi: Function;
 }>();
 
 const emit = defineEmits<{
@@ -243,8 +243,6 @@ const handleSave = () => {
   gap: 8px;
   transform: translateX(832px);
 }
-
-
 
 @media screen and (max-width: 1300px) {
   .form-action-buttons {
