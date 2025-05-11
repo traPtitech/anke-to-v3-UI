@@ -3,266 +3,265 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/channels/{channelId}/messages": {
+  '/channels/{channelId}/messages': {
     /**
      * チャンネルメッセージのリストを取得
      * @description 指定したチャンネルのメッセージのリストを取得します。
      */
-    get: operations["getMessages"];
+    get: operations['getMessages'];
     /**
      * チャンネルにメッセージを投稿
      * @description 指定したチャンネルにメッセージを投稿します。
      * embedをtrueに指定すると、メッセージ埋め込みが自動で行われます。
      * アーカイブされているチャンネルに投稿することはできません。
      */
-    post: operations["postMessage"];
+    post: operations['postMessage'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/messages": {
+  '/messages': {
     /**
      * メッセージを検索
      * @description メッセージを検索します。
      */
-    get: operations["searchMessages"];
+    get: operations['searchMessages'];
   };
-  "/messages/{messageId}": {
+  '/messages/{messageId}': {
     /**
      * メッセージを取得
      * @description 指定したメッセージを取得します。
      */
-    get: operations["getMessage"];
+    get: operations['getMessage'];
     /**
      * メッセージを編集
      * @description 指定したメッセージを編集します。
      * 自身が投稿したメッセージのみ編集することができます。
      * アーカイブされているチャンネルのメッセージを編集することは出来ません。
      */
-    put: operations["editMessage"];
+    put: operations['editMessage'];
     /**
      * メッセージを削除
      * @description 指定したメッセージを削除します。
      * 自身が投稿したメッセージと自身が管理権限を持つWebhookとBOTが投稿したメッセージのみ削除することができます。
      * アーカイブされているチャンネルのメッセージを編集することは出来ません。
      */
-    delete: operations["deleteMessage"];
+    delete: operations['deleteMessage'];
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
   };
-  "/messages/{messageId}/pin": {
+  '/messages/{messageId}/pin': {
     /**
      * ピン留めを取得
      * @description 指定したメッセージのピン留め情報を取得します。
      */
-    get: operations["getPin"];
+    get: operations['getPin'];
     /**
      * ピン留めする
      * @description 指定したメッセージをピン留めします。
      * アーカイブされているチャンネルのメッセージ・存在しないメッセージ・チャンネル当たりの上限数を超えたメッセージのピン留めはできません。
      */
-    post: operations["createPin"];
+    post: operations['createPin'];
     /**
      * ピン留めを外す
      * @description 指定したメッセージのピン留めを外します。
      */
-    delete: operations["removePin"];
+    delete: operations['removePin'];
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
   };
-  "/channels/{channelId}/stats": {
+  '/channels/{channelId}/stats': {
     /**
      * チャンネル統計情報を取得
      * @description 指定したチャンネルの統計情報を取得します。
      */
-    get: operations["getChannelStats"];
+    get: operations['getChannelStats'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/channels/{channelId}/topic": {
+  '/channels/{channelId}/topic': {
     /**
      * チャンネルトピックを取得
      * @description 指定したチャンネルのトピックを取得します。
      */
-    get: operations["getChannelTopic"];
+    get: operations['getChannelTopic'];
     /**
      * チャンネルトピックを編集
      * @description 指定したチャンネルのトピックを編集します。
      * アーカイブされているチャンネルのトピックは編集できません。
      */
-    put: operations["editChannelTopic"];
+    put: operations['editChannelTopic'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/channels/{channelId}/viewers": {
+  '/channels/{channelId}/viewers': {
     /**
      * チャンネル閲覧者リストを取得
      * @description 指定したチャンネルの閲覧者のリストを取得します。
      */
-    get: operations["getChannelViewers"];
+    get: operations['getChannelViewers'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/files": {
+  '/files': {
     /**
      * ファイルメタのリストを取得
      * @description 指定したクエリでファイルメタのリストを取得します。
      * クエリパラメータ`channelId`, `mine`の少なくともいずれかが必須です。
      */
-    get: operations["getFiles"];
+    get: operations['getFiles'];
     /**
      * ファイルをアップロード
      * @description 指定したチャンネルにファイルをアップロードします。
      * アーカイブされているチャンネルにはアップロード出来ません。
      */
-    post: operations["postFile"];
+    post: operations['postFile'];
   };
-  "/files/{fileId}/meta": {
+  '/files/{fileId}/meta': {
     /**
      * ファイルメタを取得
      * @description 指定したファイルのメタ情報を取得します。
      * 指定したファイルへのアクセス権限が必要です。
      */
-    get: operations["getFileMeta"];
+    get: operations['getFileMeta'];
     parameters: {
       path: {
-        fileId: components["parameters"]["fileIdInPath"];
+        fileId: components['parameters']['fileIdInPath'];
       };
     };
   };
-  "/files/{fileId}/thumbnail": {
+  '/files/{fileId}/thumbnail': {
     /**
      * サムネイル画像を取得
      * @description 指定したファイルのサムネイル画像を取得します。
      * 指定したファイルへのアクセス権限が必要です。
      */
-    get: operations["getThumbnailImage"];
+    get: operations['getThumbnailImage'];
     parameters: {
       query?: {
         /** @description 取得するサムネイルのタイプ */
-        type?: components["schemas"]["ThumbnailType"];
+        type?: components['schemas']['ThumbnailType'];
       };
       path: {
-        fileId: components["parameters"]["fileIdInPath"];
+        fileId: components['parameters']['fileIdInPath'];
       };
     };
   };
-  "/files/{fileId}": {
+  '/files/{fileId}': {
     /**
      * ファイルをダウンロード
      * @description 指定したファイル本体を取得します。
      * 指定したファイルへのアクセス権限が必要です。
      */
-    get: operations["getFile"];
+    get: operations['getFile'];
     /**
      * ファイルを削除
      * @description 指定したファイルを削除します。
      * 指定したファイルの削除権限が必要です。
      */
-    delete: operations["deleteFile"];
+    delete: operations['deleteFile'];
     parameters: {
       path: {
-        fileId: components["parameters"]["fileIdInPath"];
+        fileId: components['parameters']['fileIdInPath'];
       };
     };
   };
-  "/channels/{channelId}/pins": {
+  '/channels/{channelId}/pins': {
     /**
      * チャンネルピンのリストを取得
      * @description 指定したチャンネルにピン留めされているピンメッセージのリストを取得します。
      */
-    get: operations["getChannelPins"];
+    get: operations['getChannelPins'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/messages/{messageId}/stamps": {
+  '/messages/{messageId}/stamps': {
     /**
      * メッセージのスタンプリストを取得
      * @description 指定したメッセージに押されているスタンプのリストを取得します。
      */
-    get: operations["getMessageStamps"];
+    get: operations['getMessageStamps'];
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
   };
-  "/messages/{messageId}/stamps/{stampId}": {
+  '/messages/{messageId}/stamps/{stampId}': {
     /**
      * スタンプを押す
      * @description 指定したメッセージに指定したスタンプを押します。
      */
-    post: operations["addMessageStamp"];
+    post: operations['addMessageStamp'];
     /**
      * スタンプを消す
      * @description 指定したメッセージから指定した自身が押したスタンプを削除します。
      */
-    delete: operations["removeMessageStamp"];
+    delete: operations['removeMessageStamp'];
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
-        stampId: components["parameters"]["stampIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
   };
-  "/stamps/{stampId}": {
+  '/stamps/{stampId}': {
     /**
      * スタンプ情報を取得
      * @description 指定したスタンプの情報を取得します。
      */
-    get: operations["getStamp"];
+    get: operations['getStamp'];
     /**
      * スタンプを削除
      * @description 指定したスタンプを削除します。
      * 対象のスタンプの削除権限が必要です。
      */
-    delete: operations["deleteStamp"];
+    delete: operations['deleteStamp'];
     /**
      * スタンプ情報を変更
      * @description 指定したスタンプの情報を変更します。
      */
-    patch: operations["editStamp"];
+    patch: operations['editStamp'];
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
   };
-  "/stamps": {
+  '/stamps': {
     /**
      * スタンプリストを取得
      * @description スタンプのリストを取得します。
      */
-    get: operations["getStamps"];
+    get: operations['getStamps'];
     /**
      * スタンプを作成
      * @description スタンプを新規作成します。
      */
-    post: operations["createStamp"];
+    post: operations['createStamp'];
   };
-  "/users/me/stamp-history": {
+  '/users/me/stamp-history': {
     /**
      * スタンプ履歴を取得
      * @description 自分のスタンプ履歴を最大100件まで取得します。
@@ -270,535 +269,535 @@ export interface paths {
      *
      * このAPIが返すスタンプ履歴は厳密な履歴ではありません。
      */
-    get: operations["getMyStampHistory"];
+    get: operations['getMyStampHistory'];
   };
-  "/users/me/qr-code": {
+  '/users/me/qr-code': {
     /**
      * QRコードを取得
      * @description 自身のQRコードを取得します。
      * 返されたQRコードまたはトークンは、発行後の5分間のみ有効です
      */
-    get: operations["getMyQRCode"];
+    get: operations['getMyQRCode'];
   };
-  "/stamps/{stampId}/stats": {
+  '/stamps/{stampId}/stats': {
     /**
      * スタンプ統計情報を取得
      * @description 指定したスタンプの統計情報を取得します。
      */
-    get: operations["getStampStats"];
+    get: operations['getStampStats'];
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
   };
-  "/users/{userId}": {
+  '/users/{userId}': {
     /**
      * ユーザー詳細情報を取得
      * @description 指定したユーザーの詳細情報を取得します。
      */
-    get: operations["getUser"];
+    get: operations['getUser'];
     /**
      * ユーザー情報を変更
      * @description 指定したユーザーの情報を変更します。
      * 管理者権限が必要です。
      */
-    patch: operations["editUser"];
+    patch: operations['editUser'];
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/groups/{groupId}": {
+  '/groups/{groupId}': {
     /**
      * ユーザーグループを取得
      * @description 指定したユーザーグループの情報を取得します。
      */
-    get: operations["getUserGroup"];
+    get: operations['getUserGroup'];
     /**
      * ユーザーグループを削除
      * @description 指定したユーザーグループを削除します。
      * 対象のユーザーグループの管理者権限が必要です。
      */
-    delete: operations["deleteUserGroup"];
+    delete: operations['deleteUserGroup'];
     /**
      * ユーザーグループを編集
      * @description 指定したユーザーグループの情報を編集します。
      * 対象のユーザーグループの管理者権限が必要です。
      */
-    patch: operations["editUserGroup"];
+    patch: operations['editUserGroup'];
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
   };
-  "/groups/{groupId}/icon": {
+  '/groups/{groupId}/icon': {
     /**
      * ユーザーグループのアイコンを変更
      * @description ユーザーグループのアイコンを変更します。
      * 対象のユーザーグループの管理者権限が必要です。
      */
-    put: operations["changeUserGroupIcon"];
+    put: operations['changeUserGroupIcon'];
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
   };
-  "/groups/{groupId}/members": {
+  '/groups/{groupId}/members': {
     /**
      * グループメンバーを取得
      * @description 指定したグループのメンバーのリストを取得します。
      */
-    get: operations["getUserGroupMembers"];
+    get: operations['getUserGroupMembers'];
     /**
      * グループメンバーを追加
      * @description 指定したグループにメンバーを追加します。
      * 対象のユーザーグループの管理者権限が必要です。
      */
-    post: operations["addUserGroupMember"];
+    post: operations['addUserGroupMember'];
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
   };
-  "/groups/{groupId}/members/{userId}": {
+  '/groups/{groupId}/members/{userId}': {
     /**
      * グループメンバーを削除
      * @description 指定したユーザーグループから指定したユーザーを削除します。
      * 既にグループから削除されているメンバーを指定した場合は204を返します。
      * 対象のユーザーグループの管理者権限が必要です。
      */
-    delete: operations["removeUserGroupMember"];
+    delete: operations['removeUserGroupMember'];
     /**
      * グループメンバーを編集
      * @description 指定したユーザーグループ内の指定したユーザーの属性を編集します。
      * 対象のユーザーグループの管理者権限が必要です。
      */
-    patch: operations["editUserGroupMember"];
+    patch: operations['editUserGroupMember'];
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
-        userId: components["parameters"]["userIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/groups": {
+  '/groups': {
     /**
      * ユーザーグループのリストを取得
      * @description ユーザーグループのリストを取得します。
      */
-    get: operations["getUserGroups"];
+    get: operations['getUserGroups'];
     /**
      * ユーザーグループを作成
      * @description ユーザーグループを作成します。
      * 作成者は自動的にグループ管理者になります。
      */
-    post: operations["createUserGroup"];
+    post: operations['createUserGroup'];
   };
-  "/users/me": {
+  '/users/me': {
     /**
      * 自分のユーザー詳細を取得
      * @description 自身のユーザー詳細情報を取得します。
      */
-    get: operations["getMe"];
+    get: operations['getMe'];
     /**
      * 自分のユーザー情報を変更
      * @description 自身のユーザー情報を変更します。
      */
-    patch: operations["editMe"];
+    patch: operations['editMe'];
   };
-  "/users/{userId}/messages": {
+  '/users/{userId}/messages': {
     /**
      * ダイレクトメッセージのリストを取得
      * @description 指定したユーザーとのダイレクトメッセージのリストを取得します。
      */
-    get: operations["getDirectMessages"];
+    get: operations['getDirectMessages'];
     /**
      * ダイレクトメッセージを送信
      * @description 指定したユーザーにダイレクトメッセージを送信します。
      */
-    post: operations["postDirectMessage"];
+    post: operations['postDirectMessage'];
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/users/{userId}/stats": {
+  '/users/{userId}/stats': {
     /**
      * ユーザー統計情報を取得
      * @description 指定したユーザーの統計情報を取得します。
      */
-    get: operations["getUserStats"];
+    get: operations['getUserStats'];
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/channels/{channelId}/subscribers": {
+  '/channels/{channelId}/subscribers': {
     /**
      * チャンネルの通知購読者のリストを取得
      * @description 指定したチャンネルを通知購読しているユーザーのUUIDのリストを取得します。
      */
-    get: operations["getChannelSubscribers"];
+    get: operations['getChannelSubscribers'];
     /**
      * チャンネルの通知購読者を設定
      * @description 指定したチャンネルの通知購読者を設定します。
      * リクエストに含めなかったユーザーの通知購読状態はオフになります。
      * また、存在しないユーザーを指定した場合は無視されます。
      */
-    put: operations["setChannelSubscribers"];
+    put: operations['setChannelSubscribers'];
     /**
      * チャンネルの通知購読者を編集
      * @description 指定したチャンネルの通知購読者を編集します。
      * リクエストに含めなかったユーザーの通知購読状態は変更しません。
      * また、存在しないユーザーを指定した場合は無視されます。
      */
-    patch: operations["editChannelSubscribers"];
+    patch: operations['editChannelSubscribers'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/users/me/subscriptions": {
+  '/users/me/subscriptions': {
     /**
      * 自分のチャンネル購読状態を取得
      * @description 自身のチャンネル購読状態を取得します。
      */
-    get: operations["getMyChannelSubscriptions"];
+    get: operations['getMyChannelSubscriptions'];
   };
-  "/users/me/subscriptions/{channelId}": {
+  '/users/me/subscriptions/{channelId}': {
     /**
      * チャンネル購読レベルを設定
      * @description 自身の指定したチャンネルの購読レベルを設定します。
      */
-    put: operations["setChannelSubscribeLevel"];
+    put: operations['setChannelSubscribeLevel'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/webhooks": {
+  '/webhooks': {
     /**
      * Webhook情報のリストを取得します
      * @description Webhookのリストを取得します。
      * allがtrueで無い場合は、自分がオーナーのWebhookのリストを返します。
      */
-    get: operations["getWebhooks"];
+    get: operations['getWebhooks'];
     /**
      * Webhookを新規作成
      * @description Webhookを新規作成します。
      * `secret`が空文字の場合、insecureウェブフックが作成されます。
      */
-    post: operations["createWebhook"];
+    post: operations['createWebhook'];
   };
-  "/webhooks/{webhookId}": {
+  '/webhooks/{webhookId}': {
     /**
      * Webhook情報を取得
      * @description 指定したWebhookの詳細を取得します。
      */
-    get: operations["getWebhook"];
+    get: operations['getWebhook'];
     /**
      * Webhookを送信
      * @description Webhookにメッセージを投稿します。
      * secureなウェブフックに対しては`X-TRAQ-Signature`ヘッダーが必須です。
      * アーカイブされているチャンネルには投稿できません。
      */
-    post: operations["postWebhook"];
+    post: operations['postWebhook'];
     /**
      * Webhookを削除
      * @description 指定したWebhookを削除します。
      * Webhookによって投稿されたメッセージは削除されません。
      */
-    delete: operations["deleteWebhook"];
+    delete: operations['deleteWebhook'];
     /**
      * Webhook情報を変更
      * @description 指定したWebhookの情報を変更します。
      */
-    patch: operations["editWebhook"];
+    patch: operations['editWebhook'];
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
   };
-  "/webhooks/{webhookId}/icon": {
+  '/webhooks/{webhookId}/icon': {
     /**
      * Webhookのアイコンを取得
      * @description 指定したWebhookのアイコン画像を取得します
      */
-    get: operations["getWebhookIcon"];
+    get: operations['getWebhookIcon'];
     /**
      * Webhookのアイコンを変更
      * @description 指定したWebhookのアイコン画像を変更します。
      */
-    put: operations["changeWebhookIcon"];
+    put: operations['changeWebhookIcon'];
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
   };
-  "/users/{userId}/icon": {
+  '/users/{userId}/icon': {
     /**
      * ユーザーのアイコン画像を取得
      * @description 指定したユーザーのアイコン画像を取得します。
      */
-    get: operations["getUserIcon"];
+    get: operations['getUserIcon'];
     /**
      * ユーザーのアイコン画像を変更します
      * @description 指定したユーザーのアイコン画像を変更します。
      * 管理者権限が必要です。
      */
-    put: operations["changeUserIcon"];
+    put: operations['changeUserIcon'];
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/users/me/icon": {
+  '/users/me/icon': {
     /**
      * 自分のアイコン画像を取得
      * @description 自分のアイコン画像を取得します。
      */
-    get: operations["getMyIcon"];
+    get: operations['getMyIcon'];
     /**
      * 自分のアイコン画像を変更
      * @description 自分のアイコン画像を変更します。
      */
-    put: operations["changeMyIcon"];
+    put: operations['changeMyIcon'];
   };
-  "/users/me/password": {
+  '/users/me/password': {
     /**
      * 自分のパスワードを変更
      * @description 自身のパスワードを変更します。
      */
-    put: operations["changeMyPassword"];
+    put: operations['changeMyPassword'];
   };
-  "/users/{userId}/password": {
+  '/users/{userId}/password': {
     /**
      * ユーザーのパスワードを変更
      * @description 指定したユーザーのパスワードを変更します。
      * 管理者権限が必要です。
      */
-    put: operations["changeUserPassword"];
+    put: operations['changeUserPassword'];
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/users/me/fcm-device": {
+  '/users/me/fcm-device': {
     /**
      * FCMデバイスを登録
      * @description 自身のFCMデバイスを登録します。
      */
-    post: operations["registerFCMDevice"];
+    post: operations['registerFCMDevice'];
   };
-  "/users/me/view-states": {
+  '/users/me/view-states': {
     /**
      * 自身のチャンネル閲覧状態一覧を取得
      * @description 自身のチャンネル閲覧状態一覧を取得します。
      */
-    get: operations["getMyViewStates"];
+    get: operations['getMyViewStates'];
   };
-  "/users": {
+  '/users': {
     /**
      * ユーザーのリストを取得
      * @description ユーザーのリストを取得します。
      * `include-suspended`を指定しない場合、レスポンスにはユーザーアカウント状態が"1: 有効"であるユーザーのみが含まれます。
      * `include-suspended`と`name`を同時に指定することはできません。
      */
-    get: operations["getUsers"];
+    get: operations['getUsers'];
     /**
      * ユーザーを登録
      * @description ユーザーを登録します。
      * 管理者権限が必要です。
      */
-    post: operations["createUser"];
+    post: operations['createUser'];
   };
-  "/channels": {
+  '/channels': {
     /**
      * チャンネルリストを取得
      * @description チャンネルのリストを取得します。
      */
-    get: operations["getChannels"];
+    get: operations['getChannels'];
     /**
      * チャンネルを作成
      * @description チャンネルを作成します。
      * 階層が6以上になるチャンネルは作成できません。
      */
-    post: operations["createChannel"];
+    post: operations['createChannel'];
   };
-  "/users/{userId}/tags": {
+  '/users/{userId}/tags': {
     /**
      * ユーザーのタグリストを取得
      * @description 指定したユーザーのタグリストを取得します。
      */
-    get: operations["getUserTags"];
+    get: operations['getUserTags'];
     /**
      * ユーザーにタグを追加
      * @description 指定したユーザーに指定したタグを追加します。
      * Webhookユーザーにタグを追加することは出来ません。
      */
-    post: operations["addUserTag"];
+    post: operations['addUserTag'];
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/users/{userId}/tags/{tagId}": {
+  '/users/{userId}/tags/{tagId}': {
     /**
      * ユーザーからタグを削除します
      * @description 既に存在しないタグを削除しようとした場合は204を返します。
      */
-    delete: operations["removeUserTag"];
+    delete: operations['removeUserTag'];
     /**
      * ユーザーのタグを編集
      * @description 指定したユーザーの指定したタグの状態を変更します。
      * 他人の状態は変更できません。
      */
-    patch: operations["editUserTag"];
+    patch: operations['editUserTag'];
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
-        tagId: components["parameters"]["tagIdInPath"];
+        userId: components['parameters']['userIdInPath'];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
   };
-  "/tags/{tagId}": {
+  '/tags/{tagId}': {
     /**
      * タグ情報を取得
      * @description 指定したタグの情報を取得します。
      */
-    get: operations["getTag"];
+    get: operations['getTag'];
     parameters: {
       path: {
-        tagId: components["parameters"]["tagIdInPath"];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
   };
-  "/users/me/tags": {
+  '/users/me/tags': {
     /**
      * 自分のタグリストを取得
      * @description 自分に付けられているタグの配列を取得します。
      */
-    get: operations["getMyUserTags"];
+    get: operations['getMyUserTags'];
     /**
      * 自分にタグを追加
      * @description 自分に新しくタグを追加します。
      */
-    post: operations["addMyUserTag"];
+    post: operations['addMyUserTag'];
   };
-  "/users/me/tags/{tagId}": {
+  '/users/me/tags/{tagId}': {
     /**
      * 自分からタグを削除します
      * @description 既に存在しないタグを削除しようとした場合は204を返します。
      */
-    delete: operations["removeMyUserTag"];
+    delete: operations['removeMyUserTag'];
     /**
      * 自分のタグを編集
      * @description 自分の指定したタグの状態を変更します。
      */
-    patch: operations["editMyUserTag"];
+    patch: operations['editMyUserTag'];
     parameters: {
       path: {
-        tagId: components["parameters"]["tagIdInPath"];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
   };
-  "/users/me/stars": {
+  '/users/me/stars': {
     /**
      * スターチャンネルリストを取得
      * @description 自分がスターしているチャンネルのUUIDの配列を取得します。
      */
-    get: operations["getMyStars"];
+    get: operations['getMyStars'];
     /**
      * チャンネルをスターに追加
      * @description 指定したチャンネルをスターチャンネルに追加します。
      * スター済みのチャンネルIDを指定した場合、204を返します。
      * 不正なチャンネルIDを指定した場合、400を返します。
      */
-    post: operations["addMyStar"];
+    post: operations['addMyStar'];
   };
-  "/users/me/stars/{channelId}": {
+  '/users/me/stars/{channelId}': {
     /**
      * チャンネルをスターから削除します
      * @description 既にスターから削除されているチャンネルを指定した場合は204を返します。
      */
-    delete: operations["removeMyStar"];
+    delete: operations['removeMyStar'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/users/me/unread": {
+  '/users/me/unread': {
     /**
      * 未読チャンネルを取得
      * @description 自分が現在未読のチャンネルの未読情報を取得します。
      */
-    get: operations["getMyUnreadChannels"];
+    get: operations['getMyUnreadChannels'];
   };
-  "/version": {
+  '/version': {
     /**
      * バージョンを取得
      * @description サーバーバージョン及びサーバーフラグ情報を取得します。
      */
-    get: operations["getServerVersion"];
+    get: operations['getServerVersion'];
   };
-  "/login": {
+  '/login': {
     /**
      * ログイン
      * @description ログインします。
      */
-    post: operations["login"];
+    post: operations['login'];
   };
-  "/logout": {
+  '/logout': {
     /**
      * ログアウト
      * @description ログアウトします。
      */
-    post: operations["logout"];
+    post: operations['logout'];
   };
-  "/users/me/sessions": {
+  '/users/me/sessions': {
     /**
      * 自分のログインセッションリストを取得
      * @description 自分のログインセッションのリストを取得します。
      */
-    get: operations["getMySessions"];
+    get: operations['getMySessions'];
   };
-  "/users/me/sessions/{sessionId}": {
+  '/users/me/sessions/{sessionId}': {
     /**
      * セッションを無効化
      * @description 指定した自分のセッションを無効化(ログアウト)します。
      * 既に存在しない・無効化されているセッションを指定した場合も`204`を返します。
      */
-    delete: operations["revokeMySession"];
+    delete: operations['revokeMySession'];
     parameters: {
       path: {
-        sessionId: components["parameters"]["sessionIdInPath"];
+        sessionId: components['parameters']['sessionIdInPath'];
       };
     };
   };
-  "/activity/timeline": {
+  '/activity/timeline': {
     /**
      * アクテビティタイムラインを取得
      * @description パブリックチャンネルの直近の投稿メッセージを作成日時の降順で取得します。
      * `all`が`true`でない場合、購読チャンネルのみのタイムラインを取得します
      */
-    get: operations["getActivityTimeline"];
+    get: operations['getActivityTimeline'];
   };
-  "/ws": {
+  '/ws': {
     /**
      * WebSocket通知ストリームに接続します
      * @description # WebSocketプロトコル
@@ -1123,33 +1122,33 @@ export interface paths {
      * + `folder_id`: メッセージが追加されたクリップフォルダーのId
      * + `message_id`: クリップフォルダーに追加されたメッセージのId
      */
-    get: operations["ws"];
+    get: operations['ws'];
   };
-  "/users/me/tokens": {
+  '/users/me/tokens': {
     /**
      * 有効トークンのリストを取得
      * @description 有効な自分に発行されたOAuth2トークンのリストを取得します。
      */
-    get: operations["getMyTokens"];
+    get: operations['getMyTokens'];
   };
-  "/users/me/tokens/{tokenId}": {
+  '/users/me/tokens/{tokenId}': {
     /**
      * トークンの認可を取り消す
      * @description 自分の指定したトークンの認可を取り消します。
      */
-    delete: operations["revokeMyToken"];
+    delete: operations['revokeMyToken'];
     parameters: {
       path: {
-        tokenId: components["parameters"]["tokenIdInPath"];
+        tokenId: components['parameters']['tokenIdInPath'];
       };
     };
   };
-  "/public/icon/{username}": {
+  '/public/icon/{username}': {
     /**
      * ユーザーのアイコン画像を取得
      * @description ユーザーのアイコン画像を取得します。
      */
-    get: operations["getPublicUserIcon"];
+    get: operations['getPublicUserIcon'];
     parameters: {
       path: {
         /** @description ユーザー名 */
@@ -1157,61 +1156,61 @@ export interface paths {
       };
     };
   };
-  "/clients/{clientId}": {
+  '/clients/{clientId}': {
     /**
      * OAuth2クライアント情報を取得
      * @description 指定したOAuth2クライアントの情報を取得します。
      * 詳細情報の取得には対象のクライアントの管理権限が必要です。
      */
-    get: operations["getClient"];
+    get: operations['getClient'];
     /**
      * OAuth2クライアントを削除
      * @description 指定したOAuth2クライアントを削除します。
      * 対象のクライアントの管理権限が必要です。正常に削除された場合、このクライアントに対する認可は全て取り消されます。
      */
-    delete: operations["deleteClient"];
+    delete: operations['deleteClient'];
     /**
      * OAuth2クライアント情報を変更
      * @description 指定したOAuth2クライアントの情報を変更します。
      * 対象のクライアントの管理権限が必要です。
      * クライアント開発者UUIDを変更した場合は、変更先ユーザーにクライアント管理権限が移譲され、自分自身は権限を失います。
      */
-    patch: operations["editClient"];
+    patch: operations['editClient'];
     parameters: {
       path: {
-        clientId: components["parameters"]["clientIdInPath"];
+        clientId: components['parameters']['clientIdInPath'];
       };
     };
   };
-  "/clients": {
+  '/clients': {
     /**
      * OAuth2クライアントのリストを取得
      * @description 自身が開発者のOAuth2クライアントのリストを取得します。
      * `all`が`true`の場合、全開発者の全クライアントのリストを返します。
      */
-    get: operations["getClients"];
+    get: operations['getClients'];
     /**
      * OAuth2クライアントを作成
      * @description OAuth2クライアントを作成します。
      */
-    post: operations["createClient"];
+    post: operations['createClient'];
   };
-  "/bots": {
+  '/bots': {
     /**
      * BOTリストを取得
      * @description BOT情報のリストを取得します。
      * allを指定しない場合、自分が開発者のBOTのみを返します。
      */
-    get: operations["getBots"];
+    get: operations['getBots'];
     /**
      * BOTを作成
      * @description BOTを作成します。
      * 作成後に購読イベントの設定を行う必要があります。
      * さらにHTTP Modeの場合はアクティベーションを行う必要があります。
      */
-    post: operations["createBot"];
+    post: operations['createBot'];
   };
-  "/bots/ws": {
+  '/bots/ws': {
     /**
      * WebSocket Mode BOT用通知ストリームに接続します
      * @description # BOT WebSocketプロトコル
@@ -1249,486 +1248,486 @@ export interface paths {
      *
      * `{"type":"ERROR","body":"message"}`
      */
-    get: operations["connectBotWS"];
+    get: operations['connectBotWS'];
   };
-  "/bots/{botId}/icon": {
+  '/bots/{botId}/icon': {
     /**
      * BOTのアイコン画像を取得
      * @description 指定したBOTのアイコン画像を取得を取得します。
      */
-    get: operations["getBotIcon"];
+    get: operations['getBotIcon'];
     /**
      * BOTのアイコン画像を変更
      * @description 指定したBOTのアイコン画像を変更を変更します。
      * 対象のBOTの管理権限が必要です。
      */
-    put: operations["changeBotIcon"];
+    put: operations['changeBotIcon'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/bots/{botId}": {
+  '/bots/{botId}': {
     /**
      * BOT情報を取得
      * @description 指定したBOTのBOT情報を取得します。
      * BOT詳細情報を取得する場合は、対象のBOTの管理権限が必要です。
      */
-    get: operations["getBot"];
+    get: operations['getBot'];
     /**
      * BOTを削除
      * @description 指定したBOTを削除します。
      * 対象のBOTの管理権限が必要です。
      */
-    delete: operations["deleteBot"];
+    delete: operations['deleteBot'];
     /**
      * BOT情報を変更
      * @description 指定したBOTの情報を変更します。
      * 対象のBOTの管理権限が必要です。
      * BOT開発者UUIDを変更した場合は、変更先ユーザーにBOT管理権限が移譲され、自分自身は権限を失います。
      */
-    patch: operations["editBot"];
+    patch: operations['editBot'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/bots/{botId}/actions/activate": {
+  '/bots/{botId}/actions/activate': {
     /**
      * BOTをアクティベート
      * @description 指定したBOTを有効化します。
      * 対象のBOTの管理権限が必要です。
      */
-    post: operations["activateBot"];
+    post: operations['activateBot'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/bots/{botId}/actions/inactivate": {
+  '/bots/{botId}/actions/inactivate': {
     /**
      * BOTをインアクティベート
      * @description 指定したBOTを無効化します。対象のBOTの管理権限が必要です。
      */
-    post: operations["inactivateBot"];
+    post: operations['inactivateBot'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/bots/{botId}/actions/reissue": {
+  '/bots/{botId}/actions/reissue': {
     /**
      * BOTのトークンを再発行
      * @description 指定したBOTの現在の各種トークンを無効化し、再発行を行います。
      * 対象のBOTの管理権限が必要です。
      */
-    post: operations["reissueBot"];
+    post: operations['reissueBot'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/bots/{botId}/logs": {
+  '/bots/{botId}/logs': {
     /**
      * BOTのイベントログを取得
      * @description 指定したBOTのイベントログを取得します。
      * 対象のBOTの管理権限が必要です。
      */
-    get: operations["getBotLogs"];
+    get: operations['getBotLogs'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/bots/{botId}/actions/join": {
+  '/bots/{botId}/actions/join': {
     /**
      * BOTをチャンネルに参加させる
      * @description 指定したBOTを指定したチャンネルに参加させます。
      * チャンネルに参加したBOTは、そのチャンネルの各種イベントを受け取るようになります。
      * 対象のBOTの管理権限が必要です。
      */
-    post: operations["letBotJoinChannel"];
+    post: operations['letBotJoinChannel'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/bots/{botId}/actions/leave": {
+  '/bots/{botId}/actions/leave': {
     /**
      * BOTをチャンネルから退出させる
      * @description 指定したBOTを指定したチャンネルから退出させます。
      * 対象のBOTの管理権限が必要です。
      */
-    post: operations["letBotLeaveChannel"];
+    post: operations['letBotLeaveChannel'];
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
   };
-  "/channels/{channelId}/bots": {
+  '/channels/{channelId}/bots': {
     /**
      * チャンネル参加中のBOTのリストを取得
      * @description 指定したチャンネルに参加しているBOTのリストを取得します。
      */
-    get: operations["getChannelBots"];
+    get: operations['getChannelBots'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/webrtc/authenticate": {
+  '/webrtc/authenticate': {
     /**
      * Skyway用認証API
      * @description Skyway WebRTC用の認証API
      */
-    post: operations["postWebRTCAuthenticate"];
+    post: operations['postWebRTCAuthenticate'];
   };
-  "/channels/{channelId}": {
+  '/channels/{channelId}': {
     /**
      * チャンネル情報を取得
      * @description 指定したチャンネルの情報を取得します。
      */
-    get: operations["getChannel"];
+    get: operations['getChannel'];
     /**
      * チャンネル情報を変更
      * @description 指定したチャンネルの情報を変更します。
      * 変更には権限が必要です。
      * ルートチャンネルに移動させる場合は、`parent`に`00000000-0000-0000-0000-000000000000`を指定してください。
      */
-    patch: operations["editChannel"];
+    patch: operations['editChannel'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/webrtc/state": {
+  '/webrtc/state': {
     /**
      * WebRTC状態を取得
      * @description 現在のWebRTC状態を取得します。
      */
-    get: operations["getWebRTCState"];
+    get: operations['getWebRTCState'];
   };
-  "/clip-folders": {
+  '/clip-folders': {
     /**
      * クリップフォルダのリストを取得
      * @description 自身が所有するクリップフォルダのリストを取得します。
      */
-    get: operations["getClipFolders"];
+    get: operations['getClipFolders'];
     /**
      * クリップフォルダを作成
      * @description クリップフォルダを作成します。
      * 既にあるフォルダと同名のフォルダを作成することは可能です。
      */
-    post: operations["createClipFolder"];
+    post: operations['createClipFolder'];
   };
-  "/clip-folders/{folderId}": {
+  '/clip-folders/{folderId}': {
     /**
      * クリップフォルダ情報を取得
      * @description 指定したクリップフォルダの情報を取得します。
      */
-    get: operations["getClipFolder"];
+    get: operations['getClipFolder'];
     /**
      * クリップフォルダを削除
      * @description 指定したクリップフォルダを削除します。
      */
-    delete: operations["deleteClipFolder"];
+    delete: operations['deleteClipFolder'];
     /**
      * クリップフォルダ情報を編集
      * @description 指定したクリップフォルダの情報を編集します。
      */
-    patch: operations["editClipFolder"];
+    patch: operations['editClipFolder'];
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
       };
     };
   };
-  "/clip-folders/{folderId}/messages": {
+  '/clip-folders/{folderId}/messages': {
     /**
      * フォルダ内のクリップのリストを取得
      * @description 指定したフォルダ内のクリップのリストを取得します。
      * `order`を指定しない場合、クリップした日時の新しい順で返されます。
      */
-    get: operations["getClips"];
+    get: operations['getClips'];
     /**
      * メッセージをクリップフォルダに追加
      * @description 指定したメッセージを指定したクリップフォルダに追加します。
      */
-    post: operations["clipMessage"];
+    post: operations['clipMessage'];
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
       };
     };
   };
-  "/clip-folders/{folderId}/messages/{messageId}": {
+  '/clip-folders/{folderId}/messages/{messageId}': {
     /**
      * メッセージをクリップフォルダから除外
      * @description 指定したフォルダから指定したメッセージのクリップを除外します。
      * 既に外されているメッセージを指定した場合は204を返します。
      */
-    delete: operations["unclipMessage"];
+    delete: operations['unclipMessage'];
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
-        messageId: components["parameters"]["messageIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
   };
-  "/webhooks/{webhookId}/messages": {
+  '/webhooks/{webhookId}/messages': {
     /**
      * Webhookの投稿メッセージのリストを取得
      * @description 指定されたWebhookが投稿したメッセージのリストを返します。
      */
-    get: operations["getWebhookMessages"];
+    get: operations['getWebhookMessages'];
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
   };
-  "/channels/{channelId}/events": {
+  '/channels/{channelId}/events': {
     /**
      * チャンネルイベントのリストを取得
      * @description 指定したチャンネルのイベントリストを取得します。
      */
-    get: operations["getChannelEvents"];
+    get: operations['getChannelEvents'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/stamp-palettes": {
+  '/stamp-palettes': {
     /**
      * スタンプパレットのリストを取得
      * @description 自身が所有しているスタンプパレットのリストを取得します。
      */
-    get: operations["getStampPalettes"];
+    get: operations['getStampPalettes'];
     /**
      * スタンプパレットを作成
      * @description スタンプパレットを作成します。
      */
-    post: operations["createStampPalette"];
+    post: operations['createStampPalette'];
   };
-  "/stamp-palettes/{paletteId}": {
+  '/stamp-palettes/{paletteId}': {
     /**
      * スタンプパレットを取得
      * @description 指定したスタンプパレットの情報を取得します。
      */
-    get: operations["getStampPalette"];
+    get: operations['getStampPalette'];
     /**
      * スタンプパレットを削除
      * @description 指定したスタンプパレットを削除します。
      * 対象のスタンプパレットの管理権限が必要です。
      */
-    delete: operations["deleteStampPalette"];
+    delete: operations['deleteStampPalette'];
     /**
      * スタンプパレットを編集
      * @description 指定したスタンプパレットを編集します。
      * リクエストのスタンプの配列の順番は保存されて変更されます。
      * 対象のスタンプパレットの管理権限が必要です。
      */
-    patch: operations["editStampPalette"];
+    patch: operations['editStampPalette'];
     parameters: {
       path: {
-        paletteId: components["parameters"]["paletteIdInPath"];
+        paletteId: components['parameters']['paletteIdInPath'];
       };
     };
   };
-  "/activity/onlines": {
+  '/activity/onlines': {
     /**
      * オンラインユーザーリストを取得
      * @description 現在オンラインな(SSEまたはWSが接続中)ユーザーのUUIDのリストを返します。
      */
-    get: operations["getOnlineUsers"];
+    get: operations['getOnlineUsers'];
   };
-  "/stamps/{stampId}/image": {
+  '/stamps/{stampId}/image': {
     /**
      * スタンプ画像を取得
      * @description 指定したIDのスタンプ画像を返します。
      */
-    get: operations["getStampImage"];
+    get: operations['getStampImage'];
     /**
      * スタンプ画像を変更
      * @description 指定したスタンプの画像を変更します。
      */
-    put: operations["changeStampImage"];
+    put: operations['changeStampImage'];
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
   };
-  "/users/me/unread/{channelId}": {
+  '/users/me/unread/{channelId}': {
     /**
      * チャンネルを既読にする
      * @description 自分が未読のチャンネルを既読にします。
      */
-    delete: operations["readChannel"];
+    delete: operations['readChannel'];
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
   };
-  "/groups/{groupId}/admins/{userId}": {
+  '/groups/{groupId}/admins/{userId}': {
     /**
      * グループ管理者を削除
      * @description 指定したユーザーグループから指定した管理者を削除します。
      * 対象のユーザーグループの管理者権限が必要です。
      * グループから管理者が存在しなくなる場合は400エラーを返します。
      */
-    delete: operations["removeUserGroupAdmin"];
+    delete: operations['removeUserGroupAdmin'];
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
-        userId: components["parameters"]["userIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
+        userId: components['parameters']['userIdInPath'];
       };
     };
   };
-  "/groups/{groupId}/admins": {
+  '/groups/{groupId}/admins': {
     /**
      * グループ管理者を取得
      * @description 指定したグループの管理者のリストを取得します。
      */
-    get: operations["getUserGroupAdmins"];
+    get: operations['getUserGroupAdmins'];
     /**
      * グループ管理者を追加
      * @description 指定したグループに管理者を追加します。
      * 対象のユーザーグループの管理者権限が必要です。
      */
-    post: operations["addUserGroupAdmin"];
+    post: operations['addUserGroupAdmin'];
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
   };
-  "/oauth2/token": {
+  '/oauth2/token': {
     /**
      * OAuth2 トークンエンドポイント
      * @description OAuth2 トークンエンドポイント
      */
-    post: operations["postOAuth2Token"];
+    post: operations['postOAuth2Token'];
   };
-  "/oauth2/authorize/decide": {
+  '/oauth2/authorize/decide': {
     /**
      * OAuth2 認可承諾API
      * @description OAuth2 認可承諾
      */
-    post: operations["postOAuth2AuthorizeDecide"];
+    post: operations['postOAuth2AuthorizeDecide'];
   };
-  "/oauth2/authorize": {
+  '/oauth2/authorize': {
     /**
      * OAuth2 認可エンドポイント
      * @description OAuth2 認可エンドポイント
      */
-    get: operations["getOAuth2Authorize"];
+    get: operations['getOAuth2Authorize'];
     /**
      * OAuth2 認可エンドポイント
      * @description OAuth2 認可エンドポイント
      */
-    post: operations["postOAuth2Authorize"];
+    post: operations['postOAuth2Authorize'];
   };
-  "/oauth2/revoke": {
+  '/oauth2/revoke': {
     /**
      * OAuth2 トークン無効化エンドポイント
      * @description OAuth2 トークン無効化エンドポイント
      */
-    post: operations["revokeOAuth2Token"];
+    post: operations['revokeOAuth2Token'];
   };
-  "/users/me/ex-accounts": {
+  '/users/me/ex-accounts': {
     /**
      * 外部ログインアカウント一覧を取得
      * @description 自分に紐付けられている外部ログインアカウント一覧を取得します。
      */
-    get: operations["getMyExternalAccounts"];
+    get: operations['getMyExternalAccounts'];
   };
-  "/users/me/ex-accounts/link": {
+  '/users/me/ex-accounts/link': {
     /**
      * 外部ログインアカウントを紐付ける
      * @description 自分に外部ログインアカウントを紐付けます。
      * 指定した`providerName`がサーバー側で有効である必要があります。
      * リクエストが受理された場合、外部サービスの認証画面にリダイレクトされ、認証される必要があります。
      */
-    post: operations["linkExternalAccount"];
+    post: operations['linkExternalAccount'];
   };
-  "/users/me/ex-accounts/unlink": {
+  '/users/me/ex-accounts/unlink': {
     /**
      * 外部ログインアカウントの紐付けを解除
      * @description 自分に紐付けられている外部ログインアカウントの紐付けを解除します。
      */
-    post: operations["unlinkExternalAccount"];
+    post: operations['unlinkExternalAccount'];
   };
-  "/users/{userId}/dm-channel": {
+  '/users/{userId}/dm-channel': {
     /**
      * DMチャンネル情報を取得
      * @description 指定したユーザーとのダイレクトメッセージチャンネルの情報を返します。
      * ダイレクトメッセージチャンネルが存在しなかった場合、自動的に作成されます。
      */
-    get: operations["getUserDMChannel"];
+    get: operations['getUserDMChannel'];
     parameters: {
       path: {
         userId: string;
       };
     };
   };
-  "/messages/{messageId}/clips": {
+  '/messages/{messageId}/clips': {
     /**
      * 自分のクリップを取得
      * @description 対象のメッセージの自分のクリップの一覧を返します。
      */
-    get: operations["getMessageClips"];
+    get: operations['getMessageClips'];
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
   };
-  "/ogp": {
+  '/ogp': {
     /**
      * OGP情報を取得
      * @description 指定されたURLのOGP情報を取得します。
      * 指定されたURLに対するOGP情報が見つからなかった場合、typeがemptyに設定された空のOGP情報を返します。
      */
-    get: operations["getOgp"];
+    get: operations['getOgp'];
   };
-  "/ogp/cache": {
+  '/ogp/cache': {
     /**
      * OGP情報のキャッシュを削除
      * @description 指定されたURLのOGP情報のキャッシュを削除します。
      */
-    delete: operations["deleteOgpCache"];
+    delete: operations['deleteOgpCache'];
   };
-  "/users/me/settings": {
+  '/users/me/settings': {
     /**
      * ユーザー設定を取得
      * @description ユーザー設定を取得します。
      */
-    get: operations["getUserSettings"];
+    get: operations['getUserSettings'];
   };
-  "/users/me/settings/notify-citation": {
+  '/users/me/settings/notify-citation': {
     /**
      * メッセージ引用通知の設定情報を取得
      * @description メッセージ引用通知の設定情報を変更します。
      */
-    get: operations["getMyNotifyCitation"];
+    get: operations['getMyNotifyCitation'];
     /**
      * メッセージ引用通知の設定情報を変更
      * @description メッセージ引用通知の設定情報を変更します
      */
-    put: operations["changeMyNotifyCitation"];
+    put: operations['changeMyNotifyCitation'];
   };
 }
 
@@ -1771,7 +1770,7 @@ export interface components {
       /** @description ピン留めされているかどうか */
       pinned: boolean;
       /** @description 押されているスタンプの配列 */
-      stamps: components["schemas"]["MessageStamp"][];
+      stamps: components['schemas']['MessageStamp'][];
       /**
        * Format: uuid
        * @description スレッドUUID
@@ -1840,7 +1839,7 @@ export interface components {
        * @description ピン留めされた日時
        */
       pinnedAt: string;
-      message: components["schemas"]["Message"];
+      message: components['schemas']['Message'];
     };
     /**
      * Channel
@@ -1892,9 +1891,9 @@ export interface components {
        */
       totalMessageCount: number;
       /** @description チャンネル上のスタンプ統計情報 */
-      stamps: components["schemas"]["ChannelStatsStamp"][];
+      stamps: components['schemas']['ChannelStatsStamp'][];
       /** @description チャンネル上のユーザー統計情報 */
-      users: components["schemas"]["ChannelStatsUser"][];
+      users: components['schemas']['ChannelStatsUser'][];
       /**
        * Format: date-time
        * @description 統計情報日時
@@ -1964,7 +1963,7 @@ export interface components {
        * @description ユーザーUUID
        */
       userId: string;
-      state: components["schemas"]["ChannelViewState"];
+      state: components['schemas']['ChannelViewState'];
       /**
        * Format: date-time
        * @description 更新日時
@@ -1983,14 +1982,14 @@ export interface components {
        * @description チャンネルUUID
        */
       channelId: string;
-      state: components["schemas"]["ChannelViewState"];
+      state: components['schemas']['ChannelViewState'];
     };
     /**
      * ChannelViewState
      * @description 閲覧状態
      * @enum {string}
      */
-    ChannelViewState: "none" | "monitoring" | "editing";
+    ChannelViewState: 'none' | 'monitoring' | 'editing';
     /**
      * PostFileRequest
      * @description ファイルアップロードリクエスト
@@ -2014,9 +2013,9 @@ export interface components {
      * @default image
      * @enum {string}
      */
-    ThumbnailType: "image" | "waveform";
+    ThumbnailType: 'image' | 'waveform';
     ThumbnailInfo: {
-      type: components["schemas"]["ThumbnailType"];
+      type: components['schemas']['ThumbnailType'];
       /** @description MIMEタイプ */
       mime: string;
       /**
@@ -2058,7 +2057,7 @@ export interface components {
        * @description アップロード日時
        */
       createdAt: string;
-      thumbnails: components["schemas"]["ThumbnailInfo"][];
+      thumbnails: components['schemas']['ThumbnailInfo'][];
       /**
        * @deprecated
        * @description サムネイル情報
@@ -2228,7 +2227,7 @@ export interface components {
       iconFileId: string;
       /** @description BOTかどうか */
       bot: boolean;
-      state: components["schemas"]["UserAccountState"];
+      state: components['schemas']['UserAccountState'];
       /**
        * Format: date-time
        * @description 更新日時
@@ -2245,7 +2244,7 @@ export interface components {
        * @description ユーザーUUID
        */
       id: string;
-      state: components["schemas"]["UserAccountState"];
+      state: components['schemas']['UserAccountState'];
       /** @description BOTかどうか */
       bot: boolean;
       /**
@@ -2270,7 +2269,7 @@ export interface components {
        */
       updatedAt: string;
       /** @description タグリスト */
-      tags: components["schemas"]["UserTag"][];
+      tags: components['schemas']['UserTag'][];
       /** @description 所属グループのUUIDの配列 */
       groups: string[];
       /** @description 自己紹介(biography) */
@@ -2338,7 +2337,7 @@ export interface components {
        */
       icon: string;
       /** @description グループメンバーの配列 */
-      members: components["schemas"]["UserGroupMember"][];
+      members: components['schemas']['UserGroupMember'][];
       /**
        * Format: date-time
        * @description 作成日時
@@ -2376,7 +2375,7 @@ export interface components {
        */
       totalMessageCount: number;
       /** @description ユーザーのスタンプ統計情報 */
-      stamps: components["schemas"]["UserStatsStamp"][];
+      stamps: components['schemas']['UserStatsStamp'][];
       /**
        * Format: date-time
        * @description 統計情報日時
@@ -2451,7 +2450,7 @@ export interface components {
       /** @description 所属グループのUUIDの配列 */
       groups: string[];
       /** @description タグリスト */
-      tags: components["schemas"]["UserTag"][];
+      tags: components['schemas']['UserTag'][];
       /**
        * Format: date-time
        * @description 更新日時
@@ -2475,9 +2474,9 @@ export interface components {
       iconFileId: string;
       /** @description BOTかどうか */
       bot: boolean;
-      state: components["schemas"]["UserAccountState"];
+      state: components['schemas']['UserAccountState'];
       /** @description 所有している権限の配列 */
-      permissions: components["schemas"]["UserPermission"][];
+      permissions: components['schemas']['UserPermission'][];
       /**
        * Format: uuid
        * @description ホームチャンネル
@@ -2515,7 +2514,7 @@ export interface components {
        * @description チャンネルUUID
        */
       channelId: string;
-      level: components["schemas"]["ChannelSubscribeLevel"];
+      level: components['schemas']['ChannelSubscribeLevel'];
     };
     /**
      * ChannelSubscribeLevel
@@ -2531,7 +2530,7 @@ export interface components {
      * @description チャンネル購読レベル変更リクエスト
      */
     PutChannelSubscribeLevelRequest: {
-      level: components["schemas"]["ChannelSubscribeLevel"];
+      level: components['schemas']['ChannelSubscribeLevel'];
     };
     /**
      * Webhook
@@ -2670,7 +2669,7 @@ export interface components {
       displayName?: string;
       /** @description TwitterID */
       twitterId?: string;
-      state?: components["schemas"]["UserAccountState"];
+      state?: components['schemas']['UserAccountState'];
       /** @description ユーザーロール */
       role?: string;
     };
@@ -2823,7 +2822,7 @@ export interface components {
       /** @description OAuth2クライアントUUID */
       clientId: string;
       /** @description スコープ */
-      scopes: components["schemas"]["OAuth2Scope"][];
+      scopes: components['schemas']['OAuth2Scope'][];
       /**
        * Format: date-time
        * @description 発行日時
@@ -2835,7 +2834,7 @@ export interface components {
      * @description OAuth2スコープ
      * @enum {string}
      */
-    OAuth2Scope: "read" | "write" | "manage_bot";
+    OAuth2Scope: 'read' | 'write' | 'manage_bot';
     /**
      * OAuth2Client
      * @description OAuth2クライアント情報
@@ -2853,7 +2852,7 @@ export interface components {
        */
       developerId: string;
       /** @description 要求スコープの配列 */
-      scopes: components["schemas"]["OAuth2Scope"][];
+      scopes: components['schemas']['OAuth2Scope'][];
     };
     /**
      * PatchClientRequest
@@ -2892,7 +2891,7 @@ export interface components {
       /** @description クライアント名 */
       name: string;
       /** @description 要求スコープの配列 */
-      scopes: components["schemas"]["OAuth2Scope"][];
+      scopes: components['schemas']['OAuth2Scope'][];
       /**
        * Format: uri
        * @description コールバックURL
@@ -2914,7 +2913,7 @@ export interface components {
        */
       callbackUrl: string;
       /** @description 要求スコープの配列 */
-      scopes: components["schemas"]["OAuth2Scope"][];
+      scopes: components['schemas']['OAuth2Scope'][];
       /** @description 説明 */
       description: string;
     };
@@ -2926,7 +2925,7 @@ export interface components {
      * WebSocket: WebSocket Mode
      * @enum {string}
      */
-    BotMode: "HTTP" | "WebSocket";
+    BotMode: 'HTTP' | 'WebSocket';
     /**
      * BotState
      * Format: int32
@@ -2961,8 +2960,8 @@ export interface components {
       developerId: string;
       /** @description BOTが購読しているイベントの配列 */
       subscribeEvents: string[];
-      mode: components["schemas"]["BotMode"];
-      state: components["schemas"]["BotState"];
+      mode: components['schemas']['BotMode'];
+      state: components['schemas']['BotState'];
       /**
        * Format: date-time
        * @description 作成日時
@@ -2985,7 +2984,7 @@ export interface components {
       description?: string;
       /** @description 特権 */
       privileged?: boolean;
-      mode?: components["schemas"]["BotMode"];
+      mode?: components['schemas']['BotMode'];
       /**
        * Format: uri
        * @description BOTサーバーエンドポイント
@@ -3029,8 +3028,8 @@ export interface components {
        * @description 作成日時
        */
       createdAt: string;
-      mode: components["schemas"]["BotMode"];
-      state: components["schemas"]["BotState"];
+      mode: components['schemas']['BotMode'];
+      state: components['schemas']['BotState'];
       /** @description BOTが購読しているイベントの配列 */
       subscribeEvents: string[];
       /**
@@ -3045,7 +3044,7 @@ export interface components {
        * @description BOTユーザーUUID
        */
       botUserId: string;
-      tokens: components["schemas"]["BotTokens"];
+      tokens: components['schemas']['BotTokens'];
       /**
        * Format: uri
        * @description BOTサーバーエンドポイント
@@ -3073,7 +3072,7 @@ export interface components {
       requestId: string;
       /** @description イベントタイプ */
       event: string;
-      result?: components["schemas"]["BotEventResult"];
+      result?: components['schemas']['BotEventResult'];
       /**
        * Format: int32
        * @description ステータスコード
@@ -3090,7 +3089,7 @@ export interface components {
      * @description イベント配送結果
      * @enum {string}
      */
-    BotEventResult: "ok" | "ng" | "ne" | "dp";
+    BotEventResult: 'ok' | 'ng' | 'ne' | 'dp';
     /**
      * PostBotRequest
      * @description BOT作成リクエスト
@@ -3105,7 +3104,7 @@ export interface components {
       displayName: string;
       /** @description BOTの説明 */
       description: string;
-      mode: components["schemas"]["BotMode"];
+      mode: components['schemas']['BotMode'];
       /**
        * Format: uri
        * @description BOTサーバーエンドポイント
@@ -3200,7 +3199,7 @@ export interface components {
      * WebRTCUserStates
      * @description WebRTC状態の配列
      */
-    WebRTCUserStates: components["schemas"]["WebRTCUserState"][];
+    WebRTCUserStates: components['schemas']['WebRTCUserState'][];
     /**
      * ClipFolder
      * @description クリップフォルダ情報
@@ -3262,7 +3261,7 @@ export interface components {
      * @description クリップされたメッセージ
      */
     ClippedMessage: {
-      message: components["schemas"]["Message"];
+      message: components['schemas']['Message'];
       /**
        * Format: date-time
        * @description クリップした日時
@@ -3278,14 +3277,32 @@ export interface components {
        * @description イベントタイプ
        * @enum {string}
        */
-      type: "TopicChanged" | "SubscribersChanged" | "PinAdded" | "PinRemoved" | "NameChanged" | "ParentChanged" | "VisibilityChanged" | "ForcedNotificationChanged" | "ChildCreated";
+      type:
+        | 'TopicChanged'
+        | 'SubscribersChanged'
+        | 'PinAdded'
+        | 'PinRemoved'
+        | 'NameChanged'
+        | 'ParentChanged'
+        | 'VisibilityChanged'
+        | 'ForcedNotificationChanged'
+        | 'ChildCreated';
       /**
        * Format: date-time
        * @description イベント日時
        */
       datetime: string;
       /** @description イベント内容 */
-      detail: components["schemas"]["TopicChangedEvent"] | components["schemas"]["SubscribersChangedEvent"] | components["schemas"]["PinAddedEvent"] | components["schemas"]["PinRemovedEvent"] | components["schemas"]["NameChangedEvent"] | components["schemas"]["ParentChangedEvent"] | components["schemas"]["VisibilityChangedEvent"] | components["schemas"]["ForcedNotificationChangedEvent"] | components["schemas"]["ChildCreatedEvent"];
+      detail:
+        | components['schemas']['TopicChangedEvent']
+        | components['schemas']['SubscribersChangedEvent']
+        | components['schemas']['PinAddedEvent']
+        | components['schemas']['PinRemovedEvent']
+        | components['schemas']['NameChangedEvent']
+        | components['schemas']['ParentChangedEvent']
+        | components['schemas']['VisibilityChangedEvent']
+        | components['schemas']['ForcedNotificationChangedEvent']
+        | components['schemas']['ChildCreatedEvent'];
     };
     /**
      * TopicChangedEvent
@@ -3529,9 +3546,9 @@ export interface components {
      */
     ChannelList: {
       /** @description パブリックチャンネルの配列 */
-      public: components["schemas"]["Channel"][];
+      public: components['schemas']['Channel'][];
       /** @description ダイレクトメッセージチャンネルの配列 */
-      dm?: components["schemas"]["DMChannel"][];
+      dm?: components['schemas']['DMChannel'][];
     };
     /**
      * DMChannel
@@ -3608,7 +3625,7 @@ export interface components {
       id_token?: string;
     };
     OAuth2Authorization: {
-      response_type?: components["schemas"]["OAuth2ResponseType"];
+      response_type?: components['schemas']['OAuth2ResponseType'];
       client_id: string;
       redirect_uri?: string;
       scope?: string;
@@ -3616,12 +3633,12 @@ export interface components {
       code_challenge?: string;
       code_challenge_method?: string;
       nonce?: string;
-      prompt?: components["schemas"]["OAuth2Prompt"];
+      prompt?: components['schemas']['OAuth2Prompt'];
     };
     /** @enum {string} */
-    OAuth2Prompt: "none";
+    OAuth2Prompt: 'none';
     /** @enum {string} */
-    OAuth2ResponseType: "code" | "token" | "none";
+    OAuth2ResponseType: 'code' | 'token' | 'none';
     /**
      * OAuth2Revoke
      * @description POST /oauth2/revoke 用リクエストボディ
@@ -3663,7 +3680,88 @@ export interface components {
      * @description ユーザー権限
      * @enum {string}
      */
-    UserPermission: "get_webhook" | "create_webhook" | "edit_webhook" | "delete_webhook" | "access_others_webhook" | "get_bot" | "create_bot" | "edit_bot" | "delete_bot" | "access_others_bot" | "bot_action_join_channel" | "bot_action_leave_channel" | "create_channel" | "get_channel" | "edit_channel" | "delete_channel" | "change_parent_channel" | "edit_channel_topic" | "get_channel_star" | "edit_channel_star" | "get_my_tokens" | "revoke_my_token" | "get_clients" | "create_client" | "edit_my_client" | "delete_my_client" | "manage_others_client" | "upload_file" | "download_file" | "delete_file" | "get_message" | "post_message" | "edit_message" | "delete_message" | "report_message" | "get_message_reports" | "create_message_pin" | "delete_message_pin" | "get_channel_subscription" | "edit_channel_subscription" | "connect_notification_stream" | "register_fcm_device" | "get_stamp" | "create_stamp" | "edit_stamp" | "edit_stamp_created_by_others" | "delete_stamp" | "add_message_stamp" | "remove_message_stamp" | "get_my_stamp_history" | "get_stamp_palette" | "create_stamp_palette" | "edit_stamp_palette" | "delete_stamp_palette" | "get_user" | "register_user" | "get_me" | "edit_me" | "change_my_icon" | "change_my_password" | "edit_other_users" | "get_user_qr_code" | "get_user_tag" | "edit_user_tag" | "get_user_group" | "create_user_group" | "create_special_user_group" | "edit_user_group" | "delete_user_group" | "edit_others_user_group" | "web_rtc" | "get_my_sessions" | "delete_my_sessions" | "get_my_external_account" | "edit_my_external_account" | "get_unread" | "delete_unread" | "get_clip_folder" | "create_clip_folder" | "edit_clip_folder" | "delete_clip_folder";
+    UserPermission:
+      | 'get_webhook'
+      | 'create_webhook'
+      | 'edit_webhook'
+      | 'delete_webhook'
+      | 'access_others_webhook'
+      | 'get_bot'
+      | 'create_bot'
+      | 'edit_bot'
+      | 'delete_bot'
+      | 'access_others_bot'
+      | 'bot_action_join_channel'
+      | 'bot_action_leave_channel'
+      | 'create_channel'
+      | 'get_channel'
+      | 'edit_channel'
+      | 'delete_channel'
+      | 'change_parent_channel'
+      | 'edit_channel_topic'
+      | 'get_channel_star'
+      | 'edit_channel_star'
+      | 'get_my_tokens'
+      | 'revoke_my_token'
+      | 'get_clients'
+      | 'create_client'
+      | 'edit_my_client'
+      | 'delete_my_client'
+      | 'manage_others_client'
+      | 'upload_file'
+      | 'download_file'
+      | 'delete_file'
+      | 'get_message'
+      | 'post_message'
+      | 'edit_message'
+      | 'delete_message'
+      | 'report_message'
+      | 'get_message_reports'
+      | 'create_message_pin'
+      | 'delete_message_pin'
+      | 'get_channel_subscription'
+      | 'edit_channel_subscription'
+      | 'connect_notification_stream'
+      | 'register_fcm_device'
+      | 'get_stamp'
+      | 'create_stamp'
+      | 'edit_stamp'
+      | 'edit_stamp_created_by_others'
+      | 'delete_stamp'
+      | 'add_message_stamp'
+      | 'remove_message_stamp'
+      | 'get_my_stamp_history'
+      | 'get_stamp_palette'
+      | 'create_stamp_palette'
+      | 'edit_stamp_palette'
+      | 'delete_stamp_palette'
+      | 'get_user'
+      | 'register_user'
+      | 'get_me'
+      | 'edit_me'
+      | 'change_my_icon'
+      | 'change_my_password'
+      | 'edit_other_users'
+      | 'get_user_qr_code'
+      | 'get_user_tag'
+      | 'edit_user_tag'
+      | 'get_user_group'
+      | 'create_user_group'
+      | 'create_special_user_group'
+      | 'edit_user_group'
+      | 'delete_user_group'
+      | 'edit_others_user_group'
+      | 'web_rtc'
+      | 'get_my_sessions'
+      | 'delete_my_sessions'
+      | 'get_my_external_account'
+      | 'edit_my_external_account'
+      | 'get_unread'
+      | 'delete_unread'
+      | 'get_clip_folder'
+      | 'create_clip_folder'
+      | 'edit_clip_folder'
+      | 'delete_clip_folder';
     /**
      * Version
      * @description バージョン・サーバーフラグ情報
@@ -3697,11 +3795,11 @@ export interface components {
       channelId: string;
       /** @description セッションの配列 */
       sessions: {
-          /** @description 状態 */
-          state: string;
-          /** @description セッションID */
-          sessionId: string;
-        }[];
+        /** @description 状態 */
+        state: string;
+        /** @description セッションID */
+        sessionId: string;
+      }[];
     };
     /**
      * MessageClip
@@ -3727,9 +3825,9 @@ export interface components {
       type: string;
       title: string;
       url: string;
-      images: components["schemas"]["OgpMedia"][];
+      images: components['schemas']['OgpMedia'][];
       description: string;
-      videos: components["schemas"]["OgpMedia"][];
+      videos: components['schemas']['OgpMedia'][];
     };
     /**
      * OgpMedia
@@ -3824,14 +3922,14 @@ export interface components {
     /** @description 範囲の端を含めるかどうか */
     inclusiveInQuery?: boolean;
     /** @description 昇順か降順か */
-    orderInQuery?: "asc" | "desc";
+    orderInQuery?: 'asc' | 'desc';
     /** @description チャンネルUUID */
     channelIdInPath: string;
   };
   requestBodies: never;
   headers: {
     /** @description 指定した範囲に要素がさらに存在するかどうか */
-    "X-TRAQ-MORE": boolean;
+    'X-TRAQ-MORE': boolean;
   };
   pathItems: never;
 }
@@ -3841,7 +3939,6 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
-
   /**
    * チャンネルメッセージのリストを取得
    * @description 指定したチャンネルのメッセージのリストを取得します。
@@ -3849,25 +3946,25 @@ export interface operations {
   getMessages: {
     parameters: {
       query?: {
-        limit?: components["parameters"]["limitInQuery"];
-        offset?: components["parameters"]["offsetInQuery"];
-        since?: components["parameters"]["sinceInQuery"];
-        until?: components["parameters"]["untilInQuery"];
-        inclusive?: components["parameters"]["inclusiveInQuery"];
-        order?: components["parameters"]["orderInQuery"];
+        limit?: components['parameters']['limitInQuery'];
+        offset?: components['parameters']['offsetInQuery'];
+        since?: components['parameters']['sinceInQuery'];
+        until?: components['parameters']['untilInQuery'];
+        inclusive?: components['parameters']['inclusiveInQuery'];
+        order?: components['parameters']['orderInQuery'];
       };
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         headers: {
-          "X-TRAQ-MORE": components["headers"]["X-TRAQ-MORE"];
+          'X-TRAQ-MORE': components['headers']['X-TRAQ-MORE'];
         };
         content: {
-          "application/json": components["schemas"]["Message"][];
+          'application/json': components['schemas']['Message'][];
         };
       };
       /** @description Bad Request */
@@ -3892,19 +3989,19 @@ export interface operations {
   postMessage: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostMessageRequest"];
+        'application/json': components['schemas']['PostMessageRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["Message"];
+          'application/json': components['schemas']['Message'];
         };
       };
       /** @description Bad Request */
@@ -3969,21 +4066,21 @@ export interface operations {
         /** @description 検索結果から取得するメッセージのオフセット */
         offset?: number;
         /** @description ソート順 (作成日時が新しい `createdAt`, 作成日時が古い `-createdAt`, 更新日時が新しい `updatedAt`, 更新日時が古い `-updatedAt`) */
-        sort?: "createdAt" | "-createdAt" | "updatedAt" | "-updatedAt";
+        sort?: 'createdAt' | '-createdAt' | 'updatedAt' | '-updatedAt';
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": {
+          'application/json': {
             /**
              * Format: int64
              * @description 検索にヒットしたメッセージ件数
              */
             totalHits: number;
             /** @description 検索にヒットしたメッセージの配列 */
-            hits: components["schemas"]["Message"][];
+            hits: components['schemas']['Message'][];
           };
         };
       };
@@ -4004,14 +4101,14 @@ export interface operations {
   getMessage: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Message"];
+          'application/json': components['schemas']['Message'];
         };
       };
       /** @description Not Found */
@@ -4029,12 +4126,12 @@ export interface operations {
   editMessage: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostMessageRequest"];
+        'application/json': components['schemas']['PostMessageRequest'];
       };
     };
     responses: {
@@ -4071,7 +4168,7 @@ export interface operations {
   deleteMessage: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
@@ -4102,14 +4199,14 @@ export interface operations {
   getPin: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["MessagePin"];
+          'application/json': components['schemas']['MessagePin'];
         };
       };
       /**
@@ -4129,7 +4226,7 @@ export interface operations {
   createPin: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
@@ -4139,7 +4236,7 @@ export interface operations {
        */
       201: {
         content: {
-          "application/json": components["schemas"]["MessagePin"];
+          'application/json': components['schemas']['MessagePin'];
         };
       };
       /** @description Bad Request */
@@ -4162,7 +4259,7 @@ export interface operations {
   removePin: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
@@ -4193,14 +4290,14 @@ export interface operations {
   getChannelStats: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ChannelStats"];
+          'application/json': components['schemas']['ChannelStats'];
         };
       };
       /**
@@ -4219,14 +4316,14 @@ export interface operations {
   getChannelTopic: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ChannelTopic"];
+          'application/json': components['schemas']['ChannelTopic'];
         };
       };
       /**
@@ -4246,12 +4343,12 @@ export interface operations {
   editChannelTopic: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PutChannelTopicRequest"];
+        'application/json': components['schemas']['PutChannelTopicRequest'];
       };
     };
     responses: {
@@ -4282,14 +4379,14 @@ export interface operations {
   getChannelViewers: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ChannelViewer"][];
+          'application/json': components['schemas']['ChannelViewer'][];
         };
       };
       /**
@@ -4311,12 +4408,12 @@ export interface operations {
       query?: {
         /** @description アップロード先チャンネルUUID */
         channelId?: string;
-        limit?: components["parameters"]["limitInQuery"];
-        offset?: components["parameters"]["offsetInQuery"];
-        since?: components["parameters"]["sinceInQuery"];
-        until?: components["parameters"]["untilInQuery"];
-        inclusive?: components["parameters"]["inclusiveInQuery"];
-        order?: components["parameters"]["orderInQuery"];
+        limit?: components['parameters']['limitInQuery'];
+        offset?: components['parameters']['offsetInQuery'];
+        since?: components['parameters']['sinceInQuery'];
+        until?: components['parameters']['untilInQuery'];
+        inclusive?: components['parameters']['inclusiveInQuery'];
+        order?: components['parameters']['orderInQuery'];
         /** @description アップロード者が自分のファイルのみを取得するか */
         mine?: boolean;
       };
@@ -4325,10 +4422,10 @@ export interface operations {
       /** @description OK */
       200: {
         headers: {
-          "X-TRAQ-MORE": components["headers"]["X-TRAQ-MORE"];
+          'X-TRAQ-MORE': components['headers']['X-TRAQ-MORE'];
         };
         content: {
-          "application/json": components["schemas"]["FileInfo"][];
+          'application/json': components['schemas']['FileInfo'][];
         };
       };
       /** @description Bad Request */
@@ -4345,14 +4442,14 @@ export interface operations {
   postFile: {
     requestBody?: {
       content: {
-        "multipart/form-data": components["schemas"]["PostFileRequest"];
+        'multipart/form-data': components['schemas']['PostFileRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["FileInfo"];
+          'application/json': components['schemas']['FileInfo'];
         };
       };
       /** @description Bad Request */
@@ -4377,14 +4474,14 @@ export interface operations {
   getFileMeta: {
     parameters: {
       path: {
-        fileId: components["parameters"]["fileIdInPath"];
+        fileId: components['parameters']['fileIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["FileInfo"];
+          'application/json': components['schemas']['FileInfo'];
         };
       };
       /** @description Forbidden */
@@ -4409,18 +4506,18 @@ export interface operations {
     parameters: {
       query?: {
         /** @description 取得するサムネイルのタイプ */
-        type?: components["schemas"]["ThumbnailType"];
+        type?: components['schemas']['ThumbnailType'];
       };
       path: {
-        fileId: components["parameters"]["fileIdInPath"];
+        fileId: components['parameters']['fileIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "image/png": string;
-          "image/jpeg": string;
+          'image/png': string;
+          'image/jpeg': string;
         };
       };
       /** @description Forbidden */
@@ -4448,7 +4545,7 @@ export interface operations {
         dl?: number;
       };
       path: {
-        fileId: components["parameters"]["fileIdInPath"];
+        fileId: components['parameters']['fileIdInPath'];
       };
     };
     responses: {
@@ -4460,10 +4557,10 @@ export interface operations {
       200: {
         headers: {
           /** @description https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Content-Disposition */
-          "Content-Disposition"?: string;
+          'Content-Disposition'?: string;
         };
         content: {
-          "application/octet-stream": string;
+          'application/octet-stream': string;
         };
       };
       /** @description Forbidden */
@@ -4484,7 +4581,7 @@ export interface operations {
   deleteFile: {
     parameters: {
       path: {
-        fileId: components["parameters"]["fileIdInPath"];
+        fileId: components['parameters']['fileIdInPath'];
       };
     };
     responses: {
@@ -4512,14 +4609,14 @@ export interface operations {
   getChannelPins: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Pin"][];
+          'application/json': components['schemas']['Pin'][];
         };
       };
       /**
@@ -4538,14 +4635,14 @@ export interface operations {
   getMessageStamps: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["MessageStamp"][];
+          'application/json': components['schemas']['MessageStamp'][];
         };
       };
       /** @description Not Found */
@@ -4561,13 +4658,13 @@ export interface operations {
   addMessageStamp: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
-        stampId: components["parameters"]["stampIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostMessageStampRequest"];
+        'application/json': components['schemas']['PostMessageStampRequest'];
       };
     };
     responses: {
@@ -4598,8 +4695,8 @@ export interface operations {
   removeMessageStamp: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
-        stampId: components["parameters"]["stampIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     responses: {
@@ -4626,14 +4723,14 @@ export interface operations {
   getStamp: {
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Stamp"];
+          'application/json': components['schemas']['Stamp'];
         };
       };
       /** @description Not Found */
@@ -4650,7 +4747,7 @@ export interface operations {
   deleteStamp: {
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     responses: {
@@ -4678,12 +4775,12 @@ export interface operations {
   editStamp: {
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchStampRequest"];
+        'application/json': components['schemas']['PatchStampRequest'];
       };
     };
     responses: {
@@ -4724,16 +4821,16 @@ export interface operations {
          * @description Unicode絵文字を含ませるかどうか
          * Deprecated: typeクエリを指定しなければ全てのスタンプを取得できるため、そちらを利用してください
          */
-        "include-unicode"?: boolean;
+        'include-unicode'?: boolean;
         /** @description 取得するスタンプの種類 */
-        type?: "unicode" | "original";
+        type?: 'unicode' | 'original';
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StampWithThumbnail"][];
+          'application/json': components['schemas']['StampWithThumbnail'][];
         };
       };
     };
@@ -4745,14 +4842,14 @@ export interface operations {
   createStamp: {
     requestBody?: {
       content: {
-        "multipart/form-data": components["schemas"]["PostStampRequest"];
+        'multipart/form-data': components['schemas']['PostStampRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["Stamp"];
+          'application/json': components['schemas']['Stamp'];
         };
       };
       /** @description Bad Request */
@@ -4787,7 +4884,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StampHistoryEntry"][];
+          'application/json': components['schemas']['StampHistoryEntry'][];
         };
       };
     };
@@ -4808,8 +4905,8 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "image/png": string;
-          "text/plain": string;
+          'image/png': string;
+          'text/plain': string;
         };
       };
     };
@@ -4821,14 +4918,14 @@ export interface operations {
   getStampStats: {
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StampStats"];
+          'application/json': components['schemas']['StampStats'];
         };
       };
       /**
@@ -4847,14 +4944,14 @@ export interface operations {
   getUser: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserDetail"];
+          'application/json': components['schemas']['UserDetail'];
         };
       };
       /** @description Not Found */
@@ -4871,12 +4968,12 @@ export interface operations {
   editUser: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchUserRequest"];
+        'application/json': components['schemas']['PatchUserRequest'];
       };
     };
     responses: {
@@ -4908,14 +5005,14 @@ export interface operations {
   getUserGroup: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserGroup"];
+          'application/json': components['schemas']['UserGroup'];
         };
       };
       /** @description Not Found */
@@ -4932,7 +5029,7 @@ export interface operations {
   deleteUserGroup: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     responses: {
@@ -4964,12 +5061,12 @@ export interface operations {
   editUserGroup: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchUserGroupRequest"];
+        'application/json': components['schemas']['PatchUserGroupRequest'];
       };
     };
     responses: {
@@ -5012,12 +5109,12 @@ export interface operations {
   changeUserGroupIcon: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "multipart/form-data": components["schemas"]["PutUserIconRequest"];
+        'multipart/form-data': components['schemas']['PutUserIconRequest'];
       };
     };
     responses: {
@@ -5052,14 +5149,14 @@ export interface operations {
   getUserGroupMembers: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserGroupMember"][];
+          'application/json': components['schemas']['UserGroupMember'][];
         };
       };
       /**
@@ -5079,12 +5176,12 @@ export interface operations {
   addUserGroupMember: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["UserGroupMember"];
+        'application/json': components['schemas']['UserGroupMember'];
       };
     };
     responses: {
@@ -5124,8 +5221,8 @@ export interface operations {
   removeUserGroupMember: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
-        userId: components["parameters"]["userIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     responses: {
@@ -5160,13 +5257,13 @@ export interface operations {
   editUserGroupMember: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
-        userId: components["parameters"]["userIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchGroupMemberRequest"];
+        'application/json': components['schemas']['PatchGroupMemberRequest'];
       };
     };
     responses: {
@@ -5209,7 +5306,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserGroup"][];
+          'application/json': components['schemas']['UserGroup'][];
         };
       };
     };
@@ -5222,14 +5319,14 @@ export interface operations {
   createUserGroup: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostUserGroupRequest"];
+        'application/json': components['schemas']['PostUserGroupRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["UserGroup"];
+          'application/json': components['schemas']['UserGroup'];
         };
       };
       /** @description Bad Request */
@@ -5261,7 +5358,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["MyUserDetail"];
+          'application/json': components['schemas']['MyUserDetail'];
         };
       };
     };
@@ -5273,7 +5370,7 @@ export interface operations {
   editMe: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchMeRequest"];
+        'application/json': components['schemas']['PatchMeRequest'];
       };
     };
     responses: {
@@ -5297,25 +5394,25 @@ export interface operations {
   getDirectMessages: {
     parameters: {
       query?: {
-        limit?: components["parameters"]["limitInQuery"];
-        offset?: components["parameters"]["offsetInQuery"];
-        since?: components["parameters"]["sinceInQuery"];
-        until?: components["parameters"]["untilInQuery"];
-        inclusive?: components["parameters"]["inclusiveInQuery"];
-        order?: components["parameters"]["orderInQuery"];
+        limit?: components['parameters']['limitInQuery'];
+        offset?: components['parameters']['offsetInQuery'];
+        since?: components['parameters']['sinceInQuery'];
+        until?: components['parameters']['untilInQuery'];
+        inclusive?: components['parameters']['inclusiveInQuery'];
+        order?: components['parameters']['orderInQuery'];
       };
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         headers: {
-          "X-TRAQ-MORE": components["headers"]["X-TRAQ-MORE"];
+          'X-TRAQ-MORE': components['headers']['X-TRAQ-MORE'];
         };
         content: {
-          "application/json": components["schemas"]["Message"][];
+          'application/json': components['schemas']['Message'][];
         };
       };
       /** @description Bad Request */
@@ -5338,19 +5435,19 @@ export interface operations {
   postDirectMessage: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostMessageRequest"];
+        'application/json': components['schemas']['PostMessageRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["Message"];
+          'application/json': components['schemas']['Message'];
         };
       };
       /** @description Bad Request */
@@ -5373,14 +5470,14 @@ export interface operations {
   getUserStats: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserStats"];
+          'application/json': components['schemas']['UserStats'];
         };
       };
       /**
@@ -5399,14 +5496,14 @@ export interface operations {
   getChannelSubscribers: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": string[];
+          'application/json': string[];
         };
       };
       /**
@@ -5434,12 +5531,12 @@ export interface operations {
   setChannelSubscribers: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PutChannelSubscribersRequest"];
+        'application/json': components['schemas']['PutChannelSubscribersRequest'];
       };
     };
     responses: {
@@ -5448,8 +5545,7 @@ export interface operations {
        * 変更されました。
        */
       204: {
-        headers: {
-        };
+        headers: {};
         content: never;
       };
       /** @description Bad Request */
@@ -5481,12 +5577,12 @@ export interface operations {
   editChannelSubscribers: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchChannelSubscribersRequest"];
+        'application/json': components['schemas']['PatchChannelSubscribersRequest'];
       };
     };
     responses: {
@@ -5526,7 +5622,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserSubscribeState"][];
+          'application/json': components['schemas']['UserSubscribeState'][];
         };
       };
     };
@@ -5538,12 +5634,12 @@ export interface operations {
   setChannelSubscribeLevel: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PutChannelSubscribeLevelRequest"];
+        'application/json': components['schemas']['PutChannelSubscribeLevelRequest'];
       };
     };
     responses: {
@@ -5590,7 +5686,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Webhook"][];
+          'application/json': components['schemas']['Webhook'][];
         };
       };
     };
@@ -5603,14 +5699,14 @@ export interface operations {
   createWebhook: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostWebhookRequest"];
+        'application/json': components['schemas']['PostWebhookRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["Webhook"];
+          'application/json': components['schemas']['Webhook'];
         };
       };
       /** @description Bad Request */
@@ -5626,14 +5722,14 @@ export interface operations {
   getWebhook: {
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Webhook"];
+          'application/json': components['schemas']['Webhook'];
         };
       };
       /**
@@ -5659,17 +5755,17 @@ export interface operations {
       };
       header?: {
         /** @description リクエストボディシグネチャ(Secretが設定されている場合は必須) */
-        "X-TRAQ-Signature"?: string;
+        'X-TRAQ-Signature'?: string;
         /** @description 投稿先のチャンネルID(変更する場合) */
-        "X-TRAQ-Channel-Id"?: string;
+        'X-TRAQ-Channel-Id'?: string;
       };
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "text/plain": string;
+        'text/plain': string;
       };
     };
     responses: {
@@ -5695,7 +5791,7 @@ export interface operations {
   deleteWebhook: {
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
     responses: {
@@ -5722,12 +5818,12 @@ export interface operations {
   editWebhook: {
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchWebhookRequest"];
+        'application/json': components['schemas']['PatchWebhookRequest'];
       };
     };
     responses: {
@@ -5758,16 +5854,16 @@ export interface operations {
   getWebhookIcon: {
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "image/jpeg": string;
-          "image/gif": string;
-          "image/png": string;
+          'image/jpeg': string;
+          'image/gif': string;
+          'image/png': string;
         };
       };
       /**
@@ -5786,12 +5882,12 @@ export interface operations {
   changeWebhookIcon: {
     parameters: {
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "multipart/form-data": components["schemas"]["PutUserIconRequest"];
+        'multipart/form-data': components['schemas']['PutUserIconRequest'];
       };
     };
     responses: {
@@ -5826,16 +5922,16 @@ export interface operations {
   getUserIcon: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "image/jpeg": string;
-          "image/gif": string;
-          "image/png": string;
+          'image/jpeg': string;
+          'image/gif': string;
+          'image/png': string;
         };
       };
       /**
@@ -5855,12 +5951,12 @@ export interface operations {
   changeUserIcon: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "multipart/form-data": components["schemas"]["PutUserIconRequest"];
+        'multipart/form-data': components['schemas']['PutUserIconRequest'];
       };
     };
     responses: {
@@ -5901,9 +5997,9 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "image/jpeg": string;
-          "image/gif": string;
-          "image/png": string;
+          'image/jpeg': string;
+          'image/gif': string;
+          'image/png': string;
         };
       };
       /**
@@ -5922,7 +6018,7 @@ export interface operations {
   changeMyIcon: {
     requestBody?: {
       content: {
-        "multipart/form-data": components["schemas"]["PutUserIconRequest"];
+        'multipart/form-data': components['schemas']['PutUserIconRequest'];
       };
     };
     responses: {
@@ -5950,7 +6046,7 @@ export interface operations {
   changeMyPassword: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PutMyPasswordRequest"];
+        'application/json': components['schemas']['PutMyPasswordRequest'];
       };
     };
     responses: {
@@ -5982,12 +6078,12 @@ export interface operations {
   changeUserPassword: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PutUserPasswordRequest"];
+        'application/json': components['schemas']['PutUserPasswordRequest'];
       };
     };
     responses: {
@@ -6022,7 +6118,7 @@ export interface operations {
   registerFCMDevice: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostMyFCMDeviceRequest"];
+        'application/json': components['schemas']['PostMyFCMDeviceRequest'];
       };
     };
     responses: {
@@ -6048,7 +6144,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["MyChannelViewState"][];
+          'application/json': components['schemas']['MyChannelViewState'][];
         };
       };
     };
@@ -6063,7 +6159,7 @@ export interface operations {
     parameters: {
       query?: {
         /** @description アカウントがアクティブでないユーザーを含め、全てのユーザーを取得するかどうか */
-        "include-suspended"?: boolean;
+        'include-suspended'?: boolean;
         /** @description 名前が一致するアカウントのみを取得する */
         name?: string;
       };
@@ -6072,7 +6168,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["User"][];
+          'application/json': components['schemas']['User'][];
         };
       };
       /** @description Bad Request */
@@ -6089,14 +6185,14 @@ export interface operations {
   createUser: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostUserRequest"];
+        'application/json': components['schemas']['PostUserRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["UserDetail"];
+          'application/json': components['schemas']['UserDetail'];
         };
       };
       /** @description Bad Request */
@@ -6124,14 +6220,14 @@ export interface operations {
     parameters: {
       query?: {
         /** @description ダイレクトメッセージチャンネルをレスポンスに含めるかどうか */
-        "include-dm"?: boolean;
+        'include-dm'?: boolean;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ChannelList"];
+          'application/json': components['schemas']['ChannelList'];
         };
       };
     };
@@ -6144,14 +6240,14 @@ export interface operations {
   createChannel: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostChannelRequest"];
+        'application/json': components['schemas']['PostChannelRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["Channel"];
+          'application/json': components['schemas']['Channel'];
         };
       };
       /** @description Bad Request */
@@ -6178,14 +6274,14 @@ export interface operations {
   getUserTags: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserTag"][];
+          'application/json': components['schemas']['UserTag'][];
         };
       };
       /**
@@ -6205,19 +6301,19 @@ export interface operations {
   addUserTag: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostUserTagRequest"];
+        'application/json': components['schemas']['PostUserTagRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["UserTag"];
+          'application/json': components['schemas']['UserTag'];
         };
       };
       /** @description Bad Request */
@@ -6251,8 +6347,8 @@ export interface operations {
   removeUserTag: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
-        tagId: components["parameters"]["tagIdInPath"];
+        userId: components['parameters']['userIdInPath'];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
     responses: {
@@ -6287,13 +6383,13 @@ export interface operations {
   editUserTag: {
     parameters: {
       path: {
-        userId: components["parameters"]["userIdInPath"];
-        tagId: components["parameters"]["tagIdInPath"];
+        userId: components['parameters']['userIdInPath'];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchUserTagRequest"];
+        'application/json': components['schemas']['PatchUserTagRequest'];
       };
     };
     responses: {
@@ -6324,14 +6420,14 @@ export interface operations {
   getTag: {
     parameters: {
       path: {
-        tagId: components["parameters"]["tagIdInPath"];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Tag"];
+          'application/json': components['schemas']['Tag'];
         };
       };
       /** @description Not Found */
@@ -6349,7 +6445,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserTag"][];
+          'application/json': components['schemas']['UserTag'][];
         };
       };
     };
@@ -6361,14 +6457,14 @@ export interface operations {
   addMyUserTag: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostUserTagRequest"];
+        'application/json': components['schemas']['PostUserTagRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["UserTag"];
+          'application/json': components['schemas']['UserTag'];
         };
       };
       /** @description Bad Request */
@@ -6391,7 +6487,7 @@ export interface operations {
   removeMyUserTag: {
     parameters: {
       path: {
-        tagId: components["parameters"]["tagIdInPath"];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
     responses: {
@@ -6418,12 +6514,12 @@ export interface operations {
   editMyUserTag: {
     parameters: {
       path: {
-        tagId: components["parameters"]["tagIdInPath"];
+        tagId: components['parameters']['tagIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchUserTagRequest"];
+        'application/json': components['schemas']['PatchUserTagRequest'];
       };
     };
     responses: {
@@ -6456,7 +6552,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": string[];
+          'application/json': string[];
         };
       };
     };
@@ -6470,7 +6566,7 @@ export interface operations {
   addMyStar: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostStarRequest"];
+        'application/json': components['schemas']['PostStarRequest'];
       };
     };
     responses: {
@@ -6494,7 +6590,7 @@ export interface operations {
   removeMyStar: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
@@ -6516,7 +6612,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UnreadChannel"][];
+          'application/json': components['schemas']['UnreadChannel'][];
         };
       };
     };
@@ -6530,7 +6626,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Version"];
+          'application/json': components['schemas']['Version'];
         };
       };
     };
@@ -6542,12 +6638,12 @@ export interface operations {
   login: {
     parameters: {
       query?: {
-        redirect?: components["parameters"]["redirectInQuery"];
+        redirect?: components['parameters']['redirectInQuery'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostLoginRequest"];
+        'application/json': components['schemas']['PostLoginRequest'];
       };
     };
     responses: {
@@ -6592,7 +6688,7 @@ export interface operations {
   logout: {
     parameters: {
       query?: {
-        redirect?: components["parameters"]["redirectInQuery"];
+        redirect?: components['parameters']['redirectInQuery'];
         /** @description 全てのセッションでログアウトするかどうか */
         all?: boolean;
       };
@@ -6623,7 +6719,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["LoginSession"][];
+          'application/json': components['schemas']['LoginSession'][];
         };
       };
     };
@@ -6636,7 +6732,7 @@ export interface operations {
   revokeMySession: {
     parameters: {
       path: {
-        sessionId: components["parameters"]["sessionIdInPath"];
+        sessionId: components['parameters']['sessionIdInPath'];
       };
     };
     responses: {
@@ -6669,7 +6765,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ActivityTimelineMessage"][];
+          'application/json': components['schemas']['ActivityTimelineMessage'][];
         };
       };
       /** @description Bad Request */
@@ -7019,7 +7115,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ActiveOAuth2Token"][];
+          'application/json': components['schemas']['ActiveOAuth2Token'][];
         };
       };
     };
@@ -7031,7 +7127,7 @@ export interface operations {
   revokeMyToken: {
     parameters: {
       path: {
-        tokenId: components["parameters"]["tokenIdInPath"];
+        tokenId: components['parameters']['tokenIdInPath'];
       };
     };
     responses: {
@@ -7063,9 +7159,9 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "image/jpeg": string;
-          "image/gif": string;
-          "image/png": string;
+          'image/jpeg': string;
+          'image/gif': string;
+          'image/png': string;
         };
       };
       /** @description Not Found */
@@ -7086,14 +7182,16 @@ export interface operations {
         detail?: boolean;
       };
       path: {
-        clientId: components["parameters"]["clientIdInPath"];
+        clientId: components['parameters']['clientIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["OAuth2Client"] | components["schemas"]["OAuth2ClientDetail"];
+          'application/json':
+            | components['schemas']['OAuth2Client']
+            | components['schemas']['OAuth2ClientDetail'];
         };
       };
       /** @description Forbidden */
@@ -7114,7 +7212,7 @@ export interface operations {
   deleteClient: {
     parameters: {
       path: {
-        clientId: components["parameters"]["clientIdInPath"];
+        clientId: components['parameters']['clientIdInPath'];
       };
     };
     responses: {
@@ -7147,12 +7245,12 @@ export interface operations {
   editClient: {
     parameters: {
       path: {
-        clientId: components["parameters"]["clientIdInPath"];
+        clientId: components['parameters']['clientIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchClientRequest"];
+        'application/json': components['schemas']['PatchClientRequest'];
       };
     };
     responses: {
@@ -7196,7 +7294,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["OAuth2Client"][];
+          'application/json': components['schemas']['OAuth2Client'][];
         };
       };
     };
@@ -7208,14 +7306,14 @@ export interface operations {
   createClient: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostClientRequest"];
+        'application/json': components['schemas']['PostClientRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["OAuth2ClientDetail"];
+          'application/json': components['schemas']['OAuth2ClientDetail'];
         };
       };
       /** @description Bad Request */
@@ -7240,7 +7338,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Bot"][];
+          'application/json': components['schemas']['Bot'][];
         };
       };
     };
@@ -7254,14 +7352,14 @@ export interface operations {
   createBot: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostBotRequest"];
+        'application/json': components['schemas']['PostBotRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["BotDetail"];
+          'application/json': components['schemas']['BotDetail'];
         };
       };
       /** @description Bad Request */
@@ -7329,16 +7427,16 @@ export interface operations {
   getBotIcon: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "image/jpeg": string;
-          "image/gif": string;
-          "image/png": string;
+          'image/jpeg': string;
+          'image/gif': string;
+          'image/png': string;
         };
       };
       /**
@@ -7358,12 +7456,12 @@ export interface operations {
   changeBotIcon: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "multipart/form-data": components["schemas"]["PutUserIconRequest"];
+        'multipart/form-data': components['schemas']['PutUserIconRequest'];
       };
     };
     responses: {
@@ -7407,14 +7505,16 @@ export interface operations {
         detail?: boolean;
       };
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Bot"] | components["schemas"]["BotDetail"];
+          'application/json':
+            | components['schemas']['Bot']
+            | components['schemas']['BotDetail'];
         };
       };
       /** @description Forbidden */
@@ -7435,7 +7535,7 @@ export interface operations {
   deleteBot: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     responses: {
@@ -7465,12 +7565,12 @@ export interface operations {
   editBot: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchBotRequest"];
+        'application/json': components['schemas']['PatchBotRequest'];
       };
     };
     responses: {
@@ -7503,7 +7603,7 @@ export interface operations {
   activateBot: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     responses: {
@@ -7531,7 +7631,7 @@ export interface operations {
   inactivateBot: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     responses: {
@@ -7563,14 +7663,14 @@ export interface operations {
   reissueBot: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["BotTokens"];
+          'application/json': components['schemas']['BotTokens'];
         };
       };
       /** @description Forbidden */
@@ -7594,18 +7694,18 @@ export interface operations {
   getBotLogs: {
     parameters: {
       query?: {
-        limit?: components["parameters"]["limitInQuery"];
-        offset?: components["parameters"]["offsetInQuery"];
+        limit?: components['parameters']['limitInQuery'];
+        offset?: components['parameters']['offsetInQuery'];
       };
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["BotEventLog"][];
+          'application/json': components['schemas']['BotEventLog'][];
         };
       };
       /** @description Forbidden */
@@ -7630,12 +7730,12 @@ export interface operations {
   letBotJoinChannel: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostBotActionJoinRequest"];
+        'application/json': components['schemas']['PostBotActionJoinRequest'];
       };
     };
     responses: {
@@ -7671,12 +7771,12 @@ export interface operations {
   letBotLeaveChannel: {
     parameters: {
       path: {
-        botId: components["parameters"]["botIdInPath"];
+        botId: components['parameters']['botIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostBotActionLeaveRequest"];
+        'application/json': components['schemas']['PostBotActionLeaveRequest'];
       };
     };
     responses: {
@@ -7711,14 +7811,14 @@ export interface operations {
   getChannelBots: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["BotUser"][];
+          'application/json': components['schemas']['BotUser'][];
         };
       };
       /**
@@ -7737,14 +7837,14 @@ export interface operations {
   postWebRTCAuthenticate: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostWebRTCAuthenticateRequest"];
+        'application/json': components['schemas']['PostWebRTCAuthenticateRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["WebRTCAuthenticateResult"];
+          'application/json': components['schemas']['WebRTCAuthenticateResult'];
         };
       };
       /** @description Bad Request */
@@ -7767,14 +7867,14 @@ export interface operations {
   getChannel: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Channel"];
+          'application/json': components['schemas']['Channel'];
         };
       };
       /** @description Not Found */
@@ -7792,12 +7892,12 @@ export interface operations {
   editChannel: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchChannelRequest"];
+        'application/json': components['schemas']['PatchChannelRequest'];
       };
     };
     responses: {
@@ -7835,7 +7935,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["WebRTCUserStates"];
+          'application/json': components['schemas']['WebRTCUserStates'];
         };
       };
     };
@@ -7849,7 +7949,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ClipFolder"][];
+          'application/json': components['schemas']['ClipFolder'][];
         };
       };
     };
@@ -7862,14 +7962,14 @@ export interface operations {
   createClipFolder: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostClipFolderRequest"];
+        'application/json': components['schemas']['PostClipFolderRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["ClipFolder"];
+          'application/json': components['schemas']['ClipFolder'];
         };
       };
       /** @description Bad Request */
@@ -7885,14 +7985,14 @@ export interface operations {
   getClipFolder: {
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ClipFolder"];
+          'application/json': components['schemas']['ClipFolder'];
         };
       };
       /**
@@ -7911,7 +8011,7 @@ export interface operations {
   deleteClipFolder: {
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
       };
     };
     responses: {
@@ -7938,12 +8038,12 @@ export interface operations {
   editClipFolder: {
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchClipFolderRequest"];
+        'application/json': components['schemas']['PatchClipFolderRequest'];
       };
     };
     responses: {
@@ -7972,19 +8072,19 @@ export interface operations {
   getClips: {
     parameters: {
       query?: {
-        limit?: components["parameters"]["limitInQuery"];
-        offset?: components["parameters"]["offsetInQuery"];
-        order?: components["parameters"]["orderInQuery"];
+        limit?: components['parameters']['limitInQuery'];
+        offset?: components['parameters']['offsetInQuery'];
+        order?: components['parameters']['orderInQuery'];
       };
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ClippedMessage"][];
+          'application/json': components['schemas']['ClippedMessage'][];
         };
       };
       /**
@@ -8003,19 +8103,19 @@ export interface operations {
   clipMessage: {
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostClipFolderMessageRequest"];
+        'application/json': components['schemas']['PostClipFolderMessageRequest'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ClippedMessage"];
+          'application/json': components['schemas']['ClippedMessage'];
         };
       };
       /** @description Bad Request */
@@ -8046,8 +8146,8 @@ export interface operations {
   unclipMessage: {
     parameters: {
       path: {
-        folderId: components["parameters"]["folderIdInPath"];
-        messageId: components["parameters"]["messageIdInPath"];
+        folderId: components['parameters']['folderIdInPath'];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
@@ -8074,25 +8174,25 @@ export interface operations {
   getWebhookMessages: {
     parameters: {
       query?: {
-        limit?: components["parameters"]["limitInQuery"];
-        offset?: components["parameters"]["offsetInQuery"];
-        since?: components["parameters"]["sinceInQuery"];
-        until?: components["parameters"]["untilInQuery"];
-        inclusive?: components["parameters"]["inclusiveInQuery"];
-        order?: components["parameters"]["orderInQuery"];
+        limit?: components['parameters']['limitInQuery'];
+        offset?: components['parameters']['offsetInQuery'];
+        since?: components['parameters']['sinceInQuery'];
+        until?: components['parameters']['untilInQuery'];
+        inclusive?: components['parameters']['inclusiveInQuery'];
+        order?: components['parameters']['orderInQuery'];
       };
       path: {
-        webhookId: components["parameters"]["webhookIdInPath"];
+        webhookId: components['parameters']['webhookIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         headers: {
-          "X-TRAQ-MORE": components["headers"]["X-TRAQ-MORE"];
+          'X-TRAQ-MORE': components['headers']['X-TRAQ-MORE'];
         };
         content: {
-          "application/json": components["schemas"]["Message"][];
+          'application/json': components['schemas']['Message'][];
         };
       };
       /** @description Bad Request */
@@ -8115,25 +8215,25 @@ export interface operations {
   getChannelEvents: {
     parameters: {
       query?: {
-        limit?: components["parameters"]["limitInQuery"];
-        offset?: components["parameters"]["offsetInQuery"];
-        since?: components["parameters"]["sinceInQuery"];
-        until?: components["parameters"]["untilInQuery"];
-        inclusive?: components["parameters"]["inclusiveInQuery"];
-        order?: components["parameters"]["orderInQuery"];
+        limit?: components['parameters']['limitInQuery'];
+        offset?: components['parameters']['offsetInQuery'];
+        since?: components['parameters']['sinceInQuery'];
+        until?: components['parameters']['untilInQuery'];
+        inclusive?: components['parameters']['inclusiveInQuery'];
+        order?: components['parameters']['orderInQuery'];
       };
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         headers: {
-          "X-TRAQ-MORE": components["headers"]["X-TRAQ-MORE"];
+          'X-TRAQ-MORE': components['headers']['X-TRAQ-MORE'];
         };
         content: {
-          "application/json": components["schemas"]["ChannelEvent"][];
+          'application/json': components['schemas']['ChannelEvent'][];
         };
       };
       /** @description Bad Request */
@@ -8158,7 +8258,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StampPalette"][];
+          'application/json': components['schemas']['StampPalette'][];
         };
       };
     };
@@ -8170,14 +8270,14 @@ export interface operations {
   createStampPalette: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostStampPaletteRequest"];
+        'application/json': components['schemas']['PostStampPaletteRequest'];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["StampPalette"];
+          'application/json': components['schemas']['StampPalette'];
         };
       };
       /** @description Bad Request */
@@ -8193,14 +8293,14 @@ export interface operations {
   getStampPalette: {
     parameters: {
       path: {
-        paletteId: components["parameters"]["paletteIdInPath"];
+        paletteId: components['parameters']['paletteIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StampPalette"];
+          'application/json': components['schemas']['StampPalette'];
         };
       };
       /** @description Not Found */
@@ -8217,7 +8317,7 @@ export interface operations {
   deleteStampPalette: {
     parameters: {
       path: {
-        paletteId: components["parameters"]["paletteIdInPath"];
+        paletteId: components['parameters']['paletteIdInPath'];
       };
     };
     responses: {
@@ -8250,12 +8350,12 @@ export interface operations {
   editStampPalette: {
     parameters: {
       path: {
-        paletteId: components["parameters"]["paletteIdInPath"];
+        paletteId: components['parameters']['paletteIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PatchStampPaletteRequest"];
+        'application/json': components['schemas']['PatchStampPaletteRequest'];
       };
     };
     responses: {
@@ -8292,7 +8392,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": string[];
+          'application/json': string[];
         };
       };
     };
@@ -8304,16 +8404,16 @@ export interface operations {
   getStampImage: {
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "image/png": string;
-          "image/gif": string;
-          "image/jpeg": string;
+          'image/png': string;
+          'image/gif': string;
+          'image/jpeg': string;
         };
       };
       /** @description Not Found */
@@ -8329,12 +8429,12 @@ export interface operations {
   changeStampImage: {
     parameters: {
       path: {
-        stampId: components["parameters"]["stampIdInPath"];
+        stampId: components['parameters']['stampIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "multipart/form-data": {
+        'multipart/form-data': {
           /**
            * Format: binary
            * @description スタンプ画像(1MBまでのpng, jpeg, gif)
@@ -8369,7 +8469,7 @@ export interface operations {
   readChannel: {
     parameters: {
       path: {
-        channelId: components["parameters"]["channelIdInPath"];
+        channelId: components['parameters']['channelIdInPath'];
       };
     };
     responses: {
@@ -8391,8 +8491,8 @@ export interface operations {
   removeUserGroupAdmin: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
-        userId: components["parameters"]["userIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
+        userId: components['parameters']['userIdInPath'];
       };
     };
     responses: {
@@ -8430,14 +8530,14 @@ export interface operations {
   getUserGroupAdmins: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": string[];
+          'application/json': string[];
         };
       };
       /**
@@ -8457,12 +8557,12 @@ export interface operations {
   addUserGroupAdmin: {
     parameters: {
       path: {
-        groupId: components["parameters"]["groupIdInPath"];
+        groupId: components['parameters']['groupIdInPath'];
       };
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostUserGroupAdminRequest"];
+        'application/json': components['schemas']['PostUserGroupAdminRequest'];
       };
     };
     responses: {
@@ -8500,14 +8600,14 @@ export interface operations {
   postOAuth2Token: {
     requestBody: {
       content: {
-        "application/x-www-form-urlencoded": components["schemas"]["PostOAuth2Token"];
+        'application/x-www-form-urlencoded': components['schemas']['PostOAuth2Token'];
       };
     };
     responses: {
       /** @description トークンが正常に発行されました。 */
       200: {
         content: {
-          "application/json": components["schemas"]["OAuth2Token"];
+          'application/json': components['schemas']['OAuth2Token'];
         };
       };
       /** @description トークン発行に失敗しました。 */
@@ -8527,7 +8627,7 @@ export interface operations {
   postOAuth2AuthorizeDecide: {
     requestBody: {
       content: {
-        "application/x-www-form-urlencoded": components["schemas"]["OAuth2Decide"];
+        'application/x-www-form-urlencoded': components['schemas']['OAuth2Decide'];
       };
     };
     responses: {
@@ -8552,7 +8652,7 @@ export interface operations {
   getOAuth2Authorize: {
     parameters: {
       query: {
-        response_type?: components["schemas"]["OAuth2ResponseType"];
+        response_type?: components['schemas']['OAuth2ResponseType'];
         client_id: string;
         redirect_uri?: string;
         scope?: string;
@@ -8560,7 +8660,7 @@ export interface operations {
         code_challenge?: string;
         code_challenge_method?: string;
         nonce?: string;
-        prompt?: components["schemas"]["OAuth2Prompt"];
+        prompt?: components['schemas']['OAuth2Prompt'];
       };
     };
     responses: {
@@ -8585,7 +8685,7 @@ export interface operations {
   postOAuth2Authorize: {
     requestBody: {
       content: {
-        "application/x-www-form-urlencoded": components["schemas"]["OAuth2Authorization"];
+        'application/x-www-form-urlencoded': components['schemas']['OAuth2Authorization'];
       };
     };
     responses: {
@@ -8610,7 +8710,7 @@ export interface operations {
   revokeOAuth2Token: {
     requestBody: {
       content: {
-        "application/x-www-form-urlencoded": components["schemas"]["OAuth2Revoke"];
+        'application/x-www-form-urlencoded': components['schemas']['OAuth2Revoke'];
       };
     };
     responses: {
@@ -8629,7 +8729,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ExternalProviderUser"][];
+          'application/json': components['schemas']['ExternalProviderUser'][];
         };
       };
     };
@@ -8643,7 +8743,7 @@ export interface operations {
   linkExternalAccount: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostLinkExternalAccount"];
+        'application/json': components['schemas']['PostLinkExternalAccount'];
       };
     };
     responses: {
@@ -8667,7 +8767,7 @@ export interface operations {
   unlinkExternalAccount: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PostUnlinkExternalAccount"];
+        'application/json': components['schemas']['PostUnlinkExternalAccount'];
       };
     };
     responses: {
@@ -8699,7 +8799,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DMChannel"];
+          'application/json': components['schemas']['DMChannel'];
         };
       };
       /**
@@ -8718,14 +8818,14 @@ export interface operations {
   getMessageClips: {
     parameters: {
       path: {
-        messageId: components["parameters"]["messageIdInPath"];
+        messageId: components['parameters']['messageIdInPath'];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["MessageClip"][];
+          'application/json': components['schemas']['MessageClip'][];
         };
       };
       /** @description Not Found */
@@ -8750,7 +8850,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Ogp"];
+          'application/json': components['schemas']['Ogp'];
         };
       };
       /** @description 指定したURLが不正です。 */
@@ -8790,7 +8890,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserSettings"];
+          'application/json': components['schemas']['UserSettings'];
         };
       };
     };
@@ -8804,7 +8904,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetNotifyCitation"];
+          'application/json': components['schemas']['GetNotifyCitation'];
         };
       };
     };
@@ -8816,7 +8916,7 @@ export interface operations {
   changeMyNotifyCitation: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["PutNotifyCitationRequest"];
+        'application/json': components['schemas']['PutNotifyCitationRequest'];
       };
     };
     responses: {

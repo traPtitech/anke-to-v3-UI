@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="side-navigation">
-      <SideNavigation/>
+      <SideNavigation />
     </div>
     <div class="layout-header">
-      <LayoutHeader/>
+      <LayoutHeader />
     </div>
 
     <main>

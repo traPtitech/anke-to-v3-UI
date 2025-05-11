@@ -4,7 +4,7 @@ const checked = ref(false);
 
 <template>
   <div>
-    <Checkbox v-model="checked" :binary="true"/>
+    <Checkbox v-model="checked" :binary="true" />
   </div>
 </template>
 

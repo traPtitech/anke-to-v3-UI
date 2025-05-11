@@ -8,10 +8,10 @@ const { open } = defineProps<{ open: boolean }>();
     :class="{ open }"
     :aria-label="open ? 'メニューを閉じる' : 'メニューを開く'"
   >
-    <span/>
-    <span/>
-    <span/>
-    <span/>
+    <span />
+    <span />
+    <span />
+    <span />
   </button>
 </template>
 
