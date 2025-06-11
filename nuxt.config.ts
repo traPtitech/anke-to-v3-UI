@@ -2,34 +2,35 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ['ress', '~/assets/style/theme.css', '~/assets/style/global.css'],
+  css: ["ress", "~/assets/style/theme.css", "~/assets/style/global.css"],
   typescript: {
     typeCheck: true,
   },
+  ssr: false,
   runtimeConfig: {
     public: {
-      traQClientId: process.env.TRAQ_CLIENT_ID ?? '',
+      traQClientId: process.env.TRAQ_CLIENT_ID ?? "",
     },
   },
   components: [
-    '~/components/layout-elements',
-    '~/components/ui',
-    '~/components/new-questionnaire-form',
-    { path: '~/components/response-form-base', pathPrefix: false },
-    { path: '~/components/questionnaire-result', pathPrefix: false },
-    { path: '~/components/questionnaire-detail', pathPrefix: false },
-    { path: '~/components/landing-page', pathPrefix: false },
-    '~/components',
+    "~/components/layout-elements",
+    "~/components/ui",
+    "~/components/new-questionnaire-form",
+    { path: "~/components/response-form-base", pathPrefix: false },
+    { path: "~/components/questionnaire-result", pathPrefix: false },
+    { path: "~/components/questionnaire-detail", pathPrefix: false },
+    { path: "~/components/landing-page", pathPrefix: false },
+    "~/components",
   ],
   modules: [
-    '@nuxtjs/google-fonts',
-    '@pinia/nuxt',
-    '@nuxt/test-utils/module',
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/stylelint-module',
-    'nuxt-icon',
-    'nuxt-primevue',
-    '@pinia-plugin-persistedstate/nuxt',
+    "@nuxtjs/google-fonts",
+    "@pinia/nuxt",
+    "@nuxt/test-utils/module",
+    "@nuxtjs/eslint-module",
+    "@nuxtjs/stylelint-module",
+    "nuxt-icon",
+    "nuxt-primevue",
+    "@pinia-plugin-persistedstate/nuxt",
   ],
   eslint: {
     cache: false,
@@ -40,13 +41,13 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       Inter: [400, 500, 700],
-      'M+PLUS+1p': [400, 500, 700],
+      "M+PLUS+1p": [400, 500, 700],
     },
     preload: true,
     download: false,
   },
   pinia: {
-    storesDirs: ['./stores/**'],
+    storesDirs: ["./stores/**"],
   },
   appConfig: {
     nuxtIcon: {},
