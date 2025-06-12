@@ -1,6 +1,12 @@
+.p-toggleswitch-handle {
+  margin-block-start: initial;
+  transform: translateY(-50%);
+}
+
 .p-inputtext::placeholder,
+.p-textarea::placeholder,
 .p-multiselect .p-multiselect-label.p-placeholder {
-  color: #d1c7c8;
+  color: var(--p-gray-400);
 }
 
 .p-button.p-button-icon-only {

@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+import { BrandPreset } from "./theme/preset";
+
 export default defineNuxtConfig({
   modules: [
     "@pinia/nuxt",
@@ -23,7 +25,7 @@ export default defineNuxtConfig({
     "~/components",
   ],
   devtools: { enabled: true },
-  css: ["ress", "~/assets/style/theme.css", "~/assets/style/global.css"],
+  css: ["ress", "~/assets/style/global.css"],
   appConfig: {
     nuxtIcon: {},
   },
@@ -55,6 +57,16 @@ export default defineNuxtConfig({
   },
   pinia: {
     storesDirs: ["./stores/**"],
+  },
+  primevue: {
+    options: {
+      theme: {
+        preset: BrandPreset,
+        options: {
+          darkModeSelector: false,
+        },
+      },
+    },
   },
   stylelint: {
     cache: true,
