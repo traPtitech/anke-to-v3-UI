@@ -80,7 +80,7 @@ watch(
               'update:modelValue',
               replaceInArray(modelValue, index, {
                 ...option,
-                label: $event,
+                label: $event ?? '',
               }),
             )
           "

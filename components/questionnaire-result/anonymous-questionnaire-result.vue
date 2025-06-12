@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { QuestionnaireDetail, QuestionnaireResult } from './type';
+import type { QuestionnaireDetail } from './type';
 
 const props = defineProps<{
-  result: QuestionnaireResult;
+  result: any;
   detail: QuestionnaireDetail;
 }>();
 </script>
