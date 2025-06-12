@@ -16,20 +16,18 @@ const userSpecifier = computed({
 });
 
 const { data: users } = useFetchTraqApi('/users');
-const userIds = computed(
-  () =>
-    users.value
-      ?.filter((user) => !user.bot)
-      .map((user) => ({ label: user.name, value: user.name, id: user.id }))
-      .toSorted((a, b) => a.label.localeCompare(b.label)),
+const userIds = computed(() =>
+  users.value
+    ?.filter((user) => !user.bot)
+    .map((user) => ({ label: user.name, value: user.name, id: user.id }))
+    .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
 
 const { data: groups } = useFetchTraqApi('/groups');
-const groupIds = computed(
-  () =>
-    groups.value
-      ?.map((group) => ({ label: group.name, value: group.id }))
-      .toSorted((a, b) => a.label.localeCompare(b.label)),
+const groupIds = computed(() =>
+  groups.value
+    ?.map((group) => ({ label: group.name, value: group.id }))
+    .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
 </script>
 
@@ -43,7 +41,12 @@ const groupIds = computed(
     >
       <template #option="{ option }">
         <div class="user-option">
-          <UserIcon :user-id="option.id" class="user-icon" />
+          <img
+            :src="`https://q.trap.jp/api/v3/public/icon/${option.value}`"
+            alt=""
+            width="24"
+            height="24"
+          />
           <div>{{ option.label }}</div>
         </div>
       </template>
