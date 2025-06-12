@@ -53,14 +53,6 @@ export default defineNuxtConfig({
       stylistic: true,
     },
   },
-  fonts: {
-    families: [{
-      name: "M PLUS 1p",
-      provider: "google",
-      weights: [400, 500, 700],
-      preload: true,
-    }],
-  },
   pinia: {
     storesDirs: ["./stores/**"],
   },
