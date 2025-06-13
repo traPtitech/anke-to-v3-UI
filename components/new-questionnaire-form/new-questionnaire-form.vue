@@ -41,6 +41,8 @@ const checkValidity = () => {
     return { ok: false, message: '回答期限は未来の日時を指定してください' };
   if (state.questions.length === 0)
     return { ok: false, message: '質問を1つ以上設定する必要があります' };
+  if (state.admin.groups.length === 0 && state.admin.users.length === 0)
+    return { ok: false, message: '管理者を1人以上設定する必要があります' };
 
   return { ok: true };
 };
