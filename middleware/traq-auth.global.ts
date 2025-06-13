@@ -1,7 +1,7 @@
 import { getTraqAuthCodeRequestUrl } from '@/utils/sendTraqAuthCodeRequest';
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  if (process.server) return;
+  if (import.meta.server) return;
 
   if (to.path === '/') return;
 

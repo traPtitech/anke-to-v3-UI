@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ResponseFormQuestionnaireFormSettings } from '~/components/response-form-base/questionnaire-settings';
+
 const formSettings: ResponseFormQuestionnaireFormSettings = {
   title: 'アンケートのタイトル',
   description: 'アンケートの説明',

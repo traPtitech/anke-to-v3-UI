@@ -16,7 +16,7 @@ defineEmits<{
 watch(
   () => props.modelValue,
   (currentValue, prevValue) => {
-    if (!process.client) return;
+    if (!import.meta.client) return;
 
     if (document === undefined) return;
 
