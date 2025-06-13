@@ -10,7 +10,6 @@ export default defineNuxtConfig({
     "@nuxtjs/stylelint-module",
     "@pinia-plugin-persistedstate/nuxt",
     "@nuxt/icon",
-    "@nuxt/fonts",
     "@primevue/nuxt-module",
   ],
   ssr: false,
