@@ -276,7 +276,8 @@ export interface components {
             created_at?: string;
         };
         QuestionBase: {
-            body: string;
+            title: string;
+            description: string;
             /** @description 回答必須かどうか
              *      */
             is_required: boolean;
@@ -414,6 +415,15 @@ export interface components {
         /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。
          *      */
         onlyMyResponseInQuery: boolean;
+        /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。
+         *      */
+        notOverDueInQuery: boolean;
+        /** @description 自分の回答があるもののみ取得 (true), 自分の回答がないものも含めてすべて取得 (false)。デフォルトはfalse。
+         *      */
+        hasMyResponseInQuery: boolean;
+        /** @description 自分の下書きがあるもののみ取得 (true), 自分の下書きがないものも含めてすべて取得 (false)。デフォルトはfalse。
+         *      */
+        hasMyDraftInQuery: boolean;
         /** @description アンケートID
          *      */
         questionnaireIDInPath: number;
@@ -442,6 +452,15 @@ export interface operations {
                 /** @description 自分が管理者になっていないもののみ取得 (true), 管理者になっているものも含めてすべて取得 (false)。デフォルトはfalse。
                  *      */
                 onlyAdministratedByMe?: components["parameters"]["onlyAdministratedByMeInQuery"];
+                /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。
+                 *      */
+                notOverDue?: components["parameters"]["notOverDueInQuery"];
+                /** @description 自分の回答があるもののみ取得 (true), 自分の回答がないものも含めてすべて取得 (false)。デフォルトはfalse。
+                 *      */
+                hasMyResponse?: components["parameters"]["hasMyResponseInQuery"];
+                /** @description 自分の下書きがあるもののみ取得 (true), 自分の下書きがないものも含めてすべて取得 (false)。デフォルトはfalse。
+                 *      */
+                hasMyDraft?: components["parameters"]["hasMyDraftInQuery"];
             };
             header?: never;
             path?: never;
