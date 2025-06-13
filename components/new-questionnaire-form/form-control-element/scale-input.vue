@@ -20,7 +20,7 @@ const state = computed({
   <div class="scale-input-container">
     <div class="scale-input-group">
       <Dropdown
-        v-model="state.minValue"
+        v-model="state.min_value"
         placeholder="最小値"
         :options="[0, 1]"
         class="scale-input-dropdown"
@@ -28,20 +28,20 @@ const state = computed({
         panel-class="scale-input-dropdown-panel"
       />
       <InputText
-        v-model="state.minLabel"
+        v-model="state.min_label"
         placeholder="最小値のラベル (任意)"
         class="scale-input-label-input"
       />
     </div>
     <div class="scale-input-group">
       <Dropdown
-        v-model="state.maxValue"
+        v-model="state.max_value"
         placeholder="最大値"
         :options="[2, 3, 4, 5, 6, 7, 8, 9, 10]"
         scroll-height="320px"
       />
       <InputText
-        v-model="state.maxLabel"
+        v-model="state.max_label"
         placeholder="最大値のラベル (任意)"
         class="scale-input-label-input"
       />

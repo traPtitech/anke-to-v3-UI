@@ -1,44 +1,28 @@
-export type UserSpecifier = {
-  users: string[];
-  groups: string[];
+import type { components } from "~/composables/type-fetch/anke-to/openapi";
+
+export type UserSpecifier = components["schemas"]["UsersAndGroups"];
+
+export type QuestionSettingsBase = components["schemas"]["QuestionBase"] & {
+  question_id: number;
 };
 
-export type QuestionSettingsBase = {
-  id: string;
-  title: string;
-  description: string;
-  required: boolean;
-};
+export type QuestionSettingsText =
+  components["schemas"]["QuestionSettingsText"];
 
-export type QuestionSettingsText = {
-  type: 'Text';
-};
+export type QuestionSettingsTextLong =
+  components["schemas"]["QuestionSettingsTextLong"];
 
-export type QuestionSettingsTextLong = {
-  type: 'TextLong';
-};
+export type QuestionSettingsNumber =
+  components["schemas"]["QuestionSettingsNumber"];
 
-export type QuestionSettingsNumber = {
-  type: 'Number';
-};
+export type QuestionSettingsSingleChoice =
+  components["schemas"]["QuestionSettingsSingleChoice"];
 
-export type QuestionSettingsSingleChoice = {
-  type: 'SingleChoice';
-  options: { id: string; label: string }[];
-};
+export type QuestionSettingsMultipleChoice =
+  components["schemas"]["QuestionSettingsMultipleChoice"];
 
-export type QuestionSettingsMultipleChoice = {
-  type: 'MultipleChoice';
-  options: { id: string; label: string }[];
-};
-
-export type QuestionSettingsScale = {
-  type: 'Scale';
-  minValue: number;
-  minLabel?: string;
-  maxValue: number;
-  maxLabel?: string;
-};
+export type QuestionSettingsScale =
+  components["schemas"]["QuestionSettingsScale"];
 
 export type QuestionSettingsByType =
   | QuestionSettingsText
@@ -50,14 +34,8 @@ export type QuestionSettingsByType =
 
 export type QuestionSettings = QuestionSettingsBase & QuestionSettingsByType;
 
-export type QuestionnaireFormSettings = {
-  title: string;
-  description: string;
-  responseDueDateTime: string | null;
-  responseViewableBy: 'anyone' | 'respondents' | 'admins';
-  isAnonymous: boolean;
-  isAllowingMultipleResponses: boolean;
-  targets: UserSpecifier;
-  admins: UserSpecifier;
-  questions: QuestionSettings[];
-};
+export type NewQuestionnaireFormSettings =
+  & Omit<components["schemas"]["NewQuestionnaire"], "questions">
+  & {
+    questions: QuestionSettings[];
+  };

@@ -1,49 +1,68 @@
 <script lang="ts" setup>
 import { Container, Draggable } from 'vue3-smooth-dnd';
 import { useStoreNewQuestionnaireForm } from '~/components/new-questionnaire-form/store';
-import type { QuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
+import type { NewQuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
 
 const form = ref<HTMLFormElement | null>(null);
 
 const emit = defineEmits<{
-  (e: 'save', value: QuestionnaireFormSettings): void;
-  (e: 'send', value: QuestionnaireFormSettings): void;
+  (e: 'save', value: NewQuestionnaireFormSettings): void;
+  (e: 'send', value: NewQuestionnaireFormSettings): void;
 }>();
 
 const { state, addQuestion, copyQuestion, removeQuestion } =
   useStoreNewQuestionnaireForm();
 
 const isResponseDueDateTimeInvalidForTargets = computed(() => {
-  if (state.responseDueDateTime !== null) return false;
+  if (state.response_due_date_time !== undefined) return false;
 
-  return state.targets.users.length > 0 || state.targets.groups.length > 0;
+  return state.target.users.length > 0 || state.target.groups.length > 0;
 });
 const isResponseDueDateTimeInvalidForDate = computed(() => {
-  if (state.responseDueDateTime === null) return false;
+  if (state.response_due_date_time === undefined) return false;
 
-  return new Date(state.responseDueDateTime) < new Date();
+  return new Date(state.response_due_date_time) < new Date();
 });
 
 const checkValidity = () => {
-  if (form.value === null) return false;
+  if (form.value === null)
+    return { ok: false, message: '予期せぬエラーが発生しました' };
 
   form.value.reportValidity();
-  if (!form.value.checkValidity()) return false;
+  if (!form.value.checkValidity())
+    return { ok: false, message: '必須項目を入力してください' };
 
-  if (isResponseDueDateTimeInvalidForTargets.value) return false;
-  if (isResponseDueDateTimeInvalidForDate.value) return false;
-  if (state.questions.length === 0) return false;
+  if (isResponseDueDateTimeInvalidForTargets.value)
+    return {
+      ok: false,
+      message: '対象者が設定されている場合、回答期限は設定必須です',
+    };
+  if (isResponseDueDateTimeInvalidForDate.value)
+    return { ok: false, message: '回答期限は未来の日時を指定してください' };
+  if (state.questions.length === 0)
+    return { ok: false, message: '質問を1つ以上設定する必要があります' };
 
-  return true;
+  return { ok: true };
 };
 
 const handleSend = () => {
-  if (!checkValidity()) return;
-  emit('send', state);
+  const validity = checkValidity();
+  if (validity.ok) {
+    emit('send', state);
+  } else {
+    // TODO: handle error
+    console.error(validity.message);
+  }
 };
 
 const handleSave = () => {
-  emit('save', state);
+  const validity = checkValidity();
+  if (validity.ok) {
+    emit('save', state);
+  } else {
+    // TODO: handle error
+    console.error(validity.message);
+  }
 };
 </script>
 
@@ -72,7 +91,7 @@ const handleSave = () => {
     >
       <Draggable
         v-for="(question, i) in state.questions"
-        :key="question.id"
+        :key="question.question_id"
         class="question-container"
       >
         <div class="question-side-buttons">
@@ -87,7 +106,7 @@ const handleSave = () => {
             text
             class="p-button-icon-only question-add-button"
             title="質問を追加"
-            @click="addQuestion(question.type, i)"
+            @click="addQuestion(question.question_type, i)"
           >
             <Icon size="24px" name="mdi:plus-circle-outline" />
           </Button>
@@ -96,8 +115,8 @@ const handleSave = () => {
           class="question-control"
           :model-value="question"
           @update:model-value="Object.assign(state.questions[i], $event)"
-          @copy="copyQuestion(question.id, i)"
-          @delete="removeQuestion(question.id)"
+          @copy="copyQuestion(question.question_id, i)"
+          @delete="removeQuestion(question.question_id)"
         />
       </Draggable>
     </Container>

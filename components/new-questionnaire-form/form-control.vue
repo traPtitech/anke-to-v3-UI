@@ -29,9 +29,11 @@ const formComponents = {
   SingleChoice: SingleChoiceInput,
   Number: NumberInput,
   Scale: ScaleInput,
-} satisfies Record<QuestionSettings['type'], unknown>;
+} satisfies Record<QuestionSettings['question_type'], unknown>;
 
-const formComponent = computed(() => formComponents[question.value.type]);
+const formComponent = computed(
+  () => formComponents[question.value.question_type],
+);
 </script>
 
 <template>
@@ -47,7 +49,7 @@ const formComponent = computed(() => formComponents[question.value.type]);
     <div class="form-control-footer">
       <div class="form-control-required-switch">
         <label>必須</label>
-        <InputSwitch v-model="question.required" />
+        <InputSwitch v-model="question.is_required" />
       </div>
       <div class="form-control-footer-buttons">
         <Button

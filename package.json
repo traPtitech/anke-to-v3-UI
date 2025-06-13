@@ -58,6 +58,7 @@
     "@primeuix/themes": "^1.1.1",
     "@primevue/forms": "^4.3.5",
     "js-sha256": "^0.11.1",
+    "openapi-fetch": "^0.14.0",
     "primevue": "^4.3.5",
     "smooth-dnd": "^0.12.1",
     "vue3-smooth-dnd": "^0.0.6"

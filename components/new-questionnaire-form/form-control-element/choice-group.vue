@@ -6,23 +6,60 @@ const props = defineProps<{
   modelValue: QuestionSettingsMultipleChoice['options'];
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (
     e: 'update:modelValue',
     value: QuestionSettingsMultipleChoice['options'],
   ): void;
 }>();
 
+type InternalOption = {
+  id: number;
+  label: string;
+};
+
+const toInternal = (
+  value: QuestionSettingsMultipleChoice['options'],
+): InternalOption[] =>
+  value.map((option) => ({
+    id: createId(),
+    label: option,
+  }));
+
+const fromInternal = (
+  value: InternalOption[],
+): QuestionSettingsMultipleChoice['options'] =>
+  value.map((option) => option.label);
+
+const internalOptions = ref<InternalOption[]>(toInternal(props.modelValue));
+
 watch(
   () => props.modelValue,
+  (newValue) => {
+    internalOptions.value = toInternal(newValue);
+  },
+);
+
+watch(internalOptions, (newValue) => {
+  const externalValue = fromInternal(newValue);
+  if (
+    externalValue.length === props.modelValue.length &&
+    externalValue.every((v, i) => v === props.modelValue[i])
+  )
+    return;
+
+  emit('update:modelValue', externalValue);
+});
+
+const containerRef = useTemplateRef('containerRef');
+
+// 更新時のフォーカス移動
+watch(
+  () => internalOptions.value,
   (currentValue, prevValue) => {
-    if (!import.meta.client) return;
-
-    if (document === undefined) return;
-
     if (prevValue === undefined) {
-      document
-        .querySelectorAll<HTMLInputElement>('.choice-group-label-input')[0]
+      containerRef.value
+        ?.querySelectorAll<HTMLInputElement>('.choice-group-label-input')[0]
         ?.focus();
       return;
     }
@@ -36,8 +73,8 @@ watch(
 
     // すぐフォーカスを当てるとレンダリング前(?)にフォーカスが当たって思った要素にフォーカスが当たらない
     setTimeout(() => {
-      document
-        .querySelectorAll<HTMLInputElement>('.choice-group-label-input')
+      containerRef.value
+        ?.querySelectorAll<HTMLInputElement>('.choice-group-label-input')
         [newValueIndex]?.focus();
     }, 10);
   },
@@ -46,19 +83,20 @@ watch(
 </script>
 
 <template>
-  <div>
+  <div ref="containerRef">
     <Container
       drag-handle-selector=".drag-handle"
       lock-axis="y"
       @drop="
-        $emit(
-          'update:modelValue',
-          moveInArray(modelValue, $event.removedIndex, $event.addedIndex),
+        internalOptions = moveInArray(
+          internalOptions,
+          $event.removedIndex,
+          $event.addedIndex,
         )
       "
     >
       <Draggable
-        v-for="(option, index) in modelValue"
+        v-for="(option, index) in internalOptions"
         :key="option.id"
         class="choice-group-element"
       >
@@ -76,23 +114,17 @@ watch(
           required
           placeholder="選択肢"
           @update:model-value="
-            $emit(
-              'update:modelValue',
-              replaceInArray(modelValue, index, {
-                ...option,
-                label: $event ?? '',
-              }),
-            )
+            internalOptions = replaceInArray(internalOptions, index, {
+              ...option,
+              label: $event ?? '',
+            })
           "
           @keypress="
             if ($event.key === 'Enter') {
-              $emit(
-                'update:modelValue',
-                insertToArray(modelValue, index + 1, {
-                  id: createId(),
-                  label: '',
-                }),
-              );
+              internalOptions = insertToArray(internalOptions, index + 1, {
+                id: createId(),
+                label: '',
+              });
             }
           "
         />
@@ -100,10 +132,7 @@ watch(
           outlined
           class="delete-choice-button p-button-icon-only"
           @click="
-            $emit(
-              'update:modelValue',
-              modelValue.filter((o) => o.id !== option.id),
-            )
+            internalOptions = internalOptions.filter((o) => o.id !== option.id)
           "
         >
           <Icon size="24px" name="mdi:trash-can-outline" />
@@ -114,10 +143,7 @@ watch(
       class="add-choice-button"
       outlined
       @click="
-        $emit(
-          'update:modelValue',
-          modelValue.concat({ id: createId(), label: '' }),
-        )
+        internalOptions = internalOptions.concat({ id: createId(), label: '' })
       "
     >
       <Icon size="24px" name="mdi:plus" />

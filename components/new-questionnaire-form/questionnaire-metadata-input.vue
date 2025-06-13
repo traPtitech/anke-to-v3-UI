@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import type { QuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
+import type { NewQuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
 
 const props = defineProps<{
-  modelValue: QuestionnaireFormSettings;
+  modelValue: NewQuestionnaireFormSettings;
   isResponseDueDateTimeInvalidForTargets: boolean;
   isResponseDueDateTimeInvalidForDate: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: QuestionnaireFormSettings): void;
+  (e: 'update:modelValue', value: NewQuestionnaireFormSettings): void;
 }>();
 
 const state = computed({
@@ -31,7 +31,7 @@ const responseViewableByOptions = [
   },
 ] satisfies {
   label: string;
-  value: QuestionnaireFormSettings['responseViewableBy'];
+  value: NewQuestionnaireFormSettings['response_viewable_by'];
 }[];
 
 type ResponseDueDateTimeOption =
@@ -52,12 +52,12 @@ const responseDueDateTimeOptions = [
 ] satisfies { label: string; value: ResponseDueDateTimeOption }[];
 
 const responseDueDateTimeDropdown = ref<ResponseDueDateTimeOption>(
-  state.value.responseDueDateTime === null ? 'no-due' : 'custom',
+  state.value.response_due_date_time === undefined ? 'no-due' : 'custom',
 );
 const responseDueDateTimeInput = ref<Date>(
-  state.value.responseDueDateTime === null
+  state.value.response_due_date_time === undefined
     ? addDays(today, 7)
-    : new Date(state.value.responseDueDateTime),
+    : new Date(state.value.response_due_date_time),
 );
 const responseDueDateTimeInputDisabled = computed(() => {
   return responseDueDateTimeDropdown.value !== 'custom';
@@ -68,7 +68,7 @@ watch(
   (value) => {
     switch (value) {
       case 'no-due':
-        state.value.responseDueDateTime = null;
+        state.value.response_due_date_time = undefined;
         break;
       case '1days':
         responseDueDateTimeInput.value = addDays(today, 1);
@@ -80,7 +80,7 @@ watch(
         responseDueDateTimeInput.value = addDays(today, 7);
         break;
       case 'custom':
-        state.value.responseDueDateTime =
+        state.value.response_due_date_time =
           responseDueDateTimeInput.value.toISOString();
         break;
     }
@@ -90,7 +90,7 @@ watch(
 
 watch(
   responseDueDateTimeInput,
-  (value) => (state.value.responseDueDateTime = value.toISOString()),
+  (value) => (state.value.response_due_date_time = value.toISOString()),
 );
 </script>
 
@@ -107,7 +107,7 @@ watch(
       <div class="form-element">
         <p class="form-label">結果の公開範囲</p>
         <Dropdown
-          v-model="state.responseViewableBy"
+          v-model="state.response_viewable_by"
           :options="responseViewableByOptions"
           option-label="label"
           option-value="value"
@@ -156,20 +156,20 @@ watch(
       <div class="form-element">
         <p class="form-label">対象者</p>
         <small>未回答の対象者は自動でリマインドされます</small>
-        <UserSpecifierInput v-model="state.targets" />
+        <UserSpecifierInput v-model="state.target" />
       </div>
       <div class="form-element">
         <p class="form-label">管理者</p>
         <small>管理者はアンケートを編集できます</small>
-        <UserSpecifierInput v-model="state.admins" />
+        <UserSpecifierInput v-model="state.admin" />
       </div>
       <div class="form-element form-bottom-switch">
         <p class="form-label">1人が複数回答できるか</p>
-        <InputSwitch v-model="state.isAllowingMultipleResponses" />
+        <InputSwitch v-model="state.is_duplicate_answer_allowed" />
       </div>
       <div class="form-element form-bottom-switch">
         <p class="form-label">回答を匿名にするか</p>
-        <InputSwitch v-model="state.isAnonymous" />
+        <InputSwitch v-model="state.is_anonymous" />
       </div>
     </div>
   </div>

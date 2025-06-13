@@ -1,2 +1,2 @@
 export const createId = () =>
-  Date.now().toString(36) + Math.random().toString(36).slice(2);
+  -Date.now() * 10000 - Math.floor(Math.random() * 10000);

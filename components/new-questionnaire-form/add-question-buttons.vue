@@ -2,7 +2,7 @@
 import type { QuestionSettings } from '~/components/new-questionnaire-form/type';
 
 defineEmits<{
-  (e: 'add-question', type: QuestionSettings['type']): void;
+  (e: 'add-question', type: QuestionSettings['question_type']): void;
 }>();
 </script>
 

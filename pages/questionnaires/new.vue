@@ -1,9 +1,40 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import type { NewQuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
+import { postNewQuestionnaire } from '~/composables/type-fetch/anke-to/client';
+
+const saveHandler = async (form: NewQuestionnaireFormSettings) => {
+  try {
+    const result = await postNewQuestionnaire({ ...form, is_published: false });
+    if (!result) {
+      throw new Error('Failed to create questionnaire');
+    }
+    await navigateTo({
+      path: `/questionnaires/${result?.questionnaire_id}/edit`,
+    });
+  } catch (err) {
+    console.error(err);
+    // TODO: handle error
+  }
+};
+
+const sendHandler = async (form: NewQuestionnaireFormSettings) => {
+  try {
+    const result = await postNewQuestionnaire({ ...form, is_published: true });
+    if (!result) {
+      throw new Error('Failed to create questionnaire');
+    }
+    await navigateTo({
+      path: `/questionnaires/${result?.questionnaire_id}`,
+    });
+  } catch (err) {
+    console.error(err);
+    // TODO: handle error
+  }
+};
+</script>
 
 <template>
   <div>
-    <NewQuestionnaireForm />
+    <NewQuestionnaireForm @save="saveHandler" @send="sendHandler" />
   </div>
 </template>
-
-<style></style>

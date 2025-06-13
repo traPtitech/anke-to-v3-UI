@@ -1,4 +1,5 @@
 import type {
+  NewQuestionnaireFormSettings,
   QuestionSettings,
   QuestionSettingsBase,
   QuestionSettingsByType,
@@ -8,60 +9,60 @@ import type {
   QuestionSettingsSingleChoice,
   QuestionSettingsText,
   QuestionSettingsTextLong,
-  QuestionnaireFormSettings,
-} from '~/components/new-questionnaire-form/type';
+} from "~/components/new-questionnaire-form/type";
 
-const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
-  title: '',
-  description: '',
-  responseDueDateTime: null,
-  responseViewableBy: 'anyone',
-  isAnonymous: false,
-  isAllowingMultipleResponses: false,
-  targets: {
+const defaultQuestionnaireFormSettings: NewQuestionnaireFormSettings = {
+  title: "",
+  description: "",
+  response_due_date_time: undefined,
+  response_viewable_by: "anyone",
+  is_anonymous: false,
+  is_duplicate_answer_allowed: false,
+  target: {
     users: [],
     groups: [],
   },
-  admins: {
+  admin: {
     users: [],
     groups: [],
   },
   questions: [],
+  is_published: false,
 };
 
 const defaultQuestionSettingsBase: QuestionSettingsBase = {
-  id: createId(),
-  title: '',
-  description: '',
-  required: false,
+  question_id: createId(),
+  title: "",
+  description: "",
+  is_required: false,
 };
 
 const defaultQuestionSettingsText: QuestionSettingsText = {
-  type: 'Text',
+  question_type: "Text",
 };
 
 const defaultQuestionSettingsTextLong: QuestionSettingsTextLong = {
-  type: 'TextLong',
+  question_type: "TextLong",
 };
 
 const defaultQuestionSettingsNumber: QuestionSettingsNumber = {
-  type: 'Number',
+  question_type: "Number",
 };
 
 const defaultQuestionSettingsSingleChoice: QuestionSettingsSingleChoice = {
-  type: 'SingleChoice',
-  options: [],
+  question_type: "SingleChoice",
+  options: [""],
 };
 
 const defaultQuestionSettingsMultipleChoice: QuestionSettingsMultipleChoice = {
-  type: 'MultipleChoice',
-  options: [],
+  question_type: "MultipleChoice",
+  options: [""],
 };
 
 const defaultQuestionSettingsScale: QuestionSettingsScale = {
-  type: 'Scale',
-  minValue: 1,
-  maxValue: 5,
+  question_type: "Scale",
+  min_value: 1,
+  max_value: 5,
 };
 
 const defaultQuestionSettingsByType = {
@@ -71,16 +72,19 @@ const defaultQuestionSettingsByType = {
   SingleChoice: defaultQuestionSettingsSingleChoice,
   MultipleChoice: defaultQuestionSettingsMultipleChoice,
   Scale: defaultQuestionSettingsScale,
-} satisfies Record<QuestionSettings['type'], QuestionSettingsByType>;
+} satisfies Record<QuestionSettings["question_type"], QuestionSettingsByType>;
 
 export const useStoreNewQuestionnaireForm = defineStore(
-  'NewQuestionnaireForm',
+  "NewQuestionnaireForm",
   () => {
-    const state = ref<QuestionnaireFormSettings>(
+    const state = ref<NewQuestionnaireFormSettings>(
       defaultQuestionnaireFormSettings,
     );
 
-    const addQuestion = (type: QuestionSettings['type'], index?: number) => {
+    const addQuestion = (
+      type: QuestionSettings["question_type"],
+      index?: number,
+    ) => {
       const newQuestion = {
         ...defaultQuestionSettingsBase,
         ...defaultQuestionSettingsByType[type],
@@ -98,15 +102,15 @@ export const useStoreNewQuestionnaireForm = defineStore(
       );
     };
 
-    const copyQuestion = (id: string, index?: number) => {
+    const copyQuestion = (id: number, index?: number) => {
       const question = state.value.questions.find(
-        (question) => question.id === id,
+        (question) => question.question_id === id,
       );
       if (question === undefined) return;
 
       const newQuestion = {
         ...question,
-        id: createId(),
+        question_id: createId(),
       };
 
       if (index === undefined) {
@@ -121,9 +125,9 @@ export const useStoreNewQuestionnaireForm = defineStore(
       );
     };
 
-    const removeQuestion = (id: string) => {
+    const removeQuestion = (id: number) => {
       const index = state.value.questions.findIndex(
-        (question) => question.id === id,
+        (question) => question.question_id === id,
       );
       if (index !== -1) {
         state.value.questions.splice(index, 1);
