@@ -46,6 +46,7 @@ export default withNuxt(
           math: 'always',
         },
       ],
+      '@typescript-eslint/unified-signatures': 'off',
     },
   },
   prettier,
