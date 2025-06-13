@@ -22,12 +22,14 @@ const defaultQuestionnaire: Omit<
   response_due_date_time: undefined,
   created_at: oneDayBefore,
   modified_at: oneDayBefore,
-  is_allowing_multiple_responses: false,
+  is_duplicate_answer_allowed: false,
   is_anonymous: false,
   is_published: true,
   response_viewable_by: "anyone",
-  admins: { users: [], groups: [] },
-  targets: { users: [], groups: [] },
+  admin: { users: [], groups: [] },
+  admins: [],
+  target: { users: [], groups: [] },
+  targets: [],
   questions: [],
   respondents: [],
 };
@@ -53,14 +55,14 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     ...defaultQuestionnaire,
     questionnaire_id: 3,
     title: "既に自分が回答したアンケート (自分が対象)",
-    targets: { users: [myUserId], groups: [] },
+    targets: [myUserId],
     respondents: [myUserId],
   },
   {
     ...defaultQuestionnaire,
     questionnaire_id: 4,
     title: "既に自分が回答したアンケート (自分が対象ではない)",
-    targets: { users: [], groups: [] },
+    targets: [],
     respondents: [myUserId],
   },
   {
@@ -73,30 +75,34 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     ...defaultQuestionnaire,
     questionnaire_id: 6,
     title: "自分の下書きが残っているアンケート (回答済み)",
-    is_allowing_multiple_responses: true,
+    is_duplicate_answer_allowed: true,
     respondents: [myUserId],
   },
   {
     ...defaultQuestionnaire,
     questionnaire_id: 7,
     title: "自分が管理者のアンケート (未公開)",
-    admins: { users: [myUserId], groups: [] },
+    admin: { users: [myUserId], groups: [] },
+    admins: [myUserId],
     is_published: false,
   },
   {
     ...defaultQuestionnaire,
     questionnaire_id: 8,
     title: "自分が管理者のアンケート (公開済み)",
-    admins: { users: [myUserId], groups: [] },
+    admin: { users: [myUserId], groups: [] },
+    admins: [myUserId],
     is_published: true,
   },
   {
     ...defaultQuestionnaire,
     questionnaire_id: 9,
     title: "自分が管理者のアンケート (全員回答済み)",
-    admins: { users: [myUserId], groups: [] },
+    admin: { users: [myUserId], groups: [] },
+    admins: [myUserId],
     is_published: true,
-    targets: { users: [myUserId], groups: [] },
+    target: { users: [myUserId], groups: [] },
+    targets: [myUserId],
     respondents: [myUserId],
   },
   {
@@ -115,7 +121,7 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     ...defaultQuestionnaire,
     questionnaire_id: 12,
     title: "複数回答できるアンケート",
-    is_allowing_multiple_responses: true,
+    is_duplicate_answer_allowed: true,
   },
   {
     ...defaultQuestionnaire,
@@ -130,25 +136,25 @@ export const questionsData: Question[] = [];
 
 export const toSummary = (
   q: GatewayQuestionnaire,
-) => ({
+): QuestionnaireSummary => ({
   questionnaire_id: q.questionnaire_id,
   title: q.title,
   description: q.description,
   response_due_date_time: q.response_due_date_time,
   is_published: q.is_published,
-  is_allowing_multiple_responses: q.is_allowing_multiple_responses,
+  is_duplicate_answer_allowed: q.is_duplicate_answer_allowed,
   is_anonymous: q.is_anonymous,
   response_viewable_by: q.response_viewable_by,
   created_at: q.created_at,
   modified_at: q.modified_at,
-  all_responded: q.targets.users.every((user) => q.respondents.includes(user)),
+  all_responded: q.targets.every((user) => q.respondents.includes(user)),
   has_my_draft: responsesData.some(
     (r) =>
       r.questionnaire_id === q.questionnaire_id &&
       r.is_draft &&
       r.respondent === myUserId,
   ),
-  is_targeting_me: q.targets.users.includes(myUserId),
+  is_targeting_me: q.targets.includes(myUserId),
   has_my_response: q.respondents.includes(myUserId),
   responded_date_time_by_me: responsesData.find(
     (r) =>
@@ -219,7 +225,7 @@ export const questionnaireHandlers = [
         .includes(search.toLowerCase());
       const isTargetingMe = !onlyTargetingMe || q.is_targeting_me;
       const isAdministeredByMe = !onlyAdministratedByMe ||
-        detail?.admins.users.includes(myUserId);
+        detail?.admins.includes(myUserId);
       return matchesSearch && isTargetingMe && isAdministeredByMe;
     }).toSorted(questionnairesSortFunc[sort]);
 
@@ -258,6 +264,8 @@ export const questionnaireHandlers = [
           questionsData.length - body.questions.length,
           questionsData.length,
         ),
+        targets: body.target?.users ?? [],
+        admins: body.admin?.users ?? [],
         respondents: [],
       };
       questionnairesData.push(newQuestionnaire);

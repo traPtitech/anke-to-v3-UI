@@ -243,7 +243,7 @@ export const responseHandlers = [
       }
 
       if (
-        !questionnaire.is_allowing_multiple_responses &&
+        !questionnaire.is_duplicate_answer_allowed &&
         lastResponseIndex !== -1
       ) {
         responsesData.splice(lastResponseIndex, 1);
