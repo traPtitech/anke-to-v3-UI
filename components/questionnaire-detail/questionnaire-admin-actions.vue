@@ -4,41 +4,34 @@ import type { QuestionnaireDetail } from './type';
 
 const props = defineProps<{ detail: QuestionnaireDetail }>();
 
-const { getGroupMembersFromGroupID, getGroupNameFromUserID } =
-  await useTraqGroup();
-const { getTraqIDFromUserID } = await useTraqId();
+const me = await useMe();
 
-const { users: adminUsers } = useResolveUserSpecifier(props.detail.admins, {
-  getGroupMembersFromGroupID,
-  getGroupNameFromUserID,
-  getTraqIDFromUserID,
-});
+const canEdit = computed(() =>
+  props.detail.admins.includes(me.value?.name ?? ''),
+);
 
-const me = useMe();
-
-const canEdit = computed(() => {
-  if (!me.value) return false;
-  return adminUsers.value.includes(me.value.name);
-});
+const canAnswer = computed(
+  () =>
+    props.detail.response_due_date_time === undefined ||
+    new Date(props.detail.response_due_date_time) > new Date(),
+);
 </script>
 
 <template>
   <div class="questionnaire-actions-container">
-    <router-link
-      :to="canEdit ? `/questionnaires/${detail.questionnaire_id}/edit` : ''"
-      class="questionnaire-action-button-link"
-      :aria-disabled="!canEdit"
+    <Button
+      class="questionnaire-action-button"
+      :disabled="!canEdit"
+      @click="$router.push(`/questionnaires/${detail.questionnaire_id}/edit`)"
     >
-      <Button class="questionnaire-action-button" :disabled="!canEdit">
-        <Icon name="mdi:pencil-outline" size="24px" />
-        <span>編集する</span>
-      </Button>
-    </router-link>
+      <Icon name="mdi:pencil-outline" size="24px" />
+      <span>編集する</span>
+    </Button>
     <Button
       class="questionnaire-action-button"
       outlined
       :disabled="!canEdit"
-      @click="actionDelete(detail.questionnaire_id)"
+      @click="actionDelete(detail)"
     >
       <Icon name="mdi:trash-can-outline" size="24px" />
       <span>削除する</span>
@@ -46,7 +39,7 @@ const canEdit = computed(() => {
     <Button
       class="questionnaire-action-button"
       outlined
-      :disabled="!canEdit"
+      :disabled="!canEdit || !canAnswer"
       @click="actionClose(detail)"
     >
       <Icon name="mdi:alarm-check" size="24px" />
@@ -55,7 +48,7 @@ const canEdit = computed(() => {
     <Button
       class="questionnaire-action-button"
       outlined
-      @click="actionDuplicate(detail, $router)"
+      @click="actionDuplicate(detail)"
     >
       <Icon name="mdi:content-copy" size="24px" />
       <span>複製する</span>
@@ -81,10 +74,6 @@ const canEdit = computed(() => {
   .questionnaire-actions-container {
     grid-template-columns: 1fr;
   }
-}
-
-.questionnaire-action-button-link {
-  text-decoration: none;
 }
 
 .questionnaire-action-button {

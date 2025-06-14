@@ -1,22 +1,25 @@
-import { useFetchTraqApi } from '~/composables/type-fetch/traq/use-fetch-traq-api';
+import { useFetchTraqApi } from "~/composables/type-fetch/traq/use-fetch-traq-api";
 
 export const useTraqId = async () => {
-  const { data: users } = await useFetchTraqApi('/users');
+  const { data: users } = await useFetchTraqApi("/users");
+  const traqIdToUserIdMap = new Map<string, string>();
+  const userIdToTraqIdMap = new Map<string, string>();
+
+  if (users.value !== null) {
+    for (const user of users.value) {
+      traqIdToUserIdMap.set(user.name, user.id);
+      userIdToTraqIdMap.set(user.id, user.name);
+    }
+  }
 
   const getUserIDFromTraqID = (traqID: string) => {
     if (users.value === null) return undefined;
-
-    const user = users.value.find((user) => user.name === traqID);
-    const userID = user?.id;
-    return userID;
+    return traqIdToUserIdMap.get(traqID);
   };
 
   const getTraqIDFromUserID = (userID: string) => {
     if (users.value === null) return undefined;
-
-    const user = users.value.find((user) => user.id === userID);
-    const traqID = user?.name;
-    return traqID;
+    return userIdToTraqIdMap.get(userID);
   };
 
   return {

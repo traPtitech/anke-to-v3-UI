@@ -1,9 +1,9 @@
-import { useFetchTraqApi } from '~/composables/type-fetch/traq/use-fetch-traq-api';
+import { useFetchTraqApi } from "~/composables/type-fetch/traq/use-fetch-traq-api";
 
 export const useTraqGroup = async () => {
-  const { data: groups } = await useFetchTraqApi('/groups');
+  const { data: groups } = await useFetchTraqApi("/groups");
 
-  const getGroupNameFromUserID = (groupID: string) => {
+  const getGroupNameFromGroupID = (groupID: string) => {
     if (groups.value === null) return undefined;
 
     const group = groups.value.find((group) => group.id === groupID);
@@ -21,7 +21,7 @@ export const useTraqGroup = async () => {
   };
 
   return {
-    getGroupNameFromUserID,
+    getGroupNameFromGroupID,
     getGroupMembersFromGroupID,
   };
 };

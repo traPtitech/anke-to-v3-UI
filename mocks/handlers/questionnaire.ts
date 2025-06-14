@@ -26,11 +26,66 @@ const defaultQuestionnaire: Omit<
   is_anonymous: false,
   is_published: true,
   response_viewable_by: "anyone",
-  admin: { users: [], groups: [] },
-  admins: [],
-  target: { users: [], groups: [] },
-  targets: [],
-  questions: [],
+  admin: { users: [myUserId], groups: [] },
+  admins: [myUserId],
+  target: { users: [myUserId], groups: [] },
+  targets: [myUserId],
+  questions: [
+    {
+      question_id: 1,
+      title: "質問1",
+      description: "質問1の説明",
+      question_type: "Text",
+      is_required: true,
+      created_at: oneDayBefore,
+    },
+    {
+      question_id: 2,
+      title: "質問2",
+      description: "質問2の説明",
+      question_type: "TextLong",
+      is_required: true,
+      created_at: oneDayBefore,
+    },
+    {
+      question_id: 3,
+      title: "質問3",
+      description: "質問3の説明",
+      question_type: "Number",
+      is_required: true,
+      created_at: oneDayBefore,
+    },
+    {
+      question_id: 4,
+      title: "質問4",
+      description: "質問4の説明",
+      question_type: "SingleChoice",
+      is_required: true,
+      options: ["選択肢1", "選択肢2", "選択肢3"],
+      created_at: oneDayBefore,
+    },
+    {
+      question_id: 5,
+      title: "質問5",
+      description: "質問5の説明",
+      question_type: "MultipleChoice",
+      is_required: true,
+      options: ["選択肢1", "選択肢2", "選択肢3"],
+      created_at: oneDayBefore,
+    },
+    {
+      question_id: 6,
+      title: "質問6",
+      description: "質問6の説明",
+      question_type: "Scale",
+      is_required: true,
+      min_value: 1,
+      min_label: "最小値",
+      max_value: 5,
+      max_label: "最大値",
+      created_at: oneDayBefore,
+    },
+  ],
   respondents: [],
 };
 
@@ -42,6 +97,8 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     description:
       "ここに **Markdown** 形式で *アンケート* の説明を書けます。\n- リスト\n  - も使えるよ！\n```\n使うか分からんけどコードブロックも書けるよ\n```:traq: ← スタンプは使えるのかな？",
     response_due_date_time: oneDayAfter,
+    admins: [],
+    admin: { users: [], groups: [] },
   },
   {
     ...defaultQuestionnaire,
@@ -110,12 +167,16 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     questionnaire_id: 10,
     title: "回答が非公開のアンケート",
     response_viewable_by: "admins",
+    admin: { users: [], groups: [] },
+    admins: [],
   },
   {
     ...defaultQuestionnaire,
     questionnaire_id: 11,
     title: "回答が回答者のみに公開されるアンケート",
     response_viewable_by: "respondents",
+    admin: { users: [], groups: [] },
+    admins: [],
   },
   {
     ...defaultQuestionnaire,
@@ -189,6 +250,11 @@ type PostQuestionnaireRequest =
     "application/json"
   ];
 
+type PatchQuestionnaireBody =
+  paths["/questionnaires/{questionnaireID}"]["patch"]["requestBody"]["content"][
+    "application/json"
+  ];
+
 type GetQuestionnaireResponse =
   paths["/questionnaires/{questionnaireID}"]["get"]["responses"]["200"][
     "content"
@@ -244,34 +310,31 @@ export const questionnaireHandlers = [
     return HttpResponse.json(response);
   }),
 
-  http.post(
-    "/api/questionnaires",
-    async (req) => {
-      const body = await req.request.json() as PostQuestionnaireRequest;
-      for (const question of body.questions) {
-        questionsData.push({
-          ...question,
-          question_id: questionsData.length + 1,
-          created_at: new Date().toISOString(),
-        });
-      }
-      const newQuestionnaire: GatewayQuestionnaire = {
-        ...body,
-        questionnaire_id: questionnairesData.length + 1,
+  http.post("/api/questionnaires", async (req) => {
+    const body = await req.request.json() as PostQuestionnaireRequest;
+    for (const question of body.questions) {
+      questionsData.push({
+        ...question,
+        question_id: questionsData.length + 1,
         created_at: new Date().toISOString(),
-        modified_at: new Date().toISOString(),
-        questions: questionsData.slice(
-          questionsData.length - body.questions.length,
-          questionsData.length,
-        ),
-        targets: body.target?.users ?? [],
-        admins: body.admin?.users ?? [],
-        respondents: [],
-      };
-      questionnairesData.push(newQuestionnaire);
-      return HttpResponse.json(newQuestionnaire, { status: 201 });
-    },
-  ),
+      });
+    }
+    const newQuestionnaire: GatewayQuestionnaire = {
+      ...body,
+      questionnaire_id: questionnairesData.length + 1,
+      created_at: new Date().toISOString(),
+      modified_at: new Date().toISOString(),
+      questions: questionsData.slice(
+        questionsData.length - body.questions.length,
+        questionsData.length,
+      ),
+      targets: body.target?.users ?? [],
+      admins: body.admin?.users ?? [],
+      respondents: [],
+    };
+    questionnairesData.push(newQuestionnaire);
+    return HttpResponse.json(newQuestionnaire, { status: 201 });
+  }),
 
   http.get("/api/questionnaires/:id", (req) => {
     const { id } = req.params;
@@ -290,12 +353,28 @@ export const questionnaireHandlers = [
     return HttpResponse.json(response);
   }),
 
-  http.patch(
-    "/api/questionnaires/:id",
-    () => {
-      // TODO: Implement update logic
-    },
-  ),
+  http.patch("/api/questionnaires/:id", async (req) => {
+    const id = Number(req.params.id);
+    const body = await req.request.json() as PatchQuestionnaireBody;
+    const index = questionnairesData.findIndex(
+      (q) => q.questionnaire_id === id,
+    );
+    if (index === -1) {
+      return HttpResponse.json(
+        { error: "Questionnaire not found" },
+        { status: 404 },
+      );
+    }
+    const questionnaire = questionnairesData[index];
+    questionnairesData[index] = {
+      ...questionnaire,
+      ...body,
+      modified_at: new Date().toISOString(),
+      // TODO: update questionsData accordingly
+    };
+
+    return HttpResponse.json(questionnairesData[index]);
+  }),
 
   http.delete("/api/questionnaires/:id", (req) => {
     const { id } = req.params;

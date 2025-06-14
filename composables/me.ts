@@ -1,6 +1,6 @@
-import { useFetchTraqApi } from '~/composables/type-fetch/traq/use-fetch-traq-api';
+import { useFetchTraqApi } from "~/composables/type-fetch/traq/use-fetch-traq-api";
 
-export const useMe = () => {
-  const { data: me } = useFetchTraqApi('/users/me');
+export const useMe = async () => {
+  const { data: me } = await useFetchTraqApi("/users/me");
   return me;
 };

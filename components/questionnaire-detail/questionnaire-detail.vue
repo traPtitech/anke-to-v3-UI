@@ -9,18 +9,10 @@ const responseViewableByLabels = {
   admins: '管理者のみ',
 } satisfies Record<ResShareType, string>;
 
-const { getGroupMembersFromGroupID, getGroupNameFromUserID } =
-  await useTraqGroup();
-const { getTraqIDFromUserID } = await useTraqId();
-
-const { users } = useResolveUserSpecifier(props.detail.targets, {
-  getGroupMembersFromGroupID,
-  getGroupNameFromUserID,
-  getTraqIDFromUserID,
-});
-
 const nonAnsweredTargets = computed(() =>
-  users.value.filter((user) => !props.detail.respondents.includes(user)),
+  props.detail.targets.filter(
+    (user) => !props.detail.respondents.includes(user),
+  ),
 );
 </script>
 
@@ -52,14 +44,14 @@ const nonAnsweredTargets = computed(() =>
         </div>
       </div>
       <div
-        v-if="detail.is_allowing_multiple_responses"
+        v-if="detail.is_duplicate_answer_allowed"
         class="questionnaire-detail-element"
       >
         <div class="questionnaire-detail-element-label">
           1人が複数回答できるか
         </div>
         <div>
-          {{ detail.is_allowing_multiple_responses ? '複数回答可' : '1回のみ' }}
+          {{ detail.is_duplicate_answer_allowed ? '複数回答可' : '1回のみ' }}
         </div>
       </div>
     </div>
@@ -71,7 +63,10 @@ const nonAnsweredTargets = computed(() =>
     >
       <div class="questionnaire-detail-element">
         <div class="questionnaire-detail-element-label">対象者</div>
-        <UserAndGroupList :specifier="detail.targets" />
+        <UserAndGroupList
+          :specifier="detail.target"
+          :actual-users="detail.targets"
+        />
       </div>
       <div class="questionnaire-target-result">
         <div class="questionnaire-detail-element">
@@ -90,7 +85,10 @@ const nonAnsweredTargets = computed(() =>
     <div class="questionnaire-detail-element-container">
       <div class="questionnaire-detail-element">
         <div class="questionnaire-detail-element-label">管理者</div>
-        <UserAndGroupList :specifier="detail.admins" />
+        <UserAndGroupList
+          :specifier="detail.admin"
+          :actual-users="detail.admins"
+        />
       </div>
       <div class="questionnaire-detail-element">
         <div class="questionnaire-detail-element-label">最終更新日時</div>
@@ -125,8 +123,8 @@ const nonAnsweredTargets = computed(() =>
 
 .questionnaire-detail-title {
   padding: 32px;
-  border: 1px solid var(--surface-d);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--p-surface-300);
+  border-radius: var(--p-border-radius-md);
   min-height: 160px;
   display: flex;
   flex-direction: column;
@@ -138,8 +136,8 @@ const nonAnsweredTargets = computed(() =>
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   padding: 32px;
-  border: 1px solid var(--surface-d);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--p-surface-300);
+  border-radius: var(--p-border-radius-md);
 }
 
 .questionnaire-detail-element {

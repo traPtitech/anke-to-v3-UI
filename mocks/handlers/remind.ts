@@ -13,6 +13,11 @@ type GetMyRemindStatusResponse =
     "200"
   ]["content"]["application/json"];
 
+type PatchMyRemindStatusBody =
+  paths["/questionnaires/{questionnaireID}/myRemindStatus"]["patch"][
+    "requestBody"
+  ]["content"]["application/json"];
+
 export const remindHandlers = [
   http.get("/api/questionnaires/:id/myRemindStatus", (req) => {
     const { id } = req.params;
@@ -24,4 +29,24 @@ export const remindHandlers = [
 
     return HttpResponse.json(response);
   }),
+
+  http.patch(
+    "/api/questionnaires/:id/myRemindStatus",
+    async (req) => {
+      const { id } = req.params;
+      const body = await req.request.json() as PatchMyRemindStatusBody;
+      const remind = myRemindsData.find((r) =>
+        r.questionnaire_id === Number(id)
+      );
+      if (remind) {
+        remind.remind = body.is_remind_enabled;
+      } else {
+        myRemindsData.push({
+          questionnaire_id: Number(id),
+          remind: body.is_remind_enabled,
+        });
+      }
+      return HttpResponse.json({ is_remind_enabled: body.is_remind_enabled });
+    },
+  ),
 ];

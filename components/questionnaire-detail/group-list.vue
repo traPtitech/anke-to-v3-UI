@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 defineProps<{
-  users: string[];
+  groups: { name: string; members: string[] }[];
 }>();
 
 const me = await useMe();
 </script>
 
 <template>
-  <span v-for="user in users" :key="user" class="user-element">
-    <span :class="{ highlighted: me?.name === user }">
-      {{ '@' + user }}
+  <span v-for="group in groups" :key="group.name" class="group-element">
+    <span :class="{ highlighted: group.members.includes(me?.name || '') }">
+      @{{ group.name }}
     </span>
     {{ ' ' }}
   </span>

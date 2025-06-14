@@ -7,22 +7,102 @@ type GetQuestionnairesOption =
   paths["/questionnaires"]["get"]["parameters"]["query"];
 export const useGetQuestionnaires = async (option?: GetQuestionnairesOption) =>
   useAsyncData(
-    async () =>
-      (await client.GET("/questionnaires", { params: { query: option } })).data,
+    "/questionnaires",
+    async () => {
+      const res = await client.GET("/questionnaires", {
+        params: { query: option },
+      });
+      if (res.data === undefined) {
+        throw new Error("No data returned from the API");
+      }
+      return res.data;
+    },
   );
 
 export const useGetQuestionnaire = async (id: number) =>
   useAsyncData(
-    async () =>
-      (await client.GET(`/questionnaires/{questionnaireID}`, {
+    `/questionnaires/${id}`,
+    async () => {
+      const res = await client.GET("/questionnaires/{questionnaireID}", {
         params: { path: { questionnaireID: id } },
-      }))
-        .data,
+      });
+      if (res.data === undefined) {
+        throw new Error("No data returned from the API");
+      }
+      return res.data;
+    },
   );
 
-type PostQuestionnaireBody =
+export type PostQuestionnaireBody =
   paths["/questionnaires"]["post"]["requestBody"]["content"][
     "application/json"
   ];
-export const postNewQuestionnaire = async (data: PostQuestionnaireBody) =>
-  (await client.POST("/questionnaires", { body: data })).data;
+export const postNewQuestionnaire = async (data: PostQuestionnaireBody) => {
+  const res = await client.POST("/questionnaires", { body: data });
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+
+  await refreshNuxtData("/questionnaires");
+
+  return res.data;
+};
+
+export type PatchMyRemindStatusBody =
+  paths["/questionnaires/{questionnaireID}/myRemindStatus"]["patch"][
+    "requestBody"
+  ]["content"]["application/json"];
+export const patchMyRemindStatus = async (
+  questionnaireID: number,
+  body: PatchMyRemindStatusBody,
+) => {
+  const res = await client.PATCH(
+    "/questionnaires/{questionnaireID}/myRemindStatus",
+    {
+      params: { path: { questionnaireID } },
+      body,
+    },
+  );
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+
+  await refreshNuxtData(`/questionnaires/${questionnaireID}`);
+
+  return res.response.ok;
+};
+
+export const deleteQuestionnaireById = async (questionnaireID: number) => {
+  const res = await client.DELETE("/questionnaires/{questionnaireID}", {
+    params: { path: { questionnaireID } },
+  });
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+
+  await refreshNuxtData("/questionnaires");
+  await refreshNuxtData(`/questionnaires/${questionnaireID}`);
+  return res.response.ok;
+};
+
+export type PatchQuestionnaireBody =
+  paths["/questionnaires/{questionnaireID}"]["patch"]["requestBody"]["content"][
+    "application/json"
+  ];
+export const patchQuestionnaireById = async (
+  questionnaireID: number,
+  body: PatchQuestionnaireBody,
+) => {
+  const res = await client.PATCH("/questionnaires/{questionnaireID}", {
+    params: { path: { questionnaireID } },
+    body,
+  });
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+
+  await refreshNuxtData("/questionnaires");
+  await refreshNuxtData(`/questionnaires/${questionnaireID}`);
+
+  return;
+};

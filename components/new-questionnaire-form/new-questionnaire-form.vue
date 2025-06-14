@@ -53,7 +53,7 @@ const handleSend = () => {
     emit('send', state);
   } else {
     // TODO: handle error
-    console.error(validity.message);
+    alert(validity.message);
   }
 };
 
@@ -63,7 +63,7 @@ const handleSave = () => {
     emit('save', state);
   } else {
     // TODO: handle error
-    console.error(validity.message);
+    alert(validity.message);
   }
 };
 </script>

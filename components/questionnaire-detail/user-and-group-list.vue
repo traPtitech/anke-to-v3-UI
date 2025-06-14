@@ -1,29 +1,19 @@
 <script lang="ts" setup>
 const props = defineProps<{
   specifier: { users: string[]; groups: string[] };
+  actualUsers: string[];
 }>();
 
-const { getGroupMembersFromGroupID, getGroupNameFromUserID } =
-  await useTraqGroup();
-const { getTraqIDFromUserID } = await useTraqId();
-
-const { users, groups } = await useResolveUserSpecifier(props.specifier, {
-  getGroupMembersFromGroupID,
-  getGroupNameFromUserID,
-  getTraqIDFromUserID,
-});
-
-const groupString = computed(() =>
-  groups.value.map((group) => '@' + group).join(' '),
+const { restUsers, groups } = await useResolveUserSpecifier(
+  props.specifier,
+  props.actualUsers,
 );
 </script>
 
 <template>
   <div>
-    <UserList :users="users" />
-    <span v-if="groupString !== ''">
-      {{ `(${groupString})` }}
-    </span>
+    <GroupList :groups="groups" />
+    <UserList :users="restUsers" />
   </div>
 </template>
 

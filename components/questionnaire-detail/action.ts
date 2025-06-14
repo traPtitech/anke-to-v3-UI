@@ -1,162 +1,84 @@
-import type { Router } from 'vue-router';
-import { useStoreNewQuestionnaireForm } from '~/components/new-questionnaire-form/store';
-import type {
-  QuestionSettings,
-  QuestionSettingsBase,
-} from '~/components/new-questionnaire-form/type';
-import type {
-  components,
-  paths,
-} from '~/composables/type-fetch/anke-to/openapi';
-import type { QuestionnaireDetail } from './type';
+import { useStoreNewQuestionnaireForm } from "~/components/new-questionnaire-form/store";
 
-type ActionRespondBody =
-  paths['/questionnaires/{questionnaireID}/myRemindStatus']['patch']['requestBody']['content']['application/json'];
+import {
+  deleteQuestionnaireById,
+  patchMyRemindStatus,
+  type PatchMyRemindStatusBody,
+  type PatchQuestionnaireBody,
+  patchQuestionnaireById,
+} from "~/composables/type-fetch/anke-to/client";
+import type { QuestionnaireDetail } from "./type";
+
 export const actionRespondLater = async (questionnaireId: number) => {
-  const body: ActionRespondBody = {
+  const body: PatchMyRemindStatusBody = {
     is_remind_enabled: true,
   };
-  const res = await fetch(
-    `/api/questionnaires/${questionnaireId}/myRemindStatus`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    },
-  );
-
-  return res.ok;
+  try {
+    await patchMyRemindStatus(questionnaireId, body);
+  } catch (err) {
+    console.error(err);
+    alert("予期せぬエラーが発生しました");
+  }
 };
 
-type ActionNotRespondBody =
-  paths['/questionnaires/{questionnaireID}/myRemindStatus']['patch']['requestBody']['content']['application/json'];
 export const actionNotRespond = async (questionnaireId: number) => {
-  const body: ActionNotRespondBody = {
+  const body: PatchMyRemindStatusBody = {
     is_remind_enabled: false,
   };
-  const res = await fetch(
-    `/api/questionnaires/${questionnaireId}/myRemindStatus`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    },
-  );
-
-  return res.ok;
+  try {
+    await patchMyRemindStatus(questionnaireId, body);
+  } catch (err) {
+    console.error(err);
+    alert("予期せぬエラーが発生しました");
+  }
 };
 
-export const actionDelete = async (questionnaireId: number) => {
-  const res = await fetch(`/api/questionnaires/${questionnaireId}`, {
-    method: 'DELETE',
-  });
-
-  return res.ok;
+export const actionDelete = async (detail: QuestionnaireDetail) => {
+  if (
+    !confirm(
+      `本当に「${detail.title}」を削除しますか？ (この操作は取り消せません)`,
+    )
+  ) return;
+  try {
+    await deleteQuestionnaireById(detail.questionnaire_id);
+    await navigateTo("/questionnaires");
+  } catch (err) {
+    console.error(err);
+    // TODO: handle error
+    alert("アンケートの削除に失敗しました。");
+  }
 };
 
-type ActionCloseBody =
-  paths['/questionnaires/{questionnaireID}']['patch']['requestBody']['content']['application/json'];
 export const actionClose = async (detail: QuestionnaireDetail) => {
-  const body: ActionCloseBody = {
+  const body: PatchQuestionnaireBody = {
     ...detail,
     response_due_date_time: toISOStringWithTZ(new Date()),
   };
-  const res = await fetch(`/api/questionnaires/${detail.questionnaire_id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-  return res.ok;
-};
-
-const convertQuestion = (
-  question: components['schemas']['NewQuestion'],
-): QuestionSettings => {
-  const convertedBase: QuestionSettingsBase = {
-    id: createId(),
-    title: question.title,
-    description: question.description,
-    required: question.is_required,
-  };
-
-  if (question.question_type === 'Text') {
-    return {
-      ...convertedBase,
-      type: 'Text',
-    };
+  try {
+    await patchQuestionnaireById(detail.questionnaire_id, body);
+  } catch (err) {
+    console.error(err);
+    // TODO: handle error
+    alert("予期せぬエラーが発生しました");
   }
-
-  if (question.question_type === 'TextLong') {
-    return {
-      ...convertedBase,
-      type: 'TextLong',
-    };
-  }
-
-  if (question.question_type === 'Number') {
-    return {
-      ...convertedBase,
-      type: 'Number',
-    };
-  }
-
-  if (question.question_type === 'SingleChoice') {
-    return {
-      ...convertedBase,
-      type: 'SingleChoice',
-      options: question.options.map((o) => ({
-        id: createId(),
-        label: o,
-      })),
-    };
-  }
-
-  if (question.question_type === 'MultipleChoice') {
-    return {
-      ...convertedBase,
-      type: 'MultipleChoice',
-      options: question.options.map((o) => ({
-        id: createId(),
-        label: o,
-      })),
-    };
-  }
-
-  if (question.question_type === 'Scale') {
-    return {
-      ...convertedBase,
-      type: 'Scale',
-      minLabel: question.min_label,
-      minValue: question.min_value,
-      maxLabel: question.max_label,
-      maxValue: question.max_value,
-    };
-  }
-
-  const _: never = question;
-  throw new Error('Unknown question type');
 };
 
 export const actionDuplicate = async (
   detail: QuestionnaireDetail,
-  router: Router,
 ) => {
   const { state } = useStoreNewQuestionnaireForm();
   state.title = detail.title;
   state.description = detail.description;
-  state.responseDueDateTime = detail.response_due_date_time ?? null;
-  state.admins = detail.admins;
-  state.questions = detail.questions.map(convertQuestion);
-  state.targets = detail.targets;
-  state.isAnonymous = detail.is_anonymous;
-  state.isAllowingMultipleResponses = detail.is_allowing_multiple_responses;
-  state.responseViewableBy = detail.response_viewable_by;
+  state.response_due_date_time = detail.response_due_date_time;
+  state.admin = detail.admin;
+  state.questions = detail.questions.map((q) => ({
+    ...q,
+    question_id: createId(),
+  }));
+  state.target = detail.target;
+  state.is_anonymous = detail.is_anonymous;
+  state.is_duplicate_answer_allowed = detail.is_duplicate_answer_allowed;
+  state.response_viewable_by = detail.response_viewable_by;
 
-  await router.push('/questionnaires/new');
+  await navigateTo("/questionnaires/new");
 };

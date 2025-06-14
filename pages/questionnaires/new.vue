@@ -13,7 +13,7 @@ const saveHandler = async (form: NewQuestionnaireFormSettings) => {
     });
   } catch (err) {
     console.error(err);
-    // TODO: handle error
+    alert('アンケートの一時保存に失敗しました。');
   }
 };
 
@@ -28,7 +28,7 @@ const sendHandler = async (form: NewQuestionnaireFormSettings) => {
     });
   } catch (err) {
     console.error(err);
-    // TODO: handle error
+    alert('アンケートの作成に失敗しました。');
   }
 };
 </script>

@@ -1,51 +1,51 @@
-export const useResolveUserSpecifier = (
+export const useResolveUserSpecifier = async (
   specifier: {
     users: string[];
     groups: string[];
   },
-  functions: {
-    getGroupMembersFromGroupID: (groupID: string) => string[] | undefined;
-    getGroupNameFromUserID: (userID: string) => string | undefined;
-    getTraqIDFromUserID: (userID: string) => string | undefined;
-  },
+  actualUsers: string[],
 ) => {
-  const {
-    getGroupMembersFromGroupID,
-    getGroupNameFromUserID,
-    getTraqIDFromUserID,
-  } = functions;
+  const { getGroupMembersFromGroupID, getGroupNameFromGroupID } =
+    await useTraqGroup();
+  const { getTraqIDFromUserID } = await useTraqId();
 
-  const excludeFalsy = <T>(array: (T | undefined | null)[]): T[] => {
-    return array.filter((item) => item) as T[];
-  };
-
-  const users = computed(() => {
+  // どのグループにも所属していないユーザー
+  const restUsers = computed(() => {
     const _groupMemberIds = specifier.groups.flatMap((group) =>
-      getGroupMembersFromGroupID(group),
+      getGroupMembersFromGroupID(group)
     );
     const groupMemberIds = excludeFalsy(_groupMemberIds);
     const _groupMemberNames = groupMemberIds.map((id) =>
-      getTraqIDFromUserID(id),
+      getTraqIDFromUserID(id)
     );
     const groupMemberNames = excludeFalsy(_groupMemberNames);
+    const groupMemberNamesSet = new Set(groupMemberNames);
 
-    const users = [...specifier.users, ...groupMemberNames];
-
-    const uniqueUsers = [...new Set(users)];
-
-    return uniqueUsers;
+    return actualUsers
+      .filter((user) => !groupMemberNamesSet.has(user));
   });
 
   const groups = computed(() => {
-    const _groupNames = specifier.groups.map((group) =>
-      getGroupNameFromUserID(group),
-    );
-    const groupNames = excludeFalsy(_groupNames);
-    return groupNames;
+    const groups = specifier.groups.map((group) => {
+      const name = getGroupNameFromGroupID(group);
+      if (name === undefined) return undefined;
+
+      const members = getGroupMembersFromGroupID(group);
+      if (members === undefined) return undefined;
+
+      const _membersNames = members.map((id) => getTraqIDFromUserID(id));
+      const membersNames = excludeFalsy(_membersNames);
+
+      return {
+        name,
+        members: membersNames,
+      };
+    });
+    return excludeFalsy(groups);
   });
 
   return {
-    users,
+    restUsers,
     groups,
   };
 };

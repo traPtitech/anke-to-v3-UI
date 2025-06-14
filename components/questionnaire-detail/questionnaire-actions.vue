@@ -1,27 +1,16 @@
 <script lang="ts" setup>
 import { actionNotRespond, actionRespondLater } from './action';
-import type { QuestionnaireDetail } from './type';
+import type { QuestionnaireDetail, ResShareType } from './type';
 
 const props = defineProps<{ detail: QuestionnaireDetail }>();
 
-const { getGroupMembersFromGroupID, getGroupNameFromUserID } =
-  await useTraqGroup();
-const { getTraqIDFromUserID } = await useTraqId();
-
-const { users: adminUsers } = useResolveUserSpecifier(props.detail.admins, {
-  getGroupMembersFromGroupID,
-  getGroupNameFromUserID,
-  getTraqIDFromUserID,
-});
-
-const me = useMe();
+const me = await useMe();
 
 const canRespond = computed(() => {
   // 既に回答済み
   if (
-    !props.detail.is_allowing_multiple_responses &&
-    me.value &&
-    props.detail.respondents.includes(me.value.name)
+    !props.detail.is_duplicate_answer_allowed &&
+    props.detail.respondents.includes(me.value?.name ?? '')
   )
     return false;
 
@@ -34,37 +23,31 @@ const canRespond = computed(() => {
 });
 
 const canViewResult = computed(() => {
-  if (props.detail.response_viewable_by === 'anyone') return true;
-  if (props.detail.response_viewable_by === 'respondents') {
-    if (!me.value) return false;
-    return props.detail.respondents.includes(me.value.name);
-  }
-  if (props.detail.response_viewable_by === 'admins') {
-    if (!me.value) return false;
-    return adminUsers.value.includes(me.value.name);
-  }
+  const isRespondent = props.detail.respondents.includes(me.value?.name ?? '');
+  const isAdmin = props.detail.admins.includes(me.value?.name ?? '');
 
-  const _: never = props.detail.response_viewable_by;
-  throw new Error(`Unknown response_viewable_by: ${_}`);
+  const canViewResultMatrix: Record<ResShareType, boolean> = {
+    anyone: true,
+    respondents: isRespondent || isAdmin,
+    admins: isAdmin,
+  };
+
+  return canViewResultMatrix[props.detail.response_viewable_by];
 });
 </script>
 
 <template>
   <div class="questionnaire-actions-container">
-    <router-link
-      :to="
-        canRespond
-          ? `/questionnaires/${detail.questionnaire_id}/responses/new`
-          : ''
+    <Button
+      class="questionnaire-action-button"
+      :disabled="!canRespond"
+      @click="
+        $router.push(`/questionnaires/${detail.questionnaire_id}/responses/new`)
       "
-      class="questionnaire-action-button-link"
-      :aria-disabled="!canRespond"
     >
-      <Button class="questionnaire-action-button" :disabled="!canRespond">
-        <Icon name="mdi:send" size="24px" />
-        <span>回答する</span>
-      </Button>
-    </router-link>
+      <Icon name="mdi:send" size="24px" />
+      <span>回答する</span>
+    </Button>
     <Button
       class="questionnaire-action-button"
       outlined
@@ -83,22 +66,15 @@ const canViewResult = computed(() => {
       <Icon name="mdi:flag" size="24px" />
       <span>回答しない</span>
     </Button>
-    <router-link
-      :to="
-        canViewResult ? `/questionnaires/${detail.questionnaire_id}/result` : ''
-      "
-      class="questionnaire-action-button-link"
-      :aria-disabled="!canRespond"
+    <Button
+      class="questionnaire-action-button"
+      outlined
+      :disabled="!canViewResult"
+      @click="$router.push(`/questionnaires/${detail.questionnaire_id}/result`)"
     >
-      <Button
-        class="questionnaire-action-button"
-        outlined
-        :disabled="!canViewResult"
-      >
-        <Icon name="mdi:text-box-multiple-outline" size="24px" />
-        <span>結果を見る</span>
-      </Button>
-    </router-link>
+      <Icon name="mdi:text-box-multiple-outline" size="24px" />
+      <span>結果を見る</span>
+    </Button>
   </div>
 </template>
 
@@ -120,10 +96,6 @@ const canViewResult = computed(() => {
   .questionnaire-actions-container {
     grid-template-columns: 1fr;
   }
-}
-
-.questionnaire-action-button-link {
-  text-decoration: none;
 }
 
 .questionnaire-action-button {
