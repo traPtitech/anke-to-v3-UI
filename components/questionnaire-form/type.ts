@@ -34,7 +34,7 @@ export type QuestionSettingsByType =
 
 export type QuestionSettings = QuestionSettingsBase & QuestionSettingsByType;
 
-export type NewQuestionnaireFormSettings =
+export type QuestionnaireFormSettings =
   & Omit<components["schemas"]["NewQuestionnaire"], "questions">
   & {
     questions: QuestionSettings[];

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { QuestionSettingsScale } from '~/components/new-questionnaire-form/type';
+import type { QuestionSettingsScale } from '../type';
 
 const props = defineProps<{
   modelValue: QuestionSettingsScale;

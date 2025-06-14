@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useFetchTraqApi } from '@/composables/type-fetch/traq/use-fetch-traq-api';
-import type { UserSpecifier } from '~/components/new-questionnaire-form/type';
+import { useFetchTraqApi } from '~/composables/type-fetch/traq/use-fetch-traq-api';
+import type { UserSpecifier } from './type';
 
 const props = defineProps<{
   modelValue: UserSpecifier;

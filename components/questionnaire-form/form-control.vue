@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import type { QuestionSettings } from '~/components/new-questionnaire-form/type';
 import MultipleChoiceInput from './form-control-element/multiple-choice-input.vue';
 import NumberInput from './form-control-element/number-input.vue';
 import ScaleInput from './form-control-element/scale-input.vue';
 import SingleChoiceInput from './form-control-element/single-choice-input.vue';
 import TextInput from './form-control-element/text-input.vue';
 import TextLongInput from './form-control-element/text-long-input.vue';
+import type { QuestionSettings } from './type';
 
 const props = defineProps<{
   modelValue: QuestionSettings;
@@ -46,7 +46,8 @@ const formComponent = computed(
       auto-resize
     />
 
-    <component :is="formComponent" v-model="question" />
+    <!-- questionの型推論が上手くいかないのでanyを使っている -->
+    <component :is="formComponent" v-model="question as any" />
     <div class="form-control-footer">
       <div class="form-control-required-switch">
         <label>必須</label>

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-// MEMO: propsとemitの型をunknownにしないとform-control.vueで謎の型エラーが出る
+import type { QuestionSettingsText } from '../type';
+
 defineProps<{
-  modelValue: unknown;
+  modelValue: QuestionSettingsText;
 }>();
 
 defineEmits<{
-  (e: 'update:modelValue', value: unknown): void;
+  (e: 'update:modelValue', value: QuestionSettingsText): void;
 }>();
 </script>
 

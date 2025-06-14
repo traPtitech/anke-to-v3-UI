@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { QuestionSettingsNumber } from '~/components/new-questionnaire-form/type';
+import type { QuestionSettingsNumber } from '../type';
 
 defineProps<{
   modelValue: QuestionSettingsNumber;

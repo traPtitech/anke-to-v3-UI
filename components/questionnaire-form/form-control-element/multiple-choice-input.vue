@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import type { QuestionSettingsSingleChoice } from '~/components/new-questionnaire-form/type';
+import type { QuestionSettingsMultipleChoice } from '../type';
 import ChoiceGroup from './choice-group.vue';
 
 const props = defineProps<{
-  modelValue: QuestionSettingsSingleChoice;
+  modelValue: QuestionSettingsMultipleChoice;
 }>();
 const question = props.modelValue;
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: QuestionSettingsSingleChoice): void;
+  (e: 'update:modelValue', value: QuestionSettingsMultipleChoice): void;
 }>();
 
 const options = computed({
@@ -19,7 +19,7 @@ const options = computed({
 
 <template>
   <ChoiceGroup v-model="options">
-    <RadioButton :model-value="false" disabled />
+    <Checkbox :model-value="false" disabled />
   </ChoiceGroup>
 </template>
 

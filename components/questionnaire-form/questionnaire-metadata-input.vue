@@ -1,20 +1,8 @@
 <script lang="ts" setup>
-import type { NewQuestionnaireFormSettings } from '~/components/new-questionnaire-form/type';
+import type { ResShareType } from '~/components/questionnaire-detail/type';
+import type { QuestionnaireFormSettings } from './type';
 
-const props = defineProps<{
-  modelValue: NewQuestionnaireFormSettings;
-  isResponseDueDateTimeInvalidForTargets: boolean;
-  isResponseDueDateTimeInvalidForDate: boolean;
-}>();
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: NewQuestionnaireFormSettings): void;
-}>();
-
-const state = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-});
+const state = defineModel<QuestionnaireFormSettings>({ required: true });
 
 const responseViewableByOptions = [
   {
@@ -29,10 +17,7 @@ const responseViewableByOptions = [
     label: '管理者のみ',
     value: 'admins',
   },
-] satisfies {
-  label: string;
-  value: NewQuestionnaireFormSettings['response_viewable_by'];
-}[];
+] satisfies { label: string; value: ResShareType }[];
 
 type ResponseDueDateTimeOption =
   | 'no-due'
@@ -50,6 +35,19 @@ const responseDueDateTimeOptions = [
   { label: '1週間後まで', value: '1week' },
   { label: 'カスタム', value: 'custom' },
 ] satisfies { label: string; value: ResponseDueDateTimeOption }[];
+
+const isResponseDueDateTimeInvalidForTargets = computed(() => {
+  if (state.value.response_due_date_time !== undefined) return false;
+
+  return (
+    state.value.target.users.length > 0 || state.value.target.groups.length > 0
+  );
+});
+const isResponseDueDateTimeInvalidForDate = computed(() => {
+  if (state.value.response_due_date_time === undefined) return false;
+
+  return new Date(state.value.response_due_date_time) < new Date();
+});
 
 const responseDueDateTimeDropdown = ref<ResponseDueDateTimeOption>(
   state.value.response_due_date_time === undefined ? 'no-due' : 'custom',
