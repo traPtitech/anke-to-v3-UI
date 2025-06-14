@@ -1,4 +1,4 @@
-import { useStoreNewQuestionnaireForm } from "~/components/new-questionnaire-form/store";
+import { useStoreNewQuestionnaireForm } from "~/components/questionnaire-form/store";
 
 import {
   deleteQuestionnaireById,
@@ -66,7 +66,7 @@ export const actionClose = async (detail: QuestionnaireDetail) => {
 export const actionDuplicate = async (
   detail: QuestionnaireDetail,
 ) => {
-  const { state } = useStoreNewQuestionnaireForm();
+  const state = useStoreNewQuestionnaireForm();
   state.title = detail.title;
   state.description = detail.description;
   state.response_due_date_time = detail.response_due_date_time;

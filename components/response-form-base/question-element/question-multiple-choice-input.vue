@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ResponseSettingsMultipleChoice } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
   ResponseFormQuestionSettingsMultipleChoice,
 } from '~/components/response-form-base/questionnaire-settings';
+import type { ResponseSettingsMultipleChoice } from '~/components/response-form-base/response-form-base-settings';
 
 type ModelValue = ResponseSettingsMultipleChoice &
   ResponseFormQuestionSettingsMultipleChoice &
@@ -37,7 +37,7 @@ const name = computed(() => `multiple-choice-input-${createId()}`);
       <Checkbox
         v-model="question.indexes"
         :value="i"
-        :input-id="optionIds[i]"
+        :input-id="`${optionIds[i]}`"
         :name="name"
         :aria-required="question.required"
         :pt="{
@@ -47,7 +47,10 @@ const name = computed(() => `multiple-choice-input-${createId()}`);
         }"
         :class="{ 'p-invalid': question.isInvalid }"
       />
-      <label :for="optionIds[i]" class="question-multiple-choice-input-label">
+      <label
+        :for="`${optionIds[i]}`"
+        class="question-multiple-choice-input-label"
+      >
         {{ option }}
       </label>
     </div>

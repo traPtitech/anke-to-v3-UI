@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ResponseSettingsScale } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
   ResponseFormQuestionSettingsScale,
 } from '~/components/response-form-base/questionnaire-settings';
+import type { ResponseSettingsScale } from '~/components/response-form-base/response-form-base-settings';
 
 type ModelValue = ResponseSettingsScale &
   ResponseFormQuestionSettingsScale &
@@ -47,14 +47,14 @@ const name = computed(() => `scale-input-${createId()}`);
     >
       <RadioButton
         v-model="question.number"
-        :input-id="id"
+        :input-id="`${id}`"
         :value="i + question.minValue"
         :name="name"
         :aria-required="question.required"
         :pt="{ hiddenInput: { required: question.required } }"
         :class="{ 'p-invalid': question.isInvalid }"
       />
-      <label :for="id">{{ i + question.minValue }}</label>
+      <label :for="`${id}`">{{ i + question.minValue }}</label>
     </div>
     <div>
       {{ question.maxLabel }}
