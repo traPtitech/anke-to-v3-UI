@@ -1,21 +1,15 @@
 <script lang="ts" setup>
-import {
-  postNewQuestionnaire,
-  useGetQuestionnaire,
-} from '~/composables/type-fetch/anke-to/client';
+import { postNewQuestionnaire } from '~/composables/type-fetch/anke-to/client';
+import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import { checkValidity } from './store';
 
 const props = defineProps<{
-  id: number;
+  questionnaire: GatewayQuestionnaire;
 }>();
 
-const { data } = await useGetQuestionnaire(props.id);
-if (!data.value) {
-  throw new Error('Questionnaire not found');
-}
 const state = reactive({
-  ...data.value,
-  questions: data.value.questions.map((q) => ({
+  ...props.questionnaire,
+  questions: props.questionnaire.questions.map((q) => ({
     ...q,
     // 既にある質問なので question_id は必ず存在する
     question_id: q.question_id!,
