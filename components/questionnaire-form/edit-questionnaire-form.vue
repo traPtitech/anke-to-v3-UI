@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { convertToBody } from '~/components/questionnaire-form/converter';
 import { postNewQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import { checkValidity } from './store';
@@ -22,10 +23,9 @@ const handleSave = async () => {
     return;
   }
   try {
-    const result = await postNewQuestionnaire({
-      ...state,
-      is_published: false,
-    });
+    const result = await postNewQuestionnaire(
+      convertToBody({ ...state, is_published: false }),
+    );
     if (!result) {
       throw new Error('Failed to create questionnaire');
     }
@@ -39,15 +39,14 @@ const handleSend = async () => {
   const validity = checkValidity(state);
   if (validity.ok) {
     try {
-      const result = await postNewQuestionnaire({
-        ...state,
-        is_published: true,
-      });
+      const result = await postNewQuestionnaire(
+        convertToBody({ ...state, is_published: true }),
+      );
       if (!result) {
         throw new Error('Failed to create questionnaire');
       }
       await navigateTo({
-        path: `/questionnaires/${result?.questionnaire_id}`,
+        path: `/questionnaires/${result.questionnaire_id}`,
       });
     } catch (err) {
       console.error(err);
