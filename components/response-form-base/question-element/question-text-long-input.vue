@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { ResponseSettingsTextLong } from '~/components/response-form-base/response-form-base-settings';
 import type {
   ResponseFormQuestionInvalid,
   ResponseFormQuestionSettingsBase,
   ResponseFormQuestionSettingsTextLong,
 } from '~/components/response-form-base/questionnaire-settings';
+import type { ResponseSettingsTextLong } from '~/components/response-form-base/response-form-base-settings';
 
 type ModelValue = ResponseSettingsTextLong &
   ResponseFormQuestionSettingsTextLong &
@@ -32,6 +32,7 @@ const question = computed({
     :class="{ 'p-invalid': question.isInvalid }"
     placeholder="回答を入力"
     :required="question.required"
+    auto-resize
   />
 </template>
 

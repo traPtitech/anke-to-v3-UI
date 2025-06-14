@@ -43,6 +43,7 @@ const formComponent = computed(
       v-model="question.description"
       placeholder="詳細な説明 (任意)"
       class="form-control-description"
+      auto-resize
     />
 
     <component :is="formComponent" v-model="question" />

@@ -102,7 +102,11 @@ watch(
       required
       placeholder="アンケートのタイトル"
     />
-    <Textarea v-model="state.description" placeholder="アンケートの説明" />
+    <Textarea
+      v-model="state.description"
+      placeholder="アンケートの説明"
+      auto-resize
+    />
     <div class="form-elements">
       <div class="form-element">
         <p class="form-label">結果の公開範囲</p>
