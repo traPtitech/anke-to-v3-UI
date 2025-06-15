@@ -53,23 +53,12 @@ const handleSend = async () => {
 <template>
   <QuestionnaireFormBase v-model="state">
     <template #buttons>
-      <Button outlined class="form-action-button" @click="handleSave">
-        <Icon name="mdi:content-save" size="24px" />
+      <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
         <span>一時保存</span>
-      </Button>
-      <Button class="form-action-button" @click="handleSend">
-        <Icon name="mdi:send" size="24px" />
+      </IconButton>
+      <IconButton variant="primary" icon="mdi:content-save" @click="handleSend">
         <span>送信</span>
-      </Button>
+      </IconButton>
     </template>
   </QuestionnaireFormBase>
 </template>
-
-<style scoped lang="scss">
-.form-action-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-}
-</style>
