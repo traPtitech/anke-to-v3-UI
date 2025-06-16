@@ -1,35 +1,25 @@
 <script lang="ts" setup>
-import type {
-  QuestionBase,
-  ResultInfoByType,
-} from '~/components/questionnaire-result/type';
+import type { QuestionResultNumber } from '../composables/use-questionnaire-result';
 
-defineProps<{
-  resultInfo: ResultInfoByType<'Number', boolean> & QuestionBase;
+const props = defineProps<{
+  result: QuestionResultNumber;
+  isAnonymous: boolean;
 }>();
+
+const data = props.result.responses.map((r) => ({
+  answer: r.answer,
+  respondent: props.isAnonymous ? undefined : r.respondent,
+}));
 </script>
 
 <template>
-  <div class="number-result-container">
-    <div v-for="(_, i) in resultInfo.responses" :key="i">
-      <div v-if="!resultInfo.isAnonymous" class="number-result-element-user">
-        @{{ resultInfo.responses[i].user }}
-      </div>
-      <div>
-        {{ resultInfo.responses[i].answer }}
-      </div>
-    </div>
-  </div>
+  <DataTable :value="data" sort-field="answer">
+    <Column field="answer" header="回答" sortable />
+    <Column
+      v-if="!props.isAnonymous"
+      field="respondent"
+      header="回答者"
+      sortable
+    />
+  </DataTable>
 </template>
-
-<style lang="scss" scoped>
-.number-result-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.number-result-element-user {
-  font-weight: bold;
-}
-</style>

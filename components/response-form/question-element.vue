@@ -51,8 +51,8 @@ const { valid } = useQuestionValidity(question.value);
 <style lang="scss" scoped>
 .question-element-container {
   padding: 16px;
-  border: 1px solid var(--surface-d);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--p-surface-300);
+  border-radius: var(--p-border-radius-md);
 }
 
 .question-element-title {
@@ -70,7 +70,7 @@ const { valid } = useQuestionValidity(question.value);
   vertical-align: middle;
   display: inline-block;
   padding: 4px 8px;
-  border-radius: var(--border-radius);
+  border-radius: var(--p-border-radius-md);
   font-size: 12px;
   font-weight: bold;
   color: white;

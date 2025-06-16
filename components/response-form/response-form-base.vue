@@ -62,8 +62,8 @@ const state = defineModel<ResponseFormState>({ required: true });
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border: 1px solid var(--surface-d);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--p-surface-300);
+  border-radius: var(--p-border-radius-md);
   padding: 16px;
 }
 

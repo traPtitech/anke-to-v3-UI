@@ -1,15 +1,13 @@
 <script lang="ts" setup>
-import type {
-  QuestionBase,
-  ResultInfoByType,
-} from '~/components/questionnaire-result/type';
+import type { QuestionResultMultipleChoice } from '../composables/use-questionnaire-result';
 
 const props = defineProps<{
-  resultInfo: ResultInfoByType<'MultipleChoice', boolean> & QuestionBase;
+  result: QuestionResultMultipleChoice;
+  isAnonymous: boolean;
 }>();
 
 const aggregatedResponses = computed(() => {
-  const responses = props.resultInfo.responses.map((res) => res.answer);
+  const responses = props.result.responses.map((res) => res.answer);
   const aggregated: Map<number, number> = new Map();
   responses.forEach((res) => {
     res.forEach((r) => {
@@ -23,14 +21,14 @@ const aggregatedResponses = computed(() => {
   });
 
   const aggregatedResponses = [...aggregated.keys()].map((key) => ({
-    value: props.resultInfo.options[key],
+    answer: props.result.options[key],
     count: aggregated.get(key)!,
     rate: `${((aggregated.get(key)! / responses.length) * 100).toFixed(1)}%`,
-    respondents: props.resultInfo.isAnonymous
+    respondents: props.isAnonymous
       ? undefined
-      : props.resultInfo.responses
+      : props.result.responses
           .filter((res) => res.answer.includes(key))
-          .map((res) => `@${res.user}`)
+          .map((res) => `@${res.respondent}`)
           .join(' '),
   }));
 
@@ -40,16 +38,14 @@ const aggregatedResponses = computed(() => {
 
 <template>
   <DataTable :value="aggregatedResponses" sort-field="count" :sort-order="-1">
-    <Column field="value" header="回答" sortable />
+    <Column field="answer" header="回答" sortable />
     <Column field="count" header="回答数" sortable />
     <Column field="rate" header="回答率" sortable />
     <Column
-      v-if="!resultInfo.isAnonymous"
+      v-if="!props.isAnonymous"
       field="respondents"
       header="回答者"
       sortable
     />
   </DataTable>
 </template>
-
-<style lang="scss" scoped></style>

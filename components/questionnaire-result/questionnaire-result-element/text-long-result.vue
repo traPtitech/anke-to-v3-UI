@@ -1,26 +1,24 @@
 <script lang="ts" setup>
-import type {
-  QuestionBase,
-  ResultInfoByType,
-} from '~/components/questionnaire-result/type';
+import type { QuestionResultTextLong } from '~/components/questionnaire-result/composables/use-questionnaire-result';
 
-defineProps<{
-  resultInfo: ResultInfoByType<'TextLong', boolean> & QuestionBase;
+const props = defineProps<{
+  result: QuestionResultTextLong;
+  isAnonymous: boolean;
 }>();
 </script>
 
 <template>
   <div class="text-long-result-container">
     <div
-      v-for="(_, i) in resultInfo.responses"
+      v-for="(_, i) in props.result.responses"
       :key="i"
       class="text-long-result-element"
     >
-      <div v-if="!resultInfo.isAnonymous" class="text-long-result-element-user">
-        @{{ resultInfo.responses[i].user }}
+      <div v-if="!props.isAnonymous" class="text-long-result-element-user">
+        @{{ props.result.responses[i].respondent }}
       </div>
       <div>
-        {{ resultInfo.responses[i].answer }}
+        {{ props.result.responses[i].answer }}
       </div>
     </div>
   </div>

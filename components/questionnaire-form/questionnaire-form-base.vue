@@ -80,8 +80,8 @@ const state = defineModel<QuestionnaireFormSettings>({ required: true });
 
 /* smooth-dndのスタイルを上書きするために詳細度を上げる */
 .question-container.question-container.question-container {
-  border: 1px solid var(--surface-d);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--p-surface-300);
+  border-radius: var(--p-border-radius-md);
   padding: 16px;
   display: flex;
   gap: 8px;

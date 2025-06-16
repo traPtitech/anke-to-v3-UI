@@ -107,6 +107,23 @@ export const patchQuestionnaireById = async (
   return;
 };
 
+export const useGetResponses = async (questionnaireID: number) =>
+  useAsyncData(
+    `/questionnaires/${questionnaireID}/responses`,
+    async () => {
+      const res = await client.GET(
+        "/questionnaires/{questionnaireID}/responses",
+        {
+          params: { path: { questionnaireID } },
+        },
+      );
+      if (res.data === undefined) {
+        throw new Error("No data returned from the API");
+      }
+      return res.data;
+    },
+  );
+
 export const useGetResponse = async (responseID: number) =>
   useAsyncData(
     `/responses/${responseID}`,

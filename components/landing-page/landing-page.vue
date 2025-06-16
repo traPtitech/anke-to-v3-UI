@@ -227,7 +227,7 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
   background-color: mix(white, $color-primary, 92%);
   padding: 8px 16px;
   width: fit-content;
-  border-radius: var(--border-radius);
+  border-radius: var(--p-border-radius-md);
   text-decoration: none;
   display: flex;
   align-items: center;

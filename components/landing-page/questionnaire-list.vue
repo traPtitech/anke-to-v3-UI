@@ -38,8 +38,8 @@ defineProps<{
 
 <style lang="scss" scoped>
 .questionnaire-card {
-  border: 1px solid var(--surface-d);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--p-surface-300);
+  border-radius: var(--p-border-radius-md);
   padding: 16px;
   margin: 16px 0;
 }
