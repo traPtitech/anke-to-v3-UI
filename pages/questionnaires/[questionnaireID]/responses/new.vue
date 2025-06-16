@@ -1,80 +1,17 @@
 <script lang="ts" setup>
-import type { ResponseFormQuestionnaireFormSettings } from '~/components/response-form-base/questionnaire-settings';
+import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
-const formSettings: ResponseFormQuestionnaireFormSettings = {
-  title: 'アンケートのタイトル',
-  description: 'アンケートの説明',
-  isAnonymous: false,
-  responseViewableBy: 'anyone',
-  responseDueDateTime: null,
-  admins: {
-    users: ['cp20'],
-    groups: [],
-  },
-  targets: {
-    users: ['cp20'],
-    groups: [],
-  },
-  isAllowMultiResponse: false,
-  questions: [
-    {
-      title:
-        'めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文',
-      description: '1行テキスト',
-      type: 'Text',
-      required: false,
-    },
-    {
-      title: '質問2',
-      description: '',
-      type: 'TextLong',
-      required: false,
-    },
-    {
-      title: '質問3',
-      description: '数値',
-      type: 'Number',
-      required: false,
-    },
-    {
-      title: '質問4',
-      description: 'ラジオボタン',
-      type: 'SingleChoice',
-      required: true,
-      options: ['選択肢1', '選択肢2', '選択肢3'],
-    },
-    {
-      title: '質問5',
-      description: 'チェックボックス',
-      type: 'MultipleChoice',
-      required: true,
-      options: ['選択肢1', '選択肢2', '選択肢3'],
-    },
-    {
-      title: '質問6',
-      description: '目盛り',
-      type: 'Scale',
-      required: true,
-      minValue: 1,
-      minLabel: '低い',
-      maxValue: 5,
-      maxLabel: '高い',
-    },
-  ],
-};
-const newResponseAPI = (
-  _responseSettings: ResponseFormQuestionnaireFormSettings,
-) => {
-  console.log('response created');
-  console.log(_responseSettings);
-};
+const route = useRoute();
+const questionnaireID = parseInt(route.params.questionnaireID as string);
+const { data, error } = await useGetQuestionnaire(questionnaireID);
 </script>
 
 <template>
-  <ResponseFormBase :form-settings="formSettings" :send-api="newResponseAPI">
-    <template #saveButton>一時保存</template>
-    <template #sendButton>送信</template>
-  </ResponseFormBase>
+  <div v-if="error">
+    <p>アンケートの取得に失敗しました: {{ error.message }}</p>
+  </div>
+  <div v-else-if="!data">
+    <p>アンケートを読み込み中...</p>
+  </div>
+  <NewResponseForm v-else :questionnaire="data" />
 </template>
-
-<style lang="scss" scoped></style>

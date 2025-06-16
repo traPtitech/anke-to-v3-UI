@@ -106,3 +106,61 @@ export const patchQuestionnaireById = async (
 
   return;
 };
+
+export const useGetResponse = async (responseID: number) =>
+  useAsyncData(
+    `/responses/${responseID}`,
+    async () => {
+      const res = await client.GET("/responses/{responseID}", {
+        params: { path: { responseID } },
+      });
+      if (res.data === undefined) {
+        throw new Error("No data returned from the API");
+      }
+      return res.data;
+    },
+  );
+
+export type PostNewResponseBody =
+  paths["/questionnaires/{questionnaireID}/responses"]["post"]["requestBody"][
+    "content"
+  ]["application/json"];
+export const postNewResponse = async (
+  questionnaireID: number,
+  data: PostNewResponseBody,
+) => {
+  const res = await client.POST("/questionnaires/{questionnaireID}/responses", {
+    params: { path: { questionnaireID } },
+    body: data,
+  });
+
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+
+  await refreshNuxtData(`/questionnaires/${questionnaireID}`);
+
+  return res.data;
+};
+
+export type PatchResponseBody =
+  paths["/responses/{responseID}"]["patch"]["requestBody"]["content"][
+    "application/json"
+  ];
+export const patchResponse = async (
+  responseID: number,
+  data: PatchResponseBody,
+) => {
+  const res = await client.PATCH("/responses/{responseID}", {
+    params: { path: { responseID } },
+    body: data,
+  });
+
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+
+  await refreshNuxtData(`/responses/${responseID}`);
+
+  return res.data;
+};

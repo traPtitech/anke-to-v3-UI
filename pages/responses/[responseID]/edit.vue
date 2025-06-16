@@ -1,80 +1,32 @@
 <script lang="ts" setup>
-import type { ResponseFormQuestionnaireFormSettings } from '~/components/response-form-base/questionnaire-settings';
+import {
+  useGetQuestionnaire,
+  useGetResponse,
+} from '~/composables/type-fetch/anke-to/client';
 
-const formSettings: ResponseFormQuestionnaireFormSettings = {
-  title: 'アンケートのタイトル',
-  description: 'アンケートの説明',
-  isAnonymous: false,
-  responseViewableBy: 'anyone',
-  responseDueDateTime: null,
-  admins: {
-    users: ['cp20'],
-    groups: [],
-  },
-  targets: {
-    users: ['cp20'],
-    groups: [],
-  },
-  isAllowMultiResponse: false,
-  questions: [
-    {
-      title:
-        'めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文めっちゃめっちゃ長い質問文',
-      description: '1行テキスト',
-      type: 'Text',
-      required: false,
-    },
-    {
-      title: '質問2',
-      description: '',
-      type: 'TextLong',
-      required: false,
-    },
-    {
-      title: '質問3',
-      description: '数値',
-      type: 'Number',
-      required: false,
-    },
-    {
-      title: '質問4',
-      description: 'ラジオボタン',
-      type: 'SingleChoice',
-      required: true,
-      options: ['選択肢1', '選択肢2', '選択肢3'],
-    },
-    {
-      title: '質問5',
-      description: 'チェックボックス',
-      type: 'MultipleChoice',
-      required: true,
-      options: ['選択肢1', '選択肢2', '選択肢3'],
-    },
-    {
-      title: '質問6',
-      description: '目盛り',
-      type: 'Scale',
-      required: true,
-      minValue: 1,
-      minLabel: '低い',
-      maxValue: 5,
-      maxLabel: '高い',
-    },
-  ],
-};
-
-const editResponseAPI = (
-  _responseSettings: ResponseFormQuestionnaireFormSettings,
-) => {
-  console.log('response edited');
-  console.log(_responseSettings);
-};
+const route = useRoute();
+const responseID = parseInt(route.params.responseID as string);
+const { data: response, error: responseError } =
+  await useGetResponse(responseID);
+const { data: questionnaire, error: questionnaireError } = response.value
+  ?.questionnaire_id
+  ? await useGetQuestionnaire(response.value?.questionnaire_id)
+  : { data: null, error: null };
 </script>
 
 <template>
-  <ResponseFormBase :form-settings="formSettings" :send-api="editResponseAPI">
-    <template #sendButton>変更</template>
-  </ResponseFormBase>
+  <div v-if="responseError || questionnaireError">
+    <p>
+      アンケートの取得に失敗しました:
+      {{ responseError?.message || questionnaireError?.message }}
+    </p>
+  </div>
+  <div v-else-if="!questionnaire || !response">
+    <p>アンケートを読み込み中...</p>
+  </div>
+  <EditResponseForm
+    v-else
+    :questionnaire="questionnaire"
+    :response="response"
+  />
 </template>
-
-<style lang="scss" scoped></style>

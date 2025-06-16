@@ -104,7 +104,7 @@ export const responseHandlers = [
     return HttpResponse.json(response);
   }),
 
-  http.patch("/api/response/:id", (req) => {
+  http.patch("/api/responses/:id", (req) => {
     const { id } = req.params;
     const body = req.request.json() as Partial<GatewayResponse>;
 
@@ -129,7 +129,7 @@ export const responseHandlers = [
     return HttpResponse.json(updatedResponse);
   }),
 
-  http.delete("/api/response/:id", (req) => {
+  http.delete("/api/responses/:id", (req) => {
     const { id } = req.params;
 
     const responseIndex = responsesData.findIndex(
