@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
-const route = useRoute();
-const questionnaireID = parseInt(route.params.questionnaireID as string);
-const { data, error } = await useGetQuestionnaire(questionnaireID);
+const questionnaireId = useRouteQuestionnaireId();
+const { data, error } = await useGetQuestionnaire(questionnaireId);
 </script>
 
 <template>

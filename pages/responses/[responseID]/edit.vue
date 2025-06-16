@@ -4,10 +4,9 @@ import {
   useGetResponse,
 } from '~/composables/type-fetch/anke-to/client';
 
-const route = useRoute();
-const responseID = parseInt(route.params.responseID as string);
+const responseId = useRouteResponseId();
 const { data: response, error: responseError } =
-  await useGetResponse(responseID);
+  await useGetResponse(responseId);
 const { data: questionnaire, error: questionnaireError } = response.value
   ?.questionnaire_id
   ? await useGetQuestionnaire(response.value?.questionnaire_id)
