@@ -1,30 +1,35 @@
 <script lang="ts" setup>
-import { createStringId } from '~/utils/create-id';
-import { useQuestionValidity, type ResponseBodyScale } from '../store';
+import {
+  useQuestionValidity,
+  type QuestionElementMode,
+  type QuestionElementScale,
+} from './composables';
 
-const question = defineModel<ResponseBodyScale>({ required: true });
+const props = defineProps<{
+  mode: QuestionElementMode;
+}>();
+
+const question = defineModel<QuestionElementScale>({ required: true });
 const { valid } = useQuestionValidity(question.value);
 
 const optionLength = computed(
   () => question.value.max_value - question.value.min_value + 1,
 );
 
-const scaleInputs = computed(() =>
-  new Array(optionLength.value).fill('').map(() => createStringId()),
-);
+const scaleInputs = new Array(optionLength.value).fill('').map(() => useId());
 
-const name = computed(() => `scale-input-${createStringId()}`);
+const name = `scale-input-${useId()}`;
 </script>
 
 <template>
-  <div class="question-scale-input-container">
+  <div class="question-element-scale-container">
     <div>
       {{ question.min_label }}
     </div>
     <div
       v-for="(id, i) in scaleInputs"
       :key="id"
-      class="question-scale-input-options"
+      class="question-element-scale-options"
     >
       <RadioButton
         v-model="question.answer"
@@ -33,7 +38,8 @@ const name = computed(() => `scale-input-${createStringId()}`);
         :name="name"
         :aria-required="question.is_required"
         :pt="{ hiddenInput: { required: question.is_required } }"
-        :class="{ 'p-invalid': !valid }"
+        :class="{ 'p-invalid': props.mode === 'edit' && !valid }"
+        :readonly="props.mode === 'view'"
       />
       <label :for="id">{{ i + question.min_value }}</label>
     </div>
@@ -44,7 +50,7 @@ const name = computed(() => `scale-input-${createStringId()}`);
 </template>
 
 <style lang="scss" scoped>
-.question-scale-input-container {
+.question-element-scale-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -53,14 +59,14 @@ const name = computed(() => `scale-input-${createStringId()}`);
   margin: 0 auto;
 }
 
-.question-scale-input-options {
+.question-element-scale-options {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 @media screen and (max-width: $breakpoint-sm) {
-  .question-scale-input-container {
+  .question-element-scale-container {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;

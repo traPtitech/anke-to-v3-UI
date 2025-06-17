@@ -38,6 +38,7 @@ const state = defineModel<ResponseFormState>({ required: true });
         v-for="(_, i) in state.body"
         :key="i"
         v-model="state.body[i]"
+        :mode="'edit'"
       />
     </div>
     <div class="form-action-buttons">

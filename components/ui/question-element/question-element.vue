@@ -1,7 +1,15 @@
 <script lang="ts" setup>
-import { useQuestionValidity, type ResponseBody } from './store';
+import {
+  useQuestionValidity,
+  type QuestionElement,
+  type QuestionElementMode,
+} from './composables';
 
-const question = defineModel<ResponseBody>({ required: true });
+const props = defineProps<{
+  mode: QuestionElementMode;
+}>();
+
+const question = defineModel<QuestionElement>({ required: true });
 const { valid } = useQuestionValidity(question.value);
 </script>
 
@@ -18,29 +26,35 @@ const { valid } = useQuestionValidity(question.value);
     </p>
     <p class="question-element-description">{{ question.description }}</p>
 
-    <QuestionTextInput
+    <QuestionElementText
       v-if="question.question_type === 'Text'"
       v-model="question"
+      :mode="props.mode"
     />
-    <QuestionTextLongInput
+    <QuestionElementTextLong
       v-if="question.question_type === 'TextLong'"
       v-model="question"
+      :mode="props.mode"
     />
-    <QuestionNumberInput
+    <QuestionElementNumber
       v-if="question.question_type === 'Number'"
       v-model="question"
+      :mode="props.mode"
     />
-    <QuestionSingleChoiceInput
+    <QuestionElementSingleChoice
       v-if="question.question_type === 'SingleChoice'"
       v-model="question"
+      :mode="props.mode"
     />
-    <QuestionMultipleChoiceInput
+    <QuestionElementMultipleChoice
       v-if="question.question_type === 'MultipleChoice'"
       v-model="question"
+      :mode="props.mode"
     />
-    <QuestionScaleInput
+    <QuestionElementScale
       v-if="question.question_type === 'Scale'"
       v-model="question"
+      :mode="props.mode"
     />
     <p v-if="!valid" class="error-message">
       <small>回答必須の質問です</small>
