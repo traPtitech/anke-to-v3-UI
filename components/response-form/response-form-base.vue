@@ -96,7 +96,7 @@ const state = defineModel<ResponseFormState>({ required: true });
     padding-right: 0;
   }
 }
-@media screen and (max-width: $breakpoint-sm) {
+@media screen and (max-width: variables.$breakpoint-sm) {
   .form-action-buttons {
     flex-direction: column;
   }

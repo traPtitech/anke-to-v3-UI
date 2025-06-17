@@ -79,7 +79,7 @@ const responseViewableByOptions = Object.entries(
   margin-top: 16px;
 }
 
-@media screen and (max-width: $breakpoint-lg) {
+@media screen and (max-width: variables.$breakpoint-lg) {
   .form-elements {
     grid-template-columns: 1fr;
   }

@@ -30,7 +30,7 @@ main {
   display: none;
 }
 
-@media screen and (max-width: $breakpoint-sm) {
+@media screen and (max-width: variables.$breakpoint-sm) {
   .container {
     flex-direction: column;
   }

@@ -52,8 +52,6 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/style/variables.scss';
-
 $side-navigation-background-color: hsl(0, 100%, 98%);
 $side-navigation-text-color: #333;
 $side-navigation-accent-color: hsl(0, 70%, 90%);
@@ -149,7 +147,7 @@ $side-navigation-accent-color: hsl(0, 70%, 90%);
   text-decoration: none;
 }
 
-@media screen and (max-width: $breakpoint-md) {
+@media screen and (max-width: variables.$breakpoint-md) {
   .nav-container {
     width: 100px;
   }

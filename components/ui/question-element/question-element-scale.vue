@@ -65,7 +65,7 @@ const name = `scale-input-${useId()}`;
   gap: 8px;
 }
 
-@media screen and (max-width: $breakpoint-sm) {
+@media screen and (max-width: variables.$breakpoint-sm) {
   .question-element-scale-container {
     flex-direction: column;
     align-items: flex-start;

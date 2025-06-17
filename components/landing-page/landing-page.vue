@@ -189,6 +189,8 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
 </template>
 
 <style lang="scss" scoped>
+@use 'sass:color';
+
 .landing-page-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -223,8 +225,8 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
 
 .questionnaire-card-action-link {
   font-weight: bold;
-  color: $color-primary;
-  background-color: mix(white, $color-primary, 92%);
+  color: variables.$color-primary;
+  background-color: color.mix(white, variables.$color-primary, 92%);
   padding: 8px 16px;
   width: fit-content;
   border-radius: var(--p-border-radius-md);

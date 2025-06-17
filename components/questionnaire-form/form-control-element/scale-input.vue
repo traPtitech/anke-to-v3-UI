@@ -1,18 +1,8 @@
 <script lang="ts" setup>
 import type { QuestionSettingsScale } from '../type';
 
-const props = defineProps<{
-  modelValue: QuestionSettingsScale;
-}>();
-const question = props.modelValue;
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: QuestionSettingsScale): void;
-}>();
-
-const state = computed({
-  get: () => question,
-  set: (value) => emit('update:modelValue', value),
+const question = defineModel<QuestionSettingsScale>({
+  required: true,
 });
 </script>
 
@@ -20,7 +10,7 @@ const state = computed({
   <div class="scale-input-container">
     <div class="scale-input-group">
       <Dropdown
-        v-model="state.min_value"
+        v-model="question.min_value"
         placeholder="最小値"
         :options="[0, 1]"
         class="scale-input-dropdown"
@@ -28,20 +18,20 @@ const state = computed({
         panel-class="scale-input-dropdown-panel"
       />
       <InputText
-        v-model="state.min_label"
+        v-model="question.min_label"
         placeholder="最小値のラベル (任意)"
         class="scale-input-label-input"
       />
     </div>
     <div class="scale-input-group">
       <Dropdown
-        v-model="state.max_value"
+        v-model="question.max_value"
         placeholder="最大値"
         :options="[2, 3, 4, 5, 6, 7, 8, 9, 10]"
         scroll-height="320px"
       />
       <InputText
-        v-model="state.max_label"
+        v-model="question.max_label"
         placeholder="最大値のラベル (任意)"
         class="scale-input-label-input"
       />

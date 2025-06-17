@@ -68,7 +68,7 @@ defineEmits<{
   gap: 16px;
 }
 
-@media screen and (max-width: $breakpoint-lg) {
+@media screen and (max-width: variables.$breakpoint-lg) {
   .add-question-buttons {
     grid-template-columns: repeat(2, 1fr);
   }

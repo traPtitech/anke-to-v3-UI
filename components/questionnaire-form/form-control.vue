@@ -1,39 +1,24 @@
 <script lang="ts" setup>
-import MultipleChoiceInput from './form-control-element/multiple-choice-input.vue';
-import NumberInput from './form-control-element/number-input.vue';
-import ScaleInput from './form-control-element/scale-input.vue';
-import SingleChoiceInput from './form-control-element/single-choice-input.vue';
-import TextInput from './form-control-element/text-input.vue';
-import TextLongInput from './form-control-element/text-long-input.vue';
+import type { GatewayQuestionType } from '~/models/question';
 import type { QuestionSettings } from './type';
 
-const props = defineProps<{
-  modelValue: QuestionSettings;
-}>();
+const question = defineModel<QuestionSettings>({ required: true });
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: QuestionSettings): void;
+defineEmits<{
   (e: 'copy'): void;
   (e: 'delete'): void;
 }>();
 
-const question = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-});
+const typeText: Record<GatewayQuestionType, string> = {
+  Text: '1行テキスト',
+  TextLong: '長文テキスト',
+  Number: '数値',
+  SingleChoice: 'ラジオボタン',
+  MultipleChoice: 'チェックボックス',
+  Scale: '目盛り',
+};
 
-const formComponents = {
-  Text: TextInput,
-  TextLong: TextLongInput,
-  MultipleChoice: MultipleChoiceInput,
-  SingleChoice: SingleChoiceInput,
-  Number: NumberInput,
-  Scale: ScaleInput,
-} satisfies Record<QuestionSettings['question_type'], unknown>;
-
-const formComponent = computed(
-  () => formComponents[question.value.question_type],
-);
+const questionType = computed(() => typeText[question.value.question_type]);
 </script>
 
 <template>
@@ -46,28 +31,54 @@ const formComponent = computed(
       auto-resize
     />
 
-    <!-- questionの型推論が上手くいかないのでanyを使っている -->
-    <component :is="formComponent" v-model="question as any" />
+    <FormControlElementTextInput
+      v-if="question.question_type === 'Text'"
+      v-model="question"
+    />
+    <FormControlElementTextLongInput
+      v-if="question.question_type === 'TextLong'"
+      v-model="question"
+    />
+    <FormControlElementNumberInput
+      v-if="question.question_type === 'Number'"
+      v-model="question"
+    />
+    <FormControlElementSingleChoiceInput
+      v-if="question.question_type === 'SingleChoice'"
+      v-model="question"
+    />
+    <FormControlElementMultipleChoiceInput
+      v-if="question.question_type === 'MultipleChoice'"
+      v-model="question"
+    />
+    <FormControlElementScaleInput
+      v-if="question.question_type === 'Scale'"
+      v-model="question"
+    />
+
     <div class="form-control-footer">
-      <div class="form-control-required-switch">
-        <label>必須</label>
-        <InputSwitch v-model="question.is_required" />
-      </div>
-      <div class="form-control-footer-buttons">
-        <Button
-          class="p-button-icon-only p-button-text"
-          title="質問を複製"
-          @click="$emit('copy')"
-        >
-          <Icon size="24px" name="mdi:content-copy" />
-        </Button>
-        <Button
-          class="p-button-icon-only p-button-text"
-          title="質問を削除"
-          @click="$emit('delete')"
-        >
-          <Icon size="24px" name="mdi:trash-can-outline" />
-        </Button>
+      <div>質問タイプ: {{ questionType }}</div>
+      <div class="form-control-footer-actions">
+        <div class="form-control-required-switch">
+          <label>必須</label>
+          <InputSwitch v-model="question.is_required" />
+        </div>
+        <div class="form-control-footer-buttons">
+          <Button
+            class="p-button-icon-only p-button-text"
+            title="質問を複製"
+            @click="$emit('copy')"
+          >
+            <Icon size="24px" name="mdi:content-copy" />
+          </Button>
+          <Button
+            class="p-button-icon-only p-button-text"
+            title="質問を削除"
+            @click="$emit('delete')"
+          >
+            <Icon size="24px" name="mdi:trash-can-outline" />
+          </Button>
+        </div>
       </div>
     </div>
   </div>
@@ -86,7 +97,13 @@ const formComponent = computed(
 
 .form-control-footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.form-control-footer-actions {
+  display: flex;
   align-items: center;
   gap: 16px;
 }

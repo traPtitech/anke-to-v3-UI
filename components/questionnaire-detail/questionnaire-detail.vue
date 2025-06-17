@@ -43,19 +43,19 @@ defineProps<{ detail: QuestionnaireDetail }>();
   font-size: 14px;
 }
 
-@media screen and (max-width: $breakpoint-lg) {
+@media screen and (max-width: variables.$breakpoint-lg) {
   .questionnaire-target-container {
     grid-template-columns: 1fr;
   }
 }
 
-@media screen and (max-width: $breakpoint-md) {
+@media screen and (max-width: variables.$breakpoint-md) {
   .questionnaire-detail-element-container {
     grid-template-columns: 1fr;
   }
 }
 
-@media screen and (max-width: $breakpoint-sm) {
+@media screen and (max-width: variables.$breakpoint-sm) {
   .questionnaire-detail-element-container {
     padding: 16px;
   }

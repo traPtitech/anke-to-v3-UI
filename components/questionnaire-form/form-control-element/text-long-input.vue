@@ -1,17 +1,25 @@
 <script lang="ts" setup>
 import type { QuestionSettingsTextLong } from '../type';
 
-defineProps<{
-  modelValue: QuestionSettingsTextLong;
-}>();
-
-defineEmits<{
-  (e: 'update:modelValue', value: QuestionSettingsTextLong): void;
-}>();
+const question = defineModel<QuestionSettingsTextLong>({
+  required: true,
+});
 </script>
 
 <template>
-  <Textarea placeholder="回答 (長文テキスト)" disabled />
+  <div class="form-control-element-text-input">
+    <TextArea placeholder="回答 (長文テキスト)" disabled />
+    <InputNumber
+      v-model="question.max_length"
+      placeholder="最大文字数 (任意)"
+    />
+  </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss">
+.form-control-element-text-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+</style>

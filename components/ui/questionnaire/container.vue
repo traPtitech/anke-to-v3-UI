@@ -24,7 +24,7 @@ const props = defineProps<{
   border-radius: var(--p-border-radius-md);
 }
 
-@media screen and (max-width: $breakpoint-md) {
+@media screen and (max-width: variables.$breakpoint-md) {
   .questionnaire-grid-container {
     grid-template-columns: 1fr;
   }

@@ -87,7 +87,7 @@ const state = defineModel<QuestionnaireFormSettings>({ required: true });
   gap: 8px;
 }
 
-@media screen and (max-width: $breakpoint-sm) {
+@media screen and (max-width: variables.$breakpoint-sm) {
   .question-container.question-container.question-container {
     padding: 8px 8px 8px 4px;
     gap: 4px;
@@ -139,7 +139,7 @@ const state = defineModel<QuestionnaireFormSettings>({ required: true });
   }
 }
 
-@media screen and (max-width: $breakpoint-sm) {
+@media screen and (max-width: variables.$breakpoint-sm) {
   .form-action-buttons {
     flex-direction: column;
   }

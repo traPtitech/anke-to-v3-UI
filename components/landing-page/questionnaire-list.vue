@@ -55,7 +55,7 @@ defineProps<{
   flex: 1;
   font-weight: bold;
   font-size: 18px;
-  color: $color-primary;
+  color: variables.$color-primary;
   margin-bottom: 8px;
   text-decoration: none;
 

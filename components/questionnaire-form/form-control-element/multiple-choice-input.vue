@@ -2,18 +2,15 @@
 import type { QuestionSettingsMultipleChoice } from '../type';
 import ChoiceGroup from './choice-group.vue';
 
-const props = defineProps<{
-  modelValue: QuestionSettingsMultipleChoice;
-}>();
-const question = props.modelValue;
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: QuestionSettingsMultipleChoice): void;
-}>();
+const question = defineModel<QuestionSettingsMultipleChoice>({
+  required: true,
+});
 
 const options = computed({
-  get: () => question.options,
-  set: (options) => emit('update:modelValue', { ...question, options }),
+  get: () => question.value.options,
+  set: (options) => {
+    question.value.options = options;
+  },
 });
 </script>
 
@@ -22,5 +19,3 @@ const options = computed({
     <Checkbox :model-value="false" disabled />
   </ChoiceGroup>
 </template>
-
-<style lang="scss" scoped></style>
