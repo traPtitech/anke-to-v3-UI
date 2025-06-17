@@ -14,16 +14,50 @@ export default defineNuxtConfig({
   ],
   ssr: false,
   components: [
-    "~/components/layout-elements",
-    "~/components/ui",
-    "~/components/questionnaire-form",
-    { path: "~/components/response-form", pathPrefix: false },
-    { path: "~/components/questionnaire-result", pathPrefix: false },
-    { path: "~/components/response-detail", pathPrefix: false },
-    { path: "~/components/questionnaire-detail", pathPrefix: false },
-    { path: "~/components/landing-page", pathPrefix: false },
-    "~/components",
+    {
+      path: "~/components/layout-elements",
+      pattern: "**/*.vue",
+    },
+    {
+      path: "~/components/ui",
+      pattern: "**/*.vue",
+    },
+    {
+      path: "~/components/questionnaire-form",
+      pathPrefix: false,
+      pattern: "**/*.vue",
+    },
+    {
+      path: "~/components/response-form",
+      pathPrefix: false,
+      pattern: "**/*.vue",
+    },
+    {
+      path: "~/components/questionnaire-result",
+      pathPrefix: false,
+      pattern: "**/*.vue",
+    },
+    {
+      path: "~/components/response-detail",
+      pathPrefix: false,
+      pattern: "**/*.vue",
+    },
+    {
+      path: "~/components/questionnaire-detail",
+      pathPrefix: false,
+      pattern: "**/*.vue",
+    },
+    {
+      path: "~/components/landing-page",
+      pathPrefix: false,
+      pattern: "**/*.vue",
+    },
   ],
+  imports: {
+    dirs: [
+      "./utils",
+    ],
+  },
   devtools: { enabled: true },
   css: ["ress", "~/assets/style/global.css"],
   appConfig: {
