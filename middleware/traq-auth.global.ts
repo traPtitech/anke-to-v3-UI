@@ -1,16 +1,14 @@
-import { getTraqAuthCodeRequestUrl } from '@/utils/sendTraqAuthCodeRequest';
+import { getTraqAuthCodeRequestUrl } from "@/utils/sendTraqAuthCodeRequest";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   if (import.meta.server) return;
 
-  if (to.path === '/') return;
-
   const { state, actions } = useTraqAuthStore();
 
-  if (to.path === '/auth-callback') {
+  if (to.path === "/auth-callback") {
     const clearSessionStorage = () => {
-      sessionStorage.removeItem('nextRoute');
-      sessionStorage.removeItem('previousRoute');
+      sessionStorage.removeItem("nextRoute");
+      sessionStorage.removeItem("previousRoute");
       sessionStorage.removeItem(`traq-auth-code-verifier-${authState}`);
     };
 
@@ -19,8 +17,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const codeVerifier = sessionStorage.getItem(
       `traq-auth-code-verifier-${authState}`,
     );
-    if (typeof authCode !== 'string' || codeVerifier === null) {
-      const previousRoute = sessionStorage.getItem('previousRoute') ?? '/';
+    if (typeof authCode !== "string" || codeVerifier === null) {
+      const previousRoute = sessionStorage.getItem("previousRoute") ?? "/";
       clearSessionStorage();
       return navigateTo(previousRoute);
     }
@@ -29,7 +27,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const data = await res.json();
     state.accessToken = data.access_token;
 
-    const nextRoute = sessionStorage.getItem('nextRoute') ?? '/';
+    const nextRoute = sessionStorage.getItem("nextRoute") ?? "/";
     clearSessionStorage();
     return navigateTo(nextRoute);
   }
@@ -41,10 +39,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   await actions.ensureToken();
   if (state.accessToken === null) {
     const message =
-      'アンケートの編集・作成にはtraQアカウントへのアクセスが必要です。OKを押すとtraQに飛びます。';
+      "アンケートの編集・作成にはtraQアカウントへのアクセスが必要です。OKを押すとtraQに飛びます。";
     if (window.confirm(message)) {
-      sessionStorage.setItem('nextRoute', to.path); // traQでのトークン取得後に飛ばすルート
-      sessionStorage.setItem('previousRoute', from.path); // traQでのトークン取得失敗時に飛ばすルート
+      sessionStorage.setItem("nextRoute", to.path); // traQでのトークン取得後に飛ばすルート
+      sessionStorage.setItem("previousRoute", from.path); // traQでのトークン取得失敗時に飛ばすルート
 
       const url = getTraqAuthCodeRequestUrl();
       return navigateTo(url, { external: true });
@@ -55,7 +53,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       }
 
       // url直打ちなどでアクセスされた場合
-      return navigateTo('/');
+      return navigateTo("/");
     }
   }
 });
