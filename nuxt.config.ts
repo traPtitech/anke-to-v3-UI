@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     "@nuxt/test-utils",
     "@nuxt/eslint",
     "@nuxtjs/stylelint-module",
-    "@pinia-plugin-persistedstate/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
     "@nuxt/icon",
     "@primevue/nuxt-module",
   ],
