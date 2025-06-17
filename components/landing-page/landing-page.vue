@@ -38,13 +38,13 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
         </div>
         <QuestionnaireList :questionnaires="questionnairesDraft">
           <template #action="{ questionnaire }">
-            <a
+            <NuxtLink
               class="questionnaire-card-action-link"
-              :href="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
+              :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
             >
               <Icon name="mdi:square-edit-outline" size="24px" />
               <span>アンケートを編集</span>
-            </a>
+            </NuxtLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -63,13 +63,13 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <a
+            <NuxtLink
               v-if="!checkIsDueOver(questionnaire)"
               class="questionnaire-card-action-link"
             >
               <Icon name="mdi:text-box-edit-outline" size="24px" />
               <span>回答を編集 (?)</span>
-            </a>
+            </NuxtLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -88,14 +88,14 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <a
+            <NuxtLink
               v-if="!checkIsDueOver(questionnaire)"
               class="questionnaire-card-action-link"
-              :href="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
+              :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
             >
               <Icon name="mdi:form-select" size="24px" />
               <span>アンケートに回答</span>
-            </a>
+            </NuxtLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -116,20 +116,20 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <a
+            <NuxtLink
               class="questionnaire-card-action-link"
-              :href="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
+              :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
             >
               <Icon name="mdi:square-edit-outline" size="24px" />
               <span>アンケートを編集</span>
-            </a>
-            <a
+            </NuxtLink>
+            <NuxtLink
               class="questionnaire-card-action-link"
-              :href="`/questionnaires/${questionnaire.questionnaire_id}/result`"
+              :to="`/questionnaires/${questionnaire.questionnaire_id}/result`"
             >
               <Icon name="mdi:forum-outline" size="24px" />
               <span>結果を確認</span>
-            </a>
+            </NuxtLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -148,13 +148,13 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <a
+            <NuxtLink
               v-if="!checkIsDueOver(questionnaire)"
               class="questionnaire-card-action-link"
             >
               <Icon name="mdi:text-box-edit-outline" size="24px" />
               <span>回答を編集(?)</span>
-            </a>
+            </NuxtLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -173,14 +173,14 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <a
+            <NuxtLink
               v-if="!checkIsDueOver(questionnaire)"
               class="questionnaire-card-action-link"
-              :href="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
+              :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
             >
               <Icon name="mdi:form-select" size="24px" />
               <span>アンケートに回答</span>
-            </a>
+            </NuxtLink>
           </template>
         </QuestionnaireList>
       </div>

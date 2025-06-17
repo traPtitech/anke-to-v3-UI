@@ -14,12 +14,12 @@ defineProps<{
       class="questionnaire-card"
     >
       <div class="questionnaire-card-title-container">
-        <a
+        <NuxtLink
           class="questionnaire-card-title"
-          :href="`/questionnaires/${questionnaire.questionnaire_id}`"
+          :to="`/questionnaires/${questionnaire.questionnaire_id}`"
         >
           {{ questionnaire.title }}
-        </a>
+        </NuxtLink>
         <div class="questionnaire-card-tip-section">
           <slot name="tip" v-bind="{ questionnaire }" />
         </div>
