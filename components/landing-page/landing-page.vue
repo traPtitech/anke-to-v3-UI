@@ -1,28 +1,18 @@
 <script lang="ts" setup>
-import type { QuestionnaireSummary } from './type';
+import {
+  checkIsDueOver,
+  formatResponseDueDateTime,
+  type GatewayQuestionnaireSummary,
+} from '~/models/questionnaire';
 
 defineProps<{
-  questionnaires: QuestionnaireSummary[];
-  questionnairesDraft: QuestionnaireSummary[];
-  questionnairesHasDraft: QuestionnaireSummary[];
-  questionnairesTargetingMe: QuestionnaireSummary[];
-  questionnairesAdministeredByMe: QuestionnaireSummary[];
-  questionnairesRespondedByMe: QuestionnaireSummary[];
+  questionnaires: GatewayQuestionnaireSummary[];
+  questionnairesDraft: GatewayQuestionnaireSummary[];
+  questionnairesHasDraft: GatewayQuestionnaireSummary[];
+  questionnairesTargetingMe: GatewayQuestionnaireSummary[];
+  questionnairesAdministeredByMe: GatewayQuestionnaireSummary[];
+  questionnairesRespondedByMe: GatewayQuestionnaireSummary[];
 }>();
-
-const formatResponseDueDateTime = (questionnaire: QuestionnaireSummary) => {
-  const due = questionnaire.response_due_date_time;
-  if (due === undefined) return '期限なし';
-  const date = new Date(due);
-  return formatRelativeDate(date);
-};
-
-const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
-  const due = questionnaire.response_due_date_time;
-  if (due === undefined) return false;
-  const date = new Date(due);
-  return date.getTime() < Date.now();
-};
 </script>
 
 <template>
@@ -38,13 +28,12 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
         </div>
         <QuestionnaireList :questionnaires="questionnairesDraft">
           <template #action="{ questionnaire }">
-            <NuxtLink
-              class="questionnaire-card-action-link"
+            <ButtonLink
               :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
             >
               <Icon name="mdi:square-edit-outline" size="24px" />
               <span>アンケートを編集</span>
-            </NuxtLink>
+            </ButtonLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -63,13 +52,10 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <NuxtLink
-              v-if="!checkIsDueOver(questionnaire)"
-              class="questionnaire-card-action-link"
-            >
+            <ButtonLink v-if="!checkIsDueOver(questionnaire)">
               <Icon name="mdi:text-box-edit-outline" size="24px" />
               <span>回答を編集 (?)</span>
-            </NuxtLink>
+            </ButtonLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -88,14 +74,13 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <NuxtLink
+            <ButtonLink
               v-if="!checkIsDueOver(questionnaire)"
-              class="questionnaire-card-action-link"
               :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
             >
               <Icon name="mdi:form-select" size="24px" />
               <span>アンケートに回答</span>
-            </NuxtLink>
+            </ButtonLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -116,20 +101,18 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <NuxtLink
-              class="questionnaire-card-action-link"
+            <ButtonLink
               :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
             >
               <Icon name="mdi:square-edit-outline" size="24px" />
               <span>アンケートを編集</span>
-            </NuxtLink>
-            <NuxtLink
-              class="questionnaire-card-action-link"
+            </ButtonLink>
+            <ButtonLink
               :to="`/questionnaires/${questionnaire.questionnaire_id}/result`"
             >
               <Icon name="mdi:forum-outline" size="24px" />
               <span>結果を確認</span>
-            </NuxtLink>
+            </ButtonLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -148,13 +131,10 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <NuxtLink
-              v-if="!checkIsDueOver(questionnaire)"
-              class="questionnaire-card-action-link"
-            >
+            <ButtonLink v-if="!checkIsDueOver(questionnaire)">
               <Icon name="mdi:text-box-edit-outline" size="24px" />
               <span>回答を編集(?)</span>
-            </NuxtLink>
+            </ButtonLink>
           </template>
         </QuestionnaireList>
       </div>
@@ -173,14 +153,13 @@ const checkIsDueOver = (questionnaire: QuestionnaireSummary) => {
             </div>
           </template>
           <template #action="{ questionnaire }">
-            <NuxtLink
+            <ButtonLink
               v-if="!checkIsDueOver(questionnaire)"
-              class="questionnaire-card-action-link"
               :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
             >
               <Icon name="mdi:form-select" size="24px" />
               <span>アンケートに回答</span>
-            </NuxtLink>
+            </ButtonLink>
           </template>
         </QuestionnaireList>
       </div>

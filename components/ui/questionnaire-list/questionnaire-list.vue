@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-import type { QuestionnaireSummary } from './type';
+import type { GatewayQuestionnaireSummary } from '~/models/questionnaire';
+import {
+  checkIsDueOver,
+  formatResponseDueDateTime,
+} from '~/models/questionnaire';
 
-defineProps<{
-  questionnaires: QuestionnaireSummary[];
+const props = defineProps<{
+  questionnaires: GatewayQuestionnaireSummary[];
 }>();
 </script>
 
 <template>
   <div>
     <div
-      v-for="questionnaire in questionnaires"
+      v-for="questionnaire in props.questionnaires"
       :key="questionnaire.questionnaire_id"
       class="questionnaire-card"
     >
@@ -21,7 +25,12 @@ defineProps<{
           {{ questionnaire.title }}
         </NuxtLink>
         <div class="questionnaire-card-tip-section">
-          <slot name="tip" v-bind="{ questionnaire }" />
+          <div v-if="questionnaire.is_published" class="questionnaire-card-tip">
+            <Icon name="mdi:alarm" size="20px" />
+            <span>
+              {{ formatResponseDueDateTime(questionnaire) }}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -30,7 +39,36 @@ defineProps<{
       </div>
 
       <div class="questionnaire-card-action-section">
-        <slot name="action" v-bind="{ questionnaire }" />
+        <ButtonLink
+          :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
+        >
+          <Icon name="mdi:square-edit-outline" size="24px" />
+          <span>アンケートを編集</span>
+        </ButtonLink>
+        <ButtonLink
+          v-if="questionnaire.is_published && questionnaire"
+          :to="`/questionnaires/${questionnaire.questionnaire_id}/result`"
+        >
+          <Icon name="mdi:forum-outline" size="24px" />
+          <span>結果を確認</span>
+        </ButtonLink>
+        <ButtonLink
+          v-if="questionnaire.has_my_response && !checkIsDueOver(questionnaire)"
+        >
+          <Icon name="mdi:text-box-edit-outline" size="24px" />
+          <span>回答を編集 (?)</span>
+        </ButtonLink>
+        <ButtonLink
+          v-if="
+            questionnaire.is_published &&
+            !questionnaire.has_my_response &&
+            !checkIsDueOver(questionnaire)
+          "
+          :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
+        >
+          <Icon name="mdi:form-select" size="24px" />
+          <span>アンケートに回答</span>
+        </ButtonLink>
       </div>
     </div>
   </div>
