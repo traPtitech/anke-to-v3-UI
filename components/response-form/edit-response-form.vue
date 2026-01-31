@@ -23,13 +23,10 @@ const { state, valid } = useResponseFormStore(initialState);
 
 const handleSave = async () => {
   try {
-    const result = await patchResponse(state.value.response_id, {
+    await patchResponse(state.value.response_id, {
       ...convertToBody(state.value),
       is_draft: true,
     });
-    if (!result) {
-      throw new Error('Failed to save response');
-    }
   } catch (err) {
     // TODO: handle error
     console.error(err);
@@ -43,13 +40,10 @@ const handleSend = async () => {
     return;
   }
   try {
-    const result = await patchResponse(state.value.response_id, {
+    await patchResponse(state.value.response_id, {
       ...convertToBody(state.value),
       is_draft: false,
     });
-    if (!result) {
-      throw new Error('Failed to send response');
-    }
     await navigateTo({
       path: `/responses/${state.value.response_id}`,
     });

@@ -173,11 +173,9 @@ export const patchResponse = async (
     body: data,
   });
 
-  if (res.data === undefined) {
-    throw new Error("No data returned from the API");
+  if (!res.response.ok) {
+    throw new Error("Failed to patch response");
   }
 
   await refreshNuxtData(`/responses/${responseID}`);
-
-  return res.data;
 };
