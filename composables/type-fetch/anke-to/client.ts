@@ -63,26 +63,24 @@ export const patchMyRemindStatus = async (
       body,
     },
   );
-  if (res.data === undefined) {
-    throw new Error("No data returned from the API");
+
+  if (!res.response.ok) {
+    throw new Error("Failed to patch remind status");
   }
 
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
-
-  return res.response.ok;
 };
 
 export const deleteQuestionnaireById = async (questionnaireID: number) => {
   const res = await client.DELETE("/questionnaires/{questionnaireID}", {
     params: { path: { questionnaireID } },
   });
-  if (res.data === undefined) {
-    throw new Error("No data returned from the API");
+  if (!res.response.ok) {
+    throw new Error("Failed to delete questionnaire");
   }
 
   await refreshNuxtData("/questionnaires");
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
-  return res.response.ok;
 };
 
 export type PatchQuestionnaireBody =
@@ -104,8 +102,6 @@ export const patchQuestionnaireById = async (
 
   await refreshNuxtData("/questionnaires");
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
-
-  return;
 };
 
 export const useGetResponses = async (questionnaireID: number) =>
