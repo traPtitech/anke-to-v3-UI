@@ -107,10 +107,24 @@ watch(
       v-if="isResponseDueDateTimeInvalidForTargets"
       class="invalid-message"
     >
-      対象者を設定する場合「期限なし」にすることはできません
+      <Icon name="mdi:alert-circle" size="20px" />
+      <span>対象者を設定する場合「期限なし」にすることはできません</span>
     </small>
     <small v-if="isResponseDueDateTimeInvalidForDate" class="invalid-message">
       過去の日時を設定することはできません
     </small>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.form-label {
+  font-weight: bold;
+}
+
+.invalid-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--p-red-600);
+}
+</style>
