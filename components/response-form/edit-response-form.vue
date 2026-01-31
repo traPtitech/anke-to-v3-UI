@@ -45,7 +45,7 @@ const handleSend = async () => {
   try {
     const result = await patchResponse(state.value.response_id, {
       ...convertToBody(state.value),
-      is_draft: true,
+      is_draft: false,
     });
     if (!result) {
       throw new Error('Failed to send response');

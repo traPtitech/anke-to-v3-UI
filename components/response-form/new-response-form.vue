@@ -43,7 +43,7 @@ const handleSend = async () => {
   try {
     const result = await postNewResponse(props.questionnaire.questionnaire_id, {
       ...convertToBody(state.value),
-      is_draft: true,
+      is_draft: false,
     });
     if (!result) {
       throw new Error('Failed to send response');
