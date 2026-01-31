@@ -1,4 +1,10 @@
 <script lang="ts" setup>
+import QuestionnaireBasicInfoContainer from '~/components/ui/questionnaire/basic-info-container.vue';
+import QuestionnaireMiscInfoContainer from '~/components/ui/questionnaire/misc-info-container.vue';
+import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
+import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
+import QuestionnaireActions from './questionnaire-actions.vue';
+import QuestionnaireAdminActions from './questionnaire-admin-actions.vue';
 import type { QuestionnaireDetail } from './type';
 
 defineProps<{ detail: QuestionnaireDetail }>();

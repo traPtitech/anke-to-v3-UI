@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import QuestionElement from '~/components/ui/question-element/question-element.vue';
 import {
   responseViewableByOptionsMap,
   type GatewayQuestionnaire,

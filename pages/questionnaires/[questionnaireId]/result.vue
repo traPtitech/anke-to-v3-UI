@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import QuestionnaireResult from '~/components/questionnaire-result/questionnaire-result.vue';
 import {
   useGetQuestionnaire,
   useGetResponses,

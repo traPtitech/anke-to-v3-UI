@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ResponseDetail from '~/components/response-detail/response-detail.vue';
 import {
   useGetQuestionnaire,
   useGetResponse,

@@ -13,46 +13,7 @@ export default defineNuxtConfig({
     "@primevue/nuxt-module",
   ],
   ssr: false,
-  components: [
-    {
-      path: "~/components/layout-elements",
-      pattern: "**/*.vue",
-    },
-    {
-      path: "~/components/ui",
-      pattern: "**/*.vue",
-    },
-    {
-      path: "~/components/questionnaire-form",
-      pathPrefix: false,
-      pattern: "**/*.vue",
-    },
-    {
-      path: "~/components/response-form",
-      pathPrefix: false,
-      pattern: "**/*.vue",
-    },
-    {
-      path: "~/components/questionnaire-result",
-      pathPrefix: false,
-      pattern: "**/*.vue",
-    },
-    {
-      path: "~/components/response-detail",
-      pathPrefix: false,
-      pattern: "**/*.vue",
-    },
-    {
-      path: "~/components/questionnaire-detail",
-      pathPrefix: false,
-      pattern: "**/*.vue",
-    },
-    {
-      path: "~/components/landing-page",
-      pathPrefix: false,
-      pattern: "**/*.vue",
-    },
-  ],
+  components: false,
   imports: {
     dirs: [
       "./utils",

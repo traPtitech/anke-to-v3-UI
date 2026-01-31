@@ -1,5 +1,12 @@
 <script lang="ts" setup>
 import type { QuestionResult } from '~/components/questionnaire-result/composables/use-questionnaire-result';
+import QuestionnaireContainer from '~/components/ui/questionnaire/container.vue';
+import MultipleChoiceResult from './questionnaire-result-element/multiple-choice-result.vue';
+import NumberResult from './questionnaire-result-element/number-result.vue';
+import ScaleResult from './questionnaire-result-element/scale-result.vue';
+import SingleChoiceResult from './questionnaire-result-element/single-choice-result.vue';
+import TextLongResult from './questionnaire-result-element/text-long-result.vue';
+import TextResult from './questionnaire-result-element/text-result.vue';
 
 const props = defineProps<{
   result: QuestionResult;

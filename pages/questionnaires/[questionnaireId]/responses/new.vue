@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import NewResponseForm from '~/components/response-form/new-response-form.vue';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();

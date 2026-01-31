@@ -4,6 +4,12 @@ import {
   type QuestionElement,
   type QuestionElementMode,
 } from './composables';
+import QuestionElementMultipleChoice from './question-element-multiple-choice.vue';
+import QuestionElementNumber from './question-element-number.vue';
+import QuestionElementScale from './question-element-scale.vue';
+import QuestionElementSingleChoice from './question-element-single-choice.vue';
+import QuestionElementTextLong from './question-element-text-long.vue';
+import QuestionElementText from './question-element-text.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;

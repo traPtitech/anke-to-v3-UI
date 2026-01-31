@@ -1,3 +1,8 @@
+<script lang="ts" setup>
+import LayoutHeader from '~/components/layout-elements/layout-header.vue';
+import SideNavigation from '~/components/layout-elements/side-navigation.vue';
+</script>
+
 <template>
   <div class="container">
     <div class="side-navigation">

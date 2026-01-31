@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import UserAndGroupList from '~/components/questionnaire-detail/user-and-group-list.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
+import QuestionnaireContainer from './container.vue';
+import QuestionnaireLabel from './label.vue';
 
 const props = defineProps<{
   questionnaire: GatewayQuestionnaire;

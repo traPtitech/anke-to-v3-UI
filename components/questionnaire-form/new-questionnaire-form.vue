@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import IconButton from '~/components/ui/icon-button.vue';
 import { postNewQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 import { convertToBody } from './converter';
+import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity, useStoreNewQuestionnaireForm } from './store';
 
 const { state } = useStoreNewQuestionnaireForm();

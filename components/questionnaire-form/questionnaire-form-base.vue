@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { Container, Draggable } from 'vue3-smooth-dnd';
+import AddQuestionButtons from './add-question-buttons.vue';
+import FormControl from './form-control.vue';
+import QuestionnaireMetadataInput from './questionnaire-metadata-input.vue';
 import { addQuestion, copyQuestion, removeQuestion } from './store';
 import type { QuestionnaireFormSettings } from './type';
 

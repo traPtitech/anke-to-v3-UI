@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import GroupList from './group-list.vue';
+import UserList from './user-list.vue';
+
 const props = defineProps<{
   specifier: { users: string[]; groups: string[] };
   actualUsers: string[];

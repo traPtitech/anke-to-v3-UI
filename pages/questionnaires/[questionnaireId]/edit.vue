@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import EditQuestionnaireForm from '~/components/questionnaire-form/edit-questionnaire-form.vue';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();

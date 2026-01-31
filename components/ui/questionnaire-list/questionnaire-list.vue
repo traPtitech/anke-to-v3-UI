@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import type { GatewayQuestionnaireSummary } from '~/models/questionnaire';
 import {
   checkIsDueOver,

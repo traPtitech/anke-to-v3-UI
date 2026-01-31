@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useFetchTraqApi } from '~/composables/type-fetch/traq/use-fetch-traq-api';
+import MultiSelectInput from './multi-select-input.vue';
 import type { UserSpecifier } from './type';
 
 const props = defineProps<{

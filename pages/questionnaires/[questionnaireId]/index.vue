@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import QuestionnaireDetail from '~/components/questionnaire-detail/questionnaire-detail.vue';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();

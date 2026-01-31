@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import QuestionnaireList from '~/components/ui/questionnaire-list/questionnaire-list.vue';
 import { useGetQuestionnaires } from '~/composables/type-fetch/anke-to/client';
 import {
   checkIsDueOver,

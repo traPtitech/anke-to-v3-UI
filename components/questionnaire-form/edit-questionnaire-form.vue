@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { convertToBody } from '~/components/questionnaire-form/converter';
+import IconButton from '~/components/ui/icon-button.vue';
 import { postNewQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
+import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity } from './store';
 
 const props = defineProps<{

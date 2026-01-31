@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import type { GatewayQuestionType } from '~/models/question';
+import FormControlElementMultipleChoiceInput from './form-control-element/multiple-choice-input.vue';
+import FormControlElementNumberInput from './form-control-element/number-input.vue';
+import FormControlElementScaleInput from './form-control-element/scale-input.vue';
+import FormControlElementSingleChoiceInput from './form-control-element/single-choice-input.vue';
+import FormControlElementTextInput from './form-control-element/text-input.vue';
+import FormControlElementTextLongInput from './form-control-element/text-long-input.vue';
 import type { QuestionSettings } from './type';
 
 const question = defineModel<QuestionSettings>({ required: true });

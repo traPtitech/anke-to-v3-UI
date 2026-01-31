@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import LandingPage from '~/components/landing-page/landing-page.vue';
 import { useGetQuestionnaires } from '~/composables/type-fetch/anke-to/client';
 
 const { data: questionnaires } = await useGetQuestionnaires();

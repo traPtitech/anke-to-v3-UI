@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import IconButton from '~/components/ui/icon-button.vue';
 import { postNewResponse } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
+import ResponseFormBase from './response-form-base.vue';
 import {
   convertToBody,
   getInitialResponseFormState,

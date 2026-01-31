@@ -3,6 +3,8 @@ import {
   type GatewayQuestionnaire,
   responseViewableByOptionsMap,
 } from '~/models/questionnaire';
+import QuestionnaireContainer from './container.vue';
+import QuestionnaireLabel from './label.vue';
 
 const props = defineProps<{
   questionnaire: GatewayQuestionnaire;

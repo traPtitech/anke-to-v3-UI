@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
+import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
 import { useQuestionnaireResult } from './composables/use-questionnaire-result';
+import QuestionResult from './question-result.vue';
 
 const props = defineProps<{
   questionnaire: GatewayQuestionnaire;

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import QuestionElement from '~/components/ui/question-element/question-element.vue';
+import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
 import { useResponseBodies } from './composables/use-question-responses';

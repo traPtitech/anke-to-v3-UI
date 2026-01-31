@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import MenuIconButton from '~/components/ui/menu-icon-button.vue';
 import { paths } from './navigation-paths';
 
 const menuOpen = ref(false);

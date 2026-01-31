@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import EditResponseForm from '~/components/response-form/edit-response-form.vue';
 import {
   useGetQuestionnaire,
   useGetResponse,
