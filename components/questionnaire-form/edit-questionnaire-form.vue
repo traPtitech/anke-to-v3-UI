@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { convertToBody } from '~/components/questionnaire-form/converter';
 import IconButton from '~/components/ui/icon-button.vue';
-import { postNewQuestionnaire } from '~/composables/type-fetch/anke-to/client';
+import { patchQuestionnaireById } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity } from './store';
@@ -26,12 +26,10 @@ const handleSave = async () => {
     return;
   }
   try {
-    const result = await postNewQuestionnaire(
-      convertToBody({ ...state, is_published: false }),
-    );
-    if (!result) {
-      throw new Error('Failed to create questionnaire');
-    }
+    await patchQuestionnaireById(props.questionnaire.questionnaire_id, {
+      ...convertToBody({ ...state, is_published: false }),
+      questionnaire_id: props.questionnaire.questionnaire_id,
+    });
   } catch (err) {
     console.error(err);
     alert('アンケートの一時保存に失敗しました。');
@@ -42,14 +40,12 @@ const handleSend = async () => {
   const validity = checkValidity(state);
   if (validity.ok) {
     try {
-      const result = await postNewQuestionnaire(
-        convertToBody({ ...state, is_published: true }),
-      );
-      if (!result) {
-        throw new Error('Failed to create questionnaire');
-      }
+      await patchQuestionnaireById(props.questionnaire.questionnaire_id, {
+        ...convertToBody({ ...state, is_published: true }),
+        questionnaire_id: props.questionnaire.questionnaire_id,
+      });
       await navigateTo({
-        path: `/questionnaires/${result.questionnaire_id}`,
+        path: `/questionnaires/${props.questionnaire.questionnaire_id}`,
       });
     } catch (err) {
       console.error(err);
