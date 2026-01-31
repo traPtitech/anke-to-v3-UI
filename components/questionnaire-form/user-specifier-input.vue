@@ -42,7 +42,7 @@ const groupIds = computed(() =>
       <template #option="{ option }">
         <div class="user-option">
           <img
-            :src="`https://q.trap.jp/api/v3/public/icon/${option.value}`"
+            :src="`https://image-proxy.trap.jp/icon/${option.value}?width=48&height=48&format=webp`"
             alt=""
             width="24"
             height="24"
