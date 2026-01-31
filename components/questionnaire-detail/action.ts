@@ -41,7 +41,7 @@ export const actionDelete = async (detail: QuestionnaireDetail) => {
   ) return;
   try {
     await deleteQuestionnaireById(detail.questionnaire_id);
-    await navigateTo("/questionnaires");
+    await navigateTo("/explorer");
   } catch (err) {
     console.error(err);
     // TODO: handle error
