@@ -27,7 +27,7 @@ const name = `question-element-multiple-choice-${useId()}`;
       class="question-element-multiple-choice-element"
     >
       <Checkbox
-        :value="i"
+        :value="option"
         :input-id="`${optionIds[i]}`"
         :name="name"
         :required="question.is_required"

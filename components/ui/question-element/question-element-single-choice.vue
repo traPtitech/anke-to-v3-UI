@@ -25,7 +25,7 @@ const optionIds = question.value.options.map(() => useId());
     >
       <RadioButton
         v-model="question.answer"
-        :value="i"
+        :value="option"
         :name="name"
         :input-id="optionIds[i]"
         :aria-required="question.is_required"

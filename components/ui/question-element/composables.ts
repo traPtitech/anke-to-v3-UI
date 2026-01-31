@@ -15,11 +15,11 @@ export type QuestionElementNumber = {
 } & QuestionElementBase;
 export type QuestionElementSingleChoice = {
   question_type: "SingleChoice";
-  answer: number | undefined;
+  answer: string | undefined;
 } & QuestionElementBase;
 export type QuestionElementMultipleChoice = {
   question_type: "MultipleChoice";
-  answer: number[];
+  answer: string[];
 } & QuestionElementBase;
 export type QuestionElementScale = {
   question_type: "Scale";
