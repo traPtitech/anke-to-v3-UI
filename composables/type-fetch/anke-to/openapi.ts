@@ -334,7 +334,7 @@ export interface components {
         NewResponse: {
             /** @example true */
             is_draft: boolean;
-            body: components["schemas"]["ResponseBody"][];
+            body: components["schemas"]["NewResponseBody"][];
         };
         Response: components["schemas"]["QuestionnaireID"] & {
             /** @example 1 */
@@ -352,7 +352,10 @@ export interface components {
              * @example 2020-01-01T00:00:00+09:00
              */
             modified_at: string;
-        } & components["schemas"]["NewResponse"];
+            /** @example true */
+            is_draft: boolean;
+            body: components["schemas"]["ResponseBody"][];
+        };
         EditResponse: {
             /** @example 1 */
             response_id?: number;
@@ -366,15 +369,18 @@ export interface components {
             questionnaire_info?: components["schemas"]["QuestionnaireInfo"];
             responses?: components["schemas"]["Response"][];
         };
+        NewResponseBody: {
+            question_id: number;
+        } & (components["schemas"]["ResponseBodyText"] | components["schemas"]["ResponseBodyTextLong"] | components["schemas"]["ResponseBodyNumber"] | components["schemas"]["ResponseBodySingleChoice"] | components["schemas"]["ResponseBodyMultipleChoice"] | components["schemas"]["ResponseBodyScale"]);
         ResponseBody: {
             question_id: number;
         } & (components["schemas"]["ResponseBodyText"] | components["schemas"]["ResponseBodyTextLong"] | components["schemas"]["ResponseBodyNumber"] | components["schemas"]["ResponseBodySingleChoice"] | components["schemas"]["ResponseBodyMultipleChoice"] | components["schemas"]["ResponseBodyScale"]);
         ResponseBodyText: components["schemas"]["QuestionTypeText"] & components["schemas"]["ResponseBodyBaseString"];
         ResponseBodyTextLong: components["schemas"]["QuestionTypeTextLong"] & components["schemas"]["ResponseBodyBaseString"];
         ResponseBodyNumber: components["schemas"]["QuestionTypeNumber"] & components["schemas"]["ResponseBodyBaseNumber"];
-        ResponseBodySingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & components["schemas"]["ResponseBodyBaseInteger"] & unknown;
+        ResponseBodySingleChoice: components["schemas"]["QuestionTypeSingleChoice"] & components["schemas"]["ResponseBodyBaseString"];
         ResponseBodyMultipleChoice: components["schemas"]["QuestionTypeMultipleChoice"] & {
-            answer: number[];
+            answer: string[];
         };
         ResponseBodyScale: components["schemas"]["QuestionTypeScale"] & components["schemas"]["ResponseBodyBaseInteger"];
         ResponseBodyBaseString: {
