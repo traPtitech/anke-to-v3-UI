@@ -158,6 +158,8 @@ export interface components {
             has_my_draft: boolean;
             /** @description 回答が存在する */
             has_my_response: boolean;
+            /** @description 自分が管理者になっているかどうか */
+            is_administrated_by_me: boolean;
             /** Format: date-time */
             responded_date_time_by_me?: string;
             /**
@@ -358,8 +360,11 @@ export interface components {
         Responses: components["schemas"]["Response"][];
         ResponsesWithQuestionnaireInfo: components["schemas"]["ResponseWithQuestionnaireInfoItem"][];
         QuestionnaireInfo: components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & components["schemas"]["QuestionnaireIsTargetingMe"];
-        ResponseWithQuestionnaireInfoItem: components["schemas"]["Response"] & {
+        /** @description 同じアンケートの回答情報をまとめて返す。
+         *      */
+        ResponseWithQuestionnaireInfoItem: {
             questionnaire_info?: components["schemas"]["QuestionnaireInfo"];
+            responses?: components["schemas"]["Response"][];
         };
         ResponseBody: {
             question_id: number;
@@ -415,15 +420,25 @@ export interface components {
         /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。
          *      */
         onlyMyResponseInQuery: boolean;
+        /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
+         *      */
+        isDraftInQuery: boolean;
         /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。
          *      */
         notOverDueInQuery: boolean;
-        /** @description 自分の回答があるもののみ取得 (true), 自分の回答がないものも含めてすべて取得 (false)。デフォルトはfalse。
+        /** @description trueの場合、自分の回答（下書きを除く）が存在するアンケートのみを取得する。
+         *     falseの場合、自分の回答（下書きを除く）が存在しないアンケートのみを取得する。
+         *     存在しない場合、すべてのアンケートを取得する。
          *      */
         hasMyResponseInQuery: boolean;
-        /** @description 自分の下書きがあるもののみ取得 (true), 自分の下書きがないものも含めてすべて取得 (false)。デフォルトはfalse。
+        /** @description trueの場合、自分の回答の下書きが存在するアンケートのみを取得する。
+         *     falseの場合、自分の回答の下書きが存在しないアンケートのみを取得する。
+         *     存在しない場合、すべてのアンケートを取得する。
          *      */
         hasMyDraftInQuery: boolean;
+        /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。
+         *      */
+        questionnaireIDsInQuery: number[];
         /** @description アンケートID
          *      */
         questionnaireIDInPath: number;
@@ -455,10 +470,17 @@ export interface operations {
                 /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。
                  *      */
                 notOverDue?: components["parameters"]["notOverDueInQuery"];
-                /** @description 自分の回答があるもののみ取得 (true), 自分の回答がないものも含めてすべて取得 (false)。デフォルトはfalse。
+                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
+                 *      */
+                isDraft?: components["parameters"]["isDraftInQuery"];
+                /** @description trueの場合、自分の回答（下書きを除く）が存在するアンケートのみを取得する。
+                 *     falseの場合、自分の回答（下書きを除く）が存在しないアンケートのみを取得する。
+                 *     存在しない場合、すべてのアンケートを取得する。
                  *      */
                 hasMyResponse?: components["parameters"]["hasMyResponseInQuery"];
-                /** @description 自分の下書きがあるもののみ取得 (true), 自分の下書きがないものも含めてすべて取得 (false)。デフォルトはfalse。
+                /** @description trueの場合、自分の回答の下書きが存在するアンケートのみを取得する。
+                 *     falseの場合、自分の回答の下書きが存在しないアンケートのみを取得する。
+                 *     存在しない場合、すべてのアンケートを取得する。
                  *      */
                 hasMyDraft?: components["parameters"]["hasMyDraftInQuery"];
             };
@@ -766,6 +788,9 @@ export interface operations {
                 /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。
                  *      */
                 onlyMyResponse?: components["parameters"]["onlyMyResponseInQuery"];
+                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
+                 *      */
+                isDraft?: components["parameters"]["isDraftInQuery"];
             };
             header?: never;
             path: {
@@ -1040,6 +1065,12 @@ export interface operations {
             query?: {
                 /** @description 並び順 (作成日時が新しい "submitted_at", 作成日時が古い "-submitted_at", TraqIDの昇順 "traqid", TraqIDの降順 "-traqid", 更新日時が新しい "modified_at", 更新日時が古い "-modified_at" ) */
                 sort?: components["parameters"]["responseSortInQuery"];
+                /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。
+                 *      */
+                questionnaireIDs?: components["parameters"]["questionnaireIDsInQuery"];
+                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
+                 *      */
+                isDraft?: components["parameters"]["isDraftInQuery"];
             };
             header?: never;
             path?: never;
