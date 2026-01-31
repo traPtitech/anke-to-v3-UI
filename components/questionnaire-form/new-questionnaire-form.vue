@@ -4,6 +4,12 @@ import { convertToBody } from './converter';
 import { checkValidity, useStoreNewQuestionnaireForm } from './store';
 
 const { state } = useStoreNewQuestionnaireForm();
+const me = await useMe();
+
+onMounted(() => {
+  if (me.value === null) return;
+  state.admin.users = [me.value.name];
+});
 
 const handleSave = async () => {
   if (state.title.trim() === '') {
