@@ -4,4 +4,4 @@ export type GatewayResponse = components["schemas"]["Response"];
 
 export type GatewayNewResponse = components["schemas"]["NewResponse"];
 
-export type GatewayResponseBody = components["schemas"]["ResponseBody"];
+export type GatewayNewResponseBody = components["schemas"]["NewResponseBody"];

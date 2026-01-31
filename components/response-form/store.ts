@@ -6,7 +6,10 @@ import {
 import type { PostNewResponseBody } from "~/composables/type-fetch/anke-to/client";
 import type { GatewayQuestion } from "~/models/question";
 import type { GatewayQuestionnaire } from "~/models/questionnaire";
-import type { GatewayResponse, GatewayResponseBody } from "~/models/response";
+import type {
+  GatewayNewResponseBody,
+  GatewayResponse,
+} from "~/models/response";
 
 export type ResponseFormState =
   & { body: QuestionElement[] }
@@ -82,6 +85,6 @@ export const convertToBody = (
         question_id: q.question_id!,
         answer: q.answer,
         question_type: q.question_type,
-      }) as GatewayResponseBody
+      }) as GatewayNewResponseBody
     ),
 });
