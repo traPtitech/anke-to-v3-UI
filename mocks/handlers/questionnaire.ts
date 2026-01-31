@@ -217,6 +217,7 @@ export const toSummary = (
   ),
   is_targeting_me: q.targets.includes(myUserId),
   has_my_response: q.respondents.includes(myUserId),
+  is_administrated_by_me: q.admins.includes(myUserId),
   responded_date_time_by_me: responsesData.find(
     (r) =>
       r.questionnaire_id === q.questionnaire_id &&
@@ -264,18 +265,28 @@ export const questionnaireHandlers = [
   http.get("/api/questionnaires", (req) => {
     const pageSize = 20;
 
-    const sort = new URL(req.request.url).searchParams.get("sort") ??
+    const searchParams = new URL(req.request.url).searchParams;
+
+    const sort = searchParams.get("sort") ??
       "created_at";
-    const search = new URL(req.request.url).searchParams.get("search") ?? "";
-    const page = parseInt(
-      new URL(req.request.url).searchParams.get("page") ?? "1",
-    );
-    const onlyTargetingMe = new URL(req.request.url).searchParams.get(
-      "onlyTargetingMe",
-    ) === "true";
-    const onlyAdministratedByMe = new URL(
-      req.request.url,
-    ).searchParams.get("onlyAdministratedByMe") === "true";
+    const search = searchParams.get("search") ?? "";
+    const page = parseInt(searchParams.get("page") ?? "1");
+    const onlyTargetingMe = searchParams.get("onlyTargetingMe") === "true";
+    const onlyAdministratedByMe =
+      searchParams.get("onlyAdministratedByMe") === "true";
+    const notOverDue = searchParams.get("notOverDue") === "true";
+    const isDraftRaw = searchParams.get("isDraft");
+    const isDraft = isDraftRaw === "true"
+      ? true
+      : isDraftRaw === "false"
+      ? false
+      : undefined;
+    const hasMyDraftRaw = searchParams.get("hasMyDraft");
+    const hasMyDraft = hasMyDraftRaw === "true"
+      ? true
+      : hasMyDraftRaw === "false"
+      ? false
+      : undefined;
 
     const questionnaires: QuestionnaireSummary[] = questionnairesData.map(
       toSummary,
@@ -292,7 +303,16 @@ export const questionnaireHandlers = [
       const isTargetingMe = !onlyTargetingMe || q.is_targeting_me;
       const isAdministeredByMe = !onlyAdministratedByMe ||
         detail?.admins.includes(myUserId);
-      return matchesSearch && isTargetingMe && isAdministeredByMe;
+      const isNotOverDue = !notOverDue ||
+        !q.response_due_date_time ||
+        new Date(q.response_due_date_time) > new Date();
+      const matchesIsDraft = isDraft === undefined ||
+        (detail?.is_published === !isDraft);
+      const matchesHasMyDraft = hasMyDraft === undefined ||
+        (hasMyDraft === true ? q.has_my_draft : !q.has_my_draft);
+      return matchesSearch && isTargetingMe && isAdministeredByMe &&
+        isNotOverDue &&
+        matchesIsDraft && matchesHasMyDraft;
     }).toSorted(questionnairesSortFunc[sort]);
 
     const pagedQuestionnaires = filteredQuestionnaires.slice(
