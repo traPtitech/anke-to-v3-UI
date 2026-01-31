@@ -15,7 +15,7 @@
     "lint:fix": "eslint --fix .",
     "test": "npx nuxi test",
     "openapi:traq": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/traQ/master/docs/v3-api.yaml --output ./composables/type-fetch/traq/openapi.ts",
-    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
+    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/fix/openapi/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.5.0",
@@ -25,7 +25,6 @@
     "@nuxt/icon": "1.13.0",
     "@nuxt/test-utils": "^3.19.1",
     "@nuxtjs/stylelint-module": "^5.2.1",
-    "pinia-plugin-persistedstate": "^4.3.0",
     "@pinia/nuxt": "^0.11.1",
     "@primevue/nuxt-module": "^4.3.5",
     "@typescript-eslint/eslint-plugin": "^8.34.1",
@@ -40,13 +39,14 @@
     "nuxt": "^3.17.5",
     "openapi-typescript": "^7.8.0",
     "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.3.0",
     "postcss-html": "^1.8.0",
     "prettier": "^3.5.3",
     "ress": "^5.0.2",
     "sass": "^1.89.2",
     "stylelint": "^16.20.0",
-    "stylelint-order": "^7.0.0",
     "stylelint-config-recess-order": "^7.1.0",
+    "stylelint-order": "^7.0.0",
     "type-fest": "^4.41.0",
     "typescript": "^5.8.3",
     "vite-plugin-eslint2": "^5.0.3",
