@@ -18,6 +18,7 @@ const state = reactive({
     question_id: q.question_id!,
   })),
 });
+const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 
 const handleSave = async () => {
   if (state.title.trim() === '') {
@@ -67,7 +68,12 @@ const handleSend = async () => {
       <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
         <span>一時保存</span>
       </IconButton>
-      <IconButton variant="primary" icon="mdi:content-save" @click="handleSend">
+      <IconButton
+        variant="primary"
+        icon="mdi:content-save"
+        :disabled="!isValidQuestionnaire"
+        @click="handleSend"
+      >
         <span>送信</span>
       </IconButton>
     </template>

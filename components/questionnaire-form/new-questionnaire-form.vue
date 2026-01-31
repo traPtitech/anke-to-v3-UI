@@ -6,6 +6,7 @@ import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity, useStoreNewQuestionnaireForm } from './store';
 
 const { state } = useStoreNewQuestionnaireForm();
+const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 const me = await useMe();
 
 onMounted(() => {
@@ -64,7 +65,12 @@ const handleSend = async () => {
       <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
         <span>一時保存</span>
       </IconButton>
-      <IconButton variant="primary" icon="mdi:content-save" @click="handleSend">
+      <IconButton
+        variant="primary"
+        icon="mdi:content-save"
+        :disabled="!isValidQuestionnaire"
+        @click="handleSend"
+      >
         <span>送信</span>
       </IconButton>
     </template>

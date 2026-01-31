@@ -2,11 +2,16 @@
 const props = defineProps<{
   variant: 'primary' | 'secondary';
   icon: string;
+  disabled?: boolean;
 }>();
 </script>
 
 <template>
-  <Button :outlined="props.variant === 'secondary'" class="icon-button">
+  <Button
+    :outlined="props.variant === 'secondary'"
+    :disabled="props.disabled"
+    class="icon-button"
+  >
     <Icon :name="props.icon" size="24px" />
     <slot />
   </Button>

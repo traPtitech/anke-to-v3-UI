@@ -3,14 +3,20 @@ import { Container, Draggable } from 'vue3-smooth-dnd';
 import AddQuestionButtons from './add-question-buttons.vue';
 import FormControl from './form-control.vue';
 import QuestionnaireMetadataInput from './questionnaire-metadata-input.vue';
-import { addQuestion, copyQuestion, removeQuestion } from './store';
+import {
+  addQuestion,
+  checkValidity,
+  copyQuestion,
+  removeQuestion,
+} from './store';
 import type { QuestionnaireFormSettings } from './type';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
+const validationResult = computed(() => checkValidity(state.value));
 </script>
 
 <template>
-  <form class="new-questionnaire-form-container">
+  <form class="questionnaire-form-container">
     <QuestionnaireMetadataInput v-model="state" />
     <Container
       class="questions-container"
@@ -56,14 +62,22 @@ const state = defineModel<QuestionnaireFormSettings>({ required: true });
       </Draggable>
     </Container>
     <AddQuestionButtons @add-question="addQuestion(state, $event)" />
-    <div class="form-action-buttons">
-      <slot name="buttons" />
+    <div class="form-action-buttons-container">
+      <div class="form-action-buttons">
+        <slot name="buttons" />
+      </div>
+      <small v-if="!validationResult.ok" class="form-validation-error-message">
+        <Icon size="20px" name="mdi:alert-circle" />
+        <span>
+          {{ validationResult.message }}
+        </span>
+      </small>
     </div>
   </form>
 </template>
 
 <style lang="scss" scoped>
-.new-questionnaire-form-container {
+.questionnaire-form-container {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -119,25 +133,44 @@ const state = defineModel<QuestionnaireFormSettings>({ required: true });
   flex: 1;
 }
 
-.form-action-buttons {
+.form-action-buttons-container {
   position: fixed;
   top: 32px;
+  transform: translateX(1056px);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transform: translateX(1056px);
+  width: 180px;
+}
+
+.form-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-validation-error-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--p-red-600);
+  justify-content: end;
 }
 
 @media screen and (max-width: 1600px) {
-  .form-action-buttons {
+  .form-action-buttons-container {
     position: static;
     transform: none;
+    width: auto;
+  }
+
+  .form-action-buttons {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
   }
 
-  .new-questionnaire-form-container {
+  .questionnaire-form-container {
     padding-right: 0;
   }
 }
