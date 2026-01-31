@@ -92,7 +92,7 @@ const state = defineModel<ResponseFormState>({ required: true });
     justify-content: flex-end;
   }
 
-  .new-response-form-container {
+  .response-form-container {
     padding-right: 0;
   }
 }
