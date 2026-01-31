@@ -5,9 +5,9 @@
 :80 {
 	encode zstd gzip
 
-	handle_path /api/* {
-		reverse_proxy {$SERVER_ORIGIN}
-	}
+	# handle_path /api/* {
+	# 	reverse_proxy {$SERVER_ORIGIN}
+	# }
 
 	route {
 		root * /usr/share/caddy
