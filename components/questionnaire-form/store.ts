@@ -203,5 +203,15 @@ export const checkValidity = (
     return { ok: false, message: "選択肢に空欄が含まれる質問があります" };
   }
 
+  if (
+    state.questions.some((q) =>
+      (q.question_type === "SingleChoice" ||
+        q.question_type === "MultipleChoice") &&
+      new Set(q.options).size !== q.options.length
+    )
+  ) {
+    return { ok: false, message: "選択肢が重複している質問があります" };
+  }
+
   return { ok: true };
 };
