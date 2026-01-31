@@ -12,12 +12,6 @@ const props = defineProps<{
 const question = defineModel<QuestionElementScale>({ required: true });
 const { valid } = useQuestionValidity(question.value);
 
-const optionLength = computed(
-  () => question.value.max_value - question.value.min_value + 1,
-);
-
-const scaleInputs = new Array(optionLength.value).fill('').map(() => useId());
-
 const name = `scale-input-${useId()}`;
 </script>
 
@@ -26,22 +20,24 @@ const name = `scale-input-${useId()}`;
     <div>
       {{ question.min_label }}
     </div>
-    <div
-      v-for="(id, i) in scaleInputs"
-      :key="id"
-      class="question-element-scale-options"
-    >
-      <RadioButton
+    <div class="rating-wrapper">
+      <Rating
         v-model="question.answer"
-        :input-id="id"
-        :value="i + question.min_value"
         :name="name"
         :aria-required="question.is_required"
-        :pt="{ hiddenInput: { required: question.is_required } }"
-        :class="{ 'p-invalid': props.mode === 'edit' && !valid }"
+        :pt="{ hiddenOptionInput: { required: question.is_required } }"
         :readonly="props.mode === 'view'"
+        :stars="question.max_value - question.min_value + 1"
+        :invalid="!valid"
       />
-      <label :for="id">{{ i + question.min_value }}</label>
+      <div class="rating-labels">
+        <span class="rating-label">
+          {{ question.min_value }}
+        </span>
+        <span class="rating-label">
+          {{ question.max_value }}
+        </span>
+      </div>
     </div>
     <div>
       {{ question.max_label }}
@@ -55,14 +51,20 @@ const name = `scale-input-${useId()}`;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  max-width: calc(128px * v-bind(optionLength));
   margin: 0 auto;
 }
 
-.question-element-scale-options {
+.rating-labels {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.rating-label {
+  display: inline-block;
+  text-align: center;
+  width: 20px;
 }
 
 @media screen and (max-width: variables.$breakpoint-sm) {
