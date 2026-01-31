@@ -21,7 +21,7 @@ const responseViewableByOptions = Object.entries(
       v-model="state.title"
       size="large"
       required
-      placeholder="アンケートのタイトル"
+      placeholder="アンケートのタイトル (必須)"
     />
     <Textarea
       v-model="state.description"
