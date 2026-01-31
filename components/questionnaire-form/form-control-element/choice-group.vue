@@ -1,99 +1,49 @@
 <script lang="ts" setup>
 import { Container, Draggable } from 'vue3-smooth-dnd';
-import type { QuestionSettingsMultipleChoice } from '../type';
+import { useChoiceGroupFromControl } from './choice-group';
 
-const props = defineProps<{
-  modelValue: QuestionSettingsMultipleChoice['options'];
-}>();
+const options = defineModel<string[]>({ required: true });
 
-const emit = defineEmits<{
-  (
-    e: 'update:modelValue',
-    value: QuestionSettingsMultipleChoice['options'],
-  ): void;
-}>();
+const { internalOptions, addOption, updateOption, moveOption, removeOption } =
+  useChoiceGroupFromControl(options);
 
-type InternalOption = {
-  id: number;
-  label: string;
+const handleAddOption = async (index?: number) => {
+  const id = addOption(index);
+  const elementId = `choice-group-option-${id}`;
+  await nextTick();
+  const input = document.getElementById(elementId);
+  input?.focus();
 };
 
-const toInternal = (
-  value: QuestionSettingsMultipleChoice['options'],
-): InternalOption[] =>
-  value.map((option) => ({
-    id: createId(),
-    label: option,
-  }));
+const focusByIndex = async (index: number) => {
+  const option = internalOptions.value[index];
+  if (!option) return;
+  const elementId = `choice-group-option-${option.id}`;
+  const input = document.getElementById(elementId);
+  input?.focus();
+};
 
-const fromInternal = (
-  value: InternalOption[],
-): QuestionSettingsMultipleChoice['options'] =>
-  value.map((option) => option.label);
-
-const internalOptions = ref<InternalOption[]>(toInternal(props.modelValue));
-
-watch(
-  () => props.modelValue,
-  (newValue) => {
-    internalOptions.value = toInternal(newValue);
-  },
-);
-
-watch(internalOptions, (newValue) => {
-  const externalValue = fromInternal(newValue);
-  if (
-    externalValue.length === props.modelValue.length &&
-    externalValue.every((v, i) => v === props.modelValue[i])
-  )
-    return;
-
-  emit('update:modelValue', externalValue);
-});
-
-const containerRef = useTemplateRef('containerRef');
-
-// 更新時のフォーカス移動
-watch(
-  () => internalOptions.value,
-  (currentValue, prevValue) => {
-    if (prevValue === undefined) {
-      containerRef.value
-        ?.querySelectorAll<HTMLInputElement>('.choice-group-label-input')[0]
-        ?.focus();
-      return;
-    }
-
-    if (currentValue.length === prevValue.length) return;
-
-    const newValueIndex = currentValue.findIndex(
-      (c) => !prevValue.some((p) => p.id === c.id),
-    );
-    if (newValueIndex === -1) return;
-
-    // すぐフォーカスを当てるとレンダリング前(?)にフォーカスが当たって思った要素にフォーカスが当たらない
-    setTimeout(() => {
-      containerRef.value
-        ?.querySelectorAll<HTMLInputElement>('.choice-group-label-input')
-        [newValueIndex]?.focus();
-    }, 10);
-  },
-  { immediate: true },
-);
+const handleKeyPress = async (e: KeyboardEvent, index: number) => {
+  if (e.key === 'Enter') {
+    handleAddOption(index + 1);
+  }
+};
+const handleKeyDown = (e: KeyboardEvent, index: number) => {
+  if (e.key === 'ArrowUp' && index > 0) {
+    focusByIndex(index - 1);
+  }
+  if (e.key === 'ArrowDown' && index < internalOptions.value.length - 1) {
+    focusByIndex(index + 1);
+  }
+};
 </script>
 
 <template>
-  <div ref="containerRef">
+  <div>
     <Container
       drag-handle-selector=".drag-handle"
       lock-axis="y"
-      @drop="
-        internalOptions = moveInArray(
-          internalOptions,
-          $event.removedIndex,
-          $event.addedIndex,
-        )
-      "
+      @drop="moveOption($event.removedIndex, $event.addedIndex)"
     >
       <Draggable
         v-for="(option, index) in internalOptions"
@@ -109,43 +59,25 @@ watch(
         </div>
         <slot />
         <InputText
+          :id="`choice-group-option-${option.id}`"
           :model-value="option.label"
           class="choice-group-label-input"
           required
           placeholder="選択肢"
-          @update:model-value="
-            internalOptions = replaceInArray(internalOptions, index, {
-              ...option,
-              label: $event ?? '',
-            })
-          "
-          @keypress="
-            if ($event.key === 'Enter') {
-              internalOptions = insertToArray(internalOptions, index + 1, {
-                id: createId(),
-                label: '',
-              });
-            }
-          "
+          @update:model-value="updateOption(index, $event ?? '')"
+          @keypress="handleKeyPress($event, index)"
+          @keydown="handleKeyDown($event, index)"
         />
         <Button
           outlined
           class="delete-choice-button p-button-icon-only"
-          @click="
-            internalOptions = internalOptions.filter((o) => o.id !== option.id)
-          "
+          @click="removeOption(index)"
         >
           <Icon size="24px" name="mdi:trash-can-outline" />
         </Button>
       </Draggable>
     </Container>
-    <Button
-      class="add-choice-button"
-      outlined
-      @click="
-        internalOptions = internalOptions.concat({ id: createId(), label: '' })
-      "
-    >
+    <Button class="add-choice-button" outlined @click="handleAddOption()">
       <Icon size="24px" name="mdi:plus" />
       <span>新しい選択肢を追加</span>
     </Button>
