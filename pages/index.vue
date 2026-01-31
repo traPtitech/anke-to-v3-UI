@@ -1,19 +1,52 @@
 <script lang="ts" setup>
-import { useFetchAnkeToApi } from '~/composables/type-fetch/anke-to/use-fetch-anke-to-api';
+import { useGetQuestionnaires } from '~/composables/type-fetch/anke-to/client';
 
-const { data: baseData } = useFetchAnkeToApi('/questionnaires');
+const { data: questionnaires } = await useGetQuestionnaires();
+const { data: questionnairesDraft } = await useGetQuestionnaires({
+  isDraft: true,
+});
+const { data: questionnairesHasDraft } = await useGetQuestionnaires({
+  hasMyDraft: true,
+});
+const { data: questionnairesTargetingMe } = await useGetQuestionnaires({
+  onlyTargetingMe: true,
+});
+const { data: questionnairesAdministeredByMe } = await useGetQuestionnaires({
+  onlyAdministratedByMe: true,
+});
+const { data: questionnairesRespondedByMe } = await useGetQuestionnaires({
+  hasMyResponse: true,
+});
 </script>
 
 <template>
-  <LandingPage
-    v-if="baseData"
-    :questionnaires="baseData.questionnaires"
-    :questionnaires-draft="baseData.questionnaires"
-    :questionnaires-has-draft="baseData.questionnaires"
-    :questionnaires-targeting-me="baseData.questionnaires"
-    :questionnaires-administered-by-me="baseData.questionnaires"
-    :questionnaires-responded-by-me="baseData.questionnaires"
-  />
+  <div>
+    <div
+      v-if="
+        !questionnaires ||
+        !questionnairesDraft ||
+        !questionnairesHasDraft ||
+        !questionnairesTargetingMe ||
+        !questionnairesAdministeredByMe ||
+        !questionnairesRespondedByMe
+      "
+    >
+      <p>Loading...</p>
+    </div>
+    <LandingPage
+      v-else
+      :questionnaires="questionnaires?.questionnaires"
+      :questionnaires-draft="questionnairesDraft?.questionnaires"
+      :questionnaires-has-draft="questionnairesHasDraft?.questionnaires"
+      :questionnaires-targeting-me="questionnairesTargetingMe?.questionnaires"
+      :questionnaires-administered-by-me="
+        questionnairesAdministeredByMe?.questionnaires
+      "
+      :questionnaires-responded-by-me="
+        questionnairesRespondedByMe?.questionnaires
+      "
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped></style>
