@@ -24,7 +24,11 @@ const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 
 const handleSave = async () => {
   if (state.title.trim() === '') {
-    alert('アンケートのタイトルを入力してください。');
+    toast.add({
+      summary: 'アンケートのタイトルを入力してください。',
+      severity: 'error',
+      life: 3000,
+    });
     return;
   }
 
