@@ -6,7 +6,8 @@
   font-weight: 500;
 }
 
-.p-toggleswitch-handle {
+/* PrimeVue のスタイルを上書きできるように詳細度を上げる */
+.p-toggleswitch-handle.p-toggleswitch-handle {
   margin-block-start: initial;
   transform: translateY(-50%);
 }
