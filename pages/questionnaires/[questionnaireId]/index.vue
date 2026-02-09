@@ -10,6 +10,6 @@ const { data, error } = await useGetQuestionnaire(questionnaireId);
   <div v-if="error" class="error">
     {{ error.message }}
   </div>
-  <div v-else-if="data === null">Loading...</div>
+  <div v-else-if="data === undefined">Loading...</div>
   <QuestionnaireDetail v-else :detail="data" />
 </template>
