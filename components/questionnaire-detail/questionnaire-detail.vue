@@ -11,6 +11,8 @@ defineProps<{ detail: QuestionnaireDetail }>();
 </script>
 
 <template>
+  <!-- あとでけす -->
+  <Toast />
   <div class="questionnaire-detail-container">
     <QuestionnaireTitleContainer :questionnaire="detail" />
     <QuestionnaireBasicInfoContainer :questionnaire="detail" />

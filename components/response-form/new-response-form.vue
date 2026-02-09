@@ -9,6 +9,8 @@ import {
   useResponseFormStore,
 } from './store';
 
+const toast = useToast();
+
 const props = defineProps<{
   questionnaire: GatewayQuestionnaire;
 }>();
@@ -28,16 +30,28 @@ const handleSave = async () => {
     await navigateTo({
       path: `/responses/${result.response_id}/edit`,
     });
+    toast.add({
+      summary: '回答を一時保存しました',
+      severity: 'success',
+      life: 3000,
+    });
   } catch (err) {
-    // TODO: handle error
     console.error(err);
-    alert('回答の一時保存に失敗しました。');
+    toast.add({
+      summary: '回答の一時保存に失敗しました',
+      severity: 'error',
+      life: 3000,
+    });
   }
 };
 
 const handleSend = async () => {
   if (!valid.value) {
-    alert('必須項目を回答していません');
+    toast.add({
+      summary: '必須項目を回答していません',
+      severity: 'error',
+      life: 3000,
+    });
     return;
   }
   try {
@@ -51,10 +65,18 @@ const handleSend = async () => {
     await navigateTo({
       path: `/responses/${result.response_id}`,
     });
+    toast.add({
+      summary: '回答を送信しました',
+      severity: 'success',
+      life: 3000,
+    });
   } catch (err) {
-    // TODO: handle error
     console.error(err);
-    alert('回答の送信に失敗しました。');
+    toast.add({
+      summary: '回答の送信に失敗しました',
+      severity: 'error',
+      life: 3000,
+    });
   }
 };
 </script>

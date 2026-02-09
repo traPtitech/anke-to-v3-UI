@@ -5,6 +5,8 @@ import { convertToBody } from './converter';
 import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity, useStoreNewQuestionnaireForm } from './store';
 
+const toast = useToast();
+
 const { state } = useStoreNewQuestionnaireForm();
 const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 const me = await useMe();
@@ -29,32 +31,54 @@ const handleSave = async () => {
     await navigateTo({
       path: `/questionnaires/${result.questionnaire_id}/edit`,
     });
+    toast.add({
+      summary: 'アンケートを保存しました',
+      severity: 'success',
+      life: 3000,
+    });
   } catch (err) {
     console.error(err);
-    alert('アンケートの一時保存に失敗しました。');
+    toast.add({
+      summary: 'アンケートの一時保存に失敗しました',
+      severity: 'error',
+      life: 3000,
+    });
   }
 };
 
 const handleSend = async () => {
   const validity = checkValidity(state);
-  if (validity.ok) {
-    try {
-      const result = await postNewQuestionnaire(
-        convertToBody({ ...state, is_published: true }),
-      );
-      if (!result) {
-        throw new Error('Failed to create questionnaire');
-      }
-      await navigateTo({
-        path: `/questionnaires/${result.questionnaire_id}`,
-      });
-    } catch (err) {
-      console.error(err);
-      alert('アンケートの作成に失敗しました。');
+  if (!validity.ok) {
+    toast.add({
+      summary: validity.message,
+      severity: 'error',
+      life: 3000,
+    });
+    return;
+  }
+
+  try {
+    const result = await postNewQuestionnaire(
+      convertToBody({ ...state, is_published: true }),
+    );
+    if (!result) {
+      throw new Error('Failed to create questionnaire');
     }
-  } else {
-    // TODO: handle error
-    alert(validity.message);
+    await navigateTo({
+      path: `/questionnaires/${result.questionnaire_id}`,
+    });
+    toast.add({
+      summary: 'アンケートを送信しました',
+      severity: 'success',
+      life: 3000,
+    });
+  } catch (err) {
+    console.error(err);
+    toast.add({
+      summary: 'アンケートの送信に失敗しました',
+      severity: 'error',
+      life: 3000,
+    });
   }
 };
 </script>

@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { actionNotRespond, actionRespondLater } from './action';
+import { useQuestionnaireActions } from './action';
 import type { QuestionnaireDetail, ResShareType } from './type';
 
 const props = defineProps<{ detail: QuestionnaireDetail }>();
 
 const me = await useMe();
+const { actionRespondLater, actionNotRespond } = useQuestionnaireActions();
 
 const canRespond = computed(() => {
   // 既に回答済み

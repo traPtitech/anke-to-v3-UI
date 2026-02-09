@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { actionClose, actionDelete, actionDuplicate } from './action';
+import { useQuestionnaireActions } from './action';
 import type { QuestionnaireDetail } from './type';
 
 const props = defineProps<{ detail: QuestionnaireDetail }>();
 
 const me = await useMe();
+const { actionDelete, actionClose, actionDuplicate } =
+  useQuestionnaireActions();
 
 const canEdit = computed(() =>
   props.detail.admins.includes(me.value?.name ?? ''),

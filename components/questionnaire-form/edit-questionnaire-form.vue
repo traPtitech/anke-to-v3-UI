@@ -6,6 +6,8 @@ import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity } from './store';
 
+const toast = useToast();
+
 const props = defineProps<{
   questionnaire: GatewayQuestionnaire;
 }>();
@@ -25,35 +27,58 @@ const handleSave = async () => {
     alert('アンケートのタイトルを入力してください。');
     return;
   }
+
   try {
     await patchQuestionnaireById(props.questionnaire.questionnaire_id, {
       ...convertToBody({ ...state, is_published: false }),
       questionnaire_id: props.questionnaire.questionnaire_id,
     });
+    toast.add({
+      summary: 'アンケートを保存しました',
+      severity: 'success',
+      life: 3000,
+    });
   } catch (err) {
     console.error(err);
-    alert('アンケートの一時保存に失敗しました。');
+    toast.add({
+      summary: 'アンケートの一時保存に失敗しました',
+      severity: 'error',
+      life: 3000,
+    });
   }
 };
 
 const handleSend = async () => {
   const validity = checkValidity(state);
-  if (validity.ok) {
-    try {
-      await patchQuestionnaireById(props.questionnaire.questionnaire_id, {
-        ...convertToBody({ ...state, is_published: true }),
-        questionnaire_id: props.questionnaire.questionnaire_id,
-      });
-      await navigateTo({
-        path: `/questionnaires/${props.questionnaire.questionnaire_id}`,
-      });
-    } catch (err) {
-      console.error(err);
-      alert('アンケートの作成に失敗しました。');
-    }
-  } else {
-    // TODO: handle error
-    alert(validity.message);
+  if (!validity.ok) {
+    toast.add({
+      summary: validity.message,
+      severity: 'error',
+      life: 3000,
+    });
+    return;
+  }
+
+  try {
+    await patchQuestionnaireById(props.questionnaire.questionnaire_id, {
+      ...convertToBody({ ...state, is_published: true }),
+      questionnaire_id: props.questionnaire.questionnaire_id,
+    });
+    await navigateTo({
+      path: `/questionnaires/${props.questionnaire.questionnaire_id}`,
+    });
+    toast.add({
+      summary: 'アンケートを送信しました',
+      severity: 'success',
+      life: 3000,
+    });
+  } catch (err) {
+    console.error(err);
+    toast.add({
+      summary: 'アンケートの送信に失敗しました',
+      severity: 'error',
+      life: 3000,
+    });
   }
 };
 </script>
