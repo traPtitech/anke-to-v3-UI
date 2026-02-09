@@ -16,9 +16,18 @@ const props = defineProps<{
 }>();
 
 const initialState = getInitialResponseFormState(props.questionnaire);
-const { state, valid } = useResponseFormStore(initialState);
+const { state, valid, atLeastOneFilled } = useResponseFormStore(initialState);
 
 const handleSave = async () => {
+  if (!atLeastOneFilled.value) {
+    toast.add({
+      summary: '少なくとも1つの質問に回答してください',
+      severity: 'error',
+      life: 3000,
+    });
+    return;
+  }
+
   try {
     const result = await postNewResponse(props.questionnaire.questionnaire_id, {
       ...convertToBody(state.value),
@@ -54,6 +63,16 @@ const handleSend = async () => {
     });
     return;
   }
+
+  if (!atLeastOneFilled.value) {
+    toast.add({
+      summary: '少なくとも1つの質問に回答してください',
+      severity: 'error',
+      life: 3000,
+    });
+    return;
+  }
+
   try {
     const result = await postNewResponse(props.questionnaire.questionnaire_id, {
       ...convertToBody(state.value),

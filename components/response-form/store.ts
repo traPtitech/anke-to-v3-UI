@@ -68,11 +68,15 @@ export const getExistingResponseFormState = (
 export const useResponseFormStore = (initialState: ResponseFormState) => {
   const state = ref<ResponseFormState>(initialState);
 
+  const atLeastOneFilled = computed(() =>
+    state.value.body.some((q) => checkQuestionFilled(q))
+  );
+
   const valid = computed(() =>
     state.value.body.every((q) => checkQuestionValidity(q))
   );
 
-  return { state, valid };
+  return { state, valid, atLeastOneFilled };
 };
 
 export const convertToBody = (
