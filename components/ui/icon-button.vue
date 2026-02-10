@@ -3,6 +3,7 @@ const props = defineProps<{
   variant: 'primary' | 'secondary';
   icon: string;
   disabled?: boolean;
+  title?: string;
 }>();
 </script>
 
@@ -10,6 +11,7 @@ const props = defineProps<{
   <Button
     :outlined="props.variant === 'secondary'"
     :disabled="props.disabled"
+    :pt="{ root: { title: props.title } }"
     class="icon-button"
   >
     <Icon :name="props.icon" size="24px" />

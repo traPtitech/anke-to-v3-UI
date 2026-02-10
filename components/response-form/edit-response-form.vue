@@ -99,10 +99,30 @@ const handleSend = async () => {
 <template>
   <ResponseFormBase v-model="state" :questionnaire="questionnaire">
     <template #buttons>
-      <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
+      <IconButton
+        variant="secondary"
+        icon="mdi:close"
+        @click="handleSave"
+        :disabled="!atLeastOneFilled"
+        :title="
+          !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''
+        "
+      >
         <span>一時保存</span>
       </IconButton>
-      <IconButton variant="primary" icon="mdi:content-save" @click="handleSend">
+      <IconButton
+        variant="primary"
+        icon="mdi:content-save"
+        @click="handleSend"
+        :disabled="!valid || !atLeastOneFilled"
+        :title="
+          !atLeastOneFilled
+            ? '少なくとも1つの質問に回答してください'
+            : !valid
+              ? '必須項目を回答してください'
+              : ''
+        "
+      >
         <span>送信</span>
       </IconButton>
     </template>
