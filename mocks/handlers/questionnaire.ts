@@ -105,7 +105,7 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     questionnaire_id: 2,
     title:
       "結構長いタイトルのアンケートが作られることをちゃんと開発者が考慮するためのアンケート",
-    description: "",
+    description: "短い description",
     response_due_date_time: twoWeeksAfter,
   },
   {

@@ -119,13 +119,24 @@ const props = defineProps<{
 }
 
 .questionnaire-card-description {
+  position: relative;
   overflow: hidden;
-  display: -webkit-box;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  max-height: 72px;
+  max-height: 8rem;
+}
+
+.questionnaire-card-description::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 6.5rem;
+  height: 1.5rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    var(--p-surface-0)
+  );
+  pointer-events: none;
 }
 
 .questionnaire-card-action-section {
