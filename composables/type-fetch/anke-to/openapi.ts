@@ -113,6 +113,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/traq/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description traQのユーザー一覧を取得します。 */
+        get: operations["getTraqUsers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/traq/users/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description リクエストユーザーのtraQ情報を取得します。 */
+        get: operations["getTraqUsersMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/traq/groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description traQのグループ一覧を取得します。 */
+        get: operations["getTraqGroups"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/traq/stamps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description traQのスタンプ一覧を取得します。 */
+        get: operations["getTraqStamps"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/traq/channels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description traQのチャンネル一覧を取得します。 */
+        get: operations["getTraqChannels"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -129,7 +214,6 @@ export interface components {
         ResponseSortType: "submitted_at" | "-submitted_at" | "modified_at" | "-modified_at" | "traqid" | "-traqid";
         /**
          * @description アンケートの結果を, 運営は見られる ("admins"), 回答済みの人は見られる ("respondents") 誰でも見られる ("anyone")
-         *
          * @example anyone
          * @enum {string}
          */
@@ -143,14 +227,11 @@ export interface components {
         };
         QuestionnaireDetail: components["schemas"]["QuestionnaireID"] & components["schemas"]["QuestionnaireBase"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & components["schemas"]["QuestionnaireTargetsAndAdmins"] & {
             questions: components["schemas"]["Question"][];
-            /** @description 回答者の一覧。匿名回答の場合はnull。
-             *      */
+            /** @description 回答者の一覧。匿名回答の場合はnull。 */
             respondents: components["schemas"]["TraqId"][];
-            /** @description 対象者の一覧。（前回対象者を編集した時点で解析したグループ情報に基づいて作成されたもの）
-             *      */
+            /** @description 対象者の一覧。（前回対象者を編集した時点で解析したグループ情報に基づいて作成されたもの） */
             targets: components["schemas"]["TraqId"][];
-            /** @description 管理者の一覧。（前回対象者を編集した時点で解析したグループ情報に基づいて作成されたもの）
-             *      */
+            /** @description 管理者の一覧。（前回対象者を編集した時点で解析したグループ情報に基づいて作成されたもの） */
             admins: components["schemas"]["TraqId"][];
         };
         QuestionnaireSummary: components["schemas"]["QuestionnaireID"] & components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireDescription"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireResponseViewableBy"] & components["schemas"]["QuestionnaireIsAnonymous"] & components["schemas"]["QuestionnaireIsDuplicateAnswerAllowed"] & components["schemas"]["QuestionnaireIsPublished"] & components["schemas"]["QuestionnaireIsTargetingMe"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & {
@@ -164,7 +245,6 @@ export interface components {
             responded_date_time_by_me?: string;
             /**
              * @description すべての対象者が回答済みの場合 true を返す。それ以外は false を返す。 (対象者が存在しない場合は true を返す)
-             *
              * @example true
              */
             all_responded: boolean;
@@ -172,7 +252,6 @@ export interface components {
         QuestionnaireList: {
             /**
              * @description 合計のページ数
-             *
              * @example 1
              */
             page_max: number;
@@ -194,7 +273,6 @@ export interface components {
             /**
              * Format: date-time
              * @description 回答期限。この日時を過ぎたら回答できなくなる。nullの場合は回答期限なし。
-             *
              * @example 2020-01-01T00:00:00+09:00
              */
             response_due_date_time?: string;
@@ -205,7 +283,6 @@ export interface components {
         QuestionnaireIsAnonymous: {
             /**
              * @description 匿名回答かどうか
-             *
              * @example true
              */
             is_anonymous: boolean;
@@ -213,7 +290,6 @@ export interface components {
         QuestionnaireIsDuplicateAnswerAllowed: {
             /**
              * @description 一人が複数回回答できるかどうか
-             *
              * @example true
              */
             is_duplicate_answer_allowed: boolean;
@@ -221,7 +297,6 @@ export interface components {
         QuestionnaireIsPublished: {
             /**
              * @description アンケートが公開されているかどうか
-             *
              * @example true
              */
             is_published: boolean;
@@ -229,7 +304,6 @@ export interface components {
         QuestionnaireIsTargetingMe: {
             /**
              * @description 自分がターゲットになっているかどうか
-             *
              * @example true
              */
             is_targeting_me: boolean;
@@ -257,22 +331,19 @@ export interface components {
             admin?: components["schemas"]["UsersAndGroups"];
         };
         QuestionnaireIsRemindEnabled: {
-            /** @description 自分に対するリマインドが有効かどうか。ユーザーが対象者でありかつ回答していない場合、この値がtrueであればリマインドが送信される。
-             *      */
+            /** @description 自分に対するリマインドが有効かどうか。ユーザーが対象者でありかつ回答していない場合、この値がtrueであればリマインドが送信される。 */
             is_remind_enabled: boolean;
         };
         NewQuestion: components["schemas"]["QuestionBase"] & components["schemas"]["QuestionSettingsByType"];
         Question: components["schemas"]["QuestionBase"] & components["schemas"]["QuestionSettingsByType"] & {
             /**
              * @description 質問を追加する場合はnull。
-             *
              * @example 1
              */
             question_id?: number;
             /**
              * Format: date-time
              * @description 質問を追加または編集する場合はnull。
-             *
              * @example 2020-01-01T00:00:00+09:00
              */
             created_at?: string;
@@ -280,8 +351,7 @@ export interface components {
         QuestionBase: {
             title: string;
             description: string;
-            /** @description 回答必須かどうか
-             *      */
+            /** @description 回答必須かどうか */
             is_required: boolean;
         };
         QuestionSettingsByType: components["schemas"]["QuestionSettingsText"] | components["schemas"]["QuestionSettingsTextLong"] | components["schemas"]["QuestionSettingsNumber"] | components["schemas"]["QuestionSettingsSingleChoice"] | components["schemas"]["QuestionSettingsMultipleChoice"] | components["schemas"]["QuestionSettingsScale"];
@@ -341,7 +411,7 @@ export interface components {
             response_id: number;
             respondent?: components["schemas"]["TraqId"];
             /** @example true */
-            is_anonymous?: boolean;
+            is_anonymous: boolean;
             /**
              * Format: date-time
              * @example 2020-01-01T00:00:00+09:00
@@ -363,11 +433,10 @@ export interface components {
         Responses: components["schemas"]["Response"][];
         ResponsesWithQuestionnaireInfo: components["schemas"]["ResponseWithQuestionnaireInfoItem"][];
         QuestionnaireInfo: components["schemas"]["QuestionnaireTitle"] & components["schemas"]["QuestionnaireResponseDueDateTime"] & components["schemas"]["QuestionnaireCreatedAt"] & components["schemas"]["QuestionnaireModifiedAt"] & components["schemas"]["QuestionnaireIsTargetingMe"];
-        /** @description 同じアンケートの回答情報をまとめて返す。
-         *      */
+        /** @description 同じアンケートの回答情報をまとめて返す。 */
         ResponseWithQuestionnaireInfoItem: {
-            questionnaire_info?: components["schemas"]["QuestionnaireInfo"];
-            responses?: components["schemas"]["Response"][];
+            questionnaire_info: components["schemas"]["QuestionnaireInfo"];
+            responses: components["schemas"]["Response"][];
         };
         NewResponseBody: {
             question_id: number;
@@ -396,16 +465,46 @@ export interface components {
             users: components["schemas"]["Users"];
             groups: components["schemas"]["Groups"];
         };
-        /** @description 回答者の一覧。匿名回答の場合はnull。
-         *      */
+        /** @description 回答者の一覧。匿名回答の場合はnull。 */
         Users: components["schemas"]["TraqId"][];
         /**
          * @description traQ ID
-         *
          * @example cp20
          */
         TraqId: string;
         Groups: string[];
+        TraqUsers: components["schemas"]["TraqUser"][];
+        TraqUser: {
+            /** Format: uuid */
+            id: string;
+            /** @description traQ ID */
+            name: string;
+        };
+        TraqMe: {
+            /** @description traQ ID */
+            id: string;
+            /** Format: uuid */
+            uuid: string;
+        };
+        TraqGroups: components["schemas"]["TraqGroup"][];
+        TraqGroup: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+        };
+        TraqStamps: components["schemas"]["TraqStamp"][];
+        TraqStamp: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+        };
+        TraqChannels: components["schemas"]["TraqChannel"][];
+        TraqChannel: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            path?: string;
+        };
     };
     responses: never;
     parameters: {
@@ -417,39 +516,33 @@ export interface components {
         searchInQuery: string;
         /** @description 何ページ目か (未定義の場合は1ページ目) */
         pageInQuery: number;
-        /** @description 自分がターゲットになっているもののみ取得 (true), ターゲットになっているものも含めてすべて取得 (false)。デフォルトはfalse。
-         *      */
+        /** @description 自分がターゲットになっているもののみ取得 (true), ターゲットになっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
         onlyTargetingMeInQuery: boolean;
-        /** @description 自分が管理者になっていないもののみ取得 (true), 管理者になっているものも含めてすべて取得 (false)。デフォルトはfalse。
-         *      */
+        /** @description 自分が管理者になっていないもののみ取得 (true), 管理者になっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
         onlyAdministratedByMeInQuery: boolean;
-        /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。
-         *      */
+        /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。 */
         onlyMyResponseInQuery: boolean;
-        /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
-         *      */
+        /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
         isDraftInQuery: boolean;
-        /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。
-         *      */
+        /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。 */
         notOverDueInQuery: boolean;
-        /** @description trueの場合、自分の回答（下書きを除く）が存在するアンケートのみを取得する。
+        /**
+         * @description trueの場合、自分の回答（下書きを除く）が存在するアンケートのみを取得する。
          *     falseの場合、自分の回答（下書きを除く）が存在しないアンケートのみを取得する。
          *     存在しない場合、すべてのアンケートを取得する。
-         *      */
+         */
         hasMyResponseInQuery: boolean;
-        /** @description trueの場合、自分の回答の下書きが存在するアンケートのみを取得する。
+        /**
+         * @description trueの場合、自分の回答の下書きが存在するアンケートのみを取得する。
          *     falseの場合、自分の回答の下書きが存在しないアンケートのみを取得する。
          *     存在しない場合、すべてのアンケートを取得する。
-         *      */
+         */
         hasMyDraftInQuery: boolean;
-        /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。
-         *      */
+        /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。 */
         questionnaireIDsInQuery: number[];
-        /** @description アンケートID
-         *      */
+        /** @description アンケートID */
         questionnaireIDInPath: number;
-        /** @description 回答ID
-         *      */
+        /** @description 回答ID */
         responseIDInPath: number;
     };
     requestBodies: never;
@@ -467,27 +560,25 @@ export interface operations {
                 search?: components["parameters"]["searchInQuery"];
                 /** @description 何ページ目か (未定義の場合は1ページ目) */
                 page?: components["parameters"]["pageInQuery"];
-                /** @description 自分がターゲットになっているもののみ取得 (true), ターゲットになっているものも含めてすべて取得 (false)。デフォルトはfalse。
-                 *      */
+                /** @description 自分がターゲットになっているもののみ取得 (true), ターゲットになっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
                 onlyTargetingMe?: components["parameters"]["onlyTargetingMeInQuery"];
-                /** @description 自分が管理者になっていないもののみ取得 (true), 管理者になっているものも含めてすべて取得 (false)。デフォルトはfalse。
-                 *      */
+                /** @description 自分が管理者になっていないもののみ取得 (true), 管理者になっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
                 onlyAdministratedByMe?: components["parameters"]["onlyAdministratedByMeInQuery"];
-                /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。
-                 *      */
+                /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。 */
                 notOverDue?: components["parameters"]["notOverDueInQuery"];
-                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
-                 *      */
+                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
                 isDraft?: components["parameters"]["isDraftInQuery"];
-                /** @description trueの場合、自分の回答（下書きを除く）が存在するアンケートのみを取得する。
+                /**
+                 * @description trueの場合、自分の回答（下書きを除く）が存在するアンケートのみを取得する。
                  *     falseの場合、自分の回答（下書きを除く）が存在しないアンケートのみを取得する。
                  *     存在しない場合、すべてのアンケートを取得する。
-                 *      */
+                 */
                 hasMyResponse?: components["parameters"]["hasMyResponseInQuery"];
-                /** @description trueの場合、自分の回答の下書きが存在するアンケートのみを取得する。
+                /**
+                 * @description trueの場合、自分の回答の下書きが存在するアンケートのみを取得する。
                  *     falseの場合、自分の回答の下書きが存在しないアンケートのみを取得する。
                  *     存在しない場合、すべてのアンケートを取得する。
-                 *      */
+                 */
                 hasMyDraft?: components["parameters"]["hasMyDraftInQuery"];
             };
             header?: never;
@@ -571,8 +662,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description アンケートID
-                 *      */
+                /** @description アンケートID */
                 questionnaireID: components["parameters"]["questionnaireIDInPath"];
             };
             cookie?: never;
@@ -616,8 +706,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description アンケートID
-                 *      */
+                /** @description アンケートID */
                 questionnaireID: components["parameters"]["questionnaireIDInPath"];
             };
             cookie?: never;
@@ -652,8 +741,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description アンケートID
-                 *      */
+                /** @description アンケートID */
                 questionnaireID: components["parameters"]["questionnaireIDInPath"];
             };
             cookie?: never;
@@ -699,8 +787,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description アンケートID
-                 *      */
+                /** @description アンケートID */
                 questionnaireID: components["parameters"]["questionnaireIDInPath"];
             };
             cookie?: never;
@@ -744,8 +831,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description アンケートID
-                 *      */
+                /** @description アンケートID */
                 questionnaireID: components["parameters"]["questionnaireIDInPath"];
             };
             cookie?: never;
@@ -791,17 +877,14 @@ export interface operations {
             query?: {
                 /** @description 並び順 (作成日時が新しい "submitted_at", 作成日時が古い "-submitted_at", TraqIDの昇順 "traqid", TraqIDの降順 "-traqid", 更新日時が新しい "modified_at", 更新日時が古い "-modified_at" ) */
                 sort?: components["parameters"]["responseSortInQuery"];
-                /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。
-                 *      */
+                /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。 */
                 onlyMyResponse?: components["parameters"]["onlyMyResponseInQuery"];
-                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
-                 *      */
+                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
                 isDraft?: components["parameters"]["isDraftInQuery"];
             };
             header?: never;
             path: {
-                /** @description アンケートID
-                 *      */
+                /** @description アンケートID */
                 questionnaireID: components["parameters"]["questionnaireIDInPath"];
             };
             cookie?: never;
@@ -845,8 +928,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description アンケートID
-                 *      */
+                /** @description アンケートID */
                 questionnaireID: components["parameters"]["questionnaireIDInPath"];
             };
             cookie?: never;
@@ -901,8 +983,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description 回答ID
-                 *      */
+                /** @description 回答ID */
                 responseID: components["parameters"]["responseIDInPath"];
             };
             cookie?: never;
@@ -953,8 +1034,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description 回答ID
-                 *      */
+                /** @description 回答ID */
                 responseID: components["parameters"]["responseIDInPath"];
             };
             cookie?: never;
@@ -1010,8 +1090,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description 回答ID
-                 *      */
+                /** @description 回答ID */
                 responseID: components["parameters"]["responseIDInPath"];
             };
             cookie?: never;
@@ -1071,11 +1150,9 @@ export interface operations {
             query?: {
                 /** @description 並び順 (作成日時が新しい "submitted_at", 作成日時が古い "-submitted_at", TraqIDの昇順 "traqid", TraqIDの降順 "-traqid", 更新日時が新しい "modified_at", 更新日時が古い "-modified_at" ) */
                 sort?: components["parameters"]["responseSortInQuery"];
-                /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。
-                 *      */
+                /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。 */
                 questionnaireIDs?: components["parameters"]["questionnaireIDsInQuery"];
-                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する
-                 *      */
+                /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
                 isDraft?: components["parameters"]["isDraftInQuery"];
             };
             header?: never;
@@ -1090,10 +1167,152 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ResponsesWithQuestionnaireInfo"][];
+                    "application/json": components["schemas"]["ResponsesWithQuestionnaireInfo"];
                 };
             };
             /** @description 自分の回答のリストを取得できませんでした */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getTraqUsers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 正常に取得できました。ユーザーの配列を返します。 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TraqUsers"];
+                };
+            };
+            /** @description ユーザー一覧を正常に取得できませんでした */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getTraqUsersMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 正常に取得できました。 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TraqMe"];
+                };
+            };
+            /** @description 対象ユーザーが見つかりませんでした */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description ユーザー情報を正常に取得できませんでした */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getTraqGroups: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 正常に取得できました。グループの配列を返します。 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TraqGroups"];
+                };
+            };
+            /** @description グループ一覧を正常に取得できませんでした */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getTraqStamps: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 正常に取得できました。スタンプの配列を返します。 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TraqStamps"];
+                };
+            };
+            /** @description スタンプ一覧を正常に取得できませんでした */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getTraqChannels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 正常に取得できました。チャンネルの配列を返します。 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TraqChannels"];
+                };
+            };
+            /** @description チャンネル一覧を正常に取得できませんでした */
             500: {
                 headers: {
                     [name: string]: unknown;

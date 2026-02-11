@@ -14,7 +14,7 @@ export const responseViewableByOptionsMap = {
 } satisfies Record<GatewayResponseShareType, string>;
 
 export const formatResponseDueDateTime = (
-  questionnaire: GatewayQuestionnaireSummary,
+  questionnaire: Pick<GatewayQuestionnaireSummary, "response_due_date_time">,
 ) => {
   const due = questionnaire.response_due_date_time;
   if (due === undefined) return "期限なし";
@@ -23,7 +23,7 @@ export const formatResponseDueDateTime = (
 };
 
 export const checkIsDueOver = (
-  questionnaire: GatewayQuestionnaireSummary,
+  questionnaire: Pick<GatewayQuestionnaireSummary, "response_due_date_time">,
 ) => {
   const due = questionnaire.response_due_date_time;
   if (due === undefined) return false;

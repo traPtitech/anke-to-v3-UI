@@ -2,14 +2,14 @@
 import QuestionnaireResult from '~/components/questionnaire-result/questionnaire-result.vue';
 import {
   useGetQuestionnaire,
-  useGetResponses,
+  useGetQuestionnaireResponses,
 } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
 const { data: questionnaire, error: questionnaireError } =
   useGetQuestionnaire(questionnaireId);
 const { data: responses, error: responsesError } =
-  useGetResponses(questionnaireId);
+  useGetQuestionnaireResponses(questionnaireId);
 </script>
 
 <template>

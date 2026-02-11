@@ -9,6 +9,7 @@ const defaultResponse: Omit<
   "response_id" | "questionnaire_id"
 > = {
   is_draft: false,
+  is_anonymous: false,
   modified_at: oneHourBefore,
   submitted_at: oneHourBefore,
   respondent: myUserId,
@@ -88,6 +89,33 @@ type PostQuestionnaireResponseRequest =
   ]["application/json"];
 
 export const responseHandlers = [
+  http.get("/api/responses/myResponses", (req) => {
+    const sort = new URL(req.request.url).searchParams.get("sort") ??
+      "submitted_at";
+
+    console.log("my responses", req);
+
+    const sortedResponses = questionnairesData.map((q) => {
+      const responses = responsesData.filter(
+        (r) => r.questionnaire_id === q.questionnaire_id,
+      );
+
+      const myResponses = responses
+        .filter((r) => r.respondent === myUserId)
+        .toSorted(responsesSortFunc[sort]);
+
+      return {
+        questionnaire_info: toSummary(q),
+        responses: myResponses,
+      };
+    })
+      .filter((qr) => qr.responses.length > 0);
+
+    const response: GetMyResponsesResponse = sortedResponses;
+
+    return HttpResponse.json(response);
+  }),
+
   http.get("/api/responses/:id", (req) => {
     const { id } = req.params;
     const questionnaireResponse = responsesData.find(
@@ -145,29 +173,6 @@ export const responseHandlers = [
     responsesData.splice(responseIndex, 1);
 
     return HttpResponse.json({ message: "Response deleted" });
-  }),
-
-  http.get("/api/responses/myResponses", (req) => {
-    const sort = new URL(req.request.url).searchParams.get("sort") ??
-      "submitted_at";
-
-    const sortedResponses = questionnairesData.map((q) => {
-      const responses = responsesData.filter(
-        (r) => r.questionnaire_id === q.questionnaire_id,
-      );
-
-      return responses
-        .filter((r) => r.respondent === myUserId)
-        .toSorted(responsesSortFunc[sort])
-        .map((r) => ({
-          ...r,
-          questionnaire_info: toSummary(q),
-        }));
-    });
-
-    const response: GetMyResponsesResponse = sortedResponses;
-
-    return HttpResponse.json(response);
   }),
 
   http.get("/api/questionnaires/:id/responses", (req) => {
@@ -229,6 +234,7 @@ export const responseHandlers = [
 
       const newResponse: GatewayResponse = {
         response_id: responsesData.length + 1,
+        is_anonymous: false,
         questionnaire_id: Number(id),
         is_draft: body.is_draft,
         body: body.body,

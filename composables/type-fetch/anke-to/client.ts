@@ -6,32 +6,26 @@ const client = createClient<paths>({ baseUrl: "/api" });
 type GetQuestionnairesOption =
   paths["/questionnaires"]["get"]["parameters"]["query"];
 export const useGetQuestionnaires = (option?: GetQuestionnairesOption) =>
-  useAsyncData(
-    "/questionnaires",
-    async () => {
-      const res = await client.GET("/questionnaires", {
-        params: { query: option },
-      });
-      if (res.data === undefined) {
-        throw new Error("No data returned from the API");
-      }
-      return res.data;
-    },
-  );
+  useAsyncData("/questionnaires", async () => {
+    const res = await client.GET("/questionnaires", {
+      params: { query: option },
+    });
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
 
 export const useGetQuestionnaire = (id: number) =>
-  useAsyncData(
-    `/questionnaires/${id}`,
-    async () => {
-      const res = await client.GET("/questionnaires/{questionnaireID}", {
-        params: { path: { questionnaireID: id } },
-      });
-      if (res.data === undefined) {
-        throw new Error("No data returned from the API");
-      }
-      return res.data;
-    },
-  );
+  useAsyncData(`/questionnaires/${id}`, async () => {
+    const res = await client.GET("/questionnaires/{questionnaireID}", {
+      params: { path: { questionnaireID: id } },
+    });
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
 
 export type PostQuestionnaireBody =
   paths["/questionnaires"]["post"]["requestBody"]["content"][
@@ -104,36 +98,39 @@ export const patchQuestionnaireById = async (
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
-export const useGetResponses = (questionnaireID: number) =>
-  useAsyncData(
-    `/questionnaires/${questionnaireID}/responses`,
-    async () => {
-      const res = await client.GET(
-        "/questionnaires/{questionnaireID}/responses",
-        {
-          params: { path: { questionnaireID } },
-        },
-      );
-      if (res.data === undefined) {
-        throw new Error("No data returned from the API");
-      }
-      return res.data;
-    },
-  );
+export const useGetQuestionnaireResponses = (questionnaireID: number) =>
+  useAsyncData(`/questionnaires/${questionnaireID}/responses`, async () => {
+    const res = await client.GET(
+      "/questionnaires/{questionnaireID}/responses",
+      {
+        params: { path: { questionnaireID } },
+      },
+    );
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
+
+export const useGetMyResponses = () =>
+  useAsyncData(`/responses/myResponses`, async () => {
+    const res = await client.GET("/responses/myResponses");
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
 
 export const useGetResponse = (responseID: number) =>
-  useAsyncData(
-    `/responses/${responseID}`,
-    async () => {
-      const res = await client.GET("/responses/{responseID}", {
-        params: { path: { responseID } },
-      });
-      if (res.data === undefined) {
-        throw new Error("No data returned from the API");
-      }
-      return res.data;
-    },
-  );
+  useAsyncData(`/responses/${responseID}`, async () => {
+    const res = await client.GET("/responses/{responseID}", {
+      params: { path: { responseID } },
+    });
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
 
 export type PostNewResponseBody =
   paths["/questionnaires/{questionnaireID}/responses"]["post"]["requestBody"][
