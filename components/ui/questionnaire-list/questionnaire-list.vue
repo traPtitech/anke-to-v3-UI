@@ -97,7 +97,6 @@ const props = defineProps<{
   font-weight: bold;
   font-size: 18px;
   color: variables.$color-primary;
-  margin-bottom: 8px;
   text-decoration: none;
 
   overflow: hidden;
@@ -116,6 +115,13 @@ const props = defineProps<{
 .questionnaire-card-tip-section {
   display: flex;
   gap: 4px;
+}
+
+.questionnaire-card-tip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--p-text-secondary);
 }
 
 .questionnaire-card-description {
