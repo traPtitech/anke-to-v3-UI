@@ -1,12 +1,20 @@
 <script setup lang="ts">
 const props = defineProps<{
   to?: string;
+  disabled?: boolean;
+  title?: string;
 }>();
 </script>
 
 <template>
-  <Button v-slot="slotProps" as-child variant="link">
-    <NuxtLink v-bind="slotProps" :to="props.to" class="button-link">
+  <Button v-slot="slotProps" as-child variant="link" :disabled="props.disabled">
+    <NuxtLink
+      v-bind="slotProps"
+      :to="props.to"
+      class="button-link"
+      :disabled="props.disabled"
+      :title="props.title"
+    >
       <slot />
     </NuxtLink>
   </Button>
@@ -31,5 +39,12 @@ const props = defineProps<{
   &:active {
     background-color: var(--p-primary-200);
   }
+}
+
+.button-link[disabled='true'] {
+  pointer-events: none;
+  opacity: 0.6;
+  color: var(--p-text-disabled);
+  background-color: var(--p-surface-100);
 }
 </style>

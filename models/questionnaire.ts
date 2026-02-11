@@ -30,3 +30,38 @@ export const checkIsDueOver = (
   const date = new Date(due);
   return date.getTime() < Date.now();
 };
+
+export const canViewResults = (
+  questionnaire: Pick<
+    GatewayQuestionnaireSummary,
+    | "is_published"
+    | "response_viewable_by"
+    | "is_administrated_by_me"
+    | "has_my_response"
+  >,
+) => {
+  if (!questionnaire.is_published) return false;
+  if (questionnaire.response_viewable_by === "anyone") return true;
+  if (questionnaire.is_administrated_by_me) return true;
+  if (
+    questionnaire.response_viewable_by === "respondents" &&
+    questionnaire.has_my_response
+  ) return true;
+  return false;
+};
+
+export const canRespond = (
+  questionnaire: Pick<
+    GatewayQuestionnaireSummary,
+    | "is_published"
+    | "is_duplicate_answer_allowed"
+    | "response_due_date_time"
+    | "has_my_response"
+  >,
+) => {
+  if (!questionnaire.is_published) return false;
+  if (checkIsDueOver(questionnaire)) return false;
+  if (questionnaire.is_duplicate_answer_allowed) return true;
+  if (questionnaire.has_my_response) return false;
+  return true;
+};

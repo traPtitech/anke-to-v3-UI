@@ -1,11 +1,6 @@
 <script lang="ts" setup>
-import ButtonLink from '~/components/ui/button-link.vue';
 import QuestionnaireList from '~/components/ui/questionnaire-list/questionnaire-list.vue';
-import {
-  checkIsDueOver,
-  formatResponseDueDateTime,
-  type GatewayQuestionnaireSummary,
-} from '~/models/questionnaire';
+import { type GatewayQuestionnaireSummary } from '~/models/questionnaire';
 
 defineProps<{
   questionnaires: GatewayQuestionnaireSummary[];
@@ -28,63 +23,21 @@ defineProps<{
         <div class="questionnaire-list-container-title">
           まだ投稿していないアンケート
         </div>
-        <QuestionnaireList :questionnaires="questionnairesDraft">
-          <template #action="{ questionnaire }">
-            <ButtonLink
-              :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
-            >
-              <Icon name="mdi:square-edit-outline" size="24px" />
-              <span>アンケートを編集</span>
-            </ButtonLink>
-          </template>
-        </QuestionnaireList>
+        <QuestionnaireList :questionnaires="questionnairesDraft" />
       </div>
 
       <div class="questionnaire-list-container questionnaires-targeting-me">
         <div class="questionnaire-list-container-title">
           回答の下書きがあるアンケート
         </div>
-        <QuestionnaireList :questionnaires="questionnairesHasDraft">
-          <template #tip="{ questionnaire }">
-            <div class="questionnaire-card-tip">
-              <Icon name="mdi:alarm" size="20px" />
-              <span>
-                {{ formatResponseDueDateTime(questionnaire) }}
-              </span>
-            </div>
-          </template>
-          <template #action="{ questionnaire }">
-            <ButtonLink v-if="!checkIsDueOver(questionnaire)">
-              <Icon name="mdi:text-box-edit-outline" size="24px" />
-              <span>回答を編集 (?)</span>
-            </ButtonLink>
-          </template>
-        </QuestionnaireList>
+        <QuestionnaireList :questionnaires="questionnairesHasDraft" />
       </div>
 
       <div class="questionnaire-list-container questionnaires-targeting-me">
         <div class="questionnaire-list-container-title">
           自分が対象になっているアンケート
         </div>
-        <QuestionnaireList :questionnaires="questionnairesTargetingMe">
-          <template #tip="{ questionnaire }">
-            <div class="questionnaire-card-tip">
-              <Icon name="mdi:alarm" size="20px" />
-              <span>
-                {{ formatResponseDueDateTime(questionnaire) }}
-              </span>
-            </div>
-          </template>
-          <template #action="{ questionnaire }">
-            <ButtonLink
-              v-if="!checkIsDueOver(questionnaire)"
-              :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
-            >
-              <Icon name="mdi:form-select" size="24px" />
-              <span>アンケートに回答</span>
-            </ButtonLink>
-          </template>
-        </QuestionnaireList>
+        <QuestionnaireList :questionnaires="questionnairesTargetingMe" />
       </div>
 
       <div
@@ -93,77 +46,21 @@ defineProps<{
         <div class="questionnaire-list-container-title">
           自分が管理しているアンケート
         </div>
-        <QuestionnaireList :questionnaires="questionnairesAdministeredByMe">
-          <template #tip="{ questionnaire }">
-            <div class="questionnaire-card-tip">
-              <Icon name="mdi:alarm" size="20px" />
-              <span>
-                {{ formatResponseDueDateTime(questionnaire) }}
-              </span>
-            </div>
-          </template>
-          <template #action="{ questionnaire }">
-            <ButtonLink
-              :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
-            >
-              <Icon name="mdi:square-edit-outline" size="24px" />
-              <span>アンケートを編集</span>
-            </ButtonLink>
-            <ButtonLink
-              :to="`/questionnaires/${questionnaire.questionnaire_id}/result`"
-            >
-              <Icon name="mdi:forum-outline" size="24px" />
-              <span>結果を確認</span>
-            </ButtonLink>
-          </template>
-        </QuestionnaireList>
+        <QuestionnaireList :questionnaires="questionnairesAdministeredByMe" />
       </div>
 
       <div class="questionnaire-list-container questionnaires-responded-by-me">
         <div class="questionnaire-list-container-title">
           自分が回答したアンケート
         </div>
-        <QuestionnaireList :questionnaires="questionnairesRespondedByMe">
-          <template #tip="{ questionnaire }">
-            <div class="questionnaire-card-tip">
-              <Icon name="mdi:alarm" size="20px" />
-              <span>
-                {{ formatResponseDueDateTime(questionnaire) }}
-              </span>
-            </div>
-          </template>
-          <template #action="{ questionnaire }">
-            <ButtonLink v-if="!checkIsDueOver(questionnaire)">
-              <Icon name="mdi:text-box-edit-outline" size="24px" />
-              <span>回答を編集(?)</span>
-            </ButtonLink>
-          </template>
-        </QuestionnaireList>
+        <QuestionnaireList :questionnaires="questionnairesRespondedByMe" />
       </div>
 
       <div class="questionnaire-list-container all-questionnaires">
         <div class="questionnaire-list-container-title">
           最近投稿されたアンケート
         </div>
-        <QuestionnaireList :questionnaires="questionnaires">
-          <template #tip="{ questionnaire }">
-            <div class="questionnaire-card-tip">
-              <Icon name="mdi:alarm" size="20px" />
-              <span>
-                {{ formatResponseDueDateTime(questionnaire) }}
-              </span>
-            </div>
-          </template>
-          <template #action="{ questionnaire }">
-            <ButtonLink
-              v-if="!checkIsDueOver(questionnaire)"
-              :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
-            >
-              <Icon name="mdi:form-select" size="24px" />
-              <span>アンケートに回答</span>
-            </ButtonLink>
-          </template>
-        </QuestionnaireList>
+        <QuestionnaireList :questionnaires="questionnaires" />
       </div>
     </div>
   </div>

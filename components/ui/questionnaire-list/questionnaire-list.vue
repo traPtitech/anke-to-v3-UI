@@ -3,6 +3,8 @@ import ButtonLink from '~/components/ui/button-link.vue';
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import type { GatewayQuestionnaireSummary } from '~/models/questionnaire';
 import {
+  canRespond,
+  canViewResults,
   checkIsDueOver,
   formatResponseDueDateTime,
 } from '~/models/questionnaire';
@@ -44,33 +46,31 @@ const props = defineProps<{
       <div class="questionnaire-card-action-section">
         <ButtonLink
           :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
+          title="アンケートを編集"
         >
           <Icon name="mdi:square-edit-outline" size="24px" />
-          <span>アンケートを編集</span>
         </ButtonLink>
         <ButtonLink
-          v-if="questionnaire.is_published && questionnaire"
+          :disabled="!canViewResults(questionnaire)"
           :to="`/questionnaires/${questionnaire.questionnaire_id}/result`"
+          title="結果を確認"
         >
           <Icon name="mdi:forum-outline" size="24px" />
-          <span>結果を確認</span>
         </ButtonLink>
         <ButtonLink
-          v-if="questionnaire.has_my_response && !checkIsDueOver(questionnaire)"
+          :disabled="
+            !questionnaire.has_my_response || checkIsDueOver(questionnaire)
+          "
+          title="回答を編集"
         >
           <Icon name="mdi:text-box-edit-outline" size="24px" />
-          <span>回答を編集 (?)</span>
         </ButtonLink>
         <ButtonLink
-          v-if="
-            questionnaire.is_published &&
-            !questionnaire.has_my_response &&
-            !checkIsDueOver(questionnaire)
-          "
+          :disabled="!canRespond(questionnaire)"
           :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
+          title="回答する"
         >
-          <Icon name="mdi:form-select" size="24px" />
-          <span>アンケートに回答</span>
+          <Icon name="mdi:send" size="24px" />
         </ButtonLink>
       </div>
     </div>
