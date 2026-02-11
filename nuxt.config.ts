@@ -24,11 +24,6 @@ export default defineNuxtConfig({
   appConfig: {
     nuxtIcon: {},
   },
-  runtimeConfig: {
-    public: {
-      traQClientId: process.env.TRAQ_CLIENT_ID ?? "",
-    },
-  },
   compatibilityDate: "2025-05-15",
   vite: {
     css: {
