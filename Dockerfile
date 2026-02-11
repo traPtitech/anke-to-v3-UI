@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+RUN npm run postinstall
 RUN npm run generate
 
 FROM caddy:2.10.2-alpine AS production
