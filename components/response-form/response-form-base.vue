@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import QuestionElement from '~/components/ui/question-element/question-element.vue';
 import {
   responseViewableByOptionsMap,
@@ -17,7 +18,7 @@ const state = defineModel<ResponseFormState>({ required: true });
   <form class="response-form-container">
     <div class="response-form-metadata-container">
       <h1>{{ props.questionnaire.title }}</h1>
-      <p>{{ props.questionnaire.description }}</p>
+      <MarkdownBlock :content="props.questionnaire.description" />
       <div v-if="props.questionnaire.is_anonymous">匿名回答</div>
       <div>
         公開範囲:

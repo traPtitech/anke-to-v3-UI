@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import { provideMarkdownRenderer } from '~/components/ui/markdown/composables';
+
+provideMarkdownRenderer();
+</script>
+
 <template>
   <NuxtLayout>
     <Toast />

@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     ],
   },
   devtools: { enabled: true },
-  css: ["ress", "~/assets/style/global.css"],
+  css: ["ress", "~/assets/style/global.css", "~/assets/style/hljs-github.css"],
   appConfig: {
     nuxtIcon: {},
   },

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { QuestionResult } from '~/components/questionnaire-result/composables/use-questionnaire-result';
+import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import QuestionnaireContainer from '~/components/ui/questionnaire/container.vue';
 import MultipleChoiceResult from './questionnaire-result-element/multiple-choice-result.vue';
 import NumberResult from './questionnaire-result-element/number-result.vue';
@@ -19,9 +20,10 @@ const props = defineProps<{
     <div class="question-result-title">
       {{ result.title }}
     </div>
-    <div class="question-result-description">
-      {{ result.description }}
-    </div>
+    <MarkdownBlock
+      class="question-result-description"
+      :content="result.description"
+    />
     <TextResult
       v-if="result.question_type === 'Text'"
       :result="result"

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import {
   useQuestionValidity,
   type QuestionElement,
@@ -30,7 +31,10 @@ const { valid } = useQuestionValidity(question.value);
       </span>
       <span v-else class="question-element-non-required-chip">任意</span>
     </p>
-    <p class="question-element-description">{{ question.description }}</p>
+    <MarkdownBlock
+      class="question-element-description"
+      :content="question.description"
+    />
 
     <QuestionElementText
       v-if="question.question_type === 'Text'"

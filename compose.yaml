@@ -1,0 +1,16 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+  proxy:
+    image: caddy:2.10.2-alpine
+    command: ["caddy", "run", "--config", "/etc/caddy/dev.Caddyfile"]
+    ports:
+      - "3000:80"
+    volumes:
+      - ./dev.Caddyfile:/etc/caddy/dev.Caddyfile
+    environment:
+      - SERVER_ORIGIN=http://host.docker.internal:1323
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

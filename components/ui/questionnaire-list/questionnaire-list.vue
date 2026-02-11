@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import ButtonLink from '~/components/ui/button-link.vue';
+import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import type { GatewayQuestionnaireSummary } from '~/models/questionnaire';
 import {
   checkIsDueOver,
@@ -35,9 +36,10 @@ const props = defineProps<{
         </div>
       </div>
 
-      <div class="questionnaire-card-description">
-        {{ questionnaire.description }}
-      </div>
+      <MarkdownBlock
+        class="questionnaire-card-description"
+        :content="questionnaire.description"
+      />
 
       <div class="questionnaire-card-action-section">
         <ButtonLink
@@ -103,6 +105,7 @@ const props = defineProps<{
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   max-height: 56px;
 }
 
@@ -121,6 +124,7 @@ const props = defineProps<{
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   max-height: 72px;
 }
 

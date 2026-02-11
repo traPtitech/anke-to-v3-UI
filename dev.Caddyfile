@@ -1,0 +1,19 @@
+{
+	admin off
+}
+
+:9000 {
+	encode zstd gzip
+
+	handle_path /api/* {
+		reverse_proxy http://localhost:1323 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-User cp20
+			header_up X-Showcase-User cp20
+		}
+	}
+
+	route {
+		reverse_proxy http://localhost:3000
+	}
+}

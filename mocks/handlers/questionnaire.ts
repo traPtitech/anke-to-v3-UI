@@ -95,7 +95,7 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     questionnaire_id: 1,
     title: "テスト用のアンケート",
     description:
-      "ここに **Markdown** 形式で *アンケート* の説明を書けます。\n- リスト\n  - も使えるよ！\n```\n使うか分からんけどコードブロックも書けるよ\n```:traq: ← スタンプは使えるのかな？",
+      "ここに **Markdown** 形式で *アンケート* の ~~説明~~ を==書けます==。\n\n# 見出し1\n## 見出し2\n### 見出し3\n\n> 引用も書けるよ\n> \n> - 引用の中のリスト\n\n- リスト\n  - ネストもOK\n  - [リンク](https://example.com) もある\n1. 番号付き\n2. リスト\n\n**太字** と *斜体* と ~~打ち消し~~ と `インラインコード`\n\n---\n\n| 見出し | 値 |\n| --- | --- |\n| サンプル | 123 |\n| ほげ | 456 |\n\n```ts\n// コードブロックも書けるよ\nconst answer = 42;\nconsole.log('Hello World', answer);\n```\n\n:traq: ← スタンプは使えるのかな？",
     response_due_date_time: oneDayAfter,
     admins: [],
     admin: { users: [], groups: [] },
