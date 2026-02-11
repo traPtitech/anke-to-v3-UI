@@ -10,19 +10,11 @@ type Item = {
 };
 
 const props = defineProps<{
-  modelValue: string[];
   options: Item[];
   placeholder?: string;
 }>();
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string[]): void;
-}>();
-
-const items = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-});
+const items = defineModel<string[]>({ required: true });
 
 const isAllSelected = ref(items.value.length === props.options.length);
 

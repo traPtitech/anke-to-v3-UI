@@ -3,18 +3,7 @@ import { useGroups, useUsers } from '~/composables/type-fetch/anke-to/client';
 import MultiSelectInput from './multi-select-input.vue';
 import type { UserSpecifier } from './type';
 
-const props = defineProps<{
-  modelValue: UserSpecifier;
-}>();
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: UserSpecifier): void;
-}>();
-
-const userSpecifier = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-});
+const userSpecifier = defineModel<UserSpecifier>({ required: true });
 
 const { data: users } = useUsers();
 const userIds = computed(() =>
