@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import IconButton from '~/components/ui/icon-button.vue';
-import { postNewQuestionnaire } from '~/composables/type-fetch/anke-to/client';
-import { useMe } from '~/composables/type-fetch/traq/client';
+import {
+  postNewQuestionnaire,
+  useMe,
+} from '~/composables/type-fetch/anke-to/client';
 import { convertToBody } from './converter';
 import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity, useStoreNewQuestionnaireForm } from './store';
@@ -13,7 +15,7 @@ const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 const { data: me } = useMe();
 
 onMounted(() => {
-  if (me.value === null) return;
+  if (me.value === undefined) return;
   state.admin.users = [me.value.name];
 });
 

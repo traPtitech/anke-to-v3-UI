@@ -173,3 +173,48 @@ export const patchResponse = async (
 
   await refreshNuxtData(`/responses/${responseID}`);
 };
+
+export const useMe = () =>
+  useAsyncData("/me", async () => {
+    const res = await client.GET("/traq/users/me");
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
+
+export const useUsers = () =>
+  useAsyncData("/users", async () => {
+    const res = await client.GET("/traq/users");
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
+
+export const useGroups = () =>
+  useAsyncData("/groups", async () => {
+    const res = await client.GET("/traq/groups");
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
+
+export const useStamps = () =>
+  useAsyncData("/stamps", async () => {
+    const res = await client.GET("/traq/stamps");
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });
+
+export const useChannels = () =>
+  useAsyncData("/channels", async () => {
+    const res = await client.GET("/traq/channels");
+    if (res.data === undefined) {
+      throw new Error("No data returned from the API");
+    }
+    return res.data;
+  });

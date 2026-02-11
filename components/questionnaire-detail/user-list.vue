@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useMe } from '~/composables/type-fetch/traq/client';
+import { useMe } from '~/composables/type-fetch/anke-to/client';
 
 defineProps<{
   users: string[];

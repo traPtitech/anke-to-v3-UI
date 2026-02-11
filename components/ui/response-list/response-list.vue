@@ -15,6 +15,7 @@ const props = defineProps<{
     >
       <div
         v-for="response in responseWithQuestionnaire.responses"
+        :key="response.response_id"
         class="response-card"
       >
         <div class="response-card-title-container">

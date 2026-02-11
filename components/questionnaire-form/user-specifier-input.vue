@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useGroups, useUsers } from '~/composables/type-fetch/traq/client';
+import { useGroups, useUsers } from '~/composables/type-fetch/anke-to/client';
 import MultiSelectInput from './multi-select-input.vue';
 import type { UserSpecifier } from './type';
 
@@ -19,7 +19,7 @@ const userSpecifier = computed({
 const { data: users } = useUsers();
 const userIds = computed(() =>
   users.value
-    ?.filter((user) => !user.bot)
+    ?.filter((user) => !user.is_bot)
     .map((user) => ({ label: user.name, value: user.name, id: user.id }))
     .toSorted((a, b) => a.label.localeCompare(b.label)),
 );

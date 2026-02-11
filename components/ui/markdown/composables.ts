@@ -5,11 +5,18 @@ import {
   useMe,
   useStamps,
   useUsers,
-} from "~/composables/type-fetch/traq/client";
-import type { components } from "~/composables/type-fetch/traq/openapi";
+} from "~/composables/type-fetch/anke-to/client";
 
-type User = components["schemas"]["User"];
-type Stamp = components["schemas"]["Stamp"];
+type User = {
+  id: string;
+  name: string;
+  iconFileId: string;
+};
+type Stamp = {
+  id: string;
+  name: string;
+  fileId: string;
+};
 
 const createMarkdownRenderer = () => {
   const { data: me } = useMe();
@@ -27,9 +34,25 @@ const createMarkdownRenderer = () => {
       stamps.value !== undefined,
   );
 
+  const traqUsers = computed<User[]>(() => {
+    return users.value?.map((u) => ({
+      id: u.id,
+      name: u.name,
+      iconFileId: u.icon_file_id,
+    })) ?? [];
+  });
+
+  const traqStamps = computed<Stamp[]>(() => {
+    return stamps.value?.map((s) => ({
+      id: s.id,
+      name: s.name,
+      fileId: s.file_id,
+    })) ?? [];
+  });
+
   const userIconFileIdMap = computed(() => {
     const map = new Map<string, User>();
-    for (const user of users.value ?? []) {
+    for (const user of traqUsers.value ?? []) {
       map.set(user.iconFileId, user);
     }
     return map;
@@ -37,22 +60,23 @@ const createMarkdownRenderer = () => {
 
   const stampFileIdMap = computed(() => {
     const map = new Map<string, Stamp>();
-    for (const stamp of stamps.value ?? []) {
+    for (const stamp of traqStamps.value ?? []) {
       map.set(stamp.fileId, stamp);
     }
     return map;
   });
 
   const store: Store = {
-    getUser: (userId) => users.value?.find((u) => u.id === userId),
+    getUser: (userId) => traqUsers.value?.find((u) => u.id === userId),
     getChannel: (channelId: string) =>
-      channels.value?.public.find((c) => c.id === channelId),
+      channels.value?.find((c) => c.id === channelId),
     getUserGroup: (groupId: string) =>
       groups.value?.find((g) => g.id === groupId),
     getMe: () => me.value ?? undefined,
     getStampByName: (name: string) =>
-      stamps.value?.find((s) => s.name === name),
-    getUserByName: (name: string) => users.value?.find((u) => u.name === name),
+      traqStamps.value?.find((s) => s.name === name),
+    getUserByName: (name: string) =>
+      traqUsers.value?.find((u) => u.name === name),
     generateUserHref: (userId: string) => `https://q.trap.jp/user/${userId}`,
     generateUserGroupHref: (groupId: string) =>
       `https://q.trap.jp/group/${groupId}`,

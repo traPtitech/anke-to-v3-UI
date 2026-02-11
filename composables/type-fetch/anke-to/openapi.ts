@@ -479,24 +479,30 @@ export interface components {
             id: string;
             /** @description traQ ID */
             name: string;
-        };
-        TraqMe: {
-            /** @description traQ ID */
-            id: string;
             /** Format: uuid */
-            uuid: string;
+            icon_file_id: string;
+            is_bot: boolean;
         };
+        TraqUserGroupMember: {
+            /** Format: uuid */
+            id: string;
+            role: string;
+        };
+        TraqUserGroupMembers: components["schemas"]["TraqUserGroupMember"][];
         TraqGroups: components["schemas"]["TraqGroup"][];
         TraqGroup: {
             /** Format: uuid */
             id: string;
             name: string;
+            members: components["schemas"]["TraqUserGroupMembers"];
         };
         TraqStamps: components["schemas"]["TraqStamp"][];
         TraqStamp: {
             /** Format: uuid */
             id: string;
             name: string;
+            /** Format: uuid */
+            file_id: string;
         };
         TraqChannels: components["schemas"]["TraqChannel"][];
         TraqChannel: {
@@ -1221,7 +1227,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["TraqMe"];
+                    "application/json": components["schemas"]["TraqUser"];
                 };
             };
             /** @description 対象ユーザーが見つかりませんでした */
