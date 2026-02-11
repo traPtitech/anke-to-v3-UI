@@ -20,11 +20,11 @@ export type QuestionResultNumber = {
 } & QuestionResultBase;
 export type QuestionResultSingleChoice = {
   question_type: "SingleChoice";
-  responses: QuestionResultResponses<number>;
+  responses: QuestionResultResponses<string>;
 } & QuestionResultBase;
 export type QuestionResultMultipleChoice = {
   question_type: "MultipleChoice";
-  responses: QuestionResultResponses<number[]>;
+  responses: QuestionResultResponses<string[]>;
 } & QuestionResultBase;
 export type QuestionResultScale = {
   question_type: "Scale";

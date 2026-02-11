@@ -8,7 +8,7 @@ const props = defineProps<{
 
 const aggregatedResponses = computed(() => {
   const responses = props.result.responses.map((res) => res.answer);
-  const aggregated: Map<number, number> = new Map();
+  const aggregated: Map<string, number> = new Map();
   responses.forEach((res) => {
     res.forEach((r) => {
       if (!aggregated.has(r)) {
@@ -20,15 +20,15 @@ const aggregatedResponses = computed(() => {
     });
   });
 
-  const aggregatedResponses = [...aggregated.keys()].map((key) => ({
-    answer: props.result.options[key],
-    count: aggregated.get(key)!,
-    rate: `${((aggregated.get(key)! / responses.length) * 100).toFixed(1)}%`,
+  const aggregatedResponses = [...aggregated.keys()].map((res) => ({
+    answer: res,
+    count: aggregated.get(res)!,
+    rate: `${((aggregated.get(res)! / responses.length) * 100).toFixed(1)}%`,
     respondents: props.isAnonymous
       ? undefined
       : props.result.responses
-          .filter((res) => res.answer.includes(key))
-          .map((res) => `@${res.respondent}`)
+          .filter((r) => r.answer.includes(res))
+          .map((r) => `@${r.respondent}`)
           .join(' '),
   }));
 
