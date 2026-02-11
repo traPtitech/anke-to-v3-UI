@@ -3,12 +3,16 @@ import { useGroups, useUsers } from '~/composables/type-fetch/anke-to/client';
 import MultiSelectInput from './multi-select-input.vue';
 import type { UserSpecifier } from './type';
 
+const props = defineProps<{
+  allowAllMentionGroup?: boolean;
+}>();
+
 const userSpecifier = defineModel<UserSpecifier>({ required: true });
 
 const { data: users } = useUsers();
 const userIds = computed(() =>
   users.value
-    ?.filter((user) => !user.is_bot)
+    ?.filter((user) => !user.is_bot && user.name !== ALL_MENTION_USER)
     .map((user) => ({ label: user.name, value: user.name, id: user.id }))
     .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
@@ -17,6 +21,11 @@ const { data: groups } = useGroups();
 const groupIds = computed(() =>
   groups.value
     ?.map((group) => ({ label: group.name, value: group.id }))
+    .concat(
+      props.allowAllMentionGroup
+        ? [{ label: ALL_MENTION_USER, value: ALL_MENTION_USER }]
+        : [],
+    )
     .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
 </script>

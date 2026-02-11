@@ -5,6 +5,14 @@ export const convertToBody = (
   state: QuestionnaireFormSettings,
 ): PostQuestionnaireBody => ({
   ...state,
+  target: {
+    users: state.target.groups.includes(ALL_MENTION_USER)
+      ? state.target.users.concat(ALL_MENTION_USER)
+      : state.target.users,
+    groups: state.target.groups.filter((groupId) =>
+      groupId !== ALL_MENTION_USER
+    ),
+  },
   questions: state.questions.map((q) => ({
     ...q,
     // createId() で生成されたID を undefined に変換

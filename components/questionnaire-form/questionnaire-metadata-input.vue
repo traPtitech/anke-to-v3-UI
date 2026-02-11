@@ -45,7 +45,7 @@ const responseViewableByOptions = Object.entries(
       <div class="form-element">
         <p class="form-label">対象者</p>
         <small>未回答の対象者は自動でリマインドされます</small>
-        <UserSpecifierInput v-model="state.target" />
+        <UserSpecifierInput v-model="state.target" allow-all-mention-group />
       </div>
       <div class="form-element">
         <p class="form-label">管理者</p>

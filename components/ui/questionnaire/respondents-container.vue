@@ -9,9 +9,21 @@ const props = defineProps<{
   questionnaire: GatewayQuestionnaire;
 }>();
 
+const { allUserNames } = useAllUsers();
+
+const targets = computed(() => {
+  if (props.questionnaire.targets.includes(ALL_MENTION_USER)) {
+    return allUserNames.value;
+  } else {
+    return props.questionnaire.targets;
+  }
+});
+
 const nonAnsweredTargets = computed(() =>
-  props.questionnaire.targets.filter(
-    (user) => !props.questionnaire.respondents.includes(user),
+  targets.value.filter(
+    (user) =>
+      !props.questionnaire.respondents.includes(user) &&
+      user !== ALL_MENTION_USER,
   ),
 );
 </script>

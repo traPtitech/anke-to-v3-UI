@@ -8,9 +8,12 @@ export const useResolveUserSpecifier = (
   const { getGroupMembersFromGroupID, getGroupNameFromGroupID } =
     useTraqGroup();
   const { getTraqIDFromUserID } = useTraqId();
+  const { allUserNames } = useAllUsers();
 
   // どのグループにも所属していないユーザー
   const restUsers = computed(() => {
+    if (specifier.users.includes(ALL_MENTION_USER)) return [];
+
     const _groupMemberIds = specifier.groups.flatMap((group) =>
       getGroupMembersFromGroupID(group)
     );
@@ -41,6 +44,14 @@ export const useResolveUserSpecifier = (
         members: membersNames,
       };
     });
+
+    if (specifier.users.includes(ALL_MENTION_USER)) {
+      groups.push({
+        name: ALL_MENTION_USER,
+        members: allUserNames.value,
+      });
+    }
+
     return excludeFalsy(groups);
   });
 
