@@ -6,11 +6,10 @@ import {
 } from '~/composables/type-fetch/anke-to/client';
 
 const responseId = useRouteResponseId();
-const { data: response, error: responseError } =
-  await useGetResponse(responseId);
+const { data: response, error: responseError } = useGetResponse(responseId);
 const { data: questionnaire, error: questionnaireError } = response.value
   ?.questionnaire_id
-  ? await useGetQuestionnaire(response.value?.questionnaire_id)
+  ? useGetQuestionnaire(response.value?.questionnaire_id)
   : { data: null, error: null };
 </script>
 

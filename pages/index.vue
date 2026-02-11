@@ -2,20 +2,20 @@
 import LandingPage from '~/components/landing-page/landing-page.vue';
 import { useGetQuestionnaires } from '~/composables/type-fetch/anke-to/client';
 
-const { data: questionnaires } = await useGetQuestionnaires();
-const { data: questionnairesDraft } = await useGetQuestionnaires({
+const { data: questionnaires } = useGetQuestionnaires();
+const { data: questionnairesDraft } = useGetQuestionnaires({
   isDraft: true,
 });
-const { data: questionnairesHasDraft } = await useGetQuestionnaires({
+const { data: questionnairesHasDraft } = useGetQuestionnaires({
   hasMyDraft: true,
 });
-const { data: questionnairesTargetingMe } = await useGetQuestionnaires({
+const { data: questionnairesTargetingMe } = useGetQuestionnaires({
   onlyTargetingMe: true,
 });
-const { data: questionnairesAdministeredByMe } = await useGetQuestionnaires({
+const { data: questionnairesAdministeredByMe } = useGetQuestionnaires({
   onlyAdministratedByMe: true,
 });
-const { data: questionnairesRespondedByMe } = await useGetQuestionnaires({
+const { data: questionnairesRespondedByMe } = useGetQuestionnaires({
   hasMyResponse: true,
 });
 </script>

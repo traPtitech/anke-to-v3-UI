@@ -3,7 +3,7 @@ import NewResponseForm from '~/components/response-form/new-response-form.vue';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
-const { data, error } = await useGetQuestionnaire(questionnaireId);
+const { data, error } = useGetQuestionnaire(questionnaireId);
 </script>
 
 <template>

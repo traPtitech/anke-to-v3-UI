@@ -1,10 +1,11 @@
 <script lang="ts" setup>
+import { useMe } from '~/composables/type-fetch/traq/client';
 import { useQuestionnaireActions } from './action';
 import type { QuestionnaireDetail } from './type';
 
 const props = defineProps<{ detail: QuestionnaireDetail }>();
 
-const me = await useMe();
+const { data: me } = useMe();
 const { actionDelete, actionClose, actionDuplicate } =
   useQuestionnaireActions();
 

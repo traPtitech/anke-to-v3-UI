@@ -1,7 +1,7 @@
-import { useFetchTraqApi } from "~/composables/type-fetch/traq/use-fetch-traq-api";
+import { useUsers } from "~/composables/type-fetch/traq/client";
 
-export const useTraqId = async () => {
-  const { data: users } = await useFetchTraqApi("/users");
+export const useTraqId = () => {
+  const { data: users } = useUsers();
   const traqIdToUserIdMap = new Map<string, string>();
   const userIdToTraqIdMap = new Map<string, string>();
 

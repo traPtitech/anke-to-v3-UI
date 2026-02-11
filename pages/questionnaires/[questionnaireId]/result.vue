@@ -7,9 +7,9 @@ import {
 
 const questionnaireId = useRouteQuestionnaireId();
 const { data: questionnaire, error: questionnaireError } =
-  await useGetQuestionnaire(questionnaireId);
+  useGetQuestionnaire(questionnaireId);
 const { data: responses, error: responsesError } =
-  await useGetResponses(questionnaireId);
+  useGetResponses(questionnaireId);
 </script>
 
 <template>

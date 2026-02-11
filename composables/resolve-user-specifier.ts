@@ -1,4 +1,4 @@
-export const useResolveUserSpecifier = async (
+export const useResolveUserSpecifier = (
   specifier: {
     users: string[];
     groups: string[];
@@ -6,8 +6,8 @@ export const useResolveUserSpecifier = async (
   actualUsers: string[],
 ) => {
   const { getGroupMembersFromGroupID, getGroupNameFromGroupID } =
-    await useTraqGroup();
-  const { getTraqIDFromUserID } = await useTraqId();
+    useTraqGroup();
+  const { getTraqIDFromUserID } = useTraqId();
 
   // どのグループにも所属していないユーザー
   const restUsers = computed(() => {

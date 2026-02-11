@@ -5,7 +5,7 @@ const client = createClient<paths>({ baseUrl: "/api" });
 
 type GetQuestionnairesOption =
   paths["/questionnaires"]["get"]["parameters"]["query"];
-export const useGetQuestionnaires = async (option?: GetQuestionnairesOption) =>
+export const useGetQuestionnaires = (option?: GetQuestionnairesOption) =>
   useAsyncData(
     "/questionnaires",
     async () => {
@@ -19,7 +19,7 @@ export const useGetQuestionnaires = async (option?: GetQuestionnairesOption) =>
     },
   );
 
-export const useGetQuestionnaire = async (id: number) =>
+export const useGetQuestionnaire = (id: number) =>
   useAsyncData(
     `/questionnaires/${id}`,
     async () => {
@@ -104,7 +104,7 @@ export const patchQuestionnaireById = async (
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
-export const useGetResponses = async (questionnaireID: number) =>
+export const useGetResponses = (questionnaireID: number) =>
   useAsyncData(
     `/questionnaires/${questionnaireID}/responses`,
     async () => {
@@ -121,7 +121,7 @@ export const useGetResponses = async (questionnaireID: number) =>
     },
   );
 
-export const useGetResponse = async (responseID: number) =>
+export const useGetResponse = (responseID: number) =>
   useAsyncData(
     `/responses/${responseID}`,
     async () => {

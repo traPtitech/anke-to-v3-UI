@@ -6,7 +6,7 @@ import {
   formatResponseDueDateTime,
 } from '~/models/questionnaire';
 
-const { data, error } = await useGetQuestionnaires();
+const { data, error } = useGetQuestionnaires();
 </script>
 
 <template>

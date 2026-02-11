@@ -7,7 +7,7 @@ const props = defineProps<{
   actualUsers: string[];
 }>();
 
-const { restUsers, groups } = await useResolveUserSpecifier(
+const { restUsers, groups } = useResolveUserSpecifier(
   props.specifier,
   props.actualUsers,
 );

@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import { useMe } from '~/composables/type-fetch/traq/client';
+
 defineProps<{
   users: string[];
 }>();
 
-const me = await useMe();
+const { data: me } = useMe();
 </script>
 
 <template>

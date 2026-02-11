@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useFetchTraqApi } from '~/composables/type-fetch/traq/use-fetch-traq-api';
+import { useGroups, useUsers } from '~/composables/type-fetch/traq/client';
 import MultiSelectInput from './multi-select-input.vue';
 import type { UserSpecifier } from './type';
 
@@ -16,7 +16,7 @@ const userSpecifier = computed({
   set: (value) => emit('update:modelValue', value),
 });
 
-const { data: users } = useFetchTraqApi('/users');
+const { data: users } = useUsers();
 const userIds = computed(() =>
   users.value
     ?.filter((user) => !user.bot)
@@ -24,7 +24,7 @@ const userIds = computed(() =>
     .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
 
-const { data: groups } = useFetchTraqApi('/groups');
+const { data: groups } = useGroups();
 const groupIds = computed(() =>
   groups.value
     ?.map((group) => ({ label: group.name, value: group.id }))
