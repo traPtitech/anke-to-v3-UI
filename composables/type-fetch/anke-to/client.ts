@@ -98,12 +98,20 @@ export const patchQuestionnaireById = async (
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
-export const useGetQuestionnaireResponses = (questionnaireID: number) =>
+type GetQuestionnaireResponsesParams =
+  paths["/questionnaires/{questionnaireID}/responses"]["get"]["parameters"][
+    "query"
+  ];
+
+export const useGetQuestionnaireResponses = (
+  questionnaireID: number,
+  params?: GetQuestionnaireResponsesParams,
+) =>
   useAsyncData(`/questionnaires/${questionnaireID}/responses`, async () => {
     const res = await client.GET(
       "/questionnaires/{questionnaireID}/responses",
       {
-        params: { path: { questionnaireID } },
+        params: { path: { questionnaireID }, query: params },
       },
     );
     if (res.data === undefined) {

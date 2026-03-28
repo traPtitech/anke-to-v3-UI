@@ -5,6 +5,7 @@ import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/res
 import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
 import QuestionnaireActions from './questionnaire-actions.vue';
 import QuestionnaireAdminActions from './questionnaire-admin-actions.vue';
+import QuestionnaireMyResponsesContainer from './questionnaire-my-responses-container.vue';
 import type { QuestionnaireDetail } from './type';
 
 defineProps<{ detail: QuestionnaireDetail }>();
@@ -15,6 +16,7 @@ defineProps<{ detail: QuestionnaireDetail }>();
     <QuestionnaireTitleContainer :questionnaire="detail" />
     <QuestionnaireBasicInfoContainer :questionnaire="detail" />
     <QuestionnaireActions :detail="detail" />
+    <QuestionnaireMyResponsesContainer :detail="detail" />
     <QuestionnaireRespondentsContainer :questionnaire="detail" />
     <QuestionnaireMiscInfoContainer :questionnaire="detail" />
     <QuestionnaireAdminActions :detail="detail" />
