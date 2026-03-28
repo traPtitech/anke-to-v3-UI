@@ -2,12 +2,32 @@
 import type { QuestionnaireDetail } from '~/components/questionnaire-detail/type';
 import QuestionnaireContainer from '~/components/ui/questionnaire/container.vue';
 import QuestionnaireLabel from '~/components/ui/questionnaire/label.vue';
-import { useGetQuestionnaireResponses } from '~/composables/type-fetch/anke-to/client';
+import {
+  deleteResponse,
+  useGetQuestionnaireResponses,
+} from '~/composables/type-fetch/anke-to/client';
 
 const props = defineProps<{ detail: QuestionnaireDetail }>();
-const { data } = useGetQuestionnaireResponses(props.detail.questionnaire_id, {
-  onlyMyResponse: true,
-});
+const { data, refresh } = useGetQuestionnaireResponses(
+  props.detail.questionnaire_id,
+  {
+    onlyMyResponse: true,
+  },
+);
+
+const deleting = ref<number | null>(null);
+const handleDelete = async (responseId: number) => {
+  if (!confirm('この回答を削除します。よろしいですか？')) return;
+  deleting.value = responseId;
+  try {
+    await deleteResponse(responseId);
+    await refresh();
+  } catch (e) {
+    alert('削除に失敗しました');
+  } finally {
+    deleting.value = null;
+  }
+};
 </script>
 
 <template>
@@ -18,25 +38,39 @@ const { data } = useGetQuestionnaireResponses(props.detail.questionnaire_id, {
       まだ回答していません
     </div>
     <div v-else class="response-list">
-      <NuxtLink
+      <div
         v-for="response in data"
         :key="response.response_id"
-        :to="`/responses/${response.response_id}`"
         class="response-item"
       >
-        <div class="response-main">
-          <div class="response-date">
-            {{ formatRelativeDate(new Date(response.modified_at)) }}
+        <NuxtLink
+          :to="`/responses/${response.response_id}`"
+          class="response-link"
+        >
+          <div class="response-main">
+            <div class="response-date">
+              {{ formatRelativeDate(new Date(response.modified_at)) }}
+            </div>
+            <div class="response-sub-date">
+              {{ formatDate(new Date(response.modified_at)) }}
+            </div>
           </div>
-          <div class="response-sub-date">
-            {{ formatDate(new Date(response.modified_at)) }}
+          <div class="response-meta">
+            <span v-if="response.is_draft" class="draft-chip">下書き</span>
+            <Icon name="mdi:chevron-right" size="18px" />
           </div>
-        </div>
-        <div class="response-meta">
-          <span v-if="response.is_draft" class="draft-chip">下書き</span>
-          <Icon name="mdi:chevron-right" size="18px" />
-        </div>
-      </NuxtLink>
+        </NuxtLink>
+        <Button
+          size="small"
+          variant="outlined"
+          severity="secondary"
+          class="delete-button"
+          :disabled="deleting === response.response_id"
+          @click="handleDelete(response.response_id)"
+        >
+          <Icon name="mdi:delete-outline" size="18px" />
+        </Button>
+      </div>
     </div>
   </QuestionnaireContainer>
 </template>
@@ -54,12 +88,26 @@ const { data } = useGetQuestionnaireResponses(props.detail.questionnaire_id, {
 
 .response-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   padding: 12px;
   border: 1px solid var(--p-surface-300);
   border-radius: var(--p-border-radius-md);
+  background: none;
+}
+
+.delete-button {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.response-link {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   color: inherit;
   text-decoration: none;
 }

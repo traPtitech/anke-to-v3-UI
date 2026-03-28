@@ -204,6 +204,18 @@ export const patchResponse = async (
   await refreshNuxtData(`/responses/${responseID}`);
 };
 
+export const deleteResponse = async (responseID: number) => {
+  const res = await client.DELETE("/responses/{responseID}", {
+    params: { path: { responseID } },
+  });
+
+  if (!res.response.ok) {
+    throw new Error("Failed to delete response");
+  }
+
+  await refreshNuxtData(`/responses/${responseID}`);
+};
+
 export const useMe = () =>
   useAsyncData("/me", async () => {
     const res = await client.GET("/traq/users/me");
