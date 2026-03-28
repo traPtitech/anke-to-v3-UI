@@ -16,6 +16,20 @@ const state = defineModel<ResponseFormState>({ required: true });
 
 <template>
   <form class="response-form-container">
+    <div>
+      <Button
+        class="p-button-icon-only"
+        variant="text"
+        @click="
+          $router.push(
+            `/questionnaires/${props.questionnaire.questionnaire_id}`,
+          )
+        "
+      >
+        <Icon name="mdi:chevron-left" size="24px" />
+      </Button>
+    </div>
+
     <div class="response-form-metadata-container">
       <h1>{{ props.questionnaire.title }}</h1>
       <MarkdownBlock :content="props.questionnaire.description" />
