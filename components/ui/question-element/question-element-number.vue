@@ -11,11 +11,22 @@ const props = defineProps<{
 
 const question = defineModel<QuestionElementNumber>({ required: true });
 const { valid } = useQuestionValidity(question.value);
+
+const answerModel = computed({
+  get: () => question.value.answer,
+  set: (val: number | null) => {
+    if (val === null) {
+      question.value.answer = undefined;
+    } else {
+      question.value.answer = val;
+    }
+  },
+});
 </script>
 
 <template>
   <InputNumber
-    v-model="question.answer"
+    v-model="answerModel"
     class="question-element-number"
     placeholder="回答を入力"
     :input-props="{ required: question.is_required }"
