@@ -27,6 +27,23 @@ export const useGetQuestionnaire = (id: number) =>
     return res.data;
   });
 
+export const useGetMyRemindStatus = (questionnaireID: number) =>
+  useAsyncData(
+    `/questionnaires/${questionnaireID}/myRemindStatus`,
+    async () => {
+      const res = await client.GET(
+        "/questionnaires/{questionnaireID}/myRemindStatus",
+        {
+          params: { path: { questionnaireID } },
+        },
+      );
+      if (res.data === undefined) {
+        throw new Error("No data returned from the API");
+      }
+      return res.data;
+    },
+  );
+
 export type PostQuestionnaireBody =
   paths["/questionnaires"]["post"]["requestBody"]["content"][
     "application/json"
@@ -63,6 +80,7 @@ export const patchMyRemindStatus = async (
   }
 
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
+  await refreshNuxtData(`/questionnaires/${questionnaireID}/myRemindStatus`);
 };
 
 export const deleteQuestionnaireById = async (questionnaireID: number) => {

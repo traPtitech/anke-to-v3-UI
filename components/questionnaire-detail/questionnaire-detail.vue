@@ -16,9 +16,9 @@ defineProps<{ detail: QuestionnaireDetail }>();
     <QuestionnaireTitleContainer :questionnaire="detail" />
     <QuestionnaireBasicInfoContainer :questionnaire="detail" />
     <QuestionnaireActions :detail="detail" />
-    <QuestionnaireMyResponsesContainer :detail="detail" />
     <QuestionnaireRespondentsContainer :questionnaire="detail" />
     <QuestionnaireMiscInfoContainer :questionnaire="detail" />
+    <QuestionnaireMyResponsesContainer :detail="detail" />
     <QuestionnaireAdminActions :detail="detail" />
   </div>
 </template>

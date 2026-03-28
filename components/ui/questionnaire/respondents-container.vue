@@ -37,10 +37,7 @@ const nonAnsweredTargets = computed(() =>
         :actual-users="props.questionnaire.targets"
       />
     </div>
-    <div v-if="props.questionnaire.is_anonymous" class="anonymous-note">
-      匿名回答のため、回答者情報は表示されません
-    </div>
-    <div v-else class="questionnaire-target-result">
+    <div class="questionnaire-target-result">
       <div>
         <QuestionnaireLabel>回答した人</QuestionnaireLabel>
         <UserList :users="props.questionnaire.respondents" />
@@ -58,11 +55,5 @@ const nonAnsweredTargets = computed(() =>
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.anonymous-note {
-  color: var(--p-surface-600);
-  font-size: 14px;
-  align-self: center;
 }
 </style>
