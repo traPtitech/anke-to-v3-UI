@@ -20,8 +20,7 @@ const aggregatedResponses = computed(() => {
 
   const aggregatedResponses = [...aggregated.keys()].map((res) => ({
     value: res,
-    count: aggregated.get(res)!,
-    rate: `${((aggregated.get(res)! / responses.length) * 100).toFixed(1)}%`,
+    countAndRate: `${aggregated.get(res)!}件 (${((aggregated.get(res)! / responses.length) * 100).toFixed(1)}%)`,
     respondents: props.isAnonymous
       ? undefined
       : props.result.responses
@@ -35,10 +34,15 @@ const aggregatedResponses = computed(() => {
 </script>
 
 <template>
-  <DataTable :value="aggregatedResponses" sort-field="count" :sort-order="-1">
+  <DataTable
+    :value="aggregatedResponses"
+    sort-field="countAndRate"
+    :sort-order="-1"
+    scrollable
+    scrollable-height="500px"
+  >
     <Column field="value" header="回答" sortable />
-    <Column field="count" header="回答数" sortable />
-    <Column field="rate" header="回答率" sortable />
+    <Column field="countAndRate" header="回答数・回答率" sortable />
     <Column
       v-if="!props.isAnonymous"
       field="respondents"

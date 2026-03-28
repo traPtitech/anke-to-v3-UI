@@ -8,12 +8,17 @@ const props = defineProps<{
 
 const data = props.result.responses.map((r) => ({
   answer: r.answer,
-  respondent: props.isAnonymous ? undefined : r.respondent,
+  respondent: props.isAnonymous ? undefined : `@${r.respondent}`,
 }));
 </script>
 
 <template>
-  <DataTable :value="data" sort-field="answer">
+  <DataTable
+    :value="data"
+    sort-field="answer"
+    scrollable
+    scrollable-height="500px"
+  >
     <Column field="answer" header="回答" sortable />
     <Column
       v-if="!props.isAnonymous"

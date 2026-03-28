@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { QuestionResult } from '~/components/questionnaire-result/composables/use-questionnaire-result';
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
+import QuestionTypeBadge from '~/components/ui/question-element/question-type-badge.vue';
 import QuestionnaireContainer from '~/components/ui/questionnaire/container.vue';
 import MultipleChoiceResult from './questionnaire-result-element/multiple-choice-result.vue';
 import NumberResult from './questionnaire-result-element/number-result.vue';
@@ -17,8 +18,11 @@ const props = defineProps<{
 
 <template>
   <QuestionnaireContainer>
-    <div class="question-result-title">
-      {{ result.title }}
+    <div class="question-result-header">
+      <div class="question-result-title">
+        {{ result.title }}
+      </div>
+      <QuestionTypeBadge :question="result" />
     </div>
     <MarkdownBlock
       class="question-result-description"
@@ -58,12 +62,23 @@ const props = defineProps<{
 </template>
 
 <style lang="scss" scoped>
+.question-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
 .question-result-title {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
+  flex: 1;
 }
 
 .question-result-description {
   margin-bottom: 16px;
+  color: var(--p-surface-600);
+  font-size: 14px;
 }
 </style>

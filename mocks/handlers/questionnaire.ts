@@ -97,16 +97,26 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     description:
       "ここに **Markdown** 形式で *アンケート* の ~~説明~~ を==書けます==。\n\n# 見出し1\n## 見出し2\n### 見出し3\n\n> 引用も書けるよ\n> \n> - 引用の中のリスト\n\n- リスト\n  - ネストもOK\n  - [リンク](https://example.com) もある\n1. 番号付き\n2. リスト\n\n**太字** と *斜体* と ~~打ち消し~~ と `インラインコード`\n\n---\n\n| 見出し | 値 |\n| --- | --- |\n| サンプル | 123 |\n| ほげ | 456 |\n\n```ts\n// コードブロックも書けるよ\nconst answer = 42;\nconsole.log('Hello World', answer);\n```\n\n:traq: ← スタンプは使えるのかな？",
     response_due_date_time: oneDayAfter,
-    admins: [],
-    admin: { users: [], groups: [] },
+    admins: [myUserId],
+    admin: { users: [myUserId], groups: [] },
+    targets: ["user1", "user2", "user3", myUserId],
+    target: { users: ["user1", "user2", "user3", myUserId], groups: [] },
+    respondents: ["user1", "user2", "user3", myUserId],
   },
   {
     ...defaultQuestionnaire,
     questionnaire_id: 2,
-    title:
-      "結構長いタイトルのアンケートが作られることをちゃんと開発者が考慮するためのアンケート",
-    description: "短い description",
+    title: "大量回答者向けアンケート (200人以上が回答)",
+    description: "大量の回答データをテストするためのアンケートです",
     response_due_date_time: twoWeeksAfter,
+    admins: [myUserId],
+    admin: { users: [myUserId], groups: [] },
+    targets: Array.from({ length: 200 }, (_, i) => `user${200 + i}`),
+    target: {
+      users: Array.from({ length: 200 }, (_, i) => `user${200 + i}`),
+      groups: [],
+    },
+    respondents: Array.from({ length: 200 }, (_, i) => `user${200 + i}`),
   },
   {
     ...defaultQuestionnaire,
@@ -188,7 +198,35 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     ...defaultQuestionnaire,
     questionnaire_id: 13,
     title: "匿名回答のアンケート",
+    description:
+      "このアンケートは匿名で回答できます。回答者の情報は表示されません。",
     is_anonymous: true,
+    admins: [myUserId],
+    admin: { users: [myUserId], groups: [] },
+    targets: [
+      "anonymous1",
+      "anonymous2",
+      "anonymous3",
+      "anonymous4",
+      "anonymous5",
+    ],
+    target: {
+      users: [
+        "anonymous1",
+        "anonymous2",
+        "anonymous3",
+        "anonymous4",
+        "anonymous5",
+      ],
+      groups: [],
+    },
+    respondents: [
+      "anonymous1",
+      "anonymous2",
+      "anonymous3",
+      "anonymous4",
+      "anonymous5",
+    ],
   },
 ];
 

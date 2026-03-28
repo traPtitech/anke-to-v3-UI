@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
-import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
+import ResultTitleContainer from '~/components/ui/questionnaire/result-title-container.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
 import { useQuestionnaireResult } from './composables/use-questionnaire-result';
@@ -19,7 +19,20 @@ const { results } = useQuestionnaireResult(
 
 <template>
   <div class="questionnaire-result-container">
-    <QuestionnaireTitleContainer :questionnaire="props.questionnaire" />
+    <div class="result-header">
+      <Button
+        class="p-button-icon-only"
+        variant="text"
+        @click="
+          $router.push(
+            `/questionnaires/${props.questionnaire.questionnaire_id}`,
+          )
+        "
+      >
+        <Icon name="mdi:chevron-left" size="24px" />
+      </Button>
+    </div>
+    <ResultTitleContainer :questionnaire="props.questionnaire" />
     <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
     <QuestionResult
       v-for="(result, i) in results"
@@ -38,5 +51,10 @@ const { results } = useQuestionnaireResult(
   max-width: 1080px;
   margin: 0 auto;
   padding-bottom: 50vh;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
 }
 </style>

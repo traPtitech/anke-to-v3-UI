@@ -16,7 +16,256 @@ const defaultResponse: Omit<
   body: [],
 };
 
+const generateBulkResponses = (
+  startResponseId: number,
+  questionnaireId: number,
+) => {
+  const questionnaire = questionnairesData.find((q) =>
+    q.questionnaire_id === questionnaireId
+  );
+  if (questionnaire === undefined) {
+    throw new Error(`Questionnaire with ID=${questionnaireId} not found`);
+  }
+
+  const responses: GatewayResponse[] = [];
+  const startUserId = 200;
+
+  for (let i = 0; i < 200; i++) {
+    const userId = `user${startUserId + i}`;
+    const responseId = startResponseId + i;
+
+    const body = [];
+    for (const question of questionnaire.questions) {
+      if (question.question_type === "Text") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "Text",
+          answer: `ユーザー${userId}の短い回答${i}`,
+        });
+      } else if (question.question_type === "TextLong") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "TextLong",
+          answer:
+            `ユーザー${userId}の長い回答です。\n複数行のテキストも含まれています。\nこのデータは${i}番目のユーザーのものです。`,
+        });
+      } else if (question.question_type === "Number") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "Number",
+          answer: Math.floor(Math.random() * 100) + 1,
+        });
+      } else if (question.question_type === "SingleChoice") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "SingleChoice",
+          answer: question
+            .options[Math.floor(Math.random() * question.options.length)],
+        });
+      } else if (question.question_type === "MultipleChoice") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "MultipleChoice",
+          answer: question.options.filter(() => Math.random() > 0.5),
+        });
+      } else if (question.question_type === "Scale") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "Scale",
+          answer: (i % 5) + 1,
+        });
+      } else {
+        const _: never = question;
+        throw new Error(
+          `Unknown question type: ${(question as any).question_type}`,
+        );
+      }
+    }
+
+    responses.push({
+      ...defaultResponse,
+      response_id: responseId,
+      questionnaire_id: questionnaireId,
+      respondent: userId,
+      body: body as GatewayResponse["body"],
+      is_anonymous: false,
+    });
+  }
+
+  return responses;
+};
+
+const generateAnonymousResponses = (
+  startResponseId: number,
+  questionnaireId: number,
+) => {
+  const questionnaire = questionnairesData.find((q) =>
+    q.questionnaire_id === questionnaireId
+  );
+  if (questionnaire === undefined) {
+    throw new Error(`Questionnaire with ID=${questionnaireId} not found`);
+  }
+
+  const responses: GatewayResponse[] = [];
+
+  const anonymousUsers = [
+    "anonymous1",
+    "anonymous2",
+    "anonymous3",
+    "anonymous4",
+    "anonymous5",
+  ];
+
+  for (let i = 0; i < anonymousUsers.length; i++) {
+    const responseId = startResponseId + i;
+
+    const body = [];
+    for (const question of questionnaire.questions) {
+      if (question.question_type === "Text") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "Text",
+          answer: `匿名回答${i}のテキスト`,
+        });
+      } else if (question.question_type === "TextLong") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "TextLong",
+          answer: `匿名回答${i}の長いテキスト\n複数行のテキストです。`,
+        });
+      } else if (question.question_type === "Number") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "Number",
+          answer: Math.floor(Math.random() * 100) + 1,
+        });
+      } else if (question.question_type === "SingleChoice") {
+        const choices = ["選択肢1", "選択肢2", "選択肢3"];
+        body.push({
+          question_id: question.question_id,
+          question_type: "SingleChoice",
+          answer: choices[i % 3],
+        });
+      } else if (question.question_type === "MultipleChoice") {
+        const choices = ["選択肢1", "選択肢2", "選択肢3"];
+        body.push({
+          question_id: question.question_id,
+          question_type: "MultipleChoice",
+          answer: [choices[i % 2], choices[(i + 1) % 3]],
+        });
+      } else if (question.question_type === "Scale") {
+        body.push({
+          question_id: question.question_id,
+          question_type: "Scale",
+          answer: (i % 5) + 1,
+        });
+      } else {
+        const _: never = question;
+        throw new Error(
+          `Unknown question type: ${(question as any).question_type}`,
+        );
+      }
+    }
+
+    responses.push({
+      ...defaultResponse,
+      response_id: responseId,
+      questionnaire_id: questionnaireId,
+      respondent: anonymousUsers[i],
+      body: body as GatewayResponse["body"],
+      is_anonymous: true,
+    });
+  }
+
+  return responses;
+};
+
 export const responsesData: GatewayResponse[] = [
+  {
+    ...defaultResponse,
+    response_id: 100,
+    questionnaire_id: 1,
+    respondent: "user1",
+    body: [
+      { question_id: 1, question_type: "Text", answer: "短いテキスト回答1" },
+      {
+        question_id: 2,
+        question_type: "TextLong",
+        answer:
+          "長いテキスト回答1\nこれは複数行のテキストです。\n改行も含まれています。",
+      },
+      { question_id: 3, question_type: "Number", answer: 85 },
+      { question_id: 4, question_type: "SingleChoice", answer: "選択肢1" },
+      {
+        question_id: 5,
+        question_type: "MultipleChoice",
+        answer: ["選択肢1", "選択肢3"],
+      },
+      { question_id: 6, question_type: "Scale", answer: 4 },
+    ],
+  },
+  {
+    ...defaultResponse,
+    response_id: 101,
+    questionnaire_id: 1,
+    respondent: "user2",
+    body: [
+      { question_id: 1, question_type: "Text", answer: "短いテキスト回答2" },
+      {
+        question_id: 2,
+        question_type: "TextLong",
+        answer: "長いテキスト回答2\nユーザー2の回答です。",
+      },
+      { question_id: 3, question_type: "Number", answer: 72 },
+      { question_id: 4, question_type: "SingleChoice", answer: "選択肢2" },
+      { question_id: 5, question_type: "MultipleChoice", answer: ["選択肢2"] },
+      { question_id: 6, question_type: "Scale", answer: 3 },
+    ],
+  },
+  {
+    ...defaultResponse,
+    response_id: 102,
+    questionnaire_id: 1,
+    respondent: "user3",
+    body: [
+      { question_id: 1, question_type: "Text", answer: "短いテキスト回答3" },
+      {
+        question_id: 2,
+        question_type: "TextLong",
+        answer: "長いテキスト回答3\nユーザー3の回答になります。",
+      },
+      { question_id: 3, question_type: "Number", answer: 90 },
+      { question_id: 4, question_type: "SingleChoice", answer: "選択肢3" },
+      {
+        question_id: 5,
+        question_type: "MultipleChoice",
+        answer: ["選択肢1", "選択肢2"],
+      },
+      { question_id: 6, question_type: "Scale", answer: 5 },
+    ],
+  },
+  {
+    ...defaultResponse,
+    response_id: 103,
+    questionnaire_id: 1,
+    respondent: myUserId,
+    body: [
+      { question_id: 1, question_type: "Text", answer: "自分の短い回答" },
+      {
+        question_id: 2,
+        question_type: "TextLong",
+        answer: "自分の長い回答\n複数行になっています。",
+      },
+      { question_id: 3, question_type: "Number", answer: 88 },
+      { question_id: 4, question_type: "SingleChoice", answer: "選択肢1" },
+      {
+        question_id: 5,
+        question_type: "MultipleChoice",
+        answer: ["選択肢1", "選択肢2", "選択肢3"],
+      },
+      { question_id: 6, question_type: "Scale", answer: 4 },
+    ],
+  },
   {
     ...defaultResponse,
     response_id: 1,
@@ -49,6 +298,8 @@ export const responsesData: GatewayResponse[] = [
     response_id: 6,
     questionnaire_id: 9,
   },
+  ...generateBulkResponses(1000, 2),
+  ...generateAnonymousResponses(2000, 13),
 ];
 
 export const responsesSortFunc: Record<
@@ -88,6 +339,16 @@ type PostQuestionnaireResponseRequest =
     "content"
   ]["application/json"];
 
+const maskAnonymousRespondent = (
+  response: GatewayResponse,
+): GatewayResponse => {
+  if (!response.is_anonymous) return response;
+  return {
+    ...response,
+    respondent: "",
+  };
+};
+
 export const responseHandlers = [
   http.get("/api/responses/myResponses", (req) => {
     const sort = new URL(req.request.url).searchParams.get("sort") ??
@@ -102,7 +363,8 @@ export const responseHandlers = [
 
       const myResponses = responses
         .filter((r) => r.respondent === myUserId)
-        .toSorted(responsesSortFunc[sort]);
+        .toSorted(responsesSortFunc[sort])
+        .map(maskAnonymousRespondent);
 
       return {
         questionnaire_info: toSummary(q),
@@ -128,7 +390,9 @@ export const responseHandlers = [
       );
     }
 
-    const response: GetResponseResponse = questionnaireResponse;
+    const response: GetResponseResponse = maskAnonymousRespondent(
+      questionnaireResponse,
+    );
     return HttpResponse.json(response);
   }),
 
@@ -203,7 +467,11 @@ export const responseHandlers = [
       return true;
     }).toSorted(responsesSortFunc[sort]);
 
-    const response: GetQuestionnaireResponsesResponse = filteredResponses;
+    const returnedResponses = questionnaire.is_anonymous
+      ? filteredResponses.map(maskAnonymousRespondent)
+      : filteredResponses;
+
+    const response: GetQuestionnaireResponsesResponse = returnedResponses;
 
     return HttpResponse.json(response);
   }),
@@ -244,6 +512,7 @@ export const responseHandlers = [
 
       if (questionnaire.is_anonymous) {
         newResponse.is_anonymous = true;
+        newResponse.respondent = "";
       } else {
         newResponse.respondent = myUserId;
       }

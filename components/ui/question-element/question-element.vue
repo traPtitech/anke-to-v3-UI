@@ -11,6 +11,7 @@ import QuestionElementScale from './question-element-scale.vue';
 import QuestionElementSingleChoice from './question-element-single-choice.vue';
 import QuestionElementTextLong from './question-element-text-long.vue';
 import QuestionElementText from './question-element-text.vue';
+import QuestionTypeBadge from './question-type-badge.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;
@@ -22,15 +23,21 @@ const { valid } = useQuestionValidity(question.value);
 
 <template>
   <div class="question-element-container">
-    <p class="question-element-title">
-      <span class="question-element-title-main">
-        {{ question.title }}
-      </span>
-      <span v-if="question.is_required" class="question-element-required-chip">
-        必須
-      </span>
-      <span v-else class="question-element-non-required-chip">任意</span>
-    </p>
+    <div class="question-element-header">
+      <p class="question-element-title">
+        <span class="question-element-title-main">
+          {{ question.title }}
+        </span>
+        <span
+          v-if="question.is_required"
+          class="question-element-required-chip"
+        >
+          必須
+        </span>
+        <span v-else class="question-element-non-required-chip">任意</span>
+      </p>
+      <QuestionTypeBadge :question="question" />
+    </div>
     <MarkdownBlock
       class="question-element-description"
       :content="question.description"
@@ -77,6 +84,14 @@ const { valid } = useQuestionValidity(question.value);
   padding: 16px;
   border: 1px solid var(--p-surface-300);
   border-radius: var(--p-border-radius-md);
+}
+
+.question-element-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .question-element-title {

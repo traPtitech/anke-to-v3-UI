@@ -28,15 +28,25 @@ const props = defineProps<{
 .text-result-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 .text-result-element {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: var(--p-surface-50);
+  border-left: 3px solid var(--p-primary-color);
+  border-radius: var(--p-border-radius-sm);
 }
 
 .text-result-element-user {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--p-primary-color);
+  font-size: 14px;
 }
 </style>
