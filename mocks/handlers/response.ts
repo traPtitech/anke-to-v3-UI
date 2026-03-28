@@ -525,6 +525,7 @@ export const responseHandlers = [
       }
 
       responsesData.push(newResponse);
+      questionnaire.respondents.push(myUserId);
 
       return HttpResponse.json(newResponse, { status: 201 });
     },
