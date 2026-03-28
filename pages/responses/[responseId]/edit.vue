@@ -7,10 +7,21 @@ import {
 
 const responseId = useRouteResponseId();
 const { data: response, error: responseError } = useGetResponse(responseId);
-const { data: questionnaire, error: questionnaireError } = response.value
-  ?.questionnaire_id
-  ? useGetQuestionnaire(response.value?.questionnaire_id)
-  : { data: null, error: null };
+
+const questionnaireRequest = computed(() => {
+  const questionnaireId = response.value?.questionnaire_id;
+  if (!questionnaireId) {
+    return null;
+  }
+  return useGetQuestionnaire(questionnaireId);
+});
+
+const questionnaire = computed(
+  () => questionnaireRequest.value?.data.value ?? null,
+);
+const questionnaireError = computed(
+  () => questionnaireRequest.value?.error.value ?? null,
+);
 </script>
 
 <template>
