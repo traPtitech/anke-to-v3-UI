@@ -19,7 +19,7 @@ const route = useRoute();
       />
 
       <nuxt-link class="header-logo" href="/">
-        <img src="~/assets/img/logo.svg" alt="anke-to" />
+        <img src="~/assets/img/logo.svg" alt="anke-to" width="96" height="48" />
       </nuxt-link>
 
       <div class="navigation-menu-container" :class="{ open: menuOpen }">

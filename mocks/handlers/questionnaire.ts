@@ -89,6 +89,39 @@ const defaultQuestionnaire: Omit<
   respondents: [],
 };
 
+const generatedQuestionnaires: GatewayQuestionnaire[] = Array.from(
+  { length: 52 },
+  (_, i) => {
+    const id = 100 + i;
+    const isPublished = i % 6 !== 0;
+    const isAnonymous = i % 9 === 0;
+    const isDuplicateAllowed = i % 5 === 0;
+    const myTargetIncluded = i % 4 !== 0;
+    const myResponded = myTargetIncluded && i % 3 === 0;
+
+    const targetUsers = myTargetIncluded
+      ? [myUserId, `dummy-user-${id}`]
+      : [`dummy-user-${id}`];
+
+    const respondents = myResponded ? [myUserId, `dummy-user-${id}`] : [];
+
+    return {
+      ...defaultQuestionnaire,
+      questionnaire_id: id,
+      title: `ダミーアンケート ${id}`,
+      description: `ページネーション確認用のダミーアンケート ${id}`,
+      is_published: isPublished,
+      is_anonymous: isAnonymous,
+      is_duplicate_answer_allowed: isDuplicateAllowed,
+      target: { users: targetUsers, groups: [] },
+      targets: targetUsers,
+      respondents,
+      admins: [myUserId],
+      admin: { users: [myUserId], groups: [] },
+    };
+  },
+);
+
 export const questionnairesData: GatewayQuestionnaire[] = [
   {
     ...defaultQuestionnaire,
@@ -228,6 +261,7 @@ export const questionnairesData: GatewayQuestionnaire[] = [
       "anonymous5",
     ],
   },
+  ...generatedQuestionnaires,
 ];
 
 type Question = components["schemas"]["Question"];
@@ -325,6 +359,12 @@ export const questionnaireHandlers = [
       : hasMyDraftRaw === "false"
       ? false
       : undefined;
+    const hasMyResponseRaw = searchParams.get("hasMyResponse");
+    const hasMyResponse = hasMyResponseRaw === "true"
+      ? true
+      : hasMyResponseRaw === "false"
+      ? false
+      : undefined;
 
     const questionnaires: QuestionnaireSummary[] = questionnairesData.map(
       toSummary,
@@ -348,9 +388,11 @@ export const questionnaireHandlers = [
         (detail?.is_published === !isDraft);
       const matchesHasMyDraft = hasMyDraft === undefined ||
         (hasMyDraft === true ? q.has_my_draft : !q.has_my_draft);
+      const matchesHasMyResponse = hasMyResponse === undefined ||
+        (hasMyResponse === true ? q.has_my_response : !q.has_my_response);
       return matchesSearch && isTargetingMe && isAdministeredByMe &&
         isNotOverDue &&
-        matchesIsDraft && matchesHasMyDraft;
+        matchesIsDraft && matchesHasMyDraft && matchesHasMyResponse;
     }).toSorted(questionnairesSortFunc[sort]);
 
     const pagedQuestionnaires = filteredQuestionnaires.slice(

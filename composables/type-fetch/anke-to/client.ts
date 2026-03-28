@@ -3,18 +3,22 @@ import type { paths } from "./openapi";
 
 const client = createClient<paths>({ baseUrl: "/api" });
 
-type GetQuestionnairesOption =
+export type GetQuestionnairesOption =
   paths["/questionnaires"]["get"]["parameters"]["query"];
 export const useGetQuestionnaires = (option?: GetQuestionnairesOption) =>
   useAsyncData("/questionnaires", async () => {
-    const res = await client.GET("/questionnaires", {
-      params: { query: option },
-    });
-    if (res.data === undefined) {
-      throw new Error("No data returned from the API");
-    }
-    return res.data;
+    return await fetchQuestionnaires(option);
   });
+
+export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
+  const res = await client.GET("/questionnaires", {
+    params: { query: option },
+  });
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+  return res.data;
+};
 
 export const useGetQuestionnaire = (id: number) =>
   useAsyncData(`/questionnaires/${id}`, async () => {

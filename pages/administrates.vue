@@ -1,14 +1,11 @@
 <script lang="ts" setup>
+import { useAsyncData } from 'nuxt/app';
 import QuestionnaireList from '~/components/ui/questionnaire-list/questionnaire-list.vue';
-import { useGetQuestionnaires } from '~/composables/type-fetch/anke-to/client';
+import { fetchQuestionnaires } from '~/composables/type-fetch/anke-to/client';
 
-const { data, error } = useGetQuestionnaires();
-
-const administratedQuestionnaires = computed(
-  () =>
-    data.value?.questionnaires.filter(
-      (questionnaire) => questionnaire.is_administrated_by_me,
-    ) ?? [],
+const { data, error, pending } = useAsyncData(
+  'administrates',
+  async () => await fetchQuestionnaires({ onlyAdministratedByMe: true }),
 );
 </script>
 
@@ -17,9 +14,12 @@ const administratedQuestionnaires = computed(
     <div v-if="error" class="error-message">
       {{ error.message }}
     </div>
-    <div v-else-if="!data">
+    <div v-else-if="pending && !data">
       <p>Loading...</p>
     </div>
-    <QuestionnaireList v-else :questionnaires="administratedQuestionnaires" />
+    <QuestionnaireList
+      v-else
+      :questionnaires="data && data.questionnaires ? data.questionnaires : []"
+    />
   </div>
 </template>
