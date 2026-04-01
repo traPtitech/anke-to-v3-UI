@@ -6,7 +6,11 @@ import {
 } from '~/composables/type-fetch/anke-to/client';
 import { convertToBody } from './converter';
 import QuestionnaireFormBase from './questionnaire-form-base.vue';
-import { checkValidity, useStoreNewQuestionnaireForm } from './store';
+import {
+  checkValidity,
+  getValidationErrors,
+  useStoreNewQuestionnaireForm,
+} from './store';
 
 const toast = useToast();
 
@@ -54,13 +58,17 @@ const handleSave = async () => {
 };
 
 const handleSend = async () => {
-  const validity = checkValidity(state);
-  if (!validity.ok) {
-    toast.add({
-      summary: validity.message,
-      severity: 'error',
-      life: 3000,
-    });
+  const validationErrors = getValidationErrors(state);
+  if (validationErrors.length > 0) {
+    validationErrors
+      .filter(({ display }) => display)
+      .forEach(({ message }) => {
+        toast.add({
+          summary: message,
+          severity: 'error',
+          life: 3000,
+        });
+      });
     return;
   }
 

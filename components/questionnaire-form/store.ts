@@ -9,13 +9,13 @@ import type {
   QuestionSettingsSingleChoice,
   QuestionSettingsText,
   QuestionSettingsTextLong,
-} from "./type";
+} from './type';
 
 const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
-  title: "",
-  description: "",
+  title: '',
+  description: '',
   response_due_date_time: undefined,
-  response_viewable_by: "anyone",
+  response_viewable_by: 'anyone',
   is_anonymous: false,
   is_duplicate_answer_allowed: false,
   target: {
@@ -32,35 +32,35 @@ const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
 
 const createDefaultQuestionSettingsBase = (): QuestionSettingsBase => ({
   question_id: createId(),
-  title: "",
-  description: "",
+  title: '',
+  description: '',
   is_required: false,
 });
 
 const defaultQuestionSettingsText: QuestionSettingsText = {
-  question_type: "Text",
+  question_type: 'Text',
 };
 
 const defaultQuestionSettingsTextLong: QuestionSettingsTextLong = {
-  question_type: "TextLong",
+  question_type: 'TextLong',
 };
 
 const defaultQuestionSettingsNumber: QuestionSettingsNumber = {
-  question_type: "Number",
+  question_type: 'Number',
 };
 
 const defaultQuestionSettingsSingleChoice: QuestionSettingsSingleChoice = {
-  question_type: "SingleChoice",
-  options: [""],
+  question_type: 'SingleChoice',
+  options: [],
 };
 
 const defaultQuestionSettingsMultipleChoice: QuestionSettingsMultipleChoice = {
-  question_type: "MultipleChoice",
-  options: [""],
+  question_type: 'MultipleChoice',
+  options: [],
 };
 
 const defaultQuestionSettingsScale: QuestionSettingsScale = {
-  question_type: "Scale",
+  question_type: 'Scale',
   min_value: 1,
   max_value: 5,
 };
@@ -72,10 +72,10 @@ const defaultQuestionSettingsByType = {
   SingleChoice: defaultQuestionSettingsSingleChoice,
   MultipleChoice: defaultQuestionSettingsMultipleChoice,
   Scale: defaultQuestionSettingsScale,
-} satisfies Record<QuestionSettings["question_type"], QuestionSettingsByType>;
+} satisfies Record<QuestionSettings['question_type'], QuestionSettingsByType>;
 
 export const useStoreNewQuestionnaireForm = defineStore(
-  "NewQuestionnaireForm",
+  'NewQuestionnaireForm',
   () => {
     const state = ref<QuestionnaireFormSettings>(
       defaultQuestionnaireFormSettings,
@@ -86,9 +86,9 @@ export const useStoreNewQuestionnaireForm = defineStore(
 
 export const addQuestion = (
   state: QuestionnaireFormSettings,
-  type: QuestionSettings["question_type"],
+  type: QuestionSettings['question_type'],
   index?: number,
-) => {
+): number => {
   const newQuestion = {
     ...createDefaultQuestionSettingsBase(),
     ...defaultQuestionSettingsByType[type],
@@ -96,15 +96,11 @@ export const addQuestion = (
 
   if (index === undefined) {
     state.questions.push(newQuestion);
-    return true;
+    return newQuestion.question_id;
   }
 
-  state.questions = insertToArray(
-    state.questions,
-    index + 1,
-    newQuestion,
-  );
-  return true;
+  state.questions = insertToArray(state.questions, index + 1, newQuestion);
+  return newQuestion.question_id;
 };
 
 export const copyQuestion = (
@@ -125,11 +121,7 @@ export const copyQuestion = (
     return true;
   }
 
-  state.questions = insertToArray(
-    state.questions,
-    index + 1,
-    newQuestion,
-  );
+  state.questions = insertToArray(state.questions, index + 1, newQuestion);
   return true;
 };
 
@@ -143,74 +135,114 @@ export const removeQuestion = (
   return true;
 };
 
-type Validity = { ok: true } | { ok: false; message: string };
-export const checkValidity = (
+type Validity = { ok: boolean; errors?: { message: string; display: boolean } };
+
+export const getValidationErrors = (
   state: QuestionnaireFormSettings,
-): Validity => {
-  if (state.title.trim() === "") {
-    return { ok: false, message: "アンケートのタイトルを入力してください" };
+): { message: string; display: boolean }[] => {
+  const errors: { message: string; display: boolean }[] = [];
+
+  if (state.title.trim() === '') {
+    errors.push({
+      message: 'アンケートのタイトルを入力してください',
+      display: false,
+    });
   }
 
   if (
     state.response_due_date_time !== undefined &&
     new Date(state.response_due_date_time) < new Date()
   ) {
-    return {
-      ok: false,
-      message: "回答期限は未来の日時を指定してください",
-    };
+    errors.push({
+      message: '回答期限は未来の日時を指定してください',
+      display: false,
+    });
   }
 
   if (
     (state.target.users.length > 0 || state.target.groups.length > 0) &&
     state.response_due_date_time === undefined
   ) {
-    return {
-      ok: false,
-      message: "対象者が設定されている場合、回答期限は設定必須です",
-    };
+    errors.push({
+      message: '対象者が設定されている場合、回答期限は設定必須です',
+      display: false,
+    });
   }
 
   if (state.admin.users.length === 0 && state.admin.groups.length === 0) {
-    return { ok: false, message: "アンケートの管理者を設定してください" };
+    errors.push({
+      message: 'アンケートの管理者を設定してください',
+      display: false,
+    });
   }
 
   if (state.questions.length === 0) {
-    return { ok: false, message: "アンケートに質問を追加してください" };
+    errors.push({
+      message: 'アンケートに質問を追加してください',
+      display: true,
+    });
   }
 
-  if (state.questions.some((q) => q.title.trim() === "")) {
-    return { ok: false, message: "タイトルが空欄の質問があります" };
-  }
-
-  if (
-    state.questions.some((q) =>
-      (q.question_type === "SingleChoice" ||
-        q.question_type === "MultipleChoice") && q.options.length === 0
-    )
-  ) {
-    return { ok: false, message: "選択肢がない質問があります" };
+  if (state.questions.some((q) => q.title.trim() === '')) {
+    errors.push({
+      message: 'タイトルが空欄の質問があります',
+      display: false,
+    });
   }
 
   if (
     state.questions.some(
       (q) =>
-        (q.question_type === "SingleChoice" ||
-          q.question_type === "MultipleChoice") &&
-        q.options.some((o) => o.trim() === ""),
+        (q.question_type === 'SingleChoice' ||
+          q.question_type === 'MultipleChoice') &&
+        q.options.length === 0,
     )
   ) {
-    return { ok: false, message: "選択肢に空欄が含まれる質問があります" };
+    errors.push({
+      message: '選択肢がない質問があります',
+      display: false,
+    });
   }
 
   if (
-    state.questions.some((q) =>
-      (q.question_type === "SingleChoice" ||
-        q.question_type === "MultipleChoice") &&
-      new Set(q.options).size !== q.options.length
+    state.questions.some(
+      (q) =>
+        (q.question_type === 'SingleChoice' ||
+          q.question_type === 'MultipleChoice') &&
+        q.options.some((o) => o.trim() === ''),
     )
   ) {
-    return { ok: false, message: "選択肢が重複している質問があります" };
+    errors.push({
+      message: '選択肢に空欄が含まれる質問があります',
+      display: false,
+    });
+  }
+
+  if (
+    state.questions.some(
+      (q) =>
+        (q.question_type === 'SingleChoice' ||
+          q.question_type === 'MultipleChoice') &&
+        new Set(q.options).size !== q.options.length,
+    )
+  ) {
+    errors.push({
+      message: '選択肢が重複している質問があります',
+      display: false,
+    });
+  }
+
+  return errors;
+};
+
+export const checkValidity = (state: QuestionnaireFormSettings): Validity => {
+  const errors = getValidationErrors(state);
+
+  if (errors.length > 0) {
+    return {
+      ok: false,
+      errors: errors.find(({ display }) => display),
+    };
   }
 
   return { ok: true };

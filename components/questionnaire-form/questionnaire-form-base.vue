@@ -5,14 +5,24 @@ import FormControl from './form-control.vue';
 import QuestionnaireMetadataInput from './questionnaire-metadata-input.vue';
 import {
   addQuestion,
-  checkValidity,
   copyQuestion,
+  getValidationErrors,
   removeQuestion,
 } from './store';
 import type { QuestionnaireFormSettings } from './type';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
-const validationResult = computed(() => checkValidity(state.value));
+const validationErrors = computed(() =>
+  getValidationErrors(state.value).filter(({ display }) => display),
+);
+const focusedQuestionId = ref<number | null>(null);
+
+const handleAddQuestion = (
+  type: Parameters<typeof addQuestion>[1],
+  index?: number,
+) => {
+  focusedQuestionId.value = addQuestion(state.value, type, index);
+};
 </script>
 
 <template>
@@ -47,7 +57,7 @@ const validationResult = computed(() => checkValidity(state.value));
             text
             class="p-button-icon-only question-add-button"
             title="質問を追加"
-            @click="addQuestion(state, question.question_type, i)"
+            @click="handleAddQuestion(question.question_type, i)"
           >
             <Icon size="24px" name="mdi:plus-circle-outline" />
           </Button>
@@ -55,23 +65,33 @@ const validationResult = computed(() => checkValidity(state.value));
         <FormControl
           class="question-control"
           :model-value="question"
+          :auto-focus-title="focusedQuestionId === question.question_id"
           @update:model-value="Object.assign(state.questions[i], $event)"
           @copy="copyQuestion(state, question.question_id, i)"
           @delete="removeQuestion(state, question.question_id)"
         />
       </Draggable>
     </Container>
-    <AddQuestionButtons @add-question="addQuestion(state, $event)" />
+    <AddQuestionButtons @add-question="handleAddQuestion" />
     <div class="form-action-buttons-container">
       <div class="form-action-buttons">
         <slot name="buttons" />
       </div>
-      <small v-if="!validationResult.ok" class="form-validation-error-message">
-        <Icon size="20px" name="mdi:alert-circle" />
-        <span>
-          {{ validationResult.message }}
-        </span>
-      </small>
+      <div
+        v-if="validationErrors.length > 0"
+        class="form-validation-error-messages"
+      >
+        <small
+          v-for="{ message } in validationErrors"
+          :key="message"
+          class="form-validation-error-message"
+        >
+          <Icon size="20px" name="mdi:alert-circle" />
+          <span>
+            {{ message }}
+          </span>
+        </small>
+      </div>
     </div>
   </form>
 </template>
@@ -155,6 +175,12 @@ const validationResult = computed(() => checkValidity(state.value));
   gap: 4px;
   color: var(--p-red-600);
   justify-content: end;
+}
+
+.form-validation-error-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 @media screen and (max-width: 1600px) {
