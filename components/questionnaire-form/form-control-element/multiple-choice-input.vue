@@ -2,6 +2,10 @@
 import type { QuestionSettingsMultipleChoice } from '../type';
 import ChoiceGroup from './choice-group.vue';
 
+defineProps<{
+  showChoiceOptionRequiredError?: boolean;
+}>();
+
 const question = defineModel<QuestionSettingsMultipleChoice>({
   required: true,
 });
@@ -15,7 +19,10 @@ const options = computed({
 </script>
 
 <template>
-  <ChoiceGroup v-model="options">
+  <ChoiceGroup
+    v-model="options"
+    :show-choice-option-required-error="showChoiceOptionRequiredError"
+  >
     <Checkbox :model-value="false" disabled />
   </ChoiceGroup>
 </template>

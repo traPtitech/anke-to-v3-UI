@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue';
 import {
   responseViewableByOptionsMap,
   type GatewayResponseShareType,
@@ -8,6 +9,19 @@ import type { QuestionnaireFormSettings } from './type';
 import UserSpecifierInput from './user-specifier-input.vue';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
+const isTitleFocused = ref(false);
+const showTitleRequiredErrorAfterBlur = computed(
+  () => state.value.title.trim() === '' && !isTitleFocused.value,
+);
+const showAdminRequiredError = computed(
+  () =>
+    state.value.admin.users.length === 0 &&
+    state.value.admin.groups.length === 0,
+);
+
+onMounted(() => {
+  document.getElementById('questionnaire-title-input')?.focus();
+});
 
 const responseViewableByOptions = Object.entries(
   responseViewableByOptionsMap,
@@ -20,20 +34,24 @@ const responseViewableByOptions = Object.entries(
 <template>
   <div class="questionnaire-metadata-input-container">
     <InputText
+      id="questionnaire-title-input"
       v-model="state.title"
+      :class="{ 'p-invalid': showTitleRequiredErrorAfterBlur }"
       size="large"
       required
-      placeholder="アンケートのタイトル (必須)"
+      placeholder="タイトル (必須)"
+      @focus="isTitleFocused = true"
+      @blur="isTitleFocused = false"
     />
-    <Textarea
-      v-model="state.description"
-      placeholder="アンケートの説明"
-      auto-resize
-    />
+    <small v-if="showTitleRequiredErrorAfterBlur" class="invalid-message">
+      <Icon name="mdi:alert-circle" size="20px" />
+      <span>タイトルを入力してください</span>
+    </small>
+    <Textarea v-model="state.description" placeholder="説明" auto-resize />
     <div class="form-elements">
       <div class="form-element">
         <p class="form-label">結果の公開範囲</p>
-        <Dropdown
+        <Select
           v-model="state.response_viewable_by"
           :options="responseViewableByOptions"
           option-label="label"
@@ -51,14 +69,23 @@ const responseViewableByOptions = Object.entries(
         <p class="form-label">管理者</p>
         <small>管理者はアンケートを編集できます</small>
         <UserSpecifierInput v-model="state.admin" />
+        <small v-if="showAdminRequiredError" class="invalid-message">
+          <Icon name="mdi:alert-circle" size="18px" />
+          <span>アンケートの管理者を設定してください</span>
+        </small>
       </div>
-      <div class="form-element form-bottom-switch">
-        <p class="form-label">1人が複数回答できるか</p>
-        <InputSwitch v-model="state.is_duplicate_answer_allowed" />
-      </div>
-      <div class="form-element form-bottom-switch">
-        <p class="form-label">回答を匿名にするか</p>
-        <InputSwitch v-model="state.is_anonymous" />
+      <div class="form-element">
+        <label class="form-bottom-switch" for="allow-duplicate">
+          <Checkbox
+            input-id="allow-duplicate"
+            :value="state.is_duplicate_answer_allowed"
+          />
+          <p class="form-label">複数回答を許可</p>
+        </label>
+        <label class="form-element form-bottom-switch" for="is-anonymous">
+          <Checkbox :value="state.is_anonymous" input-id="is-anonymous" />
+          <p class="form-label">匿名回答</p>
+        </label>
       </div>
     </div>
   </div>
@@ -106,6 +133,9 @@ const responseViewableByOptions = Object.entries(
 }
 
 .invalid-message {
-  color: #f26451;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--p-red-500);
 }
 </style>
