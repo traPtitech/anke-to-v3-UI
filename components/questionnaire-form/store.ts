@@ -30,12 +30,12 @@ const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
   is_published: false,
 };
 
-const defaultQuestionSettingsBase: QuestionSettingsBase = {
+const createDefaultQuestionSettingsBase = (): QuestionSettingsBase => ({
   question_id: createId(),
   title: "",
   description: "",
   is_required: false,
-};
+});
 
 const defaultQuestionSettingsText: QuestionSettingsText = {
   question_type: "Text",
@@ -90,7 +90,7 @@ export const addQuestion = (
   index?: number,
 ) => {
   const newQuestion = {
-    ...defaultQuestionSettingsBase,
+    ...createDefaultQuestionSettingsBase(),
     ...defaultQuestionSettingsByType[type],
   };
 
