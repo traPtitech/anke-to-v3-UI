@@ -39,11 +39,11 @@ const nonAnsweredTargets = computed(() =>
     </div>
     <div class="questionnaire-target-result">
       <div>
-        <QuestionnaireLabel>回答した人</QuestionnaireLabel>
+        <QuestionnaireLabel>回答済み</QuestionnaireLabel>
         <UserList :users="props.questionnaire.respondents" />
       </div>
       <div>
-        <QuestionnaireLabel>まだ回答してない人</QuestionnaireLabel>
+        <QuestionnaireLabel>未回答</QuestionnaireLabel>
         <UserList :users="nonAnsweredTargets" />
       </div>
     </div>

@@ -147,10 +147,7 @@ const headerSearchText = computed<string>({
 
 <template>
   <div class="container">
-    <Header
-      v-model:search="headerSearchText"
-      :hide-search-on-mobile="isExplorerRoute"
-    />
+    <Header v-model:search="headerSearchText" />
 
     <main :class="{ 'main-explorer': isExplorerRoute }">
       <slot />

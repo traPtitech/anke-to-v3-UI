@@ -9,7 +9,7 @@ export type GatewayResponseShareType = components["schemas"]["ResShareType"];
 
 export const responseViewableByOptionsMap = {
   anyone: "全体",
-  respondents: "回答した人のみ",
+  respondents: "回答者のみ",
   admins: "管理者のみ",
 } satisfies Record<GatewayResponseShareType, string>;
 

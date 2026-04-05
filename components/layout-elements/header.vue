@@ -2,14 +2,7 @@
 import { useMe } from '~/composables/type-fetch/anke-to/client';
 
 const searchText = defineModel<string>('search', { default: '' });
-const props = withDefaults(
-  defineProps<{
-    hideSearchOnMobile?: boolean;
-  }>(),
-  {
-    hideSearchOnMobile: false,
-  },
-);
+
 const { data: me } = useMe();
 
 const goToCreate = () => navigateTo('/questionnaires/new');
@@ -27,10 +20,7 @@ const userIconSrc = computed(() => {
 </script>
 
 <template>
-  <header
-    class="header"
-    :class="{ 'hide-search-on-mobile': props.hideSearchOnMobile }"
-  >
+  <header class="header hide-search-on-mobile">
     <NuxtLink to="/" class="logo-link" aria-label="anke-to home">
       <img src="~/assets/img/logo.svg" alt="anke-to" class="logo-image" />
     </NuxtLink>

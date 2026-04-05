@@ -135,10 +135,6 @@ watch(
     <div class="form-control-footer">
       <div>質問タイプ: {{ questionType }}</div>
       <div class="form-control-footer-actions">
-        <div class="form-control-required-switch">
-          <label>必須</label>
-          <ToggleSwitch v-model="question.is_required" />
-        </div>
         <div class="form-control-footer-buttons">
           <Button
             class="p-button-icon-only p-button-text"
@@ -195,12 +191,5 @@ watch(
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.form-control-required-switch {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
 }
 </style>

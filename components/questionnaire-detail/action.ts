@@ -1,4 +1,4 @@
-import { useStoreNewQuestionnaireForm } from "~/components/questionnaire-form/store";
+import { useStoreNewQuestionnaireForm } from '~/components/questionnaire-form/store';
 
 import {
   deleteQuestionnaireById,
@@ -6,8 +6,8 @@ import {
   type PatchMyRemindStatusBody,
   type PatchQuestionnaireBody,
   patchQuestionnaireById,
-} from "~/composables/type-fetch/anke-to/client";
-import type { QuestionnaireDetail } from "./type";
+} from '~/composables/type-fetch/anke-to/client';
+import type { QuestionnaireDetail } from './type';
 
 export const useQuestionnaireActions = () => {
   const toast = useToast();
@@ -19,15 +19,15 @@ export const useQuestionnaireActions = () => {
     try {
       await patchMyRemindStatus(questionnaireId, body);
       toast.add({
-        summary: "後で回答するようリマインドを設定しました",
-        severity: "success",
+        summary: '後で回答するようリマインドを設定しました',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "回答設定の更新に失敗しました",
-        severity: "error",
+        summary: '回答設定の更新に失敗しました',
+        severity: 'error',
         life: 3000,
       });
     }
@@ -40,15 +40,15 @@ export const useQuestionnaireActions = () => {
     try {
       await patchMyRemindStatus(questionnaireId, body);
       toast.add({
-        summary: "今後このアンケートのリマインドは行いません",
-        severity: "success",
+        summary: '今後このアンケートのリマインドは行いません',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "回答設定の更新に失敗しました",
-        severity: "error",
+        summary: '回答設定の更新に失敗しました',
+        severity: 'error',
         life: 3000,
       });
     }
@@ -59,25 +59,33 @@ export const useQuestionnaireActions = () => {
       !confirm(
         `本当に「${detail.title}」を削除しますか？ (この操作は取り消せません)`,
       )
-    ) return;
+    )
+      return;
     try {
       await deleteQuestionnaireById(detail.questionnaire_id);
-      await navigateTo("/explorer");
+      await navigateTo('/explorer');
       toast.add({
-        summary: "アンケートを削除しました。",
-        severity: "success",
+        summary: 'アンケートを削除しました。',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "アンケートの削除に失敗しました。",
-        severity: "error",
+        summary: 'アンケートの削除に失敗しました。',
+        severity: 'error',
         life: 3000,
       });
     }
   };
   const actionClose = async (detail: QuestionnaireDetail) => {
+    if (
+      !confirm(
+        `本当に「${detail.title}」を締め切りますか？ (この操作は取り消せません)`,
+      )
+    )
+      return;
+
     const body: PatchQuestionnaireBody = {
       ...detail,
       response_due_date_time: toISOStringWithTZ(new Date()),
@@ -85,23 +93,21 @@ export const useQuestionnaireActions = () => {
     try {
       await patchQuestionnaireById(detail.questionnaire_id, body);
       toast.add({
-        summary: "アンケートの締め切りを設定しました。",
-        severity: "success",
+        summary: 'アンケートの締め切りを設定しました。',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "アンケートの締め切り設定に失敗しました。",
-        severity: "error",
+        summary: 'アンケートの締め切り設定に失敗しました。',
+        severity: 'error',
         life: 3000,
       });
     }
   };
 
-  const actionDuplicate = async (
-    detail: QuestionnaireDetail,
-  ) => {
+  const actionDuplicate = async (detail: QuestionnaireDetail) => {
     const { state } = useStoreNewQuestionnaireForm();
     state.title = detail.title;
     state.description = detail.description;
@@ -116,11 +122,11 @@ export const useQuestionnaireActions = () => {
     state.is_duplicate_answer_allowed = detail.is_duplicate_answer_allowed;
     state.response_viewable_by = detail.response_viewable_by;
 
-    await navigateTo("/questionnaires/new");
+    await navigateTo('/questionnaires/new');
 
     toast.add({
-      summary: "アンケートを複製しました。",
-      severity: "success",
+      summary: 'アンケートを複製しました。',
+      severity: 'success',
       life: 3000,
     });
   };

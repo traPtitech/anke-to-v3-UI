@@ -61,6 +61,7 @@ const isNotRespondDisabled = computed(
     <div class="questionnaire-actions-row questionnaire-actions-row-primary">
       <Button
         class="questionnaire-action-button"
+        severity="danger"
         :disabled="!canRespond"
         @click="
           $router.push(
@@ -74,6 +75,7 @@ const isNotRespondDisabled = computed(
       <Button
         class="questionnaire-action-button"
         outlined
+        severity="secondary"
         :disabled="!canViewResult"
         @click="
           $router.push(`/questionnaires/${detail.questionnaire_id}/result`)
@@ -85,21 +87,25 @@ const isNotRespondDisabled = computed(
     </div>
     <div class="questionnaire-actions-row questionnaire-actions-row-secondary">
       <Button
-        class="questionnaire-action-button"
-        outlined
+        class="questionnaire-action-link"
+        text
+        size="small"
+        severity="secondary"
         :disabled="isRespondLaterDisabled"
         @click="actionRespondLater(detail.questionnaire_id)"
       >
-        <Icon name="mdi:send-clock" size="24px" />
+        <Icon name="mdi:send-clock" size="18px" />
         <span>後で回答する</span>
       </Button>
       <Button
-        class="questionnaire-action-button"
-        outlined
+        class="questionnaire-action-link"
+        text
+        size="small"
+        severity="secondary"
         :disabled="isNotRespondDisabled"
         @click="actionNotRespond(detail.questionnaire_id)"
       >
-        <Icon name="mdi:flag" size="24px" />
+        <Icon name="mdi:flag" size="18px" />
         <span>回答しない</span>
       </Button>
     </div>
@@ -110,8 +116,7 @@ const isNotRespondDisabled = computed(
 .questionnaire-actions-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 12px 0;
+  gap: 12px;
 }
 
 .questionnaire-actions-row {
@@ -120,9 +125,20 @@ const isNotRespondDisabled = computed(
   gap: 16px;
 }
 
+.questionnaire-actions-row-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
 @container (max-width: 360px) {
   .questionnaire-actions-row {
     grid-template-columns: 1fr;
+  }
+
+  .questionnaire-actions-row-secondary {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -131,5 +147,12 @@ const isNotRespondDisabled = computed(
   align-items: center;
   gap: 8px;
   width: 100%;
+}
+
+.questionnaire-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
 }
 </style>

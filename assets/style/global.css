@@ -73,3 +73,7 @@
 span.iconify {
   flex-shrink: 0;
 }
+
+.relative {
+  position: relative;
+}

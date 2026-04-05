@@ -45,31 +45,40 @@ const handleAddQuestion = (
         :key="question.question_id"
         class="question-container"
       >
-        <div class="question-side-buttons">
-          <div class="drag-handle">
-            <Icon
-              size="24px"
-              name="ic:outline-drag-indicator"
-              class="drag-icon"
+        <div class="question-card">
+          <div class="question-card-number">{{ i + 1 }} 問目</div>
+          <div class="question-card-required-switch">
+            <label>必須</label>
+            <ToggleSwitch v-model="question.is_required" />
+          </div>
+          <div class="question-card-body">
+            <div class="question-side-buttons">
+              <div class="drag-handle">
+                <Icon
+                  size="24px"
+                  name="ic:outline-drag-indicator"
+                  class="drag-icon"
+                />
+              </div>
+              <Button
+                text
+                class="p-button-icon-only question-add-button"
+                title="質問を追加"
+                @click="handleAddQuestion(question.question_type, i)"
+              >
+                <Icon size="24px" name="mdi:plus-circle-outline" />
+              </Button>
+            </div>
+            <FormControl
+              class="question-control"
+              :model-value="question"
+              :auto-focus-title="focusedQuestionId === question.question_id"
+              @update:model-value="Object.assign(state.questions[i], $event)"
+              @copy="copyQuestion(state, question.question_id, i)"
+              @delete="removeQuestion(state, question.question_id)"
             />
           </div>
-          <Button
-            text
-            class="p-button-icon-only question-add-button"
-            title="質問を追加"
-            @click="handleAddQuestion(question.question_type, i)"
-          >
-            <Icon size="24px" name="mdi:plus-circle-outline" />
-          </Button>
         </div>
-        <FormControl
-          class="question-control"
-          :model-value="question"
-          :auto-focus-title="focusedQuestionId === question.question_id"
-          @update:model-value="Object.assign(state.questions[i], $event)"
-          @copy="copyQuestion(state, question.question_id, i)"
-          @delete="removeQuestion(state, question.question_id)"
-        />
       </Draggable>
     </Container>
     <AddQuestionButtons @add-question="handleAddQuestion" />
@@ -117,11 +126,39 @@ const handleAddQuestion = (
 
 /* smooth-dndのスタイルを上書きするために詳細度を上げる */
 .question-container.question-container.question-container {
+  position: relative;
   border: 1px solid var(--p-surface-300);
   border-radius: var(--p-border-radius-md);
-  padding: 16px;
+  padding: 16px 16px 16px 16px;
+}
+
+.question-card {
+  position: relative;
+}
+
+.question-card-number {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  font-weight: bold;
+  line-height: 1;
+  color: var(--p-text-color);
+}
+
+.question-card-required-switch {
+  position: absolute;
+  top: -8px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.question-card-body {
   display: flex;
   gap: 8px;
+  padding-top: 32px;
 }
 
 @media screen and (max-width: variables.$breakpoint-sm) {
@@ -155,7 +192,6 @@ const handleAddQuestion = (
 
 .form-action-buttons-container {
   position: fixed;
-  top: 32px;
   transform: translateX(1056px);
   display: flex;
   flex-direction: column;
