@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {
+  fetchMyRemindStatus,
   patchMyRemindStatus,
   type PatchMyRemindStatusBody,
 } from '~/composables/type-fetch/anke-to/client';
@@ -34,15 +35,24 @@ const statusClass = (questionnaire: GatewayQuestionnaireSummary) => {
   return 'is-open';
 };
 
-const actionRespondLater = async (questionnaireId: number) => {
+const remindStatusCache = ref<Record<number, boolean>>({});
+const remindStatusLoading = ref<Record<number, boolean>>({});
+
+const actionRespondLater = async (
+  questionnaireId: number,
+  isEnabled: boolean,
+) => {
   const body: PatchMyRemindStatusBody = {
-    is_remind_enabled: true,
+    is_remind_enabled: isEnabled,
   };
 
   try {
     await patchMyRemindStatus(questionnaireId, body);
+    remindStatusCache.value[questionnaireId] = isEnabled;
     toast.add({
-      summary: '後で回答するようリマインドを設定しました',
+      summary: isEnabled
+        ? '後で回答するようリマインドを設定しました'
+        : 'リマインド設定を解除しました',
       severity: 'success',
       life: 3000,
     });
@@ -58,10 +68,21 @@ const actionRespondLater = async (questionnaireId: number) => {
 const isRespondMenuOpen = (questionnaireId: number) =>
   openRespondMenuQuestionnaireId.value === questionnaireId;
 
-const toggleRespondMenu = (questionnaireId: number) => {
-  openRespondMenuQuestionnaireId.value = isRespondMenuOpen(questionnaireId)
-    ? null
-    : questionnaireId;
+const toggleRespondMenu = async (questionnaireId: number) => {
+  const isOpening = !isRespondMenuOpen(questionnaireId);
+  openRespondMenuQuestionnaireId.value = isOpening ? questionnaireId : null;
+
+  if (isOpening && remindStatusCache.value[questionnaireId] === undefined) {
+    remindStatusLoading.value[questionnaireId] = true;
+    try {
+      const status = await fetchMyRemindStatus(questionnaireId);
+      remindStatusCache.value[questionnaireId] = status.is_remind_enabled;
+    } catch {
+      // ignore in case of fetch failure
+    } finally {
+      remindStatusLoading.value[questionnaireId] = false;
+    }
+  }
 };
 
 const closeRespondMenu = () => {
@@ -70,7 +91,8 @@ const closeRespondMenu = () => {
 
 const handleRespondLaterClick = async (questionnaireId: number) => {
   closeRespondMenu();
-  await actionRespondLater(questionnaireId);
+  const currentStatus = remindStatusCache.value[questionnaireId] ?? false;
+  await actionRespondLater(questionnaireId, !currentStatus);
 };
 
 const handleClickOutsideRespondMenu = (event: MouseEvent) => {
@@ -162,8 +184,9 @@ onBeforeUnmount(() => {
                 </NuxtLink>
 
                 <NuxtLink
+                  v-if="questionnaire.is_administrated_by_me"
                   class="hover-menu-item"
-                  :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
+                  :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
                 >
                   <Icon name="mdi:square-edit-outline" size="18px" />
                   <span>アンケートを編集</span>
@@ -218,12 +241,33 @@ onBeforeUnmount(() => {
                   type="button"
                   class="respond-menu-item"
                   role="menuitem"
+                  :disabled="
+                    remindStatusLoading[questionnaire.questionnaire_id]
+                  "
                   @click="
                     handleRespondLaterClick(questionnaire.questionnaire_id)
                   "
                 >
-                  <Icon name="mdi:send-clock" size="18px" />
-                  <span>後で回答する</span>
+                  <template
+                    v-if="remindStatusLoading[questionnaire.questionnaire_id]"
+                  >
+                    <Icon name="mdi:loading" class="animate-spin" size="18px" />
+                    <span>読み込み中...</span>
+                  </template>
+                  <template
+                    v-else-if="
+                      remindStatusCache[questionnaire.questionnaire_id]
+                    "
+                  >
+                    <span class="action-icon-wrapper is-canceled">
+                      <Icon name="mdi:send-clock" size="18px" />
+                    </span>
+                    <span>リマインドしない</span>
+                  </template>
+                  <template v-else>
+                    <Icon name="mdi:send-clock" size="18px" />
+                    <span>後で回答する</span>
+                  </template>
                 </button>
               </div>
             </Transition>
@@ -584,7 +628,7 @@ onBeforeUnmount(() => {
   right: 0;
   bottom: calc(100% + 8px);
   z-index: 15;
-  min-width: 190px;
+  width: max-content;
   padding: 8px;
   border: 1px solid var(--p-surface-300);
   border-radius: var(--p-border-radius-md);
@@ -636,6 +680,38 @@ onBeforeUnmount(() => {
   transform: translateX(10%);
 }
 
+.action-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon-wrapper.is-canceled::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10%;
+  width: 120%;
+  height: 1.5px;
+  background-color: currentColor;
+  transform: translateY(-50%) rotate(-45deg);
+  border-radius: 2px;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media screen and (max-width: 900px) {
   .card {
     flex-direction: column;
@@ -652,8 +728,20 @@ onBeforeUnmount(() => {
     justify-content: flex-start;
   }
 
+  .card-title-row {
+    padding-right: 40px;
+  }
+
+  .hover-menu {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
   .hover-menu-list {
-    right: -42px;
+    top: calc(100% + 8px);
+    bottom: auto;
+    right: 0;
   }
 }
 

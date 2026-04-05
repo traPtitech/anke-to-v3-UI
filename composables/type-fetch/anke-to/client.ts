@@ -31,21 +31,23 @@ export const useGetQuestionnaire = (id: number) =>
     return res.data;
   });
 
+export const fetchMyRemindStatus = async (questionnaireID: number) => {
+  const res = await client.GET(
+    "/questionnaires/{questionnaireID}/myRemindStatus",
+    {
+      params: { path: { questionnaireID } },
+    },
+  );
+  if (res.data === undefined) {
+    throw new Error("No data returned from the API");
+  }
+  return res.data;
+};
+
 export const useGetMyRemindStatus = (questionnaireID: number) =>
   useAsyncData(
     `/questionnaires/${questionnaireID}/myRemindStatus`,
-    async () => {
-      const res = await client.GET(
-        "/questionnaires/{questionnaireID}/myRemindStatus",
-        {
-          params: { path: { questionnaireID } },
-        },
-      );
-      if (res.data === undefined) {
-        throw new Error("No data returned from the API");
-      }
-      return res.data;
-    },
+    async () => fetchMyRemindStatus(questionnaireID)
   );
 
 export type PostQuestionnaireBody =

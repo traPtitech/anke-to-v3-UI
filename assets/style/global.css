@@ -6,7 +6,6 @@
   font-weight: 500;
 }
 
-/* PrimeVue のスタイルを上書きできるように詳細度を上げる */
 .p-toggleswitch-handle.p-toggleswitch-handle {
   margin-block-start: initial;
   transform: translateY(-50%);
@@ -76,4 +75,45 @@ span.iconify {
 
 .relative {
   position: relative;
+}
+
+.question-answer-view {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.answer-text {
+  font-size: 15px;
+  color: var(--p-text-color);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.answer-empty {
+  font-size: 14px;
+  color: var(--p-text-muted-color);
+  font-style: italic;
+}
+
+.answer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: var(--p-primary-50);
+  color: var(--p-primary-700);
+  border: 1px solid var(--p-primary-200);
+  transition: all 0.2s ease;
+}
+
+.answer-chip-unselected {
+  background-color: transparent;
+  color: var(--p-text-muted-color);
+  border: 1px dashed var(--p-surface-300);
 }

@@ -14,14 +14,18 @@ const { valid } = useQuestionValidity(question.value);
 </script>
 
 <template>
+  <div v-if="props.mode === 'view'" class="question-answer-view">
+    <span v-if="question.answer" class="answer-text">{{ question.answer }}</span>
+    <span v-else class="answer-empty">（未回答）</span>
+  </div>
   <TextArea
+    v-else
     v-model="question.answer"
     class="question-element-text-long"
     placeholder="回答を入力"
     auto-resize
     :required="question.is_required"
-    :class="{ 'p-invalid': props.mode === 'edit' && !valid }"
-    :readonly="props.mode === 'view'"
+    :class="{ 'p-invalid': !valid }"
   />
 </template>
 

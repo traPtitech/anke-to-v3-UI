@@ -10,22 +10,20 @@ export const useResolveUserSpecifier = (
   const { getTraqIDFromUserID } = useTraqId();
   const { allUserNames } = useAllUsers();
 
-  // どのグループにも所属していないユーザー
   const restUsers = computed(() => {
     if (specifier.users.includes(ALL_MENTION_USER)) return [];
 
     const _groupMemberIds = specifier.groups.flatMap((group) =>
-      getGroupMembersFromGroupID(group)
+      getGroupMembersFromGroupID(group),
     );
     const groupMemberIds = excludeFalsy(_groupMemberIds);
     const _groupMemberNames = groupMemberIds.map((id) =>
-      getTraqIDFromUserID(id)
+      getTraqIDFromUserID(id),
     );
     const groupMemberNames = excludeFalsy(_groupMemberNames);
     const groupMemberNamesSet = new Set(groupMemberNames);
 
-    return actualUsers
-      .filter((user) => !groupMemberNamesSet.has(user));
+    return actualUsers.filter((user) => !groupMemberNamesSet.has(user));
   });
 
   const groups = computed(() => {

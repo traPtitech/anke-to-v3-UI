@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {
   useGetMyRemindStatus,
+  useGetQuestionnaireResponses,
   useMe,
 } from '~/composables/type-fetch/anke-to/client';
 import { useQuestionnaireActions } from './action';
@@ -14,15 +15,33 @@ const { data: myRemindStatus } = useGetMyRemindStatus(
   props.detail.questionnaire_id,
 );
 
+const { data: responses } = useGetQuestionnaireResponses(
+  props.detail.questionnaire_id,
+  {
+    onlyMyResponse: true,
+  },
+);
+
+const latestDraft = computed(() => {
+  if (!responses.value) return null;
+  const drafts = responses.value.filter((r) => r.is_draft);
+  if (drafts.length === 0) return null;
+  return drafts.reduce(
+    (latest, current) =>
+      new Date(current.modified_at) > new Date(latest.modified_at)
+        ? current
+        : latest,
+    drafts[0],
+  );
+});
+
 const canRespond = computed(() => {
-  // 既に回答済み
   if (
     !props.detail.is_duplicate_answer_allowed &&
     props.detail.respondents.includes(me.value?.name ?? '')
   )
     return false;
 
-  // 期限なし
   if (props.detail.response_due_date_time === undefined) return true;
 
   const now = new Date();
@@ -46,21 +65,24 @@ const canViewResult = computed(() => {
 const isRemindEnabled = computed(
   () => myRemindStatus.value?.is_remind_enabled ?? false,
 );
-
-const isRespondLaterDisabled = computed(
-  () => !canRespond.value || isRemindEnabled.value,
-);
-
-const isNotRespondDisabled = computed(
-  () => !canRespond.value || !isRemindEnabled.value,
-);
 </script>
 
 <template>
   <div class="questionnaire-actions-container">
     <div class="questionnaire-actions-row questionnaire-actions-row-primary">
       <Button
-        class="questionnaire-action-button"
+        v-if="latestDraft"
+        class="questionnaire-action-button questionnaire-action-button-respond"
+        severity="warn"
+        :disabled="!canRespond"
+        @click="$router.push(`/responses/${latestDraft.response_id}/edit`)"
+      >
+        <Icon name="mdi:file-document-edit" size="20px" />
+        <span>下書きの続きを書く</span>
+      </Button>
+      <Button
+        v-else
+        class="questionnaire-action-button questionnaire-action-button-respond"
         severity="danger"
         :disabled="!canRespond"
         @click="
@@ -69,7 +91,7 @@ const isNotRespondDisabled = computed(
           )
         "
       >
-        <Icon name="mdi:send" size="24px" />
+        <Icon name="mdi:send" size="20px" />
         <span>回答する</span>
       </Button>
       <Button
@@ -81,7 +103,7 @@ const isNotRespondDisabled = computed(
           $router.push(`/questionnaires/${detail.questionnaire_id}/result`)
         "
       >
-        <Icon name="mdi:text-box-multiple-outline" size="24px" />
+        <Icon name="mdi:text-box-multiple-outline" size="20px" />
         <span>結果を見る</span>
       </Button>
     </div>
@@ -91,21 +113,29 @@ const isNotRespondDisabled = computed(
         text
         size="small"
         severity="secondary"
-        :disabled="isRespondLaterDisabled"
-        @click="actionRespondLater(detail.questionnaire_id)"
+        @click="
+          isRemindEnabled
+            ? actionNotRespond(detail.questionnaire_id)
+            : actionRespondLater(detail.questionnaire_id)
+        "
       >
-        <Icon name="mdi:send-clock" size="18px" />
-        <span>後で回答する</span>
+        <span class="action-icon-wrapper" :class="{ 'is-canceled': isRemindEnabled }">
+          <Icon name="mdi:send-clock" size="16px" />
+        </span>
+        <span v-if="isRemindEnabled">リマインドしない</span>
+        <span v-else>後で回答する</span>
       </Button>
+
+      <span class="action-divider">|</span>
       <Button
         class="questionnaire-action-link"
         text
         size="small"
         severity="secondary"
-        :disabled="isNotRespondDisabled"
+        disabled
         @click="actionNotRespond(detail.questionnaire_id)"
       >
-        <Icon name="mdi:flag" size="18px" />
+        <Icon name="mdi:flag" size="16px" />
         <span>回答しない</span>
       </Button>
     </div>
@@ -116,43 +146,73 @@ const isNotRespondDisabled = computed(
 .questionnaire-actions-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.questionnaire-actions-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+.questionnaire-actions-row-primary {
+  display: flex;
+  gap: 12px;
 }
 
 .questionnaire-actions-row-secondary {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  align-items: center;
+  gap: 4px;
 }
 
-@container (max-width: 360px) {
-  .questionnaire-actions-row {
-    grid-template-columns: 1fr;
-  }
-
-  .questionnaire-actions-row-secondary {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.action-divider {
+  color: var(--p-surface-300);
+  font-size: 14px;
+  user-select: none;
 }
 
 .questionnaire-action-button {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
+  flex: 1;
+  justify-content: center;
+}
+
+.questionnaire-action-button-respond {
+  flex: 1.5;
 }
 
 .questionnaire-action-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   padding: 0;
+  font-size: 13px;
+}
+
+.action-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon-wrapper.is-canceled::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10%;
+  width: 120%;
+  height: 1.5px;
+  background-color: currentColor;
+  transform: translateY(-50%) rotate(-45deg);
+  border-radius: 2px;
+}
+
+@container (max-width: 400px) {
+  .questionnaire-actions-row-primary {
+    flex-direction: column;
+  }
+
+  .questionnaire-action-button {
+    width: 100%;
+  }
 }
 </style>

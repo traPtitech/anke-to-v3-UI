@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useMe } from '~/composables/type-fetch/anke-to/client';
 import QuestionnaireBasicInfoContainer from '~/components/ui/questionnaire/basic-info-container.vue';
 import QuestionnaireMiscInfoContainer from '~/components/ui/questionnaire/misc-info-container.vue';
 import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
@@ -8,142 +9,141 @@ import QuestionnaireAdminActions from './questionnaire-admin-actions.vue';
 import QuestionnaireMyResponsesContainer from './questionnaire-my-responses-container.vue';
 import type { QuestionnaireDetail } from './type';
 
-defineProps<{ detail: QuestionnaireDetail }>();
+const props = defineProps<{ detail: QuestionnaireDetail }>();
+
+const { data: me } = useMe();
+const isQuestionnaireAdmin = computed(() =>
+  props.detail.admins.includes(me.value?.name ?? ''),
+);
 </script>
 
 <template>
-  <div class="questionnaire-detail-container">
-    <QuestionnaireTitleContainer
-      :questionnaire="detail"
-      class="detail-card detail-card-title"
-    />
+  <div class="detail-page">
+    <div class="detail-title-area">
+      <QuestionnaireTitleContainer :questionnaire="detail" />
+    </div>
 
-    <section class="detail-surface-group">
-      <QuestionnaireActions
-        :detail="detail"
-        class="detail-card detail-card-soft"
-      />
-      <QuestionnaireBasicInfoContainer
-        :questionnaire="detail"
-        class="detail-card detail-card-soft"
-      />
-      <QuestionnaireRespondentsContainer
-        :questionnaire="detail"
-        class="detail-card detail-card-soft"
-      />
-      <QuestionnaireMiscInfoContainer
-        :questionnaire="detail"
-        class="detail-card detail-card-soft"
-      />
-      <QuestionnaireMyResponsesContainer
-        :detail="detail"
-        class="detail-card detail-card-soft"
-      />
-    </section>
+    <div class="detail-columns">
+      <div class="detail-main">
+        <section class="main-section">
+          <QuestionnaireActions :detail="detail" />
+        </section>
 
-    <section class="detail-danger-group">
-      <QuestionnaireAdminActions
-        :detail="detail"
-        class="detail-card detail-card-danger"
-      />
-    </section>
+        <section class="main-section">
+          <QuestionnaireMyResponsesContainer :detail="detail" />
+        </section>
+
+        <section v-if="isQuestionnaireAdmin" class="main-section main-section-admin">
+          <QuestionnaireAdminActions :detail="detail" />
+        </section>
+      </div>
+
+      <aside class="detail-sidebar">
+        <QuestionnaireBasicInfoContainer :questionnaire="detail" />
+        <QuestionnaireRespondentsContainer :questionnaire="detail" />
+        <QuestionnaireMiscInfoContainer :questionnaire="detail" />
+      </aside>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
-.questionnaire-detail-container {
+.detail-page {
   max-width: 1080px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  container-type: inline-size;
+  gap: 24px;
   padding-bottom: 50vh;
+  container-type: inline-size;
 }
 
-.detail-surface-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 14px;
-  border-radius: calc(var(--p-border-radius-md) + 8px);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--p-surface-0) 70%, var(--p-surface-100)),
-    color-mix(in srgb, var(--p-surface-0) 45%, var(--p-surface-100))
-  );
-}
-
-.detail-danger-group {
-  padding: 14px;
-  border-radius: calc(var(--p-border-radius-md) + 8px);
-  background: color-mix(in srgb, var(--p-red-100) 38%, var(--p-surface-0));
-}
-
-.questionnaire-detail-container :deep(.detail-card.questionnaire-container),
-.questionnaire-detail-container
-  :deep(.detail-card.questionnaire-grid-container) {
-  border: none;
-  box-shadow: none;
-  border-radius: var(--p-border-radius-md);
-}
-
-.questionnaire-detail-container
-  :deep(.detail-card-soft.questionnaire-container),
-.questionnaire-detail-container
-  :deep(.detail-card-soft.questionnaire-grid-container) {
-  background: color-mix(in srgb, var(--p-surface-0) 82%, var(--p-surface-100));
-}
-
-.questionnaire-detail-container
-  :deep(.detail-card-title.questionnaire-container) {
+.detail-title-area {
   background: linear-gradient(
     135deg,
     color-mix(in srgb, var(--p-red-100) 58%, var(--p-surface-0)),
     color-mix(in srgb, var(--p-red-50) 40%, var(--p-surface-0))
   );
-}
-
-.questionnaire-detail-container :deep(.detail-card-danger) {
-  background: transparent;
-}
-
-.questionnaire-detail-element-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  border-radius: 12px;
   padding: 32px;
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
 }
 
-.questionnaire-detail-element {
+.detail-title-area h1 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
-.questionnaire-detail-element-label {
-  font-weight: bold;
-  font-size: 14px;
+.detail-columns {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
 }
 
-@media screen and (max-width: variables.$breakpoint-lg) {
-  .questionnaire-target-container {
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.main-section {
+  padding: 24px;
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--p-surface-0) 85%, var(--p-surface-100)),
+    color-mix(in srgb, var(--p-surface-0) 65%, var(--p-surface-100))
+  );
+}
+
+.main-section-admin {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--p-surface-0) 90%, var(--p-surface-100)),
+    color-mix(in srgb, var(--p-surface-0) 75%, var(--p-surface-100))
+  );
+  border: 1px solid var(--p-surface-200);
+  border-left: 3px solid var(--p-orange-300);
+}
+
+.detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 20px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--p-surface-0) 80%, var(--p-surface-100));
+  position: sticky;
+  top: 24px;
+}
+
+@container (max-width: 768px) {
+  .detail-columns {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .detail-sidebar {
+    position: static;
   }
 }
 
-@media screen and (max-width: variables.$breakpoint-md) {
-  .questionnaire-detail-element-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media screen and (max-width: variables.$breakpoint-sm) {
-  .detail-surface-group,
-  .detail-danger-group {
-    padding: 8px;
+@container (max-width: 480px) {
+  .detail-title-area {
+    padding: 20px;
   }
 
-  .questionnaire-detail-element-container {
+  .detail-title-area h1 {
+    font-size: 20px;
+  }
+
+  .main-section {
+    padding: 16px;
+  }
+
+  .detail-sidebar {
     padding: 16px;
   }
 }

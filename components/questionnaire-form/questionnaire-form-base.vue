@@ -124,7 +124,6 @@ const handleAddQuestion = (
   min-height: 32px;
 }
 
-/* smooth-dndのスタイルを上書きするために詳細度を上げる */
 .question-container.question-container.question-container {
   position: relative;
   border: 1px solid var(--p-surface-300);

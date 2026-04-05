@@ -25,13 +25,17 @@ const answerModel = computed({
 </script>
 
 <template>
+  <div v-if="props.mode === 'view'" class="question-answer-view">
+    <span v-if="question.answer !== undefined" class="answer-text">{{ question.answer }}</span>
+    <span v-else class="answer-empty">（未回答）</span>
+  </div>
   <InputNumber
+    v-else
     v-model="answerModel"
     class="question-element-number"
     placeholder="回答を入力"
     :input-props="{ required: question.is_required }"
-    :class="{ 'p-invalid': props.mode === 'edit' && !valid }"
-    :readonly="props.mode === 'view'"
+    :class="{ 'p-invalid': !valid }"
   />
 </template>
 

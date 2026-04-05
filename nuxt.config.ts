@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 
 import { BrandPreset } from "./theme/preset";
 

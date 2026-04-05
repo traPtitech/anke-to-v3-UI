@@ -171,7 +171,6 @@ const showChoiceCountRequiredError = (optionId: number, index: number) =>
   border-color: #e6d6d6;
 }
 
-/* smooth-dndのスタイルを上書きするために詳細度を上げる */
 .choice-group-element.choice-group-element.choice-group-element {
   padding: 4px 0;
 }
