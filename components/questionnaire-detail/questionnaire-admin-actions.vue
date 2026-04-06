@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import { useMe } from '~/composables/type-fetch/anke-to/client';
 import { useQuestionnaireActions } from './action';
 import type { QuestionnaireDetail } from './type';
@@ -28,18 +29,16 @@ const canAnswer = computed(
     </h3>
     <div class="admin-actions-body">
       <div class="admin-actions-main">
-        <Button
+        <ButtonLink
           class="admin-action-btn"
-          size="small"
-          outlined
+          size="sm"
+          variant="secondary"
+          :to="`/questionnaires/${detail.questionnaire_id}/edit`"
           :disabled="!canEdit"
-          @click="
-            $router.push(`/questionnaires/${detail.questionnaire_id}/edit`)
-          "
         >
           <Icon name="mdi:pencil-outline" size="18px" />
           <span>編集する</span>
-        </Button>
+        </ButtonLink>
         <Button
           class="admin-action-btn"
           size="small"

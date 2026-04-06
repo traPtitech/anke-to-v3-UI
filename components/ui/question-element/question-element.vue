@@ -18,6 +18,18 @@ const props = defineProps<{
 
 const question = defineModel<QuestionElement>({ required: true });
 const { valid } = useQuestionValidity(question.value);
+const questionTypeLabelMap = {
+  Text: '短文',
+  TextLong: '長文',
+  Number: '数値',
+  SingleChoice: '単一選択',
+  MultipleChoice: '複数選択',
+  Scale: '評価',
+} satisfies Record<QuestionElement['question_type'], string>;
+
+const questionTypeLabel = computed(
+  () => questionTypeLabelMap[question.value.question_type],
+);
 </script>
 
 <template>
@@ -34,6 +46,7 @@ const { valid } = useQuestionValidity(question.value);
           必須
         </span>
         <span v-else class="question-element-non-required-chip">任意</span>
+        <span class="question-element-type-chip">{{ questionTypeLabel }}</span>
       </p>
     </div>
     <MarkdownBlock
@@ -82,7 +95,7 @@ const { valid } = useQuestionValidity(question.value);
   padding: 20px 24px;
   border: 1px solid var(--p-surface-200);
   border-radius: 12px;
-  background: color-mix(in srgb, var(--p-surface-0) 80%, var(--p-surface-50));
+  background-color: var(--p-surface-0);
 }
 
 .question-element-header {
@@ -106,7 +119,8 @@ const { valid } = useQuestionValidity(question.value);
 }
 
 .question-element-required-chip,
-.question-element-non-required-chip {
+.question-element-non-required-chip,
+.question-element-type-chip {
   vertical-align: middle;
   display: inline-block;
   padding: 2px 8px;
@@ -125,6 +139,11 @@ const { valid } = useQuestionValidity(question.value);
 .question-element-non-required-chip {
   background-color: var(--p-surface-200);
   color: var(--p-text-muted-color);
+}
+
+.question-element-type-chip {
+  background-color: var(--p-surface-100);
+  color: var(--p-text-secondary);
 }
 
 .question-element-description {

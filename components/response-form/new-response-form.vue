@@ -106,18 +106,17 @@ const handleSend = async () => {
       <IconButton
         variant="secondary"
         icon="mdi:close"
-        @click="handleSave"
         :disabled="!atLeastOneFilled"
         :title="
           !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''
         "
+        @click="handleSave"
       >
         <span>一時保存</span>
       </IconButton>
       <IconButton
         variant="primary"
         icon="mdi:content-save"
-        @click="handleSend"
         :disabled="!valid || !atLeastOneFilled"
         :title="
           !atLeastOneFilled
@@ -126,6 +125,7 @@ const handleSend = async () => {
               ? '必須項目を回答してください'
               : ''
         "
+        @click="handleSend"
       >
         <span>送信</span>
       </IconButton>

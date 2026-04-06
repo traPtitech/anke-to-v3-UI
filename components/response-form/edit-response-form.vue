@@ -22,6 +22,13 @@ const initialState = getExistingResponseFormState(
   props.response,
 );
 const { state, valid, atLeastOneFilled } = useResponseFormStore(initialState);
+const isEditingDraft = props.response.is_draft;
+const saveButtonLabel = computed(() =>
+  isEditingDraft ? '一時保存' : '下書きに戻す',
+);
+const saveButtonIcon = computed(() =>
+  isEditingDraft ? 'mdi:close' : 'mdi:file-undo-outline',
+);
 
 const handleSave = async () => {
   if (!atLeastOneFilled.value) {
@@ -39,14 +46,18 @@ const handleSave = async () => {
       is_draft: true,
     });
     toast.add({
-      summary: '回答を一時保存しました',
+      summary: isEditingDraft
+        ? '回答を一時保存しました'
+        : '回答を下書きに戻しました',
       severity: 'success',
       life: 3000,
     });
   } catch (err) {
     console.error(err);
     toast.add({
-      summary: '回答の一時保存に失敗しました',
+      summary: isEditingDraft
+        ? '回答の一時保存に失敗しました'
+        : '回答を下書きに戻せませんでした',
       severity: 'error',
       life: 3000,
     });
@@ -101,19 +112,18 @@ const handleSend = async () => {
     <template #buttons>
       <IconButton
         variant="secondary"
-        icon="mdi:close"
-        @click="handleSave"
+        :icon="saveButtonIcon"
         :disabled="!atLeastOneFilled"
         :title="
           !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''
         "
+        @click="handleSave"
       >
-        <span>一時保存</span>
+        <span>{{ saveButtonLabel }}</span>
       </IconButton>
       <IconButton
         variant="primary"
         icon="mdi:content-save"
-        @click="handleSend"
         :disabled="!valid || !atLeastOneFilled"
         :title="
           !atLeastOneFilled
@@ -122,6 +132,7 @@ const handleSend = async () => {
               ? '必須項目を回答してください'
               : ''
         "
+        @click="handleSend"
       >
         <span>送信</span>
       </IconButton>

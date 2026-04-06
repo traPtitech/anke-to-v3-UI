@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import QuestionElement from '~/components/ui/question-element/question-element.vue';
 import {
@@ -23,17 +24,14 @@ const dueDateString = computed(() => {
 <template>
   <form class="response-form-container">
     <div class="response-form-nav">
-      <Button
-        class="p-button-icon-only back-button"
-        variant="text"
-        @click="
-          $router.push(
-            `/questionnaires/${props.questionnaire.questionnaire_id}`,
-          )
-        "
+      <ButtonLink
+        class="back-link"
+        variant="ghost"
+        :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       >
         <Icon name="mdi:chevron-left" size="24px" />
-      </Button>
+        <span>アンケート詳細画面に戻る</span>
+      </ButtonLink>
     </div>
 
     <div class="response-form-title-row">
@@ -93,6 +91,7 @@ const dueDateString = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
   padding-bottom: 50vh;
@@ -105,8 +104,8 @@ const dueDateString = computed(() => {
   align-items: center;
 }
 
-.back-button {
-  color: var(--p-text-muted-color);
+.back-link {
+  font-weight: 600;
 }
 
 .response-form-title-row {
@@ -116,11 +115,8 @@ const dueDateString = computed(() => {
   gap: 16px;
   padding: 24px 28px;
   border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--p-red-100) 50%, var(--p-surface-0)),
-    color-mix(in srgb, var(--p-red-50) 35%, var(--p-surface-0))
-  );
+  border: 1px solid var(--p-surface-200);
+  background-color: var(--p-surface-0);
 }
 
 .response-form-title-area {

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import {
   useGetMyRemindStatus,
   useGetQuestionnaireResponses,
@@ -65,79 +66,68 @@ const canViewResult = computed(() => {
 const isRemindEnabled = computed(
   () => myRemindStatus.value?.is_remind_enabled ?? false,
 );
+
+const remindSwitchId = computed(
+  () => `questionnaire-remind-switch-${props.detail.questionnaire_id}`,
+);
+
+const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
+  const isEnabled = nextValue ?? false;
+
+  if (isEnabled === isRemindEnabled.value) {
+    return;
+  }
+
+  if (isEnabled) {
+    void actionRespondLater(props.detail.questionnaire_id);
+    return;
+  }
+
+  void actionNotRespond(props.detail.questionnaire_id);
+};
 </script>
 
 <template>
   <div class="questionnaire-actions-container">
     <div class="questionnaire-actions-row questionnaire-actions-row-primary">
-      <Button
-        v-if="latestDraft"
+      <ButtonLink
+        v-if="latestDraft && canRespond"
         class="questionnaire-action-button questionnaire-action-button-respond"
-        severity="warn"
-        :disabled="!canRespond"
-        @click="$router.push(`/responses/${latestDraft.response_id}/edit`)"
+        variant="primary"
+        :to="`/responses/${latestDraft.response_id}/edit`"
       >
         <Icon name="mdi:file-document-edit" size="20px" />
         <span>下書きの続きを書く</span>
-      </Button>
-      <Button
+      </ButtonLink>
+      <ButtonLink
         v-else
         class="questionnaire-action-button questionnaire-action-button-respond"
-        severity="danger"
+        variant="primary"
+        :to="`/questionnaires/${detail.questionnaire_id}/responses/new`"
         :disabled="!canRespond"
-        @click="
-          $router.push(
-            `/questionnaires/${detail.questionnaire_id}/responses/new`,
-          )
-        "
       >
         <Icon name="mdi:send" size="20px" />
         <span>回答する</span>
-      </Button>
-      <Button
+      </ButtonLink>
+      <ButtonLink
         class="questionnaire-action-button"
-        outlined
-        severity="secondary"
+        variant="secondary"
+        :to="`/questionnaires/${detail.questionnaire_id}/result`"
         :disabled="!canViewResult"
-        @click="
-          $router.push(`/questionnaires/${detail.questionnaire_id}/result`)
-        "
       >
         <Icon name="mdi:text-box-multiple-outline" size="20px" />
         <span>結果を見る</span>
-      </Button>
+      </ButtonLink>
     </div>
     <div class="questionnaire-actions-row questionnaire-actions-row-secondary">
-      <Button
-        class="questionnaire-action-link"
-        text
-        size="small"
-        severity="secondary"
-        @click="
-          isRemindEnabled
-            ? actionNotRespond(detail.questionnaire_id)
-            : actionRespondLater(detail.questionnaire_id)
-        "
-      >
-        <span class="action-icon-wrapper" :class="{ 'is-canceled': isRemindEnabled }">
-          <Icon name="mdi:send-clock" size="16px" />
-        </span>
-        <span v-if="isRemindEnabled">リマインドしない</span>
-        <span v-else>後で回答する</span>
-      </Button>
-
-      <span class="action-divider">|</span>
-      <Button
-        class="questionnaire-action-link"
-        text
-        size="small"
-        severity="secondary"
-        disabled
-        @click="actionNotRespond(detail.questionnaire_id)"
-      >
-        <Icon name="mdi:flag" size="16px" />
-        <span>回答しない</span>
-      </Button>
+      <label class="remind-switch-item" :for="remindSwitchId">
+        <ToggleSwitch
+          :id="remindSwitchId"
+          :model-value="isRemindEnabled"
+          @update:model-value="handleRemindSwitchUpdate"
+        />
+        <span>このアンケートに関するリマインドを受け取る</span>
+      </label>
     </div>
   </div>
 </template>
@@ -158,13 +148,7 @@ const isRemindEnabled = computed(
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px;
-}
-
-.action-divider {
-  color: var(--p-surface-300);
-  font-size: 14px;
-  user-select: none;
+  gap: 8px;
 }
 
 .questionnaire-action-button {
@@ -179,31 +163,13 @@ const isRemindEnabled = computed(
   flex: 1.5;
 }
 
-.questionnaire-action-link {
+.remind-switch-item {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 0;
-  font-size: 13px;
-}
-
-.action-icon-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-icon-wrapper.is-canceled::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: -10%;
-  width: 120%;
-  height: 1.5px;
-  background-color: currentColor;
-  transform: translateY(-50%) rotate(-45deg);
-  border-radius: 2px;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--p-text-color);
+  cursor: pointer;
 }
 
 @container (max-width: 400px) {

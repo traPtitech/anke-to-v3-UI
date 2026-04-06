@@ -77,6 +77,7 @@ const generateBulkResponses = (
       } else {
         const _: never = question;
         throw new Error(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           `Unknown question type: ${(question as any).question_type}`,
         );
       }
@@ -162,6 +163,7 @@ const generateAnonymousResponses = (
       } else {
         const _: never = question;
         throw new Error(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           `Unknown question type: ${(question as any).question_type}`,
         );
       }
@@ -353,8 +355,6 @@ export const responseHandlers = [
   http.get("/api/responses/myResponses", (req) => {
     const sort = new URL(req.request.url).searchParams.get("sort") ??
       "submitted_at";
-
-    console.log("my responses", req);
 
     const sortedResponses = questionnairesData.map((q) => {
       const responses = responsesData.filter(

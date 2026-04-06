@@ -20,26 +20,35 @@ const { results } = useQuestionnaireResult(
 <template>
   <div class="questionnaire-result-container">
     <div class="result-header">
-      <Button
-        class="p-button-icon-only"
-        variant="text"
-        @click="
-          $router.push(
-            `/questionnaires/${props.questionnaire.questionnaire_id}`,
-          )
-        "
+      <NuxtLink
+        class="result-back-link"
+        :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       >
         <Icon name="mdi:chevron-left" size="24px" />
-      </Button>
+        <span>アンケート詳細画面に戻る</span>
+      </NuxtLink>
     </div>
-    <ResultTitleContainer :questionnaire="props.questionnaire" />
-    <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
-    <QuestionResult
-      v-for="(result, i) in results"
-      :key="i"
-      :result="result"
-      :is-anonymous="props.questionnaire.is_anonymous"
-    />
+
+    <section class="result-info-section">
+      <p class="section-label">アンケート情報</p>
+      <ResultTitleContainer :questionnaire="props.questionnaire" />
+      <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
+    </section>
+
+    <section class="result-questions-section">
+      <div class="result-questions-header">
+        <h2>質問ごとの結果</h2>
+      </div>
+
+      <QuestionResult
+        v-for="(result, i) in results"
+        :key="i"
+        :result="result"
+        :index="i + 1"
+        :total="results.length"
+        :is-anonymous="props.questionnaire.is_anonymous"
+      />
+    </section>
   </div>
 </template>
 
@@ -48,6 +57,7 @@ const { results } = useQuestionnaireResult(
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding-bottom: 50vh;
@@ -56,5 +66,57 @@ const { results } = useQuestionnaireResult(
 .result-header {
   display: flex;
   align-items: center;
+}
+
+.result-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--p-primary-700);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: var(--p-border-radius-md);
+  padding: 4px 8px;
+}
+
+.result-back-link:hover {
+  background-color: var(--p-primary-50);
+}
+
+.result-info-section,
+.result-questions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  padding: 20px;
+  background-color: var(--p-surface-0);
+}
+
+.result-questions-section {
+  gap: 14px;
+}
+
+.section-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--p-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.result-questions-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--p-surface-200);
+}
+
+.result-questions-header h2 {
+  margin: 0;
+  font-size: 19px;
 }
 </style>

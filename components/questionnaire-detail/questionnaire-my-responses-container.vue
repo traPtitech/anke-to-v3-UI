@@ -14,6 +14,15 @@ const { data, refresh } = useGetQuestionnaireResponses(
 );
 
 const deleting = ref<number | null>(null);
+const isDueOver = computed(() => {
+  const due = props.detail.response_due_date_time;
+  if (due === undefined) {
+    return false;
+  }
+
+  return new Date(due).getTime() < Date.now();
+});
+
 const handleDelete = async (responseId: number) => {
   if (!confirm('この回答を削除します。よろしいですか？')) return;
   deleting.value = responseId;
@@ -34,6 +43,9 @@ const handleDelete = async (responseId: number) => {
       <Icon name="mdi:file-document-edit-outline" size="18px" />
       <span>あなたの回答</span>
     </h3>
+    <small v-if="isDueOver" class="due-over-note">
+      回答期限を過ぎているため、回答の編集・削除はできません。
+    </small>
     <div v-if="data === undefined" class="status-text">読み込み中...</div>
     <div v-else-if="data.length === 0" class="status-text">
       まだ回答していません
@@ -60,14 +72,14 @@ const handleDelete = async (responseId: number) => {
             </div>
           </div>
         </NuxtLink>
-        <div class="response-actions">
-          <button
+        <div v-if="!isDueOver" class="response-actions">
+          <NuxtLink
             class="action-btn edit-btn"
+            :to="`/responses/${response.response_id}/edit`"
             title="編集する"
-            @click="$router.push(`/responses/${response.response_id}/edit`)"
           >
             <Icon name="mdi:pencil-outline" size="16px" />
-          </button>
+          </NuxtLink>
           <button
             class="action-btn delete-btn"
             title="削除する"
@@ -102,6 +114,11 @@ const handleDelete = async (responseId: number) => {
 .status-text {
   color: var(--p-text-muted-color);
   font-size: 14px;
+}
+
+.due-over-note {
+  color: var(--p-text-muted-color);
+  font-size: 12px;
 }
 
 .response-list {
@@ -188,6 +205,7 @@ const handleDelete = async (responseId: number) => {
   border-radius: var(--p-border-radius-md);
   background: none;
   color: var(--p-text-muted-color);
+  text-decoration: none;
   cursor: pointer;
   transition: all 0.15s ease;
 }

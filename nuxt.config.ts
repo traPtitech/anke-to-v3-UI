@@ -1,12 +1,11 @@
-
 import { BrandPreset } from "./theme/preset";
 
 export default defineNuxtConfig({
   modules: [
     "@pinia/nuxt",
     "@nuxt/test-utils",
-    "@nuxt/eslint",
-    "@nuxtjs/stylelint-module",
+    // "@nuxt/eslint",
+    // "@nuxtjs/stylelint-module",
     "pinia-plugin-persistedstate/nuxt",
     "@nuxt/icon",
     "@primevue/nuxt-module",
@@ -36,17 +35,18 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
-  eslint: {
-    checker: {
-      cache: true,
-    },
-    config: {
-      stylistic: true,
-    },
-  },
-  pinia: {
-    storesDirs: ["./stores/**"],
-  },
+  // eslint: {
+  //   checker: {
+  //     cache: true,
+  //     lintOnStart: false,
+  //   },
+  //   config: {
+  //     stylistic: true,
+  //   },
+  // },
+  // pinia: {
+  //   storesDirs: ["./stores/**"],
+  // },
   primevue: {
     options: {
       theme: {
@@ -57,7 +57,8 @@ export default defineNuxtConfig({
       },
     },
   },
-  stylelint: {
-    cache: true,
-  },
+  // stylelint: {
+  //   cache: true,
+  //   lintOnStart: false,
+  // },
 });

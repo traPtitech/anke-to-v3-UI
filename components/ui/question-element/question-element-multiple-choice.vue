@@ -4,6 +4,9 @@ import {
   type QuestionElementMultipleChoice,
   useQuestionValidity,
 } from './composables';
+import QuestionAnswerChip from './question-answer-chip.vue';
+import QuestionAnswerEmpty from './question-answer-empty.vue';
+import QuestionAnswerView from './question-answer-view.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;
@@ -17,23 +20,19 @@ const name = `question-element-multiple-choice-${useId()}`;
 </script>
 
 <template>
-  <div v-if="props.mode === 'view'" class="question-answer-view">
-    <template v-if="question.options && question.options.length > 0">
-      <span
-        v-for="option in question.options"
-        :key="option"
-        class="answer-chip"
-        :class="{ 'answer-chip-unselected': !question.answer?.includes(option) }"
-      >
-        <Icon v-if="question.answer?.includes(option)" name="mdi:check-circle" size="14px" />
-        {{ option }}
-      </span>
-    </template>
-    <span v-if="!question.answer || question.answer.length === 0" class="answer-empty">
-      <br v-if="question.options && question.options.length > 0" />
-      （未回答）
-    </span>
-  </div>
+  <QuestionAnswerView v-if="props.mode === 'view'">
+    <QuestionAnswerChip
+      v-for="option in question.options"
+      :key="option"
+      :selected="question.answer?.includes(option) ?? false"
+    >
+      {{ option }}
+    </QuestionAnswerChip>
+    <QuestionAnswerEmpty
+      v-if="!question.answer || question.answer.length === 0"
+      :break-before="question.options.length > 0"
+    />
+  </QuestionAnswerView>
   <CheckboxGroup
     v-else
     v-model="question.answer"

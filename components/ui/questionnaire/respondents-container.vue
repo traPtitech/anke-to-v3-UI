@@ -39,15 +39,23 @@ const nonAnsweredTargets = computed(() =>
         <UserAndGroupList
           :specifier="props.questionnaire.target"
           :actual-users="props.questionnaire.targets"
+          user-dialog-title="対象ユーザー一覧"
+          group-dialog-title="対象グループ一覧"
         />
       </div>
       <div class="sidebar-people-item">
         <QuestionnaireLabel>回答済み</QuestionnaireLabel>
-        <UserList :users="props.questionnaire.respondents" />
+        <UserList
+          :users="props.questionnaire.respondents"
+          dialog-title="回答済みユーザー一覧"
+        />
       </div>
       <div class="sidebar-people-item">
         <QuestionnaireLabel>未回答</QuestionnaireLabel>
-        <UserList :users="nonAnsweredTargets" />
+        <UserList
+          :users="nonAnsweredTargets"
+          dialog-title="未回答ユーザー一覧"
+        />
       </div>
     </div>
   </div>

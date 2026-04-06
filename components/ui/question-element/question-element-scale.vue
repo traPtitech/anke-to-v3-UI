@@ -4,6 +4,9 @@ import {
   type QuestionElementMode,
   type QuestionElementScale,
 } from './composables';
+import QuestionAnswerEmpty from './question-answer-empty.vue';
+import QuestionAnswerText from './question-answer-text.vue';
+import QuestionAnswerView from './question-answer-view.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;
@@ -16,18 +19,18 @@ const name = `scale-input-${useId()}`;
 </script>
 
 <template>
-  <div v-if="props.mode === 'view'" class="question-answer-view">
+  <QuestionAnswerView v-if="props.mode === 'view'">
     <span v-if="question.answer !== undefined" class="scale-answer-display">
       <Icon name="mdi:star" size="16px" class="scale-answer-star" />
-      <span class="answer-text">
+      <QuestionAnswerText>
         {{ question.answer }} / {{ question.max_value }}
         <span class="scale-answer-sub">
           ({{ question.min_label }} — {{ question.max_label }})
         </span>
-      </span>
+      </QuestionAnswerText>
     </span>
-    <span v-else class="answer-empty">（未回答）</span>
-  </div>
+    <QuestionAnswerEmpty v-else />
+  </QuestionAnswerView>
   <div v-else class="question-element-scale-container">
     <span class="scale-edge-label">{{ question.min_label }}</span>
     <div class="rating-wrapper">

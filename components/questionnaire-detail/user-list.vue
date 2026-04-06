@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useMe } from '~/composables/type-fetch/anke-to/client';
 
 const props = defineProps<{
   users: string[];
+  dialogTitle?: string;
 }>();
 
+const MAX_VISIBLE_USERS = 14;
+
 const { data: me } = useMe();
+const isDialogVisible = ref(false);
 
 const userCounts = computed(() => {
   const counts = new Map<string, number>();
@@ -21,21 +25,72 @@ const userCounts = computed(() => {
     return 0;
   });
 });
+
+const visibleUserCounts = computed(() =>
+  userCounts.value.slice(0, MAX_VISIBLE_USERS),
+);
+
+const hiddenUserCount = computed(
+  () => userCounts.value.length - visibleUserCounts.value.length,
+);
+
+const userIconStyle = (user: string) => ({
+  backgroundImage: `url(https://q.trap.jp/api/v3/public/icon/${encodeURIComponent(user)})`,
+});
 </script>
 
 <template>
   <div v-if="props.users.length === 0" class="empty-message">いません</div>
-  <div v-else class="user-chip-list">
-    <span
-      v-for="([user, count]) in userCounts"
-      :key="user"
-      class="user-chip"
-      :class="{ 'user-chip-me': me?.name === user }"
+  <div v-else class="user-list-wrapper">
+    <div class="user-chip-list">
+      <span
+        v-for="[user, count] in visibleUserCounts"
+        :key="user"
+        class="user-chip"
+        :class="{ 'user-chip-me': me?.name === user }"
+      >
+        <span
+          class="user-chip-avatar"
+          :style="userIconStyle(user)"
+          aria-hidden="true"
+        />
+        <span class="user-chip-name">{{ '@' + user }}</span>
+        <span v-if="count > 1" class="user-chip-count">({{ count }})</span>
+      </span>
+
+      <button
+        v-if="hiddenUserCount > 0"
+        type="button"
+        class="user-chip-more"
+        @click="isDialogVisible = true"
+      >
+        +{{ hiddenUserCount }}
+      </button>
+    </div>
+
+    <Dialog
+      v-model:visible="isDialogVisible"
+      modal
+      :header="props.dialogTitle ?? 'ユーザー一覧'"
+      :style="{ width: 'min(720px, 92vw)' }"
     >
-      <Icon name="mdi:account" size="14px" class="user-chip-icon" />
-      <span class="user-chip-name">{{ '@' + user }}</span>
-      <span v-if="count > 1" class="user-chip-count">({{ count }})</span>
-    </span>
+      <div class="dialog-user-list">
+        <div
+          v-for="[user, count] in userCounts"
+          :key="`dialog-${user}`"
+          class="dialog-user-item"
+          :class="{ 'dialog-user-item-me': me?.name === user }"
+        >
+          <span
+            class="dialog-user-avatar"
+            :style="userIconStyle(user)"
+            aria-hidden="true"
+          />
+          <span class="dialog-user-name">{{ '@' + user }}</span>
+          <span v-if="count > 1" class="dialog-user-count">({{ count }})</span>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -43,32 +98,17 @@ const userCounts = computed(() => {
 .empty-message {
   color: var(--p-text-muted-color);
   font-size: 13px;
-  font-style: italic;
+}
+
+.user-list-wrapper {
+  width: 100%;
 }
 
 .user-chip-list {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 4px;
   width: 100%;
-  -webkit-overflow-scrolling: touch;
-
-  // Custom scrollbar for a cleaner look
-  &::-webkit-scrollbar {
-    height: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: var(--p-surface-200);
-    border-radius: 999px;
-  }
-  &:hover::-webkit-scrollbar-thumb {
-    background: var(--p-surface-300);
-  }
 }
 
 .user-chip {
@@ -84,15 +124,19 @@ const userCounts = computed(() => {
   transition: all 0.15s ease;
   line-height: 1.4;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .user-chip:hover {
   background-color: var(--p-surface-200);
 }
 
-.user-chip-icon {
-  color: var(--p-text-muted-color);
+.user-chip-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--p-surface-300);
 }
 
 .user-chip-me {
@@ -101,16 +145,68 @@ const userCounts = computed(() => {
   font-weight: 600;
 }
 
-.user-chip-me .user-chip-icon {
-  color: var(--p-primary-500);
-}
-
 .user-chip-me:hover {
   background-color: var(--p-primary-100);
 }
 
 .user-chip-count {
   font-size: 11px;
+  color: var(--p-text-muted-color);
+}
+
+.user-chip-more {
+  border: 1px dashed var(--p-surface-400);
+  border-radius: 999px;
+  background-color: var(--p-surface-0);
+  color: var(--p-text-secondary);
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.user-chip-more:hover {
+  background-color: var(--p-surface-100);
+}
+
+.dialog-user-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  max-height: min(65vh, 520px);
+  overflow-y: auto;
+}
+
+.dialog-user-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--p-border-radius-sm);
+  padding: 8px 10px;
+}
+
+.dialog-user-item-me {
+  border-color: var(--p-primary-300);
+  background-color: var(--p-primary-50);
+}
+
+.dialog-user-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--p-surface-300);
+}
+
+.dialog-user-name {
+  font-size: 13px;
+  color: var(--p-text-color);
+}
+
+.dialog-user-count {
+  font-size: 12px;
   color: var(--p-text-muted-color);
 }
 </style>

@@ -20,6 +20,8 @@ const props = defineProps<{
         <UserAndGroupList
           :specifier="props.questionnaire.admin"
           :actual-users="props.questionnaire.admins"
+          user-dialog-title="管理者ユーザー一覧"
+          group-dialog-title="管理者グループ一覧"
         />
       </div>
       <div class="sidebar-info-item">

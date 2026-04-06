@@ -12,7 +12,7 @@ const props = defineProps<{
   questionnaire: GatewayQuestionnaire;
 }>();
 
-const state = reactive({
+const createEditableState = () => ({
   ...props.questionnaire,
   questions: props.questionnaire.questions.map((q) => ({
     ...q,
@@ -20,7 +20,27 @@ const state = reactive({
     question_id: q.question_id!,
   })),
 });
+
+const state = reactive(createEditableState());
 const isValidQuestionnaire = computed(() => checkValidity(state).ok);
+const savedSnapshot = ref(JSON.stringify(state));
+const isDirty = computed(() => JSON.stringify(state) !== savedSnapshot.value);
+
+const handleBackToDetail = async () => {
+  if (!isDirty.value) {
+    await navigateTo(`/questionnaires/${props.questionnaire.questionnaire_id}`);
+    return;
+  }
+
+  const shouldLeave = confirm(
+    '保存していない変更は破棄されます。アンケート詳細画面に戻りますか？',
+  );
+  if (!shouldLeave) {
+    return;
+  }
+
+  await navigateTo(`/questionnaires/${props.questionnaire.questionnaire_id}`);
+};
 
 const handleSave = async () => {
   if (state.title.trim() === '') {
@@ -42,6 +62,7 @@ const handleSave = async () => {
       severity: 'success',
       life: 3000,
     });
+    savedSnapshot.value = JSON.stringify(state);
   } catch (err) {
     console.error(err);
     toast.add({
@@ -92,19 +113,57 @@ const handleSend = async () => {
 </script>
 
 <template>
-  <QuestionnaireFormBase v-model="state">
-    <template #buttons>
-      <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
-        <span>一時保存</span>
-      </IconButton>
-      <IconButton
-        variant="primary"
-        icon="mdi:content-save"
-        :disabled="!isValidQuestionnaire"
-        @click="handleSend"
-      >
-        <span>送信</span>
-      </IconButton>
-    </template>
-  </QuestionnaireFormBase>
+  <div class="edit-questionnaire-container">
+    <NuxtLink
+      :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
+      class="edit-back-link"
+      @click.prevent="handleBackToDetail"
+    >
+      <Icon name="mdi:chevron-left" size="24px" />
+      <span>
+        アンケート詳細画面に戻る
+        <template v-if="isDirty">（未保存の変更は破棄されます）</template>
+      </span>
+    </NuxtLink>
+
+    <QuestionnaireFormBase v-model="state">
+      <template #buttons>
+        <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
+          <span>一時保存</span>
+        </IconButton>
+        <IconButton
+          variant="primary"
+          icon="mdi:content-save"
+          :disabled="!isValidQuestionnaire"
+          @click="handleSend"
+        >
+          <span>送信</span>
+        </IconButton>
+      </template>
+    </QuestionnaireFormBase>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.edit-questionnaire-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  text-decoration: none;
+  color: var(--p-primary-700);
+  font-weight: 600;
+  border-radius: var(--p-border-radius-md);
+  padding: 4px 8px;
+}
+
+.edit-back-link:hover {
+  background-color: var(--p-primary-50);
+}
+</style>

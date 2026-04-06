@@ -10,6 +10,7 @@ const { initialized, renderToHtml } = useMarkdownRenderer();
 
 <template>
   <div class="markdown-block">
+    <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-if="initialized" v-html="renderToHtml(props.content)" />
   </div>
 </template>

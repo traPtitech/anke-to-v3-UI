@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import {
-  fetchMyRemindStatus,
-  patchMyRemindStatus,
-  type PatchMyRemindStatusBody,
-} from '~/composables/type-fetch/anke-to/client';
+import type { MenuItem } from 'primevue/menuitem';
 import type { GatewayQuestionnaireSummary } from '~/models/questionnaire';
 import {
   canRespond,
+  canViewResults,
   checkIsDueOver,
   formatResponseDueDateTime,
 } from '~/models/questionnaire';
@@ -16,8 +13,13 @@ defineProps<{
   questionnaires: GatewayQuestionnaireSummary[];
 }>();
 
-const toast = useToast();
-const openRespondMenuQuestionnaireId = ref<number | null>(null);
+type ActionMenuItem = MenuItem & {
+  to?: string;
+  iconName: string;
+};
+
+const actionMenuRef = ref<{ toggle: (event: MouseEvent) => void } | null>(null);
+const actionMenuItems = ref<ActionMenuItem[]>([]);
 
 const statusLabel = (questionnaire: GatewayQuestionnaireSummary) => {
   if (!questionnaire.is_published) return '下書き';
@@ -35,250 +37,145 @@ const statusClass = (questionnaire: GatewayQuestionnaireSummary) => {
   return 'is-open';
 };
 
-const remindStatusCache = ref<Record<number, boolean>>({});
-const remindStatusLoading = ref<Record<number, boolean>>({});
-
-const actionRespondLater = async (
-  questionnaireId: number,
-  isEnabled: boolean,
+const handleRespondLinkClick = (
+  event: MouseEvent,
+  questionnaire: GatewayQuestionnaireSummary,
 ) => {
-  const body: PatchMyRemindStatusBody = {
-    is_remind_enabled: isEnabled,
-  };
-
-  try {
-    await patchMyRemindStatus(questionnaireId, body);
-    remindStatusCache.value[questionnaireId] = isEnabled;
-    toast.add({
-      summary: isEnabled
-        ? '後で回答するようリマインドを設定しました'
-        : 'リマインド設定を解除しました',
-      severity: 'success',
-      life: 3000,
-    });
-  } catch {
-    toast.add({
-      summary: '回答設定の更新に失敗しました',
-      severity: 'error',
-      life: 3000,
-    });
+  if (!canRespond(questionnaire)) {
+    event.preventDefault();
   }
 };
 
-const isRespondMenuOpen = (questionnaireId: number) =>
-  openRespondMenuQuestionnaireId.value === questionnaireId;
-
-const toggleRespondMenu = async (questionnaireId: number) => {
-  const isOpening = !isRespondMenuOpen(questionnaireId);
-  openRespondMenuQuestionnaireId.value = isOpening ? questionnaireId : null;
-
-  if (isOpening && remindStatusCache.value[questionnaireId] === undefined) {
-    remindStatusLoading.value[questionnaireId] = true;
-    try {
-      const status = await fetchMyRemindStatus(questionnaireId);
-      remindStatusCache.value[questionnaireId] = status.is_remind_enabled;
-    } catch {
-      // ignore in case of fetch failure
-    } finally {
-      remindStatusLoading.value[questionnaireId] = false;
-    }
-  }
+const buildActionMenuItems = (
+  questionnaire: GatewayQuestionnaireSummary,
+): ActionMenuItem[] => {
+  return [
+    {
+      label: '結果を見る',
+      iconName: 'mdi:chart-box-outline',
+      to: `/questionnaires/${questionnaire.questionnaire_id}/result`,
+      disabled: !canViewResults(questionnaire),
+    },
+    {
+      label: 'アンケートを編集',
+      iconName: 'mdi:pencil-outline',
+      to: `/questionnaires/${questionnaire.questionnaire_id}/edit`,
+      disabled: !questionnaire.is_administrated_by_me,
+    },
+  ];
 };
 
-const closeRespondMenu = () => {
-  openRespondMenuQuestionnaireId.value = null;
+const toggleActionMenu = (
+  event: MouseEvent,
+  questionnaire: GatewayQuestionnaireSummary,
+) => {
+  actionMenuItems.value = buildActionMenuItems(questionnaire);
+  actionMenuRef.value?.toggle(event);
 };
 
-const handleRespondLaterClick = async (questionnaireId: number) => {
-  closeRespondMenu();
-  const currentStatus = remindStatusCache.value[questionnaireId] ?? false;
-  await actionRespondLater(questionnaireId, !currentStatus);
+const getActionItemTo = (item: MenuItem) => {
+  return (item as ActionMenuItem).to;
 };
 
-const handleClickOutsideRespondMenu = (event: MouseEvent) => {
-  if (openRespondMenuQuestionnaireId.value === null) {
-    return;
-  }
-
-  const target = event.target;
-  if (!(target instanceof HTMLElement)) {
-    return;
-  }
-
-  if (target.closest('.respond-split')) {
-    return;
-  }
-
-  closeRespondMenu();
+const getActionItemIcon = (item: MenuItem) => {
+  return (item as ActionMenuItem).iconName;
 };
-
-onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutsideRespondMenu);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('mousedown', handleClickOutsideRespondMenu);
-});
 </script>
 
 <template>
-  <TransitionGroup name="card-sort" tag="ul" class="card-list">
-    <li
-      v-for="questionnaire in questionnaires"
-      :key="questionnaire.questionnaire_id"
-    >
-      <article class="card" :class="statusClass(questionnaire)">
-        <div class="card-main">
-          <div class="card-title-row">
-            <span class="status-badge" :class="statusClass(questionnaire)">
-              {{ statusLabel(questionnaire) }}
-            </span>
+  <div class="questionnaire-list-root">
+    <ul class="card-list">
+      <li
+        v-for="questionnaire in questionnaires"
+        :key="questionnaire.questionnaire_id"
+      >
+        <article class="card" :class="statusClass(questionnaire)">
+          <div class="card-main">
+            <div class="card-title-row">
+              <span class="status-badge" :class="statusClass(questionnaire)">
+                {{ statusLabel(questionnaire) }}
+              </span>
 
-            <NuxtLink
-              class="card-title"
-              :to="`/questionnaires/${questionnaire.questionnaire_id}`"
-            >
-              {{ questionnaire.title }}
-            </NuxtLink>
-          </div>
-
-          <MarkdownBlock
-            class="card-description"
-            :content="questionnaire.description"
-          />
-        </div>
-
-        <div class="card-side">
-          <div class="card-side-top">
-            <div class="due-chip">
-              <Icon name="mdi:alarm" size="18px" />
-              <span>{{ formatResponseDueDateTime(questionnaire) }}</span>
+              <NuxtLink
+                class="card-title"
+                :to="`/questionnaires/${questionnaire.questionnaire_id}`"
+              >
+                {{ questionnaire.title }}
+              </NuxtLink>
             </div>
 
-            <div class="hover-menu">
-              <button
-                type="button"
-                class="hover-menu-trigger"
-                aria-label="その他の操作"
-                title="その他の操作"
-              >
-                <Icon name="mdi:dots-vertical" size="20px" />
-              </button>
+            <MarkdownBlock
+              class="card-description"
+              :content="questionnaire.description"
+            />
+          </div>
 
-              <div
-                class="hover-menu-list"
-                role="menu"
-                aria-label="その他の操作"
-              >
-                <NuxtLink class="hover-menu-item link-disabled">
-                  <Icon name="mdi:flag" size="18px" />
-                  <span>回答しない</span>
-                </NuxtLink>
-
-                <NuxtLink
-                  class="hover-menu-item"
-                  :to="`/questionnaires/${questionnaire.questionnaire_id}/result`"
-                >
-                  <Icon name="mdi:forum-outline" size="18px" />
-                  <span>結果を見る</span>
-                </NuxtLink>
-
-                <NuxtLink
-                  v-if="questionnaire.is_administrated_by_me"
-                  class="hover-menu-item"
-                  :to="`/questionnaires/${questionnaire.questionnaire_id}/edit`"
-                >
-                  <Icon name="mdi:square-edit-outline" size="18px" />
-                  <span>アンケートを編集</span>
-                </NuxtLink>
+          <div class="card-side">
+            <div class="card-side-top">
+              <div class="due-chip">
+                <Icon name="mdi:alarm" size="18px" />
+                <span>{{ formatResponseDueDateTime(questionnaire) }}</span>
               </div>
-            </div>
-          </div>
 
-          <div
-            class="respond-split"
-            :class="{
-              'is-disabled': !canRespond(questionnaire),
-              'is-menu-open': isRespondMenuOpen(questionnaire.questionnaire_id),
-            }"
-          >
-            <button
-              type="button"
-              class="respond-main-button"
-              title="回答する"
-              :disabled="!canRespond(questionnaire)"
-              @click="
-                closeRespondMenu();
-                navigateTo(
-                  `/questionnaires/${questionnaire.questionnaire_id}/responses/new`,
-                );
-              "
-            >
-              <span class="respond-hover-label">回答する</span>
-              <Icon class="send-icon-optical-fix" name="mdi:send" size="20px" />
-            </button>
-
-            <button
-              type="button"
-              class="respond-menu-trigger"
-              aria-haspopup="menu"
-              :aria-expanded="isRespondMenuOpen(questionnaire.questionnaire_id)"
-              aria-label="回答アクションを開く"
-              :disabled="!canRespond(questionnaire)"
-              @click.stop="toggleRespondMenu(questionnaire.questionnaire_id)"
-            >
-              <Icon name="mdi:chevron-down" size="18px" />
-            </button>
-
-            <Transition name="respond-menu-transition">
-              <div
-                v-if="isRespondMenuOpen(questionnaire.questionnaire_id)"
-                class="respond-menu"
-                role="menu"
-                aria-label="回答アクション"
-              >
+              <div class="card-action-menu">
                 <button
                   type="button"
-                  class="respond-menu-item"
-                  role="menuitem"
-                  :disabled="
-                    remindStatusLoading[questionnaire.questionnaire_id]
-                  "
-                  @click="
-                    handleRespondLaterClick(questionnaire.questionnaire_id)
-                  "
+                  class="card-action-menu-trigger"
+                  aria-label="その他の操作"
+                  title="その他の操作"
+                  @click="toggleActionMenu($event, questionnaire)"
                 >
-                  <template
-                    v-if="remindStatusLoading[questionnaire.questionnaire_id]"
-                  >
-                    <Icon name="mdi:loading" class="animate-spin" size="18px" />
-                    <span>読み込み中...</span>
-                  </template>
-                  <template
-                    v-else-if="
-                      remindStatusCache[questionnaire.questionnaire_id]
-                    "
-                  >
-                    <span class="action-icon-wrapper is-canceled">
-                      <Icon name="mdi:send-clock" size="18px" />
-                    </span>
-                    <span>リマインドしない</span>
-                  </template>
-                  <template v-else>
-                    <Icon name="mdi:send-clock" size="18px" />
-                    <span>後で回答する</span>
-                  </template>
+                  <Icon name="mdi:dots-vertical" size="20px" />
                 </button>
               </div>
-            </Transition>
+            </div>
+
+            <NuxtLink
+              class="respond-main-button"
+              :class="{ 'is-disabled-link': !canRespond(questionnaire) }"
+              title="回答する"
+              :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
+              :aria-disabled="!canRespond(questionnaire) ? 'true' : undefined"
+              :tabindex="!canRespond(questionnaire) ? -1 : undefined"
+              @click="handleRespondLinkClick($event, questionnaire)"
+            >
+              <span class="respond-label">回答する</span>
+              <Icon class="send-icon-optical-fix" name="mdi:send" size="20px" />
+            </NuxtLink>
           </div>
-        </div>
-      </article>
-    </li>
-  </TransitionGroup>
+        </article>
+      </li>
+    </ul>
+
+    <Menu ref="actionMenuRef" :model="actionMenuItems" popup>
+      <template #item="{ item, props: itemProps }">
+        <NuxtLink
+          v-if="getActionItemTo(item) && !item.disabled"
+          :to="getActionItemTo(item)!"
+          class="action-menu-item-link"
+          v-bind="itemProps.action"
+        >
+          <Icon :name="getActionItemIcon(item)" size="18px" />
+          <span>{{ item.label }}</span>
+        </NuxtLink>
+        <span
+          v-else
+          class="action-menu-item-link is-disabled"
+          aria-disabled="true"
+        >
+          <Icon :name="getActionItemIcon(item)" size="18px" />
+          <span>{{ item.label }}</span>
+        </span>
+      </template>
+    </Menu>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+.questionnaire-list-root {
+  position: relative;
+}
+
 .card-list {
   position: relative;
   display: flex;
@@ -288,28 +185,6 @@ onBeforeUnmount(() => {
 
   li {
     width: 100%;
-  }
-}
-
-.card-sort {
-  &-move {
-    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  &-enter-active {
-    transition:
-      opacity 0.1s ease,
-      transform 0.22s ease;
-  }
-
-  &-enter-from,
-  &-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-
-  &-leave-active {
-    position: absolute;
   }
 }
 
@@ -343,26 +218,18 @@ onBeforeUnmount(() => {
 
 .card.is-unanswered {
   --card-status-accent: variables.$color-primary;
-  --card-status-surface: color-mix(
-    in srgb,
-    variables.$color-primary 4%,
-    var(--p-surface-0)
-  );
 }
 
 .card.is-answered {
   --card-status-accent: var(--p-green-500);
-  --card-status-surface: color-mix(in srgb, var(--p-green-100) 45%, white);
 }
 
 .card.is-draft {
   --card-status-accent: var(--p-blue-500);
-  --card-status-surface: color-mix(in srgb, var(--p-blue-100) 50%, white);
 }
 
 .card.is-overdue {
   --card-status-accent: var(--p-orange-500);
-  --card-status-surface: color-mix(in srgb, var(--p-orange-100) 50%, white);
 }
 
 .card.is-open {
@@ -472,11 +339,7 @@ onBeforeUnmount(() => {
   gap: 8px;
 }
 
-.hover-menu {
-  position: relative;
-}
-
-.hover-menu-trigger {
+.card-action-menu-trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -489,52 +352,7 @@ onBeforeUnmount(() => {
   transition: background-color 0.2s ease;
 }
 
-.hover-menu-trigger:hover {
-  background-color: var(--p-surface-200);
-}
-
-.hover-menu-list {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 8px);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 180px;
-  padding: 8px;
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
-  background-color: var(--p-surface-0);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(4px);
-  transition:
-    opacity 0.16s ease,
-    transform 0.16s ease,
-    visibility 0.16s ease;
-}
-
-.hover-menu:hover .hover-menu-list,
-.hover-menu:focus-within .hover-menu-list {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.hover-menu-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: var(--p-border-radius-sm);
-  padding: 8px 10px;
-  color: var(--p-text-color);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.hover-menu-item:hover {
+.card-action-menu-trigger:hover {
   background-color: var(--p-surface-200);
 }
 
@@ -547,169 +365,53 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 
-.respond-split {
-  position: relative;
-  display: inline-flex;
-  align-items: stretch;
-  border-radius: var(--p-border-radius-md);
-}
-
-.respond-main-button,
-.respond-menu-trigger {
-  border: none;
-  background-color: variables.$color-primary;
-  color: white;
-  cursor: pointer;
-  transition: filter 0.16s ease;
-}
-
-.respond-main-button:hover,
-.respond-menu-trigger:hover {
-  filter: brightness(0.95);
-}
-
-.respond-main-button:disabled,
-.respond-menu-trigger:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
 .respond-main-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  min-height: 40px;
-  padding: 0 8px;
-  border-top-left-radius: var(--p-border-radius-md);
-  border-bottom-left-radius: var(--p-border-radius-md);
-  font-weight: 700;
-
-  &:not(:disabled) {
-    &:hover,
-    &:focus-visible,
-    &:focus {
-      .respond-hover-label {
-        max-width: 8em;
-        opacity: 1;
-        transform: translateX(2px);
-        margin-inline: 6px 10px;
-      }
-    }
-  }
-}
-
-.respond-hover-label {
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  transform: translateX(12%);
-  margin-right: 0;
-  transition:
-    max-width 0.24s ease,
-    opacity 0.2s ease,
-    transform 0.24s ease,
-    margin-right 0.24s ease;
-}
-
-.respond-menu-trigger {
-  width: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-left: 1px solid rgba(255, 255, 255, 0.35);
-  border-top-right-radius: var(--p-border-radius-md);
-  border-bottom-right-radius: var(--p-border-radius-md);
-}
-
-.respond-menu {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 8px);
-  z-index: 15;
-  width: max-content;
-  padding: 8px;
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
-  background-color: var(--p-surface-0);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.respond-menu-transition-enter-active,
-.respond-menu-transition-leave-active {
-  transition:
-    opacity 0.16s ease,
-    transform 0.16s ease;
-}
-
-.respond-menu-transition-enter-from,
-.respond-menu-transition-leave-to {
-  opacity: 0;
-  transform: translateY(4px);
-}
-
-.respond-split.is-disabled .respond-menu {
-  display: none;
-}
-
-.link-disabled {
-  pointer-events: none;
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.respond-menu-item {
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
   gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  text-decoration: none;
+  border-radius: var(--p-border-radius-md);
+  font-weight: 700;
   border: none;
-  border-radius: var(--p-border-radius-sm);
-  padding: 8px 10px;
-  background-color: transparent;
-  color: var(--p-text-color);
-  cursor: pointer;
+  background-color: variables.$color-primary;
+  color: white;
+  transition: filter 0.16s ease;
 }
 
-.respond-menu-item:hover {
-  background-color: var(--p-surface-200);
+.respond-main-button:not(.is-disabled-link):hover {
+  filter: brightness(0.95);
+}
+
+.respond-main-button.is-disabled-link {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.respond-label {
+  white-space: nowrap;
 }
 
 .send-icon-optical-fix {
   transform: translateX(10%);
 }
 
-.action-icon-wrapper {
-  position: relative;
+.action-menu-item-link {
+  width: 100%;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--p-text-color);
 }
 
-.action-icon-wrapper.is-canceled::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: -10%;
-  width: 120%;
-  height: 1.5px;
-  background-color: currentColor;
-  transform: translateY(-50%) rotate(-45deg);
-  border-radius: 2px;
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.action-menu-item-link.is-disabled {
+  opacity: 0.55;
+  color: var(--p-text-secondary);
+  cursor: not-allowed;
 }
 
 @media screen and (max-width: 900px) {
@@ -732,22 +434,20 @@ onBeforeUnmount(() => {
     padding-right: 40px;
   }
 
-  .hover-menu {
+  .card-action-menu {
     position: absolute;
     top: 16px;
     right: 16px;
-  }
-
-  .hover-menu-list {
-    top: calc(100% + 8px);
-    bottom: auto;
-    right: 0;
   }
 }
 
 @media screen and (max-width: 560px) {
   .card-side {
     align-items: stretch;
+  }
+
+  .respond-main-button {
+    width: 100%;
   }
 }
 </style>

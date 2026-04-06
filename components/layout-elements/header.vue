@@ -1,16 +1,10 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import { useMe } from '~/composables/type-fetch/anke-to/client';
 
 const searchText = defineModel<string>('search', { default: '' });
 
 const { data: me } = useMe();
-
-const goToCreate = () => navigateTo('/questionnaires/new');
-const goToResponses = () =>
-  navigateTo({
-    path: '/explorer',
-    hash: '#answered',
-  });
 
 const userIconSrc = computed(() => {
   const name = me.value?.name;
@@ -37,19 +31,22 @@ const userIconSrc = computed(() => {
     </div>
 
     <div class="top-actions">
-      <Button class="header-action-create" @click="goToCreate">
+      <ButtonLink
+        class="header-action-create"
+        to="/questionnaires/new"
+        variant="primary"
+      >
         <Icon class="header-action-create-icon" name="mdi:plus" size="20px" />
         <span class="header-action-create-label">
           <span class="label-desktop">新規作成</span>
           <span class="label-mobile">新規</span>
         </span>
-      </Button>
-      <Button
+      </ButtonLink>
+      <NuxtLink
         class="header-action-responses"
-        severity="secondary"
-        variant="outlined"
-        aria-label="自分の回答一覧へ"
-        @click="goToResponses"
+        variant="secondary"
+        :to="{ path: '/explorer', hash: '#answered' }"
+        title="自分の回答一覧へ"
       >
         <img
           v-if="userIconSrc"
@@ -58,7 +55,7 @@ const userIconSrc = computed(() => {
           class="header-action-user-icon"
         />
         <Icon v-else name="mdi:account" size="18px" />
-      </Button>
+      </NuxtLink>
     </div>
   </header>
 </template>
@@ -146,6 +143,7 @@ const userIconSrc = computed(() => {
 .header-action-responses {
   width: 40px;
   height: 40px;
+  min-height: 40px;
   padding: 0;
   overflow: hidden;
   border-radius: 999px;

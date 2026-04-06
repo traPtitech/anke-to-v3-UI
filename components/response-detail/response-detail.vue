@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import QuestionElement from '~/components/ui/question-element/question-element.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
@@ -12,20 +13,27 @@ const props = defineProps<{
 const { bodies } = useResponseBodies(props.questionnaire, props.response);
 
 const isDraft = computed(() => props.response.is_draft);
+const isDueOver = computed(() => {
+  const due = props.questionnaire.response_due_date_time;
+  if (due === undefined) {
+    return false;
+  }
+
+  return new Date(due).getTime() < Date.now();
+});
 </script>
 
 <template>
   <div class="response-detail-container">
     <div class="response-detail-nav">
-      <Button
-        class="p-button-icon-only back-button"
-        variant="text"
-        @click="
-          $router.push(`/questionnaires/${questionnaire.questionnaire_id}`)
-        "
+      <ButtonLink
+        class="back-link"
+        variant="ghost"
+        :to="`/questionnaires/${questionnaire.questionnaire_id}`"
       >
         <Icon name="mdi:chevron-left" size="24px" />
-      </Button>
+        <span>アンケート詳細画面に戻る</span>
+      </ButtonLink>
     </div>
 
     <div class="response-detail-title-row">
@@ -54,14 +62,18 @@ const isDraft = computed(() => props.response.is_draft);
     </div>
 
     <div class="response-detail-footer">
-      <Button
-        severity="danger"
+      <ButtonLink
+        v-if="!isDueOver"
         class="response-edit-button-footer"
-        @click="$router.push(`/responses/${response.response_id}/edit`)"
+        variant="primary"
+        :to="`/responses/${response.response_id}/edit`"
       >
         <Icon name="mdi:pencil" size="18px" />
         <span>{{ isDraft ? '回答を続ける' : '編集する' }}</span>
-      </Button>
+      </ButtonLink>
+      <small v-else class="response-edit-note">
+        回答期限を過ぎているため、この回答は編集できません。
+      </small>
     </div>
   </div>
 </template>
@@ -71,6 +83,7 @@ const isDraft = computed(() => props.response.is_draft);
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
   padding-bottom: 50vh;
@@ -81,8 +94,8 @@ const isDraft = computed(() => props.response.is_draft);
   align-items: center;
 }
 
-.back-button {
-  color: var(--p-text-muted-color);
+.back-link {
+  font-weight: 600;
 }
 
 .response-detail-title-row {
@@ -92,11 +105,8 @@ const isDraft = computed(() => props.response.is_draft);
   gap: 16px;
   padding: 24px 28px;
   border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--p-red-100) 50%, var(--p-surface-0)),
-    color-mix(in srgb, var(--p-red-50) 35%, var(--p-surface-0))
-  );
+  border: 1px solid var(--p-surface-200);
+  background-color: var(--p-surface-0);
 }
 
 .response-detail-title-area {
@@ -166,6 +176,10 @@ const isDraft = computed(() => props.response.is_draft);
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.response-edit-note {
+  color: var(--p-text-muted-color);
 }
 
 @media screen and (max-width: 600px) {
