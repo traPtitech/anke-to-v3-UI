@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import EditResponseForm from '~/components/response-form/edit-response-form.vue';
-import DetailLoadingSkeleton from '~/components/ui/page-state/detail-loading-skeleton.vue';
+import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
 import {
   useGetQuestionnaire,
@@ -45,7 +45,7 @@ const handleRetry = async () => {
       :message="responseError?.message || questionnaireError?.message"
       @retry="handleRetry"
     />
-    <DetailLoadingSkeleton
+    <DetailLoadingIndicator
       v-else-if="!questionnaire || !response"
       variant="response"
     />

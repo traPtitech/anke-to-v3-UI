@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import NewResponseForm from '~/components/response-form/new-response-form.vue';
+import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
@@ -11,7 +12,7 @@ const { data, error } = useGetQuestionnaire(questionnaireId);
     <p>アンケートの取得に失敗しました: {{ error.message }}</p>
   </div>
   <div v-else-if="!data">
-    <p>アンケートを読み込み中...</p>
+    <DetailLoadingIndicator variant="questionnaire" />
   </div>
   <NewResponseForm v-else :questionnaire="data" />
 </template>

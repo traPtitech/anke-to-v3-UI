@@ -46,7 +46,7 @@ const loadingText = computed(() => {
   margin: 0 auto;
   padding: 36px 20px;
   border: 1px solid var(--p-surface-200);
-  border-radius: 12px;
+  border-radius: 6px;
   background-color: var(--p-surface-0);
 }
 

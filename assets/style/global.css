@@ -32,6 +32,9 @@
   --app-secondary-disabled-bg: var(--p-surface-100);
   --app-secondary-disabled-border: var(--p-surface-200);
   --app-secondary-disabled-text: var(--p-text-muted-color);
+
+  --p-button-outlined-primary-border-color: var(--app-primary-500);
+  --p-button-outlined-primary-color: var(--app-primary-600);
 }
 
 .p-button {
@@ -198,6 +201,6 @@
   padding: 0;
 }
 
-span.iconify {
+svg.iconify {
   flex-shrink: 0;
 }

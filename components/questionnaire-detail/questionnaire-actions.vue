@@ -89,7 +89,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
 
 <template>
   <div class="questionnaire-actions-container">
-    <div class="questionnaire-actions-row questionnaire-actions-row-primary">
+    <div class="questionnaire-actions-row-primary">
       <ButtonLink
         v-if="latestDraft && canRespond"
         class="questionnaire-action-button questionnaire-action-button-respond"
@@ -119,7 +119,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
         <span>結果を見る</span>
       </ButtonLink>
     </div>
-    <div class="questionnaire-actions-row questionnaire-actions-row-secondary">
+    <div class="questionnaire-actions-row-secondary">
       <div class="remind-switch-item">
         <ToggleSwitch
           :input-id="remindSwitchId"
@@ -162,10 +162,6 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
   justify-content: center;
 }
 
-.questionnaire-action-button-respond {
-  flex: 1.5;
-}
-
 .remind-switch-item {
   display: inline-flex;
   align-items: center;
@@ -179,13 +175,9 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
   cursor: pointer;
 }
 
-@container (max-width: 400px) {
+@container (max-width: 480px) {
   .questionnaire-actions-row-primary {
-    flex-direction: column;
-  }
-
-  .questionnaire-action-button {
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 }
 </style>

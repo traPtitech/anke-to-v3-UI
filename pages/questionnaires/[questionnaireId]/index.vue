@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import QuestionnaireDetail from '~/components/questionnaire-detail/questionnaire-detail.vue';
-import DetailLoadingSkeleton from '~/components/ui/page-state/detail-loading-skeleton.vue';
+import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
@@ -20,7 +20,7 @@ const handleRetry = async () => {
       :message="error.message"
       @retry="handleRetry"
     />
-    <DetailLoadingSkeleton
+    <DetailLoadingIndicator
       v-else-if="data === undefined"
       variant="questionnaire"
     />

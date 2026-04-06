@@ -33,10 +33,7 @@ const isQuestionnaireAdmin = computed(() =>
           <QuestionnaireMyResponsesContainer :detail="detail" />
         </section>
 
-        <section
-          v-if="isQuestionnaireAdmin"
-          class="main-section main-section-admin"
-        >
+        <section v-if="isQuestionnaireAdmin" class="main-section">
           <QuestionnaireAdminActions :detail="detail" />
         </section>
       </div>
@@ -52,6 +49,7 @@ const isQuestionnaireAdmin = computed(() =>
 
 <style lang="scss" scoped>
 .detail-page {
+  --detail-section-radius: 6px;
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
@@ -65,7 +63,7 @@ const isQuestionnaireAdmin = computed(() =>
 .detail-title-area {
   border: 1px solid var(--p-surface-200);
   background-color: var(--p-surface-0);
-  border-radius: 12px;
+  border-radius: var(--detail-section-radius);
   padding: 32px;
 }
 
@@ -91,14 +89,9 @@ const isQuestionnaireAdmin = computed(() =>
 
 .main-section {
   padding: 24px;
-  border-radius: 12px;
+  border-radius: var(--detail-section-radius);
   border: 1px solid var(--p-surface-200);
   background-color: var(--p-surface-0);
-}
-
-.main-section-admin {
-  border: 1px solid var(--p-surface-200);
-  border-left: 3px solid var(--p-surface-300);
 }
 
 .detail-sidebar {
@@ -107,7 +100,7 @@ const isQuestionnaireAdmin = computed(() =>
   gap: 28px;
   padding: 20px;
   border: 1px solid var(--p-surface-200);
-  border-radius: 12px;
+  border-radius: var(--detail-section-radius);
   background-color: var(--p-surface-0);
   position: sticky;
   top: 24px;
