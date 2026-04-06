@@ -7,6 +7,7 @@ import {
   checkIsDueOver,
   formatResponseDueDateTime,
 } from '~/models/questionnaire';
+import ButtonLink from '../button-link.vue';
 import MarkdownBlock from '../markdown/markdown-block.vue';
 
 defineProps<{
@@ -30,15 +31,6 @@ const statusClass = (questionnaire: GatewayQuestionnaireSummary) => {
   if (canRespond(questionnaire)) return 'is-unanswered';
   if (checkIsDueOver(questionnaire)) return 'is-overdue';
   return 'is-open';
-};
-
-const handleRespondLinkClick = (
-  event: MouseEvent,
-  questionnaire: GatewayQuestionnaireSummary,
-) => {
-  if (!canRespond(questionnaire)) {
-    event.preventDefault();
-  }
 };
 
 const buildActionMenuItems = (
@@ -117,18 +109,16 @@ const toggleActionMenu = (
               </div>
             </div>
 
-            <NuxtLink
+            <ButtonLink
               class="respond-main-button"
-              :class="{ 'is-disabled-link': !canRespond(questionnaire) }"
-              title="回答する"
+              variant="primary"
               :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
-              :aria-disabled="!canRespond(questionnaire) ? 'true' : undefined"
-              :tabindex="!canRespond(questionnaire) ? -1 : undefined"
-              @click="handleRespondLinkClick($event, questionnaire)"
+              :disabled="!canRespond(questionnaire)"
+              title="回答する"
             >
               <span class="respond-label">回答する</span>
               <Icon class="send-icon-optical-fix" name="mdi:send" size="20px" />
-            </NuxtLink>
+            </ButtonLink>
           </div>
         </article>
       </li>
@@ -167,7 +157,7 @@ const toggleActionMenu = (
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   list-style-type: none;
 
   li {
@@ -184,10 +174,10 @@ const toggleActionMenu = (
   position: relative;
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 14px;
   border: 1px solid var(--p-surface-300);
   border-radius: var(--p-border-radius-md);
-  padding: 16px;
+  padding: 14px;
   background-color: var(--card-status-surface);
   overflow: visible;
 }
@@ -236,13 +226,14 @@ const toggleActionMenu = (
 
 .card-title-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
   border-radius: 999px;
   padding: 4px 10px;
   font-size: 12px;
@@ -281,9 +272,12 @@ const toggleActionMenu = (
   text-decoration: none;
   font-size: 18px;
   font-weight: 700;
+  line-height: 1.35;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .card-title:hover {
@@ -353,29 +347,12 @@ const toggleActionMenu = (
 }
 
 .respond-main-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   min-height: 40px;
-  padding: 0 12px;
-  text-decoration: none;
-  border-radius: var(--p-border-radius-md);
-  font-weight: 700;
-  border: none;
-  background-color: variables.$color-primary;
-  color: white;
-  transition: filter 0.16s ease;
 }
 
-.respond-main-button:not(.is-disabled-link):hover {
-  filter: brightness(0.95);
-}
-
-.respond-main-button.is-disabled-link {
-  opacity: 0.55;
-  cursor: not-allowed;
-  pointer-events: none;
+.respond-main-button :deep(.button-link-anchor) {
+  gap: 8px;
+  padding-inline: 12px;
 }
 
 .respond-label {
@@ -393,6 +370,7 @@ const toggleActionMenu = (
   gap: 8px;
   text-decoration: none;
   color: var(--p-text-color);
+  padding: 8px;
 }
 
 .action-menu-item-link.is-disabled {
@@ -405,6 +383,7 @@ const toggleActionMenu = (
   .card {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
   }
 
   .card-side {
@@ -429,12 +408,39 @@ const toggleActionMenu = (
 }
 
 @media screen and (max-width: 560px) {
+  .card-list {
+    gap: 8px;
+  }
+
+  .card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .card-title-row {
+    gap: 8px;
+    padding-right: 36px;
+  }
+
+  .card-title {
+    font-size: 16px;
+  }
+
+  .due-chip {
+    font-size: 13px;
+  }
+
   .card-side {
     align-items: stretch;
   }
 
   .respond-main-button {
     width: 100%;
+  }
+
+  .card-action-menu {
+    top: 12px;
+    right: 12px;
   }
 }
 </style>

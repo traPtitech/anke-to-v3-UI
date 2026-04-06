@@ -120,14 +120,16 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
       </ButtonLink>
     </div>
     <div class="questionnaire-actions-row questionnaire-actions-row-secondary">
-      <label class="remind-switch-item" :for="remindSwitchId">
+      <div class="remind-switch-item">
         <ToggleSwitch
-          :id="remindSwitchId"
+          :input-id="remindSwitchId"
           :model-value="isRemindEnabled"
           @update:model-value="handleRemindSwitchUpdate"
         />
-        <span>このアンケートに関するリマインドを受け取る</span>
-      </label>
+        <label class="remind-switch-label" :for="remindSwitchId">
+          このアンケートに関するリマインドを受け取る
+        </label>
+      </div>
     </div>
   </div>
 </template>
@@ -136,12 +138,13 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
 .questionnaire-actions-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 .questionnaire-actions-row-primary {
-  display: flex;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
 }
 
 .questionnaire-actions-row-secondary {
@@ -167,6 +170,9 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+}
+
+.remind-switch-label {
   font-size: 14px;
   color: var(--p-text-color);
   cursor: pointer;

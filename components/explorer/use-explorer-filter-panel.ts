@@ -1,50 +1,46 @@
 import type { MenuItem } from "primevue/menuitem";
 import type { Ref } from "vue";
 import {
-  buildFilterSignature,
-  buildListQuery,
-  buildTabCountQuery,
+    buildFilterSignature,
+    buildListQuery,
+    buildTabCountQuery,
 } from "./filter-payload";
 import {
-    findSelectedTab,
-    getQueryValue,
-    legacyFilterQueryKeys,
-    normalizeFilterSet,
-    parseFilterSet,
-    resolveTabFromHash,
-    serializeFilterSet,
-    tabFilterPresets,
-    tabs,
+  findSelectedTab,
+  getQueryValue,
+  legacyFilterQueryKeys,
+  normalizeFilterSet,
+  parseFilterSet,
+  resolveTabFromHash,
+  serializeFilterSet,
+  tabFilterPresets,
+  tabs,
 } from "./filter-query";
 import {
-  type SetQueryParamsOptions,
-  setRouteQueryParams,
+    type SetQueryParamsOptions,
+    setRouteQueryParams,
 } from "./filter-route";
 import {
-    buildSortMenuLabel,
-    getSortDirectionIcon,
-    getSortDirectionLabel,
-    isSortCategory,
-    sortDirectionOptions,
-    sortFieldOptions,
+  buildSortMenuLabel,
+  getSortDirectionIcon,
+  getSortDirectionLabel,
+  isSortCategory,
+  sortDirectionOptions,
+  sortFieldOptions,
 } from "./filter-sort";
 import {
-    DEFAULT_SORT_CATEGORY,
-    DEFAULT_SORT_DIRECTION,
-    type ExplorerFilterPayload,
-    type FilterKey,
-    type SortCategory,
-    type SortDirection,
-    type TabKey,
+  DEFAULT_SORT_CATEGORY,
+  DEFAULT_SORT_DIRECTION,
+  type ExplorerFilterPayload,
+  type FilterKey,
+  type SortCategory,
+  type SortDirection,
+  type TabKey,
 } from "./filter-types";
 
 type UseExplorerFilterPanelParams = {
   tabCounts: Ref<Partial<Record<TabKey, number>>>;
   onChange: (payload: ExplorerFilterPayload) => void;
-};
-
-type SortMenuRef = {
-  toggle: (event: MouseEvent) => void;
 };
 
 export const useExplorerFilterPanel = ({
@@ -55,8 +51,6 @@ export const useExplorerFilterPanel = ({
   const route = useRoute();
 
   const isFilterExpanded = ref(false);
-  const isSortMenuOpen = ref(false);
-  const sortMenuRef = ref<SortMenuRef | null>(null);
 
   const dateSortDirectionPreference = ref<SortDirection>(
     DEFAULT_SORT_DIRECTION,
@@ -267,10 +261,6 @@ export const useExplorerFilterPanel = ({
       getSortDirectionLabel(sortDirection.value, sortCategory.value);
   };
 
-  const toggleSortMenu = (event: MouseEvent) => {
-    sortMenuRef.value?.toggle(event);
-  };
-
   const tabCount = (tab: TabKey) => tabCounts.value[tab] ?? 0;
 
   const selectedTab = computed<TabKey | null>(() =>
@@ -362,8 +352,6 @@ export const useExplorerFilterPanel = ({
   return {
     tabs,
     isFilterExpanded,
-    isSortMenuOpen,
-    sortMenuRef,
     sortMenuItems,
     sortMenuLabel,
     onlyActiveDue,
@@ -376,7 +364,6 @@ export const useExplorerFilterPanel = ({
     selectedTab,
     selectTab,
     tabCount,
-    toggleSortMenu,
     isSortMenuItemSelected,
   };
 };

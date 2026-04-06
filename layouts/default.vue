@@ -89,11 +89,23 @@ const headerSearchText = computed<string>({
 
 main {
   flex: 1;
-  padding: 32px;
+  padding: 28px 24px;
   overflow-y: auto;
 }
 
 main.main-explorer {
   padding-top: 0;
+}
+
+@media screen and (max-width: 900px) {
+  main {
+    padding: 20px 16px;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  main {
+    padding: 12px;
+  }
 }
 </style>

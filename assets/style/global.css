@@ -187,6 +187,10 @@
   background-color: hsl(0, 30%, 85%);
 }
 
+.p-menu-list {
+  padding: 0;
+}
+
 span.iconify {
   flex-shrink: 0;
 }
