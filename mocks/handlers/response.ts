@@ -396,9 +396,9 @@ export const responseHandlers = [
     return HttpResponse.json(response);
   }),
 
-  http.patch("/api/responses/:id", (req) => {
+  http.patch("/api/responses/:id", async (req) => {
     const { id } = req.params;
-    const body = req.request.json() as Partial<GatewayResponse>;
+    const reqBody = await req.request.json() as Partial<GatewayResponse>;
 
     const responseIndex = responsesData.findIndex(
       (r) => r.response_id === Number(id),
@@ -410,9 +410,32 @@ export const responseHandlers = [
       );
     }
 
+    const mergedQuestionIds = [
+      ...new Set([
+        ...responsesData[responseIndex].body.map((a) => a.question_id),
+        ...(reqBody.body?.map((a) => a.question_id) ?? []),
+      ]),
+    ];
+    const mergedResponseBody = mergedQuestionIds.map((question_id) => {
+      const newAnswer = reqBody.body?.find((a) =>
+        a.question_id === question_id
+      );
+      if (newAnswer) return newAnswer;
+
+      const existingAnswer = responsesData[responseIndex].body.find(
+        (a) => a.question_id === question_id,
+      );
+      if (existingAnswer) return existingAnswer;
+
+      throw new Error(
+        `Question ID ${question_id} not found in existing or new body`,
+      );
+    });
+
     const updatedResponse = {
       ...responsesData[responseIndex],
-      ...body,
+      ...reqBody,
+      body: mergedResponseBody,
       modified_at: new Date().toISOString(),
     };
 
