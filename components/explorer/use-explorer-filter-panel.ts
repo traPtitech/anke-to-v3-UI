@@ -1,10 +1,10 @@
-import type { MenuItem } from "primevue/menuitem";
-import type { Ref } from "vue";
+import type { MenuItem } from 'primevue/menuitem';
+import type { Ref } from 'vue';
 import {
-    buildFilterSignature,
-    buildListQuery,
-    buildTabCountQuery,
-} from "./filter-payload";
+  buildFilterSignature,
+  buildListQuery,
+  buildTabCountQuery,
+} from './filter-payload';
 import {
   findSelectedTab,
   getQueryValue,
@@ -15,11 +15,11 @@ import {
   serializeFilterSet,
   tabFilterPresets,
   tabs,
-} from "./filter-query";
+} from './filter-query';
 import {
-    type SetQueryParamsOptions,
-    setRouteQueryParams,
-} from "./filter-route";
+  type SetQueryParamsOptions,
+  setRouteQueryParams,
+} from './filter-route';
 import {
   buildSortMenuLabel,
   getSortDirectionIcon,
@@ -27,7 +27,7 @@ import {
   isSortCategory,
   sortDirectionOptions,
   sortFieldOptions,
-} from "./filter-sort";
+} from './filter-sort';
 import {
   DEFAULT_SORT_CATEGORY,
   DEFAULT_SORT_DIRECTION,
@@ -36,7 +36,7 @@ import {
   type SortCategory,
   type SortDirection,
   type TabKey,
-} from "./filter-types";
+} from './filter-types';
 
 type UseExplorerFilterPanelParams = {
   tabCounts: Ref<Partial<Record<TabKey, number>>>;
@@ -55,12 +55,12 @@ export const useExplorerFilterPanel = ({
   const dateSortDirectionPreference = ref<SortDirection>(
     DEFAULT_SORT_DIRECTION,
   );
-  const titleSortDirectionPreference = ref<SortDirection>("asc");
+  const titleSortDirectionPreference = ref<SortDirection>('asc');
 
   const getSortDirectionPreference = (
     category: SortCategory,
   ): SortDirection => {
-    return category === "title"
+    return category === 'title'
       ? titleSortDirectionPreference.value
       : dateSortDirectionPreference.value;
   };
@@ -69,7 +69,7 @@ export const useExplorerFilterPanel = ({
     category: SortCategory,
     direction: SortDirection,
   ) => {
-    if (category === "title") {
+    if (category === 'title') {
       titleSortDirectionPreference.value = direction;
       return;
     }
@@ -81,7 +81,7 @@ export const useExplorerFilterPanel = ({
     patch: Record<string, string | undefined>,
     options: SetQueryParamsOptions = {},
   ) => {
-    const removeKeys = Object.hasOwn(patch, "filter")
+    const removeKeys = Object.hasOwn(patch, 'filter')
       ? legacyFilterQueryKeys
       : options.removeKeys;
 
@@ -119,63 +119,64 @@ export const useExplorerFilterPanel = ({
   };
 
   const filterTargetingMe = computed<boolean>({
-    get: () => hasFilter("targeting"),
-    set: (value) => setFilter("targeting", value),
+    get: () => hasFilter('targeting'),
+    set: (value) => setFilter('targeting', value),
   });
 
   const filterAdministratedByMe = computed<boolean>({
-    get: () => hasFilter("administered"),
-    set: (value) => setFilter("administered", value),
+    get: () => hasFilter('administered'),
+    set: (value) => setFilter('administered', value),
   });
 
   const filterHasMyResponse = computed<boolean>({
-    get: () => hasFilter("answered"),
-    set: (value) => setFilter("answered", value),
+    get: () => hasFilter('answered'),
+    set: (value) => setFilter('answered', value),
   });
 
   const filterUnansweredByMe = computed<boolean>({
-    get: () => hasFilter("unanswered"),
-    set: (value) => setFilter("unanswered", value),
+    get: () => hasFilter('unanswered'),
+    set: (value) => setFilter('unanswered', value),
   });
 
   const filterHasMyDraft = computed<boolean>({
-    get: () => hasFilter("draft"),
-    set: (value) => setFilter("draft", value),
+    get: () => hasFilter('draft'),
+    set: (value) => setFilter('draft', value),
   });
 
   const filterUnpublishedOnly = computed<boolean>({
-    get: () => hasFilter("unpublished"),
-    set: (value) => setFilter("unpublished", value),
+    get: () => hasFilter('unpublished'),
+    set: (value) => setFilter('unpublished', value),
   });
 
   const onlyActiveDue = computed<boolean>({
-    get: () => hasFilter("due"),
-    set: (value) => setFilter("due", value),
+    get: () => hasFilter('due'),
+    set: (value) => setFilter('due', value),
   });
 
-  const searchQuery = computed(() => getQueryValue(route.query.search) ?? "");
+  const searchQuery = computed(() => getQueryValue(route.query.search) ?? '');
 
   const resolveSortFromQuery = (): {
     category: SortCategory;
     direction: SortDirection;
   } => {
     const rawSort = getQueryValue(route.query.sort);
-    const category = rawSort !== undefined && isSortCategory(rawSort)
-      ? rawSort
-      : DEFAULT_SORT_CATEGORY;
+    const category =
+      rawSort !== undefined && isSortCategory(rawSort)
+        ? rawSort
+        : DEFAULT_SORT_CATEGORY;
 
     const rawReversed = getQueryValue(route.query.reversed);
-    if (rawReversed === "1") {
+    if (rawReversed === '1') {
       return {
         category,
-        direction: "desc",
+        direction: 'desc',
       };
     }
 
-    if (rawReversed === "0") {
+    if (rawReversed === '0') {
       return {
         category,
-        direction: "asc",
+        direction: 'asc',
       };
     }
 
@@ -185,15 +186,15 @@ export const useExplorerFilterPanel = ({
     };
   };
 
-  const sortCategory = computed<SortCategory>(() =>
-    resolveSortFromQuery().category
+  const sortCategory = computed<SortCategory>(
+    () => resolveSortFromQuery().category,
   );
-  const sortDirection = computed<SortDirection>(() =>
-    resolveSortFromQuery().direction
+  const sortDirection = computed<SortDirection>(
+    () => resolveSortFromQuery().direction,
   );
 
   const sortMenuLabel = computed(() =>
-    buildSortMenuLabel(sortCategory.value, sortDirection.value)
+    buildSortMenuLabel(sortCategory.value, sortDirection.value),
   );
 
   const setSortQuery = async (
@@ -204,7 +205,7 @@ export const useExplorerFilterPanel = ({
 
     await setQueryParams({
       sort: category === DEFAULT_SORT_CATEGORY ? undefined : category,
-      reversed: direction === "desc" ? "1" : undefined,
+      reversed: direction === 'desc' ? '1' : undefined,
     });
   };
 
@@ -225,30 +226,30 @@ export const useExplorerFilterPanel = ({
       },
     }));
 
-    const directionItems: MenuItem[] = sortDirectionOptions.map((
-      direction,
-    ) => ({
-      label: getSortDirectionLabel(direction, sortCategory.value),
-      icon: getSortDirectionIcon(direction, sortCategory.value),
-      command: () => {
-        setSortDirection(direction);
-      },
-    }));
+    const directionItems: MenuItem[] = sortDirectionOptions.map(
+      (direction) => ({
+        label: getSortDirectionLabel(direction, sortCategory.value),
+        icon: getSortDirectionIcon(direction, sortCategory.value),
+        command: () => {
+          setSortDirection(direction);
+        },
+      }),
+    );
 
     return [
       {
-        label: "並べ替え項目",
+        label: '並べ替え項目',
         items: fieldItems,
       },
       {
-        label: "並び順",
+        label: '並び順',
         items: directionItems,
       },
     ];
   });
 
   const isSortMenuItemSelected = (item: MenuItem) => {
-    const itemLabel = item.label ?? "";
+    const itemLabel = item.label ?? '';
 
     const selectedField = sortFieldOptions.find(
       (option) => option.value === sortCategory.value,
@@ -257,14 +258,16 @@ export const useExplorerFilterPanel = ({
       return true;
     }
 
-    return itemLabel ===
-      getSortDirectionLabel(sortDirection.value, sortCategory.value);
+    return (
+      itemLabel ===
+      getSortDirectionLabel(sortDirection.value, sortCategory.value)
+    );
   };
 
   const tabCount = (tab: TabKey) => tabCounts.value[tab] ?? 0;
 
   const selectedTab = computed<TabKey | null>(() =>
-    findSelectedTab(currentFilterSet.value)
+    findSelectedTab(currentFilterSet.value),
   );
 
   const applyTabPreset = async (
@@ -322,14 +325,14 @@ export const useExplorerFilterPanel = ({
       filters: currentFilterSet.value,
       sortCategory: sortCategory.value,
       sortDirection: sortDirection.value,
-    })
+    }),
   );
 
   const tabCountQuery = computed(() =>
     buildTabCountQuery({
       searchQuery: searchQuery.value,
       filters: currentFilterSet.value,
-    })
+    }),
   );
 
   const signature = computed(() =>
@@ -338,7 +341,7 @@ export const useExplorerFilterPanel = ({
       searchQuery: searchQuery.value,
       sortCategory: sortCategory.value,
       sortDirection: sortDirection.value,
-    })
+    }),
   );
 
   watchEffect(() => {

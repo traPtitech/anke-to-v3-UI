@@ -1,6 +1,6 @@
-import type { GatewayQuestion } from "~/models/question";
-import type { GatewayQuestionnaire } from "~/models/questionnaire";
-import type { GatewayResponse } from "~/models/response";
+import type { GatewayQuestion } from '~/models/question';
+import type { GatewayQuestionnaire } from '~/models/questionnaire';
+import type { GatewayResponse } from '~/models/response';
 
 export type QuestionResultBase = GatewayQuestion & { question_id?: number };
 export type QuestionResultResponses<AnswerType> = {
@@ -8,26 +8,28 @@ export type QuestionResultResponses<AnswerType> = {
   answer: AnswerType;
   respondent: string;
 }[];
-export type QuestionResultText =
-  & { question_type: "Text"; responses: QuestionResultResponses<string> }
-  & QuestionResultBase;
-export type QuestionResultTextLong =
-  & { question_type: "TextLong"; responses: QuestionResultResponses<string> }
-  & QuestionResultBase;
+export type QuestionResultText = {
+  question_type: 'Text';
+  responses: QuestionResultResponses<string>;
+} & QuestionResultBase;
+export type QuestionResultTextLong = {
+  question_type: 'TextLong';
+  responses: QuestionResultResponses<string>;
+} & QuestionResultBase;
 export type QuestionResultNumber = {
-  question_type: "Number";
+  question_type: 'Number';
   responses: QuestionResultResponses<number>;
 } & QuestionResultBase;
 export type QuestionResultSingleChoice = {
-  question_type: "SingleChoice";
+  question_type: 'SingleChoice';
   responses: QuestionResultResponses<string>;
 } & QuestionResultBase;
 export type QuestionResultMultipleChoice = {
-  question_type: "MultipleChoice";
+  question_type: 'MultipleChoice';
   responses: QuestionResultResponses<string[]>;
 } & QuestionResultBase;
 export type QuestionResultScale = {
-  question_type: "Scale";
+  question_type: 'Scale';
   responses: QuestionResultResponses<number>;
 } & QuestionResultBase;
 export type QuestionResult =
@@ -64,7 +66,7 @@ export const useQuestionnaireResult = (
   responses: GatewayResponse[],
 ) => {
   const results = computed(() =>
-    questionnaire.questions.map((q) => getResultForQuestion(q, responses))
+    questionnaire.questions.map((q) => getResultForQuestion(q, responses)),
   );
 
   return {

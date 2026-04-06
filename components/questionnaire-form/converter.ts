@@ -1,5 +1,5 @@
-import type { QuestionnaireFormSettings } from "~/components/questionnaire-form/type";
-import type { PostQuestionnaireBody } from "~/composables/type-fetch/anke-to/client";
+import type { QuestionnaireFormSettings } from '~/components/questionnaire-form/type';
+import type { PostQuestionnaireBody } from '~/composables/type-fetch/anke-to/client';
 
 export const convertToBody = (
   state: QuestionnaireFormSettings,
@@ -9,8 +9,8 @@ export const convertToBody = (
     users: state.target.groups.includes(ALL_MENTION_USER)
       ? state.target.users.concat(ALL_MENTION_USER)
       : state.target.users,
-    groups: state.target.groups.filter((groupId) =>
-      groupId !== ALL_MENTION_USER
+    groups: state.target.groups.filter(
+      (groupId) => groupId !== ALL_MENTION_USER,
     ),
   },
   questions: state.questions.map((q) => ({

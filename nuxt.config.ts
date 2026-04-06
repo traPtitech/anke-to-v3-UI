@@ -1,28 +1,26 @@
-import { BrandPreset } from "./theme/preset";
+import { BrandPreset } from './theme/preset';
 
 export default defineNuxtConfig({
   modules: [
-    "@pinia/nuxt",
-    "@nuxt/test-utils",
+    '@pinia/nuxt',
+    '@nuxt/test-utils',
     // "@nuxt/eslint",
     // "@nuxtjs/stylelint-module",
-    "pinia-plugin-persistedstate/nuxt",
-    "@nuxt/icon",
-    "@primevue/nuxt-module",
+    'pinia-plugin-persistedstate/nuxt',
+    '@nuxt/icon',
+    '@primevue/nuxt-module',
   ],
   ssr: false,
   components: false,
   imports: {
-    dirs: [
-      "./utils",
-    ],
+    dirs: ['./utils'],
   },
   devtools: { enabled: true },
-  css: ["ress", "~/assets/style/global.css", "~/assets/style/hljs-github.css"],
+  css: ['ress', '~/assets/style/global.css', '~/assets/style/hljs-github.css'],
   appConfig: {
     nuxtIcon: {},
   },
-  compatibilityDate: "2025-05-15",
+  compatibilityDate: '2025-05-15',
   vite: {
     css: {
       preprocessorOptions: {
@@ -36,7 +34,7 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
   icon: {
-    mode: "svg",
+    mode: 'svg',
   },
   // eslint: {
   //   checker: {

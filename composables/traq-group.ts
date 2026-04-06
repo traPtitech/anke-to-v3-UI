@@ -1,4 +1,4 @@
-import { useGroups } from "~/composables/type-fetch/anke-to/client";
+import { useGroups } from '~/composables/type-fetch/anke-to/client';
 
 export const useTraqGroup = () => {
   const { data: groups } = useGroups();

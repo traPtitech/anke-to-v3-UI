@@ -1,6 +1,6 @@
-import type { QuestionElement } from "~/components/ui/question-element/composables";
-import type { GatewayQuestionnaire } from "~/models/questionnaire";
-import type { GatewayResponse } from "~/models/response";
+import type { QuestionElement } from '~/components/ui/question-element/composables';
+import type { GatewayQuestionnaire } from '~/models/questionnaire';
+import type { GatewayResponse } from '~/models/response';
 
 export const useResponseBodies = (
   questionnaire: GatewayQuestionnaire,

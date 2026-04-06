@@ -1,80 +1,75 @@
-import createClient from "openapi-fetch";
-import type { paths } from "./openapi";
+import createClient from 'openapi-fetch';
+import type { paths } from './openapi';
 
-const client = createClient<paths>({ baseUrl: "/api" });
+const client = createClient<paths>({ baseUrl: '/api' });
 
 export type GetQuestionnairesOption =
-  paths["/questionnaires"]["get"]["parameters"]["query"];
+  paths['/questionnaires']['get']['parameters']['query'];
 export const useGetQuestionnaires = (option?: GetQuestionnairesOption) =>
-  useAsyncData("/questionnaires", async () => {
+  useAsyncData('/questionnaires', async () => {
     return await fetchQuestionnaires(option);
   });
 
 export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
-  const res = await client.GET("/questionnaires", {
+  const res = await client.GET('/questionnaires', {
     params: { query: option },
   });
   if (res.data === undefined) {
-    throw new Error("No data returned from the API");
+    throw new Error('No data returned from the API');
   }
   return res.data;
 };
 
 export const useGetQuestionnaire = (id: number) =>
   useAsyncData(`/questionnaires/${id}`, async () => {
-    const res = await client.GET("/questionnaires/{questionnaireID}", {
+    const res = await client.GET('/questionnaires/{questionnaireID}', {
       params: { path: { questionnaireID: id } },
     });
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export const fetchMyRemindStatus = async (questionnaireID: number) => {
   const res = await client.GET(
-    "/questionnaires/{questionnaireID}/myRemindStatus",
+    '/questionnaires/{questionnaireID}/myRemindStatus',
     {
       params: { path: { questionnaireID } },
     },
   );
   if (res.data === undefined) {
-    throw new Error("No data returned from the API");
+    throw new Error('No data returned from the API');
   }
   return res.data;
 };
 
 export const useGetMyRemindStatus = (questionnaireID: number) =>
-  useAsyncData(
-    `/questionnaires/${questionnaireID}/myRemindStatus`,
-    async () => fetchMyRemindStatus(questionnaireID)
+  useAsyncData(`/questionnaires/${questionnaireID}/myRemindStatus`, async () =>
+    fetchMyRemindStatus(questionnaireID),
   );
 
 export type PostQuestionnaireBody =
-  paths["/questionnaires"]["post"]["requestBody"]["content"][
-    "application/json"
-  ];
+  paths['/questionnaires']['post']['requestBody']['content']['application/json'];
 export const postNewQuestionnaire = async (data: PostQuestionnaireBody) => {
-  const res = await client.POST("/questionnaires", { body: data });
+  const res = await client.POST('/questionnaires', { body: data });
   if (res.data === undefined) {
-    throw new Error("No data returned from the API");
+    throw new Error('No data returned from the API');
   }
 
-  await refreshNuxtData("/questionnaires");
+  await refreshNuxtData('/questionnaires');
 
   return res.data;
 };
 
 export type PatchMyRemindStatusBody =
-  paths["/questionnaires/{questionnaireID}/myRemindStatus"]["patch"][
-    "requestBody"
-  ]["content"]["application/json"];
+  paths['/questionnaires/{questionnaireID}/myRemindStatus']['patch']['requestBody']['content']['application/json'];
 export const patchMyRemindStatus = async (
   questionnaireID: number,
   body: PatchMyRemindStatusBody,
 ) => {
   const res = await client.PATCH(
-    "/questionnaires/{questionnaireID}/myRemindStatus",
+    '/questionnaires/{questionnaireID}/myRemindStatus',
     {
       params: { path: { questionnaireID } },
       body,
@@ -82,7 +77,7 @@ export const patchMyRemindStatus = async (
   );
 
   if (!res.response.ok) {
-    throw new Error("Failed to patch remind status");
+    throw new Error('Failed to patch remind status');
   }
 
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
@@ -90,42 +85,38 @@ export const patchMyRemindStatus = async (
 };
 
 export const deleteQuestionnaireById = async (questionnaireID: number) => {
-  const res = await client.DELETE("/questionnaires/{questionnaireID}", {
+  const res = await client.DELETE('/questionnaires/{questionnaireID}', {
     params: { path: { questionnaireID } },
   });
   if (!res.response.ok) {
-    throw new Error("Failed to delete questionnaire");
+    throw new Error('Failed to delete questionnaire');
   }
 
-  await refreshNuxtData("/questionnaires");
+  await refreshNuxtData('/questionnaires');
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
 export type PatchQuestionnaireBody =
-  paths["/questionnaires/{questionnaireID}"]["patch"]["requestBody"]["content"][
-    "application/json"
-  ];
+  paths['/questionnaires/{questionnaireID}']['patch']['requestBody']['content']['application/json'];
 export const patchQuestionnaireById = async (
   questionnaireID: number,
   body: PatchQuestionnaireBody,
 ) => {
-  const res = await client.PATCH("/questionnaires/{questionnaireID}", {
+  const res = await client.PATCH('/questionnaires/{questionnaireID}', {
     params: { path: { questionnaireID } },
     body,
   });
 
   if (!res.response.ok) {
-    throw new Error("Failed to patch questionnaire");
+    throw new Error('Failed to patch questionnaire');
   }
 
-  await refreshNuxtData("/questionnaires");
+  await refreshNuxtData('/questionnaires');
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
 type GetQuestionnaireResponsesParams =
-  paths["/questionnaires/{questionnaireID}/responses"]["get"]["parameters"][
-    "query"
-  ];
+  paths['/questionnaires/{questionnaireID}/responses']['get']['parameters']['query'];
 
 export const useGetQuestionnaireResponses = (
   questionnaireID: number,
@@ -133,52 +124,50 @@ export const useGetQuestionnaireResponses = (
 ) =>
   useAsyncData(`/questionnaires/${questionnaireID}/responses`, async () => {
     const res = await client.GET(
-      "/questionnaires/{questionnaireID}/responses",
+      '/questionnaires/{questionnaireID}/responses',
       {
         params: { path: { questionnaireID }, query: params },
       },
     );
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export const useGetMyResponses = () =>
   useAsyncData(`/responses/myResponses`, async () => {
-    const res = await client.GET("/responses/myResponses");
+    const res = await client.GET('/responses/myResponses');
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export const useGetResponse = (responseID: number) =>
   useAsyncData(`/responses/${responseID}`, async () => {
-    const res = await client.GET("/responses/{responseID}", {
+    const res = await client.GET('/responses/{responseID}', {
       params: { path: { responseID } },
     });
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export type PostNewResponseBody =
-  paths["/questionnaires/{questionnaireID}/responses"]["post"]["requestBody"][
-    "content"
-  ]["application/json"];
+  paths['/questionnaires/{questionnaireID}/responses']['post']['requestBody']['content']['application/json'];
 export const postNewResponse = async (
   questionnaireID: number,
   data: PostNewResponseBody,
 ) => {
-  const res = await client.POST("/questionnaires/{questionnaireID}/responses", {
+  const res = await client.POST('/questionnaires/{questionnaireID}/responses', {
     params: { path: { questionnaireID } },
     body: data,
   });
 
   if (res.data === undefined) {
-    throw new Error("No data returned from the API");
+    throw new Error('No data returned from the API');
   }
 
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
@@ -187,78 +176,76 @@ export const postNewResponse = async (
 };
 
 export type PatchResponseBody =
-  paths["/responses/{responseID}"]["patch"]["requestBody"]["content"][
-    "application/json"
-  ];
+  paths['/responses/{responseID}']['patch']['requestBody']['content']['application/json'];
 export const patchResponse = async (
   responseID: number,
   data: PatchResponseBody,
 ) => {
-  const res = await client.PATCH("/responses/{responseID}", {
+  const res = await client.PATCH('/responses/{responseID}', {
     params: { path: { responseID } },
     body: data,
   });
 
   if (!res.response.ok) {
-    throw new Error("Failed to patch response");
+    throw new Error('Failed to patch response');
   }
 
   await refreshNuxtData(`/responses/${responseID}`);
 };
 
 export const deleteResponse = async (responseID: number) => {
-  const res = await client.DELETE("/responses/{responseID}", {
+  const res = await client.DELETE('/responses/{responseID}', {
     params: { path: { responseID } },
   });
 
   if (!res.response.ok) {
-    throw new Error("Failed to delete response");
+    throw new Error('Failed to delete response');
   }
 
   await refreshNuxtData(`/responses/${responseID}`);
 };
 
 export const useMe = () =>
-  useAsyncData("/me", async () => {
-    const res = await client.GET("/traq/users/me");
+  useAsyncData('/me', async () => {
+    const res = await client.GET('/traq/users/me');
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export const useUsers = () =>
-  useAsyncData("/users", async () => {
-    const res = await client.GET("/traq/users");
+  useAsyncData('/users', async () => {
+    const res = await client.GET('/traq/users');
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export const useGroups = () =>
-  useAsyncData("/groups", async () => {
-    const res = await client.GET("/traq/groups");
+  useAsyncData('/groups', async () => {
+    const res = await client.GET('/traq/groups');
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export const useStamps = () =>
-  useAsyncData("/stamps", async () => {
-    const res = await client.GET("/traq/stamps");
+  useAsyncData('/stamps', async () => {
+    const res = await client.GET('/traq/stamps');
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });
 
 export const useChannels = () =>
-  useAsyncData("/channels", async () => {
-    const res = await client.GET("/traq/channels");
+  useAsyncData('/channels', async () => {
+    const res = await client.GET('/traq/channels');
     if (res.data === undefined) {
-      throw new Error("No data returned from the API");
+      throw new Error('No data returned from the API');
     }
     return res.data;
   });

@@ -26,8 +26,6 @@ const dueDateString = computed(() => {
 const responseViewableByString = computed(() => {
   return responseViewableByOptionsMap[props.questionnaire.response_viewable_by];
 });
-
-
 </script>
 
 <template>
@@ -47,12 +45,24 @@ const responseViewableByString = computed(() => {
           {{ responseViewableByString }}公開
         </span>
         <span class="attribute-chip">
-          <Icon :name="questionnaire.is_anonymous ? 'mdi:incognito' : 'mdi:account'" size="14px" />
+          <Icon
+            :name="questionnaire.is_anonymous ? 'mdi:incognito' : 'mdi:account'"
+            size="14px"
+          />
           {{ questionnaire.is_anonymous ? '匿名' : '記名' }}
         </span>
         <span class="attribute-chip">
-          <Icon :name="questionnaire.is_duplicate_answer_allowed ? 'mdi:checkbox-multiple-marked-outline' : 'mdi:checkbox-marked-outline'" size="14px" />
-          {{ questionnaire.is_duplicate_answer_allowed ? '複数回答' : '単一回答' }}
+          <Icon
+            :name="
+              questionnaire.is_duplicate_answer_allowed
+                ? 'mdi:checkbox-multiple-marked-outline'
+                : 'mdi:checkbox-marked-outline'
+            "
+            size="14px"
+          />
+          {{
+            questionnaire.is_duplicate_answer_allowed ? '複数回答' : '単一回答'
+          }}
         </span>
       </div>
     </div>

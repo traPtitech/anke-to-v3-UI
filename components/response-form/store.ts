@@ -2,34 +2,35 @@ import {
   checkQuestionFilled,
   checkQuestionValidity,
   type QuestionElement,
-} from "~/components/ui/question-element/composables";
-import type { PostNewResponseBody } from "~/composables/type-fetch/anke-to/client";
-import type { GatewayQuestion } from "~/models/question";
-import type { GatewayQuestionnaire } from "~/models/questionnaire";
+} from '~/components/ui/question-element/composables';
+import type { PostNewResponseBody } from '~/composables/type-fetch/anke-to/client';
+import type { GatewayQuestion } from '~/models/question';
+import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type {
   GatewayNewResponseBody,
   GatewayResponse,
-} from "~/models/response";
+} from '~/models/response';
 
-export type ResponseFormState =
-  & { body: QuestionElement[] }
-  & Pick<GatewayResponse, "questionnaire_id" | "response_id">;
+export type ResponseFormState = { body: QuestionElement[] } & Pick<
+  GatewayResponse,
+  'questionnaire_id' | 'response_id'
+>;
 
 const getDefaultQuestionValue = (
   question: GatewayQuestion,
 ): QuestionElement => {
   switch (question.question_type) {
-    case "Text":
-      return { ...question, answer: "" };
-    case "TextLong":
-      return { ...question, answer: "" };
-    case "Number":
+    case 'Text':
+      return { ...question, answer: '' };
+    case 'TextLong':
+      return { ...question, answer: '' };
+    case 'Number':
       return { ...question, answer: undefined };
-    case "SingleChoice":
+    case 'SingleChoice':
       return { ...question, answer: undefined };
-    case "MultipleChoice":
+    case 'MultipleChoice':
       return { ...question, answer: [] };
-    case "Scale":
+    case 'Scale':
       return { ...question, answer: undefined };
     default: {
       const _: never = question;
@@ -69,11 +70,11 @@ export const useResponseFormStore = (initialState: ResponseFormState) => {
   const state = ref<ResponseFormState>(initialState);
 
   const atLeastOneFilled = computed(() =>
-    state.value.body.some((q) => checkQuestionFilled(q))
+    state.value.body.some((q) => checkQuestionFilled(q)),
   );
 
   const valid = computed(() =>
-    state.value.body.every((q) => checkQuestionValidity(q))
+    state.value.body.every((q) => checkQuestionValidity(q)),
   );
 
   return { state, valid, atLeastOneFilled };
@@ -81,14 +82,15 @@ export const useResponseFormStore = (initialState: ResponseFormState) => {
 
 export const convertToBody = (
   state: ResponseFormState,
-): Omit<PostNewResponseBody, "is_draft"> => ({
+): Omit<PostNewResponseBody, 'is_draft'> => ({
   body: state.body
     .filter((q) => checkQuestionFilled(q))
-    .map((q) =>
-      ({
-        question_id: q.question_id!,
-        answer: q.answer,
-        question_type: q.question_type,
-      }) as GatewayNewResponseBody
+    .map(
+      (q) =>
+        ({
+          question_id: q.question_id!,
+          answer: q.answer,
+          question_type: q.question_type,
+        }) as GatewayNewResponseBody,
     ),
 });

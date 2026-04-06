@@ -1,4 +1,4 @@
-import { getQueryValue } from "./filter-query";
+import { getQueryValue } from './filter-query';
 
 export type SetQueryParamsOptions = {
   clearHash?: boolean;
@@ -83,6 +83,6 @@ export const setRouteQueryParams = async ({
 
   await router.replace({
     query: nextQuery,
-    hash: shouldClearHash ? "" : route.hash,
+    hash: shouldClearHash ? '' : route.hash,
   });
 };

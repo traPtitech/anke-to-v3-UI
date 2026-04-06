@@ -70,12 +70,10 @@ type SameExactPath<A extends ExactPaths, B extends ExactPaths> = A extends B
     ? true
     : false;
 
-export type RequestParameters<
-  P extends UrlPaths,
-  M extends Methods,
-> = M extends HttpMethodsByPath<P>
-  ? Simplify<Get<paths, `${P}.${M}.parameters.query`>>
-  : never;
+export type RequestParameters<P extends UrlPaths, M extends Methods> =
+  M extends HttpMethodsByPath<P>
+    ? Simplify<Get<paths, `${P}.${M}.parameters.query`>>
+    : never;
 
 /**
  * Get the type of request body corresponding to the path and method defined in openapi
@@ -139,6 +137,7 @@ export type Entity<K extends EntityName> = Simplify<
 export type ResponseData<
   P extends UrlPaths = UrlPaths,
   M extends Methods = Methods,
-> = M extends HttpMethodsByPath<P>
-  ? Simplify<Get<paths, `${P}.${M}.responses.200.content.application/json`>>
-  : never;
+> =
+  M extends HttpMethodsByPath<P>
+    ? Simplify<Get<paths, `${P}.${M}.responses.200.content.application/json`>>
+    : never;

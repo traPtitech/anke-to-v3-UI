@@ -1,4 +1,4 @@
-import { useStoreNewQuestionnaireForm } from "~/components/questionnaire-form/store";
+import { useStoreNewQuestionnaireForm } from '~/components/questionnaire-form/store';
 
 import {
   deleteQuestionnaireById,
@@ -6,8 +6,8 @@ import {
   type PatchMyRemindStatusBody,
   type PatchQuestionnaireBody,
   patchQuestionnaireById,
-} from "~/composables/type-fetch/anke-to/client";
-import type { QuestionnaireDetail } from "./type";
+} from '~/composables/type-fetch/anke-to/client';
+import type { QuestionnaireDetail } from './type';
 
 export const useQuestionnaireActions = () => {
   const toast = useToast();
@@ -19,15 +19,15 @@ export const useQuestionnaireActions = () => {
     try {
       await patchMyRemindStatus(questionnaireId, body);
       toast.add({
-        summary: "このアンケートのリマインドを受け取る設定にしました",
-        severity: "success",
+        summary: 'このアンケートのリマインドを受け取る設定にしました',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "回答設定の更新に失敗しました",
-        severity: "error",
+        summary: '回答設定の更新に失敗しました',
+        severity: 'error',
         life: 3000,
       });
     }
@@ -40,15 +40,15 @@ export const useQuestionnaireActions = () => {
     try {
       await patchMyRemindStatus(questionnaireId, body);
       toast.add({
-        summary: "このアンケートのリマインドを受け取らない設定にしました",
-        severity: "success",
+        summary: 'このアンケートのリマインドを受け取らない設定にしました',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "回答設定の更新に失敗しました",
-        severity: "error",
+        summary: '回答設定の更新に失敗しました',
+        severity: 'error',
         life: 3000,
       });
     }
@@ -64,17 +64,17 @@ export const useQuestionnaireActions = () => {
     }
     try {
       await deleteQuestionnaireById(detail.questionnaire_id);
-      await navigateTo("/explorer");
+      await navigateTo('/explorer');
       toast.add({
-        summary: "アンケートを削除しました。",
-        severity: "success",
+        summary: 'アンケートを削除しました。',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "アンケートの削除に失敗しました。",
-        severity: "error",
+        summary: 'アンケートの削除に失敗しました。',
+        severity: 'error',
         life: 3000,
       });
     }
@@ -87,15 +87,15 @@ export const useQuestionnaireActions = () => {
     try {
       await patchQuestionnaireById(detail.questionnaire_id, body);
       toast.add({
-        summary: "アンケートを締め切りました。",
-        severity: "success",
+        summary: 'アンケートを締め切りました。',
+        severity: 'success',
         life: 3000,
       });
     } catch (err) {
       console.error(err);
       toast.add({
-        summary: "アンケートの締め切り設定に失敗しました。",
-        severity: "error",
+        summary: 'アンケートの締め切り設定に失敗しました。',
+        severity: 'error',
         life: 3000,
       });
     }
@@ -116,11 +116,11 @@ export const useQuestionnaireActions = () => {
     state.is_duplicate_answer_allowed = detail.is_duplicate_answer_allowed;
     state.response_viewable_by = detail.response_viewable_by;
 
-    await navigateTo("/questionnaires/new");
+    await navigateTo('/questionnaires/new');
 
     toast.add({
-      summary: "アンケートを複製しました。",
-      severity: "success",
+      summary: 'アンケートを複製しました。',
+      severity: 'success',
       life: 3000,
     });
   };
