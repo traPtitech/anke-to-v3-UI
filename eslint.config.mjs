@@ -30,6 +30,12 @@ export default withNuxt(
         },
       ],
       '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/consistent-type-assertions': [
+        'warn',
+        {
+          assertionStyle: 'never',
+        },
+      ],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-debugger': 'warn',
       'vue/multi-word-component-names': 'off',

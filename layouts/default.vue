@@ -1,33 +1,15 @@
 <script lang="ts" setup>
+import { getQueryValue } from '~/components/explorer/filter-query';
+import { setRouteQueryParams } from '~/components/explorer/filter-route';
 import Header from '~/components/layout-elements/header.vue';
 
 const router = useRouter();
 const route = useRoute();
 const isExplorerRoute = computed(() => route.path.startsWith('/explorer'));
-const SEARCH_THROTTLE_MS = 240;
-const tabFilterQueryKeys = [
-  'targeting',
-  'admin',
-  'answered',
-  'unanswered',
-  'draft',
-  'unpublished',
-] as const;
-
-const getQueryValue = (value: unknown): string | undefined => {
-  if (Array.isArray(value)) {
-    const first = value[0];
-    return typeof first === 'string' ? first : undefined;
-  }
-
-  return typeof value === 'string' ? value : undefined;
-};
+const SEARCH_DEBOUNCE_MS = 300;
 
 const searchInputText = ref(getQueryValue(route.query.search) ?? '');
-let searchThrottleTimer: ReturnType<typeof setTimeout> | null = null;
-let queuedSearchValue: string | null = null;
-let lastSearchCommittedAt = 0;
-let pendingSearchQueryValue: string | null = null;
+let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 const applySearchToQuery = (value: string) => {
   const normalized = value.trim();
@@ -42,86 +24,30 @@ const applySearchToQuery = (value: string) => {
     return;
   }
 
-  const currentQuery = Object.fromEntries(
-    Object.entries(route.query)
-      .map(([key, queryValue]) => [key, getQueryValue(queryValue)] as const)
-      .filter(([, queryValue]) => queryValue !== undefined),
-  ) as Record<string, string>;
-
-  const nextQuery: Record<string, string | undefined> = {
-    ...currentQuery,
-    search: normalized || undefined,
-    page: undefined,
-  };
-
-  tabFilterQueryKeys.forEach((key) => {
-    nextQuery[key] = undefined;
+  void setRouteQueryParams({
+    router,
+    route,
+    patch: {
+      search: normalized || undefined,
+      page: undefined,
+    },
   });
-
-  const cleaned = Object.fromEntries(
-    Object.entries(nextQuery).filter(
-      ([, queryValue]) => queryValue !== undefined,
-    ),
-  );
-
-  const hasChanged = JSON.stringify(currentQuery) !== JSON.stringify(cleaned);
-
-  if (!hasChanged) {
-    return;
-  }
-
-  void router.replace({ query: cleaned });
 };
 
-const applySearchWithThrottle = (value: string) => {
-  pendingSearchQueryValue = value.trim();
-  const now = Date.now();
-  const remaining = SEARCH_THROTTLE_MS - (now - lastSearchCommittedAt);
-  queuedSearchValue = value;
-
-  if (remaining <= 0) {
-    if (searchThrottleTimer) {
-      clearTimeout(searchThrottleTimer);
-      searchThrottleTimer = null;
-    }
-
-    const commitValue = queuedSearchValue;
-    queuedSearchValue = null;
-    lastSearchCommittedAt = now;
-
-    if (commitValue !== null) {
-      applySearchToQuery(commitValue);
-    }
-    return;
+const applySearchWithDebounce = (value: string) => {
+  if (searchDebounceTimer) {
+    clearTimeout(searchDebounceTimer);
   }
 
-  if (searchThrottleTimer) {
-    return;
-  }
-
-  searchThrottleTimer = setTimeout(() => {
-    searchThrottleTimer = null;
-    lastSearchCommittedAt = Date.now();
-    const commitValue = queuedSearchValue;
-    queuedSearchValue = null;
-
-    if (commitValue !== null) {
-      applySearchToQuery(commitValue);
-    }
-  }, remaining);
+  searchDebounceTimer = setTimeout(() => {
+    applySearchToQuery(value);
+  }, SEARCH_DEBOUNCE_MS);
 };
 
 watch(
   () => route.query.search,
   (searchQuery) => {
     const normalized = getQueryValue(searchQuery) ?? '';
-
-    if (pendingSearchQueryValue !== null) {
-      if (normalized === pendingSearchQueryValue) {
-        pendingSearchQueryValue = null;
-      }
-      return;
-    }
 
     if (normalized !== searchInputText.value) {
       searchInputText.value = normalized;
@@ -130,17 +56,16 @@ watch(
 );
 
 onBeforeUnmount(() => {
-  if (searchThrottleTimer) {
-    clearTimeout(searchThrottleTimer);
+  if (searchDebounceTimer) {
+    clearTimeout(searchDebounceTimer);
   }
-  pendingSearchQueryValue = null;
 });
 
 const headerSearchText = computed<string>({
   get: () => searchInputText.value,
   set: (value) => {
     searchInputText.value = value;
-    applySearchWithThrottle(value);
+    applySearchWithDebounce(value);
   },
 });
 </script>

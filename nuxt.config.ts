@@ -35,6 +35,9 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
+  icon: {
+    mode: "svg",
+  },
   // eslint: {
   //   checker: {
   //     cache: true,

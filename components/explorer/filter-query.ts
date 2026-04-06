@@ -14,6 +14,7 @@ export const filterKeys: FilterKey[] = [
   "answered",
   "unanswered",
   "draft",
+  "due",
   "unpublished",
 ];
 
@@ -24,9 +25,22 @@ export const legacyFilterQueryKeys = [
   "unanswered",
   "draft",
   "unpublished",
+  "due",
   "onlyTargetingMe",
   "isDraft",
 ];
+
+const isFilterKey = (value: string): value is FilterKey => {
+  return (
+    value === "targeting" ||
+    value === "administered" ||
+    value === "answered" ||
+    value === "unanswered" ||
+    value === "draft" ||
+    value === "due" ||
+    value === "unpublished"
+  );
+};
 
 export const tabFilterPresets: Record<TabKey, FilterKey[]> = {
   all: [],
@@ -87,6 +101,7 @@ const parseLegacyFilterSet = (
   if (getQueryValue(query.answered) === "1") set.add("answered");
   if (getQueryValue(query.unanswered) === "1") set.add("unanswered");
   if (getQueryValue(query.draft) === "1") set.add("draft");
+  if (getQueryValue(query.due) === "1") set.add("due");
   if (getQueryValue(query.unpublished) === "1") set.add("unpublished");
   if (getQueryValue(query.onlyTargetingMe) === "true") set.add("targeting");
   if (getQueryValue(query.isDraft) === "true") set.add("draft");
@@ -104,9 +119,7 @@ export const parseFilterSet = (
     raw
       .split(",")
       .map((item) => item.trim())
-      .filter((item): item is FilterKey =>
-        filterKeys.includes(item as FilterKey)
-      )
+      .filter((item): item is FilterKey => isFilterKey(item))
       .forEach((item) => set.add(item));
   }
 
@@ -136,10 +149,12 @@ export const resolveTabFromHash = (hash: string): TabKey | null => {
 export const findSelectedTab = (set: Set<FilterKey>): TabKey | null => {
   const current = [...set].sort().join(",");
 
-  const matched = (Object.entries(tabFilterPresets) as [TabKey, FilterKey[]][])
-    .find(
-      ([, preset]) => [...preset].sort().join(",") === current,
-    );
+  for (const tab of tabs) {
+    const preset = tabFilterPresets[tab.key];
+    if ([...preset].sort().join(",") === current) {
+      return tab.key;
+    }
+  }
 
-  return matched?.[0] ?? null;
+  return null;
 };

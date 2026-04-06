@@ -3,13 +3,7 @@ import type {
   SortCategory,
   SortDirection,
   SortFieldOption,
-  SortOptionValue,
 } from "./filter-types";
-
-export const DATE_SORT_ORDER_STORAGE_KEY = "explorer.sortOrder.date";
-export const TITLE_SORT_ORDER_STORAGE_KEY = "explorer.sortOrder.title";
-
-export const DEFAULT_SORT_OPTION: SortOptionValue = "createdAt:desc";
 
 export const sortFieldOptions: SortFieldOption[] = [
   { label: "作成日時", value: "createdAt" },
@@ -71,12 +65,20 @@ export const buildSortMenuLabel = (
 };
 
 export const toApiSort = (
-  option: SortOptionValue,
+  category: SortCategory,
+  direction: SortDirection,
 ): NonNullable<GetQuestionnairesOption>["sort"] => {
-  if (option === "title:asc") return "title";
-  if (option === "title:desc") return "-title";
-  if (option === "modifiedAt:asc") return "modified_at";
-  if (option === "modifiedAt:desc") return "-modified_at";
-  if (option === "createdAt:desc") return "-created_at";
+  if (category === "title") {
+    return direction === "asc" ? "title" : "-title";
+  }
+
+  if (category === "modifiedAt") {
+    return direction === "asc" ? "modified_at" : "-modified_at";
+  }
+
+  if (category === "createdAt" && direction === "desc") {
+    return "-created_at";
+  }
+
   return "created_at";
 };

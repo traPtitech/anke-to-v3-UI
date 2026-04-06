@@ -15,6 +15,7 @@ export type FilterKey =
   | "answered"
   | "unanswered"
   | "draft"
+  | "due"
   | "unpublished";
 
 export type SortCategory = "createdAt" | "modifiedAt" | "title";
@@ -22,6 +23,9 @@ export type SortCategory = "createdAt" | "modifiedAt" | "title";
 export type SortDirection = "asc" | "desc";
 
 export type SortOptionValue = `${SortCategory}:${SortDirection}`;
+
+export const DEFAULT_SORT_CATEGORY: SortCategory = "createdAt";
+export const DEFAULT_SORT_DIRECTION: SortDirection = "desc";
 
 export type SortFieldOption = {
   label: string;

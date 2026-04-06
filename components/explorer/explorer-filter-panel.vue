@@ -1,46 +1,6 @@
 <script lang="ts" setup>
-import type { MenuItem } from 'primevue/menuitem';
-import {
-  findSelectedTab,
-  getQueryValue,
-  legacyFilterQueryKeys,
-  normalizeFilterSet,
-  parseFilterSet,
-  resolveTabFromHash,
-  serializeFilterSet,
-  tabFilterPresets,
-  tabs,
-} from './filter-query';
-import {
-  DATE_SORT_ORDER_STORAGE_KEY,
-  TITLE_SORT_ORDER_STORAGE_KEY,
-  buildSortMenuLabel,
-  getSortDirectionIcon,
-  getSortDirectionLabel,
-  isSortCategory,
-  sortDirectionOptions,
-  sortFieldOptions,
-  toApiSort,
-} from './filter-sort';
-import type {
-  ExplorerFilterPayload,
-  FilterKey,
-  SortCategory,
-  SortDirection,
-  SortOptionValue,
-  TabKey,
-} from './filter-types';
-
-const ONLY_ACTIVE_DUE_STORAGE_KEY = 'explorer.onlyActiveDue';
-
-type SortMenuEntry = MenuItem & {
-  selected?: boolean;
-  iconName?: string;
-};
-
-type SetQueryParamsOptions = {
-  clearHash?: boolean;
-};
+import type { ExplorerFilterPayload, TabKey } from './filter-types';
+import { useExplorerFilterPanel } from './use-explorer-filter-panel';
 
 const props = withDefaults(
   defineProps<{
@@ -55,409 +15,30 @@ const emit = defineEmits<{
   change: [payload: ExplorerFilterPayload];
 }>();
 
-const router = useRouter();
-const route = useRoute();
-
-const isFilterExpanded = ref(false);
-const isSortMenuOpen = ref(false);
-const sortMenuRef = ref<{ toggle: (event: MouseEvent) => void } | null>(null);
-
-const dateSortDirectionPreference = ref<SortDirection>('desc');
-const titleSortDirectionPreference = ref<SortDirection>('asc');
-
-const getSortDirectionPreference = (category: SortCategory): SortDirection => {
-  if (category === 'title') {
-    return titleSortDirectionPreference.value;
-  }
-
-  return dateSortDirectionPreference.value;
-};
-
-const setSortDirectionPreference = (
-  category: SortCategory,
-  direction: SortDirection,
-) => {
-  if (category === 'title') {
-    titleSortDirectionPreference.value = direction;
-
-    if (import.meta.client) {
-      localStorage.setItem(TITLE_SORT_ORDER_STORAGE_KEY, direction);
-    }
-    return;
-  }
-
-  dateSortDirectionPreference.value = direction;
-
-  if (import.meta.client) {
-    localStorage.setItem(DATE_SORT_ORDER_STORAGE_KEY, direction);
-  }
-};
-
-const restoreStoredSortDirectionPreferences = () => {
-  if (!import.meta.client) {
-    return;
-  }
-
-  const storedDateOrder = localStorage.getItem(DATE_SORT_ORDER_STORAGE_KEY);
-  if (storedDateOrder === 'asc' || storedDateOrder === 'desc') {
-    dateSortDirectionPreference.value = storedDateOrder;
-  }
-
-  const storedTitleOrder = localStorage.getItem(TITLE_SORT_ORDER_STORAGE_KEY);
-  if (storedTitleOrder === 'asc' || storedTitleOrder === 'desc') {
-    titleSortDirectionPreference.value = storedTitleOrder;
-  }
-};
-
-const setQueryParams = async (
-  patch: Record<string, string | undefined>,
-  options: SetQueryParamsOptions = {},
-) => {
-  const currentQuery = Object.fromEntries(
-    Object.entries(route.query)
-      .map(([key, value]) => [key, getQueryValue(value)] as const)
-      .filter(([, value]) => value !== undefined),
-  ) as Record<string, string>;
-
-  const nextQueryMap = new Map(Object.entries(currentQuery));
-
-  Object.entries(patch).forEach(([key, value]) => {
-    if (value === undefined) {
-      nextQueryMap.delete(key);
-      return;
-    }
-
-    nextQueryMap.set(key, value);
-  });
-
-  if (Object.hasOwn(patch, 'filter')) {
-    legacyFilterQueryKeys.forEach((legacyKey) => {
-      nextQueryMap.delete(legacyKey);
-    });
-  }
-
-  const nextQuery = Object.fromEntries(nextQueryMap) as Record<string, string>;
-
-  const changed =
-    nextQueryMap.size !== Object.keys(currentQuery).length ||
-    Object.entries(currentQuery).some(
-      ([key, value]) => nextQuery[key] !== value,
-    );
-  const shouldClearHash = options.clearHash === true && route.hash.length > 0;
-
-  if (!changed && !shouldClearHash) {
-    return;
-  }
-
-  await router.replace({
-    query: nextQuery,
-    hash: shouldClearHash ? '' : route.hash,
-  });
-};
-
-const applyFilterSet = async (nextSet: Set<FilterKey>) => {
-  await setQueryParams({
-    filter: serializeFilterSet(normalizeFilterSet(nextSet)),
-  });
-};
-
-const currentFilterSet = computed(() =>
-  parseFilterSet(route.query as Record<string, unknown>),
-);
-
-const hasFilter = (key: FilterKey) => currentFilterSet.value.has(key);
-
-const setFilter = (key: FilterKey, enabled: boolean) => {
-  const nextSet = new Set(currentFilterSet.value);
-
-  if (enabled) {
-    nextSet.add(key);
-  } else {
-    nextSet.delete(key);
-  }
-
-  void applyFilterSet(nextSet);
-};
-
-const filterTargetingMe = computed<boolean>({
-  get: () => hasFilter('targeting'),
-  set: (value) => setFilter('targeting', value),
-});
-
-const filterAdministratedByMe = computed<boolean>({
-  get: () => hasFilter('administered'),
-  set: (value) => setFilter('administered', value),
-});
-
-const filterHasMyResponse = computed<boolean>({
-  get: () => hasFilter('answered'),
-  set: (value) => setFilter('answered', value),
-});
-
-const filterUnansweredByMe = computed<boolean>({
-  get: () => hasFilter('unanswered'),
-  set: (value) => setFilter('unanswered', value),
-});
-
-const filterHasMyDraft = computed<boolean>({
-  get: () => hasFilter('draft'),
-  set: (value) => setFilter('draft', value),
-});
-
-const filterUnpublishedOnly = computed<boolean>({
-  get: () => hasFilter('unpublished'),
-  set: (value) => setFilter('unpublished', value),
-});
-
-const searchQuery = computed(() => getQueryValue(route.query.search) ?? '');
-const searchInput = ref(searchQuery.value);
-
-let searchDebounceTimer: ReturnType<typeof setTimeout> | undefined;
-
-watch(searchQuery, (value) => {
-  if (value !== searchInput.value) {
-    searchInput.value = value;
-  }
-});
-
-watch(searchInput, (value) => {
-  if (searchDebounceTimer) {
-    clearTimeout(searchDebounceTimer);
-  }
-
-  searchDebounceTimer = setTimeout(() => {
-    const normalizedValue = value.trim();
-    const currentValue = (getQueryValue(route.query.search) ?? '').trim();
-
-    if (normalizedValue === currentValue) {
-      return;
-    }
-
-    void setQueryParams({ search: normalizedValue || undefined });
-  }, 300);
-});
-
-onBeforeUnmount(() => {
-  if (searchDebounceTimer) {
-    clearTimeout(searchDebounceTimer);
-  }
-});
-
-const onlyActiveDue = computed<boolean>({
-  get: () => getQueryValue(route.query.due) === '1',
-  set: (value) => {
-    void setQueryParams({ due: value ? '1' : undefined });
+const {
+  tabs,
+  isFilterExpanded,
+  isSortMenuOpen,
+  sortMenuRef,
+  sortMenuItems,
+  sortMenuLabel,
+  onlyActiveDue,
+  filterTargetingMe,
+  filterAdministratedByMe,
+  filterHasMyResponse,
+  filterUnansweredByMe,
+  filterHasMyDraft,
+  filterUnpublishedOnly,
+  selectedTab,
+  selectTab,
+  tabCount,
+  toggleSortMenu,
+  isSortMenuItemSelected,
+} = useExplorerFilterPanel({
+  tabCounts: toRef(props, 'tabCounts'),
+  onChange: (payload) => {
+    emit('change', payload);
   },
-});
-
-const resolveSortFromQuery = (): {
-  category: SortCategory;
-  direction: SortDirection;
-} => {
-  const rawSort = getQueryValue(route.query.sort);
-  const rawReversed = getQueryValue(route.query.reversed);
-  const category = rawSort && isSortCategory(rawSort) ? rawSort : 'createdAt';
-  const direction =
-    rawReversed === undefined
-      ? getSortDirectionPreference(category)
-      : rawReversed === '1'
-        ? 'desc'
-        : 'asc';
-
-  return {
-    category,
-    direction,
-  };
-};
-
-const sortOption = computed<SortOptionValue>({
-  get: (): SortOptionValue => {
-    const { category, direction } = resolveSortFromQuery();
-    return `${category}:${direction}` as SortOptionValue;
-  },
-  set: (value: SortOptionValue) => {
-    const [category, direction] = value.split(':') as [
-      SortCategory,
-      SortDirection,
-    ];
-
-    setSortDirectionPreference(category, direction);
-
-    void setQueryParams({
-      sort: category === 'createdAt' ? undefined : category,
-      reversed: direction === 'desc' ? '1' : undefined,
-    });
-  },
-});
-
-const sortCategory = computed<SortCategory>(
-  () => sortOption.value.split(':')[0] as SortCategory,
-);
-
-const sortDirection = computed<SortDirection>(
-  () => sortOption.value.split(':')[1] as SortDirection,
-);
-
-const sortMenuLabel = computed(() =>
-  buildSortMenuLabel(sortCategory.value, sortDirection.value),
-);
-
-const setSortCategory = (category: SortCategory) => {
-  const direction = getSortDirectionPreference(category);
-  sortOption.value = `${category}:${direction}` as SortOptionValue;
-};
-
-const setSortDirection = (direction: SortDirection) => {
-  sortOption.value = `${sortCategory.value}:${direction}` as SortOptionValue;
-};
-
-const sortMenuItems = computed<MenuItem[]>(() => {
-  const fieldItems: SortMenuEntry[] = sortFieldOptions.map((option) => ({
-    label: option.label,
-    selected: sortCategory.value === option.value,
-    command: () => {
-      setSortCategory(option.value);
-    },
-  }));
-
-  const directionItems: SortMenuEntry[] = sortDirectionOptions.map(
-    (direction) => ({
-      label: getSortDirectionLabel(direction, sortCategory.value),
-      selected: sortDirection.value === direction,
-      iconName: getSortDirectionIcon(direction, sortCategory.value),
-      command: () => {
-        setSortDirection(direction);
-      },
-    }),
-  );
-
-  return [
-    {
-      label: '並べ替え項目',
-      items: fieldItems,
-    },
-    {
-      label: '並び順',
-      items: directionItems,
-    },
-  ];
-});
-
-const isSortMenuItemSelected = (item: MenuItem) => {
-  return (item as SortMenuEntry).selected === true;
-};
-
-const getSortMenuItemIconName = (item: MenuItem) => {
-  return (item as SortMenuEntry).iconName ?? '';
-};
-
-const toggleSortMenu = (event: MouseEvent) => {
-  sortMenuRef.value?.toggle(event);
-};
-
-const tabCount = (tab: TabKey) => props.tabCounts[tab] ?? 0;
-
-const selectedTab = computed<TabKey | null>(() =>
-  findSelectedTab(currentFilterSet.value),
-);
-
-const applyTabPreset = async (
-  tab: TabKey,
-  options: SetQueryParamsOptions = {},
-) => {
-  await setQueryParams(
-    {
-      filter: serializeFilterSet(new Set(tabFilterPresets[tab])),
-    },
-    options,
-  );
-};
-
-const selectTab = (tab: TabKey) => {
-  void applyTabPreset(tab);
-};
-
-if (import.meta.client) {
-  watch(
-    () => route.hash,
-    (hash) => {
-      const tab = resolveTabFromHash(hash);
-      if (!tab) {
-        return;
-      }
-
-      void applyTabPreset(tab, { clearHash: true });
-    },
-    { immediate: true },
-  );
-}
-
-onMounted(() => {
-  restoreStoredSortDirectionPreferences();
-
-  const hasDueQuery = getQueryValue(route.query.due) !== undefined;
-  const storedDue = localStorage.getItem(ONLY_ACTIVE_DUE_STORAGE_KEY);
-  if (!hasDueQuery && (storedDue === '0' || storedDue === '1')) {
-    onlyActiveDue.value = storedDue === '1';
-  }
-});
-
-watch(onlyActiveDue, (value) => {
-  if (import.meta.client) {
-    localStorage.setItem(ONLY_ACTIVE_DUE_STORAGE_KEY, value ? '1' : '0');
-  }
-});
-
-const listQuery = computed<ExplorerFilterPayload['listQuery']>(() => {
-  const trimmedSearch = searchQuery.value.trim();
-  const filters = currentFilterSet.value;
-
-  return {
-    search: trimmedSearch || undefined,
-    sort: toApiSort(sortOption.value),
-    onlyTargetingMe:
-      filters.has('targeting') || filters.has('unanswered') ? true : undefined,
-    onlyAdministratedByMe: filters.has('administered') ? true : undefined,
-    notOverDue:
-      onlyActiveDue.value || filters.has('unanswered') ? true : undefined,
-    hasMyResponse: filters.has('answered')
-      ? true
-      : filters.has('unanswered')
-        ? false
-        : undefined,
-    hasMyDraft: filters.has('draft') ? true : undefined,
-    isDraft: filters.has('unpublished')
-      ? true
-      : filters.has('unanswered')
-        ? false
-        : undefined,
-  };
-});
-
-const tabCountQuery = computed<ExplorerFilterPayload['tabCountQuery']>(() => {
-  const trimmedSearch = searchQuery.value.trim();
-
-  return {
-    search: trimmedSearch || undefined,
-    notOverDue: onlyActiveDue.value ? true : undefined,
-  };
-});
-
-const signature = computed(() =>
-  JSON.stringify({
-    filter: serializeFilterSet(currentFilterSet.value) ?? '',
-    search: tabCountQuery.value.search ?? '',
-    due: onlyActiveDue.value ? '1' : '0',
-    sort: sortOption.value,
-  }),
-);
-
-watchEffect(() => {
-  emit('change', {
-    signature: signature.value,
-    listQuery: listQuery.value,
-    tabCountQuery: tabCountQuery.value,
-  });
 });
 </script>
 
@@ -517,8 +98,8 @@ watchEffect(() => {
                   :class="{ visible: isSortMenuItemSelected(item) }"
                 />
                 <Icon
-                  v-if="getSortMenuItemIconName(item)"
-                  :name="getSortMenuItemIconName(item)"
+                  v-if="item.icon"
+                  :name="item.icon"
                   size="22px"
                   class="sort-menu-order-icon"
                 />
@@ -566,15 +147,6 @@ watchEffect(() => {
           </AccordionHeader>
           <AccordionContent>
             <div class="advanced-filter-panel">
-              <div class="advanced-filter-search search-field-with-icon">
-                <Icon class="search-icon" name="mdi:magnify" size="20px" />
-                <InputText
-                  v-model="searchInput"
-                  placeholder="タイトルで検索"
-                  class="search-input"
-                />
-              </div>
-
               <div class="advanced-filter-grid">
                 <div class="advanced-filter-block">
                   <div class="advanced-filter-title">回答</div>
@@ -802,29 +374,6 @@ watchEffect(() => {
   border-top: 1px solid var(--p-surface-300);
   padding: 14px 12px 12px;
   background-color: var(--p-surface-0);
-}
-
-.advanced-filter-search {
-  margin-bottom: 12px;
-}
-
-.search-field-with-icon {
-  position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--p-text-secondary);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.search-input {
-  width: 100%;
-  padding-left: 40px;
 }
 
 .advanced-filter-grid {

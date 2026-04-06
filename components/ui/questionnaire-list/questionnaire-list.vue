@@ -13,13 +13,8 @@ defineProps<{
   questionnaires: GatewayQuestionnaireSummary[];
 }>();
 
-type ActionMenuItem = MenuItem & {
-  to?: string;
-  iconName: string;
-};
-
 const actionMenuRef = ref<{ toggle: (event: MouseEvent) => void } | null>(null);
-const actionMenuItems = ref<ActionMenuItem[]>([]);
+const actionMenuItems = ref<MenuItem[]>([]);
 
 const statusLabel = (questionnaire: GatewayQuestionnaireSummary) => {
   if (!questionnaire.is_published) return '下書き';
@@ -48,18 +43,18 @@ const handleRespondLinkClick = (
 
 const buildActionMenuItems = (
   questionnaire: GatewayQuestionnaireSummary,
-): ActionMenuItem[] => {
+): MenuItem[] => {
   return [
     {
       label: '結果を見る',
-      iconName: 'mdi:chart-box-outline',
-      to: `/questionnaires/${questionnaire.questionnaire_id}/result`,
+      icon: 'mdi:chart-box-outline',
+      route: `/questionnaires/${questionnaire.questionnaire_id}/result`,
       disabled: !canViewResults(questionnaire),
     },
     {
       label: 'アンケートを編集',
-      iconName: 'mdi:pencil-outline',
-      to: `/questionnaires/${questionnaire.questionnaire_id}/edit`,
+      icon: 'mdi:pencil-outline',
+      route: `/questionnaires/${questionnaire.questionnaire_id}/edit`,
       disabled: !questionnaire.is_administrated_by_me,
     },
   ];
@@ -71,14 +66,6 @@ const toggleActionMenu = (
 ) => {
   actionMenuItems.value = buildActionMenuItems(questionnaire);
   actionMenuRef.value?.toggle(event);
-};
-
-const getActionItemTo = (item: MenuItem) => {
-  return (item as ActionMenuItem).to;
-};
-
-const getActionItemIcon = (item: MenuItem) => {
-  return (item as ActionMenuItem).iconName;
 };
 </script>
 
@@ -150,12 +137,12 @@ const getActionItemIcon = (item: MenuItem) => {
     <Menu ref="actionMenuRef" :model="actionMenuItems" popup>
       <template #item="{ item, props: itemProps }">
         <NuxtLink
-          v-if="getActionItemTo(item) && !item.disabled"
-          :to="getActionItemTo(item)!"
+          v-if="item.route && !item.disabled"
+          :to="item.route"
           class="action-menu-item-link"
           v-bind="itemProps.action"
         >
-          <Icon :name="getActionItemIcon(item)" size="18px" />
+          <Icon v-if="item.icon" :name="item.icon" size="18px" />
           <span>{{ item.label }}</span>
         </NuxtLink>
         <span
@@ -163,7 +150,7 @@ const getActionItemIcon = (item: MenuItem) => {
           class="action-menu-item-link is-disabled"
           aria-disabled="true"
         >
-          <Icon :name="getActionItemIcon(item)" size="18px" />
+          <Icon v-if="item.icon" :name="item.icon" size="18px" />
           <span>{{ item.label }}</span>
         </span>
       </template>

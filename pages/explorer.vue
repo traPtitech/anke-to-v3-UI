@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import ExplorerFilterPanel from '~/components/explorer/explorer-filter-panel.vue';
 import ExplorerLoadingSkeleton from '~/components/explorer/explorer-loading-skeleton.vue';
-import {
-  DEFAULT_SORT_OPTION,
-  toApiSort,
-} from '~/components/explorer/filter-sort';
+import { getQueryValue } from '~/components/explorer/filter-query';
+import { setRouteQueryParams } from '~/components/explorer/filter-route';
+import { toApiSort } from '~/components/explorer/filter-sort';
 import type {
   ExplorerFilterPayload,
   TabKey,
+} from '~/components/explorer/filter-types';
+import {
+  DEFAULT_SORT_CATEGORY,
+  DEFAULT_SORT_DIRECTION,
 } from '~/components/explorer/filter-types';
 import QuestionnaireList from '~/components/ui/questionnaire-list/questionnaire-list.vue';
 import {
@@ -22,42 +25,13 @@ const PAGE_SIZE = 20;
 const route = useRoute();
 const router = useRouter();
 
-const getQueryValue = (value: unknown): string | undefined => {
-  if (Array.isArray(value)) {
-    const first = value[0];
-    return typeof first === 'string' ? first : undefined;
-  }
-
-  return typeof value === 'string' ? value : undefined;
-};
-
 const setPageQuery = async (value: number) => {
-  const currentQuery = Object.fromEntries(
-    Object.entries(route.query)
-      .map(([key, queryValue]) => [key, getQueryValue(queryValue)] as const)
-      .filter(([, queryValue]) => queryValue !== undefined),
-  ) as Record<string, string>;
-
-  const nextQuery: Record<string, string> = { ...currentQuery };
-  if (value === 1) {
-    delete nextQuery.page;
-  } else {
-    nextQuery.page = String(value);
-  }
-
-  const changed =
-    Object.keys(nextQuery).length !== Object.keys(currentQuery).length ||
-    Object.entries(currentQuery).some(([key, queryValue]) => {
-      return nextQuery[key] !== queryValue;
-    });
-
-  if (!changed) {
-    return;
-  }
-
-  await router.replace({
-    query: nextQuery,
-    hash: route.hash,
+  await setRouteQueryParams({
+    router,
+    route,
+    patch: {
+      page: value === 1 ? undefined : String(value),
+    },
   });
 };
 
@@ -81,7 +55,7 @@ const currentPage = computed<number>({
 const activeFilterPayload = ref<ExplorerFilterPayload>({
   signature: 'initial',
   listQuery: {
-    sort: toApiSort(DEFAULT_SORT_OPTION),
+    sort: toApiSort(DEFAULT_SORT_CATEGORY, DEFAULT_SORT_DIRECTION),
   },
   tabCountQuery: {},
 });
