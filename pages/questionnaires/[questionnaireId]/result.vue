@@ -32,7 +32,10 @@ const handleRetry = async () => {
       :message="questionnaireError?.message || responsesError?.message"
       @retry="handleRetry"
     />
-    <DetailLoadingSkeleton v-else-if="!questionnaire || !responses" />
+    <DetailLoadingSkeleton
+      v-else-if="!questionnaire || !responses"
+      variant="questionnaire"
+    />
     <QuestionnaireResult
       v-else
       :questionnaire="questionnaire"

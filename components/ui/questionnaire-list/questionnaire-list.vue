@@ -370,7 +370,7 @@ const toggleActionMenu = (
   gap: 8px;
   text-decoration: none;
   color: var(--p-text-color);
-  padding: 8px;
+  padding: 8px 16px;
 }
 
 .action-menu-item-link.is-disabled {

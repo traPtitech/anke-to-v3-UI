@@ -8,9 +8,12 @@ export const BrandPreset = definePreset(Lara, {
         light: {
           outlined: {
             primary: {
-              borderColor: 'var(--p-primary-500)',
-              hoverBackground: 'var(--p-primary-50)',
-              activeBackground: 'var(--p-primary-100)',
+              borderColor: 'var(--p-primary-600)',
+              color: 'var(--p-primary-600)',
+              hoverBackground:
+                'color-mix(in srgb, var(--p-primary-500) 12%, white)',
+              activeBackground:
+                'color-mix(in srgb, var(--p-primary-500) 18%, white)',
             },
           },
         },

@@ -82,14 +82,21 @@
 }
 
 .p-button.p-button-outlined.p-button-primary {
-  color: var(--app-primary-700);
-  border-color: color-mix(in srgb, var(--app-primary-500) 60%, white);
-  background-color: color-mix(in srgb, var(--app-primary-500) 6%, white);
+  color: var(--app-primary-600);
+  border-color: var(--app-primary-600);
+  background-color: color-mix(in srgb, var(--app-primary-500) 7%, white);
 }
 
 .p-button.p-button-outlined.p-button-primary:hover:not(:disabled) {
+  color: var(--app-primary-700);
   background-color: color-mix(in srgb, var(--app-primary-500) 12%, white);
-  border-color: color-mix(in srgb, var(--app-primary-500) 72%, white);
+  border-color: var(--app-primary-700);
+}
+
+.p-button.p-button-outlined.p-button-primary:active:not(:disabled) {
+  color: var(--app-primary-700);
+  background-color: color-mix(in srgb, var(--app-primary-500) 18%, white);
+  border-color: var(--app-primary-700);
 }
 
 .p-button.p-button-secondary {

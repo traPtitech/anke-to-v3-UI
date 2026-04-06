@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { convertToBody } from '~/components/questionnaire-form/converter';
+import ButtonLink from '~/components/ui/button-link.vue';
 import IconButton from '~/components/ui/icon-button.vue';
 import { patchQuestionnaireById } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
@@ -114,9 +115,10 @@ const handleSend = async () => {
 
 <template>
   <div class="edit-questionnaire-container">
-    <NuxtLink
+    <ButtonLink
       :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       class="edit-back-link"
+      variant="secondary"
       @click.prevent="handleBackToDetail"
     >
       <Icon name="mdi:chevron-left" size="24px" />
@@ -124,7 +126,7 @@ const handleSend = async () => {
         アンケート詳細画面に戻る
         <template v-if="isDirty">（未保存の変更は破棄されます）</template>
       </span>
-    </NuxtLink>
+    </ButtonLink>
 
     <QuestionnaireFormBase v-model="state">
       <template #buttons>
@@ -152,18 +154,7 @@ const handleSend = async () => {
 }
 
 .edit-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   width: fit-content;
-  text-decoration: none;
-  color: var(--p-primary-700);
   font-weight: 600;
-  border-radius: var(--p-border-radius-md);
-  padding: 4px 8px;
-}
-
-.edit-back-link:hover {
-  background-color: var(--p-primary-50);
 }
 </style>

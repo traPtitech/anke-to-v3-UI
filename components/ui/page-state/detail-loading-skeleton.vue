@@ -1,68 +1,83 @@
-<template>
-  <div class="detail-loading-skeleton" aria-hidden="true">
-    <div class="skeleton-line skeleton-title" />
-    <div class="skeleton-line skeleton-subtitle" />
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    variant?: 'questionnaire' | 'response';
+  }>(),
+  {
+    variant: 'questionnaire',
+  },
+);
 
-    <div class="skeleton-grid">
-      <div class="skeleton-card" />
-      <div class="skeleton-card" />
-      <div class="skeleton-card" />
-    </div>
+const loadingText = computed(() => {
+  if (props.variant === 'response') {
+    return '回答を読み込み中...';
+  }
+
+  return 'アンケートを読み込み中...';
+});
+</script>
+
+<template>
+  <div
+    class="detail-loading-indicator"
+    :class="props.variant"
+    role="status"
+    aria-live="polite"
+  >
+    <ProgressSpinner
+      class="detail-loading-spinner"
+      stroke-width="4"
+      animation-duration="0.8s"
+      fill="transparent"
+    />
+    <p class="loading-text">{{ loadingText }}</p>
   </div>
 </template>
 
 <style scoped lang="scss">
-.detail-loading-skeleton {
+.detail-loading-indicator {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 260px;
+  margin: 0 auto;
+  padding: 36px 20px;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  background-color: var(--p-surface-0);
 }
 
-.skeleton-line,
-.skeleton-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--p-border-radius-md);
-  background-color: var(--p-surface-100);
+.detail-loading-indicator.questionnaire {
+  max-width: 1080px;
 }
 
-.skeleton-line::after,
-.skeleton-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.65) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  animation: shimmer 1.2s infinite;
+.detail-loading-indicator.response {
+  max-width: 800px;
 }
 
-.skeleton-title {
-  width: min(560px, 95%);
-  height: 30px;
+.detail-loading-spinner {
+  width: 44px;
+  height: 44px;
 }
 
-.skeleton-subtitle {
-  width: min(420px, 85%);
-  height: 18px;
+.detail-loading-spinner :deep(.p-progressspinner-circle) {
+  stroke: var(--p-primary-500);
 }
 
-.skeleton-grid {
-  display: grid;
-  gap: 12px;
+.loading-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--p-text-secondary);
+  font-weight: 500;
 }
 
-.skeleton-card {
-  height: 110px;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
+@media screen and (max-width: 560px) {
+  .detail-loading-indicator {
+    min-height: 220px;
+    padding: 28px 14px;
   }
 }
 </style>

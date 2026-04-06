@@ -43,7 +43,7 @@ const emit = defineEmits<{
 .tab-button {
   flex: 0 0 auto;
   border: none;
-  border-radius: 999px;
+  border-radius: 16px;
   background-color: var(--p-surface-100);
   color: var(--p-text-color);
   font-weight: 700;

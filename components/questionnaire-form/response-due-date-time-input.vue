@@ -147,7 +147,7 @@ watch(hasTargets, (value) => {
 .response-due-date-time-input-title {
   display: flex;
   flex-direction: row;
-  gap: 32px;
+  gap: 20px;
   align-items: center;
 }
 
@@ -157,14 +157,23 @@ watch(hasTargets, (value) => {
 
 .due-date-mode-options {
   display: flex;
-  gap: 20px;
+  gap: 14px;
   align-items: center;
 }
 
 .due-date-mode-option {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
+
+  --p-toggleswitch-width: 2.15rem;
+  --p-toggleswitch-height: 1.2rem;
+  --p-toggleswitch-handle-size: 0.82rem;
+}
+
+.due-date-mode-option > span {
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .due-date-presets {

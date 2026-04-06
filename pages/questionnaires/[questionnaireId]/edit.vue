@@ -20,7 +20,7 @@ const handleRetry = async () => {
       :message="error.message"
       @retry="handleRetry"
     />
-    <DetailLoadingSkeleton v-else-if="!data" />
+    <DetailLoadingSkeleton v-else-if="!data" variant="questionnaire" />
     <EditQuestionnaireForm v-else :questionnaire="data" />
   </div>
 </template>

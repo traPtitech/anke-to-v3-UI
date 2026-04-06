@@ -54,7 +54,7 @@ const userIconSrc = computed(() => {
           alt=""
           class="header-action-user-icon"
         />
-        <Icon v-else name="mdi:account" size="18px" />
+        <Icon v-else name="mdi:account" size="40px" />
       </NuxtLink>
     </div>
   </header>

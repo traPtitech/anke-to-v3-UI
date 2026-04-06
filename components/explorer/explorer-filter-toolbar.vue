@@ -210,7 +210,6 @@ const updateOnlyActiveDue = (value: boolean | undefined) => {
 }
 
 .quick-actions {
-  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -246,7 +245,6 @@ const updateOnlyActiveDue = (value: boolean | undefined) => {
   }
 
   .quick-actions {
-    margin-left: 0;
     width: 100%;
     justify-content: space-between;
   }

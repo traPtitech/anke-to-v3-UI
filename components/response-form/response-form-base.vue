@@ -26,7 +26,7 @@ const dueDateString = computed(() => {
     <div class="response-form-nav">
       <ButtonLink
         class="back-link"
-        variant="ghost"
+        variant="secondary"
         :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       >
         <Icon name="mdi:chevron-left" size="24px" />

@@ -28,7 +28,7 @@ const isDueOver = computed(() => {
     <div class="response-detail-nav">
       <ButtonLink
         class="back-link"
-        variant="ghost"
+        variant="secondary"
         :to="`/questionnaires/${questionnaire.questionnaire_id}`"
       >
         <Icon name="mdi:chevron-left" size="24px" />
@@ -86,7 +86,7 @@ const isDueOver = computed(() => {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding-bottom: 50vh;
+  padding-bottom: 24px;
 }
 
 .response-detail-nav {
@@ -166,8 +166,6 @@ const isDueOver = computed(() => {
 
 .response-detail-footer {
   display: flex;
-  position: sticky;
-  bottom: 0;
   justify-content: flex-end;
   padding-top: 8px;
 }

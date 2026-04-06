@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
 import ResultTitleContainer from '~/components/ui/questionnaire/result-title-container.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
@@ -20,13 +21,14 @@ const { results } = useQuestionnaireResult(
 <template>
   <div class="questionnaire-result-container">
     <div class="result-header">
-      <NuxtLink
+      <ButtonLink
         class="result-back-link"
+        variant="secondary"
         :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       >
         <Icon name="mdi:chevron-left" size="24px" />
         <span>アンケート詳細画面に戻る</span>
-      </NuxtLink>
+      </ButtonLink>
     </div>
 
     <section class="result-info-section">
@@ -69,18 +71,7 @@ const { results } = useQuestionnaireResult(
 }
 
 .result-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--p-primary-700);
-  text-decoration: none;
   font-weight: 600;
-  border-radius: var(--p-border-radius-md);
-  padding: 4px 8px;
-}
-
-.result-back-link:hover {
-  background-color: var(--p-primary-50);
 }
 
 .result-info-section,

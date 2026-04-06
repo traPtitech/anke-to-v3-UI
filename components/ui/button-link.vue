@@ -80,34 +80,12 @@ const handleClick = (event: MouseEvent) => {
 .button-link-anchor[aria-disabled='true'] {
   pointer-events: none;
   cursor: not-allowed;
-  opacity: 1;
+  opacity: var(--p-disabled-opacity, 0.6);
 }
 
 .button-link-anchor.p-button[aria-disabled='true'] {
-  background-color: var(--p-surface-100);
-  border-color: var(--p-surface-300);
-  color: var(--p-text-secondary);
-}
-
-.button-link-anchor.p-button.p-button-primary[aria-disabled='true'] {
-  background-color: color-mix(
-    in srgb,
-    var(--p-primary-500) 18%,
-    var(--p-surface-0)
-  );
-  border-color: color-mix(
-    in srgb,
-    var(--p-primary-500) 28%,
-    var(--p-surface-0)
-  );
-  color: color-mix(in srgb, var(--p-primary-700) 55%, var(--p-surface-0));
-}
-
-.button-link-anchor.p-button.p-button-outlined[aria-disabled='true'],
-.button-link-anchor.p-button.p-button-text[aria-disabled='true'] {
-  background-color: var(--p-surface-100);
-  border-color: var(--p-surface-300);
-  color: var(--p-text-muted-color);
+  box-shadow: none;
+  filter: saturate(0.85);
 }
 
 .button-link-block {

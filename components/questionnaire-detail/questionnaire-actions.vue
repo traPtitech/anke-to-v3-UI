@@ -174,6 +174,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
 
 .remind-switch-label {
   font-size: 14px;
+  font-weight: 500;
   color: var(--p-text-color);
   cursor: pointer;
 }
