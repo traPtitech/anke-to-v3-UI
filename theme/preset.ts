@@ -2,24 +2,6 @@ import { definePreset } from '@primeuix/themes';
 import Lara from '@primeuix/themes/lara';
 
 export const BrandPreset = definePreset(Lara, {
-  components: {
-    button: {
-      colorScheme: {
-        light: {
-          outlined: {
-            primary: {
-              borderColor: 'var(--p-primary-600)',
-              color: 'var(--p-primary-600)',
-              hoverBackground:
-                'color-mix(in srgb, var(--p-primary-500) 12%, white)',
-              activeBackground:
-                'color-mix(in srgb, var(--p-primary-500) 18%, white)',
-            },
-          },
-        },
-      },
-    },
-  },
   semantic: {
     primary: {
       50: '#fff3f3',
