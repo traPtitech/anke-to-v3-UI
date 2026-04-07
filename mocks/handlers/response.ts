@@ -515,20 +515,14 @@ export const responseHandlers = [
 
     const newResponse: GatewayResponse = {
       response_id: responsesData.length + 1,
-      is_anonymous: false,
+      is_anonymous: questionnaire.is_anonymous,
+      respondent: myUserId,
       questionnaire_id: Number(id),
       is_draft: body.is_draft,
       body: body.body,
       modified_at: new Date().toISOString(),
       submitted_at: new Date().toISOString(),
     };
-
-    if (questionnaire.is_anonymous) {
-      newResponse.is_anonymous = true;
-      newResponse.respondent = '';
-    } else {
-      newResponse.respondent = myUserId;
-    }
 
     if (
       !questionnaire.is_duplicate_answer_allowed &&
