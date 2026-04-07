@@ -153,7 +153,7 @@ const generateAnonymousResponses = (
         body.push({
           question_id: question.question_id,
           question_type: 'MultipleChoice',
-          answer: [choices[i % 2], choices[(i + 1) % 3]],
+          answer: [...new Set([choices[i % 2], choices[(i + 1) % 3]])],
         });
       } else if (question.question_type === 'Scale') {
         body.push({
