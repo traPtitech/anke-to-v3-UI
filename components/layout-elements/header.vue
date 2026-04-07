@@ -44,7 +44,6 @@ const userIconSrc = computed(() => {
       </ButtonLink>
       <NuxtLink
         class="header-action-responses"
-        variant="secondary"
         :to="{ path: '/explorer', hash: '#answered' }"
         title="自分の回答一覧へ"
       >

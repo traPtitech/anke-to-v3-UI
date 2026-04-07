@@ -3,9 +3,7 @@ const props = withDefaults(
   defineProps<{
     cardCount?: number;
   }>(),
-  {
-    cardCount: 6,
-  },
+  { cardCount: 6 },
 );
 </script>
 
@@ -41,12 +39,6 @@ const props = withDefaults(
 </template>
 
 <style scoped lang="scss">
-.explorer-loading-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
 .paginator-placeholder {
   height: 4rem;
   border: 1px solid var(--p-surface-300);
