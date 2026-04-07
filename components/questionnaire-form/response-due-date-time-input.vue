@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ChipSelectRow from '~/components/ui/chip-select-row.vue';
 import type { QuestionnaireFormSettings } from '~/components/questionnaire-form/type';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
@@ -15,6 +16,22 @@ const dueDatePresets: { label: string; value: DueDatePreset; days: number }[] =
     { label: '3日後', value: 'three-days', days: 3 },
     { label: '1週間後', value: 'one-week', days: 7 },
   ];
+
+const getMatchingDueDatePreset = (date: Date): DueDatePreset | null => {
+  const dateIso = date.toISOString();
+  const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+  const matchedPreset = dueDatePresets.find((preset) => {
+    const presetDate = addDays(today, preset.days);
+
+    if (presetDate.toISOString() === dateIso) return true;
+
+    const presetDateKey = `${presetDate.getFullYear()}-${presetDate.getMonth()}-${presetDate.getDate()}`;
+    return presetDateKey === dateKey;
+  });
+
+  return matchedPreset?.value ?? null;
+};
 
 const isResponseDueDateTimeInvalidForTargets = computed(() => {
   if (state.value.response_due_date_time !== undefined) return false;
@@ -40,7 +57,16 @@ const responseDueDateTimeInput = ref<Date>(
     : new Date(state.value.response_due_date_time),
 );
 const selectedDueDatePreset = ref<DueDatePreset | null>(
-  state.value.response_due_date_time === undefined ? null : 'one-week',
+  state.value.response_due_date_time === undefined
+    ? null
+    : getMatchingDueDatePreset(new Date(state.value.response_due_date_time)),
+);
+
+const dueDatePresetChipItems = computed(() =>
+  dueDatePresets.map((preset) => ({
+    key: preset.value,
+    label: preset.label,
+  })),
 );
 
 const handleSelectDueDatePreset = (preset: (typeof dueDatePresets)[number]) => {
@@ -48,7 +74,12 @@ const handleSelectDueDatePreset = (preset: (typeof dueDatePresets)[number]) => {
   const presetDate = addDays(today, preset.days);
   responseDueDateTimeInput.value = presetDate;
   state.value.response_due_date_time = presetDate.toISOString();
-  selectedDueDatePreset.value = preset.value;
+};
+
+const handleSelectDueDatePresetByValue = (value: string) => {
+  const preset = dueDatePresets.find((item) => item.value === value);
+  if (preset === undefined) return;
+  handleSelectDueDatePreset(preset);
 };
 
 watch(
@@ -57,6 +88,9 @@ watch(
     if (value) {
       state.value.response_due_date_time =
         responseDueDateTimeInput.value.toISOString();
+      selectedDueDatePreset.value = getMatchingDueDatePreset(
+        responseDueDateTimeInput.value,
+      );
     } else {
       state.value.response_due_date_time = undefined;
       selectedDueDatePreset.value = null;
@@ -68,7 +102,7 @@ watch(
 watch(responseDueDateTimeInput, (value) => {
   if (!useCustomDueTime.value) return;
   state.value.response_due_date_time = value.toISOString();
-  selectedDueDatePreset.value = null;
+  selectedDueDatePreset.value = getMatchingDueDatePreset(value);
 });
 
 watch(hasTargets, (value) => {
@@ -108,20 +142,13 @@ watch(hasTargets, (value) => {
       show-icon
       icon-display="input"
     ></DatePicker>
-    <div v-if="useCustomDueTime" class="due-date-presets">
-      <Button
-        v-for="preset in dueDatePresets"
-        :key="preset.value"
-        size="small"
-        :outlined="selectedDueDatePreset !== preset.value"
-        :severity="
-          selectedDueDatePreset === preset.value ? 'primary' : 'secondary'
-        "
-        @click="handleSelectDueDatePreset(preset)"
-      >
-        {{ preset.label }}
-      </Button>
-    </div>
+    <ChipSelectRow
+      v-if="useCustomDueTime"
+      class="due-date-presets"
+      :items="dueDatePresetChipItems"
+      :selected-key="selectedDueDatePreset"
+      @select="handleSelectDueDatePresetByValue"
+    />
     <small
       v-if="isResponseDueDateTimeInvalidForTargets"
       class="invalid-message"
@@ -177,9 +204,7 @@ watch(hasTargets, (value) => {
 }
 
 .due-date-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  margin-top: 2px;
 }
 
 .invalid-message {
