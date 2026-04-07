@@ -4,18 +4,17 @@ import type { QuestionnaireFormSettings } from '~/components/questionnaire-form/
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
 
-const now = new Date();
-const today = setTime(now, 23, 59, 0);
+const today = setTime(new Date(), 23, 59, 0);
 const minSelectableDueDate = setTime(new Date(), 0, 0, 0);
 
-type DueDatePreset = 'tomorrow' | 'three-days' | 'one-week';
+const dueDatePresets = [
+  { label: '明日', value: 'tomorrow', days: 1 },
+  { label: '3日後', value: 'three-days', days: 3 },
+  { label: '1週間後', value: 'one-week', days: 7 },
+] as const satisfies { label: string; value: string; days: number }[];
 
-const dueDatePresets: { label: string; value: DueDatePreset; days: number }[] =
-  [
-    { label: '明日', value: 'tomorrow', days: 1 },
-    { label: '3日後', value: 'three-days', days: 3 },
-    { label: '1週間後', value: 'one-week', days: 7 },
-  ];
+type DueDatePresetItem = (typeof dueDatePresets)[number];
+type DueDatePreset = DueDatePresetItem['value'];
 
 const getMatchingDueDatePreset = (date: Date): DueDatePreset | null => {
   const dateIso = date.toISOString();
@@ -56,7 +55,7 @@ const responseDueDateTimeInput = ref<Date>(
     ? addDays(today, 7)
     : new Date(state.value.response_due_date_time),
 );
-const selectedDueDatePreset = ref<DueDatePreset | null>(
+const selectedDueDatePreset = computed<DueDatePreset | null>(() =>
   state.value.response_due_date_time === undefined
     ? null
     : getMatchingDueDatePreset(new Date(state.value.response_due_date_time)),
@@ -69,7 +68,7 @@ const dueDatePresetChipItems = computed(() =>
   })),
 );
 
-const handleSelectDueDatePreset = (preset: (typeof dueDatePresets)[number]) => {
+const handleSelectDueDatePreset = (preset: DueDatePresetItem) => {
   useCustomDueTime.value = true;
   const presetDate = addDays(today, preset.days);
   responseDueDateTimeInput.value = presetDate;
@@ -88,12 +87,8 @@ watch(
     if (value) {
       state.value.response_due_date_time =
         responseDueDateTimeInput.value.toISOString();
-      selectedDueDatePreset.value = getMatchingDueDatePreset(
-        responseDueDateTimeInput.value,
-      );
     } else {
       state.value.response_due_date_time = undefined;
-      selectedDueDatePreset.value = null;
     }
   },
   { immediate: true },
@@ -102,7 +97,6 @@ watch(
 watch(responseDueDateTimeInput, (value) => {
   if (!useCustomDueTime.value) return;
   state.value.response_due_date_time = value.toISOString();
-  selectedDueDatePreset.value = getMatchingDueDatePreset(value);
 });
 
 watch(hasTargets, (value) => {
