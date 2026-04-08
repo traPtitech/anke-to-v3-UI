@@ -5,7 +5,7 @@ import type { ExplorerTabItem, TabKey } from './filter-types';
 const props = defineProps<{
   tabs: ExplorerTabItem[];
   selectedTab: TabKey | null;
-  tabCount: (tab: TabKey) => number;
+  tabCount: (tab: TabKey) => number | string;
 }>();
 
 const emit = defineEmits<{

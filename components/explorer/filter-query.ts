@@ -1,4 +1,8 @@
 import type { ExplorerTabItem, FilterKey, TabKey } from './filter-types';
+import {
+  explorerLegacyFilterQueryKeys,
+  explorerQueryKeys,
+} from '~/composables/explorer/query-params';
 
 export const tabs: ExplorerTabItem[] = [
   { key: 'unanswered', label: '未回答' },
@@ -18,17 +22,7 @@ export const filterKeys: FilterKey[] = [
   'unpublished',
 ];
 
-export const legacyFilterQueryKeys = [
-  'targeting',
-  'admin',
-  'answered',
-  'unanswered',
-  'draft',
-  'unpublished',
-  'due',
-  'onlyTargetingMe',
-  'isDraft',
-];
+export const legacyFilterQueryKeys = [...explorerLegacyFilterQueryKeys];
 
 const isFilterKey = (value: string): value is FilterKey => {
   return (
@@ -112,7 +106,7 @@ const parseLegacyFilterSet = (
 export const parseFilterSet = (
   query: Record<string, unknown>,
 ): Set<FilterKey> => {
-  const raw = getQueryValue(query.filter);
+  const raw = getQueryValue(query[explorerQueryKeys.filter]);
   const set = new Set<FilterKey>();
 
   if (raw) {
@@ -157,4 +151,8 @@ export const findSelectedTab = (set: Set<FilterKey>): TabKey | null => {
   }
 
   return null;
+};
+
+export const buildTabFilterQuery = (tab: TabKey): string | undefined => {
+  return serializeFilterSet(new Set(tabFilterPresets[tab]));
 };

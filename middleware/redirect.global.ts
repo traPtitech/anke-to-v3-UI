@@ -1,3 +1,15 @@
+import { buildTabFilterQuery } from '~/components/explorer/filter-query';
+import {
+  explorerQueryKeys,
+  questionnaireDetailQueryKeys,
+  questionnaireDetailTabValues,
+} from '~/composables/explorer/query-params';
+
+const legacyExplorerRedirectFilterByPath: Record<string, string | undefined> = {
+  '/administrates': buildTabFilterQuery('administered'),
+  '/responses': buildTabFilterQuery('answered'),
+};
+
 export default defineNuxtRouteMiddleware((to, _from) => {
   // before: /
   // after: /explorer
@@ -5,21 +17,14 @@ export default defineNuxtRouteMiddleware((to, _from) => {
     return { path: '/explorer', query: to.query };
   }
 
-  // before: /administrates
-  // after: /explorer?filter=administered
-  if (to.path === '/administrates') {
+  const legacyExplorerFilter = legacyExplorerRedirectFilterByPath[to.path];
+  if (legacyExplorerFilter !== undefined) {
     return {
       path: '/explorer',
-      query: { ...to.query, filter: 'administered' },
-    };
-  }
-
-  // before: /responses
-  // after: /explorer?filter=answered
-  if (to.path === '/responses') {
-    return {
-      path: '/explorer',
-      query: { ...to.query, filter: 'answered' },
+      query: {
+        ...to.query,
+        [explorerQueryKeys.filter]: legacyExplorerFilter,
+      },
     };
   }
 
@@ -27,10 +32,17 @@ export default defineNuxtRouteMiddleware((to, _from) => {
     // before: /questionnaires/:id?tab=questions
     // after: /questionnaires/:id/questions
     const match = to.path.match(/\/questionnaires\/(\d+)/);
-    if (match !== null && to.query.tab === 'questions') {
+    if (
+      match !== null &&
+      to.query[questionnaireDetailQueryKeys.tab] ===
+        questionnaireDetailTabValues.questions
+    ) {
       return {
         path: `${to.path}/questions`,
-        query: { ...to.query, tab: undefined },
+        query: {
+          ...to.query,
+          [questionnaireDetailQueryKeys.tab]: undefined,
+        },
       };
     }
   }

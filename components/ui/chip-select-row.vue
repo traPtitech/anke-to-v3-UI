@@ -2,7 +2,7 @@
 export type ChipSelectItem = {
   key: string;
   label: string;
-  count?: number;
+  count?: number | string;
 };
 
 const props = withDefaults(

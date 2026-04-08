@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { getQueryValue } from '~/components/explorer/filter-query';
 import { setRouteQueryParams } from '~/components/explorer/filter-route';
+import { explorerQueryKeys } from '~/composables/explorer/query-params';
 import Header from '~/components/layout-elements/header.vue';
 
 const router = useRouter();
@@ -8,7 +9,9 @@ const route = useRoute();
 const isExplorerRoute = computed(() => route.path.startsWith('/explorer'));
 const SEARCH_DEBOUNCE_MS = 300;
 
-const searchInputText = ref(getQueryValue(route.query.search) ?? '');
+const searchInputText = ref(
+  getQueryValue(route.query[explorerQueryKeys.search]) ?? '',
+);
 let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 const applySearchToQuery = (value: string) => {
@@ -18,7 +21,7 @@ const applySearchToQuery = (value: string) => {
     void navigateTo({
       path: '/explorer',
       query: {
-        search: normalized || undefined,
+        [explorerQueryKeys.search]: normalized || undefined,
       },
     });
     return;
@@ -28,8 +31,8 @@ const applySearchToQuery = (value: string) => {
     router,
     route,
     patch: {
-      search: normalized || undefined,
-      page: undefined,
+      [explorerQueryKeys.search]: normalized || undefined,
+      [explorerQueryKeys.page]: undefined,
     },
   });
 };
@@ -45,7 +48,7 @@ const applySearchWithDebounce = (value: string) => {
 };
 
 watch(
-  () => route.query.search,
+  () => route.query[explorerQueryKeys.search],
   (searchQuery) => {
     const normalized = getQueryValue(searchQuery) ?? '';
 

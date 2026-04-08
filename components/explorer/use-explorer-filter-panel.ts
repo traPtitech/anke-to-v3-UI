@@ -1,5 +1,6 @@
 import type { MenuItem } from 'primevue/menuitem';
 import type { Ref } from 'vue';
+import { explorerQueryKeys } from '~/composables/explorer/query-params';
 import {
   buildFilterSignature,
   buildListQuery,
@@ -39,12 +40,14 @@ import {
 } from './filter-types';
 
 type UseExplorerFilterPanelParams = {
-  tabCounts: Ref<Partial<Record<TabKey, number>>>;
+  tabCounts: Ref<Partial<Record<TabKey, number | string>>>;
+  tabCountsLoading: Ref<boolean>;
   onChange: (payload: ExplorerFilterPayload) => void;
 };
 
 export const useExplorerFilterPanel = ({
   tabCounts,
+  tabCountsLoading,
   onChange,
 }: UseExplorerFilterPanelParams) => {
   const router = useRouter();
@@ -81,7 +84,7 @@ export const useExplorerFilterPanel = ({
     patch: Record<string, string | undefined>,
     options: SetQueryParamsOptions = {},
   ) => {
-    const removeKeys = Object.hasOwn(patch, 'filter')
+    const removeKeys = Object.hasOwn(patch, explorerQueryKeys.filter)
       ? legacyFilterQueryKeys
       : options.removeKeys;
 
@@ -98,7 +101,7 @@ export const useExplorerFilterPanel = ({
 
   const applyFilterSet = async (nextSet: Set<FilterKey>) => {
     await setQueryParams({
-      filter: serializeFilterSet(normalizeFilterSet(nextSet)),
+      [explorerQueryKeys.filter]: serializeFilterSet(normalizeFilterSet(nextSet)),
     });
   };
 
@@ -153,19 +156,21 @@ export const useExplorerFilterPanel = ({
     set: (value) => setFilter('due', value),
   });
 
-  const searchQuery = computed(() => getQueryValue(route.query.search) ?? '');
+  const searchQuery = computed(
+    () => getQueryValue(route.query[explorerQueryKeys.search]) ?? '',
+  );
 
   const resolveSortFromQuery = (): {
     category: SortCategory;
     direction: SortDirection;
   } => {
-    const rawSort = getQueryValue(route.query.sort);
+    const rawSort = getQueryValue(route.query[explorerQueryKeys.sort]);
     const category =
       rawSort !== undefined && isSortCategory(rawSort)
         ? rawSort
         : DEFAULT_SORT_CATEGORY;
 
-    const rawReversed = getQueryValue(route.query.reversed);
+    const rawReversed = getQueryValue(route.query[explorerQueryKeys.reversed]);
     if (rawReversed === '1') {
       return {
         category,
@@ -204,8 +209,9 @@ export const useExplorerFilterPanel = ({
     setSortDirectionPreference(category, direction);
 
     await setQueryParams({
-      sort: category === DEFAULT_SORT_CATEGORY ? undefined : category,
-      reversed: direction === 'desc' ? '1' : undefined,
+      [explorerQueryKeys.sort]:
+        category === DEFAULT_SORT_CATEGORY ? undefined : category,
+      [explorerQueryKeys.reversed]: direction === 'desc' ? '1' : undefined,
     });
   };
 
@@ -264,7 +270,13 @@ export const useExplorerFilterPanel = ({
     );
   };
 
-  const tabCount = (tab: TabKey) => tabCounts.value[tab] ?? 0;
+  const tabCount = (tab: TabKey) => {
+    if (tabCountsLoading.value) {
+      return '?';
+    }
+
+    return tabCounts.value[tab] ?? 0;
+  };
 
   const selectedTab = computed<TabKey | null>(() =>
     findSelectedTab(currentFilterSet.value),
@@ -276,7 +288,9 @@ export const useExplorerFilterPanel = ({
   ) => {
     await setQueryParams(
       {
-        filter: serializeFilterSet(new Set(tabFilterPresets[tab])),
+        [explorerQueryKeys.filter]: serializeFilterSet(
+          new Set(tabFilterPresets[tab]),
+        ),
       },
       options,
     );
@@ -313,7 +327,7 @@ export const useExplorerFilterPanel = ({
       }
 
       void setQueryParams({
-        filter: serializeFilterSet(currentFilterSet.value),
+        [explorerQueryKeys.filter]: serializeFilterSet(currentFilterSet.value),
       });
     },
     { immediate: true },

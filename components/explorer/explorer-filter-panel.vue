@@ -7,10 +7,12 @@ import { useExplorerFilterPanel } from './use-explorer-filter-panel';
 
 const props = withDefaults(
   defineProps<{
-    tabCounts?: Partial<Record<TabKey, number>>;
+    tabCounts?: Partial<Record<TabKey, number | string>>;
+    tabCountsLoading?: boolean;
   }>(),
   {
     tabCounts: () => ({}),
+    tabCountsLoading: false,
   },
 );
 
@@ -36,6 +38,7 @@ const {
   isSortMenuItemSelected,
 } = useExplorerFilterPanel({
   tabCounts: toRef(props, 'tabCounts'),
+  tabCountsLoading: toRef(props, 'tabCountsLoading'),
   onChange: (payload) => {
     emit('change', payload);
   },
