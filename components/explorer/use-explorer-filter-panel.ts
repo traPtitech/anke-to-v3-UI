@@ -101,7 +101,9 @@ export const useExplorerFilterPanel = ({
 
   const applyFilterSet = async (nextSet: Set<FilterKey>) => {
     await setQueryParams({
-      [explorerQueryKeys.filter]: serializeFilterSet(normalizeFilterSet(nextSet)),
+      [explorerQueryKeys.filter]: serializeFilterSet(
+        normalizeFilterSet(nextSet),
+      ),
     });
   };
 

@@ -1,4 +1,7 @@
-import type { ExplorerFilterPayload, TabKey } from '~/components/explorer/filter-types';
+import type {
+  ExplorerFilterPayload,
+  TabKey,
+} from '~/components/explorer/filter-types';
 import {
   fetchQuestionnaires,
   type GetQuestionnairesOption,
@@ -39,8 +42,8 @@ export const useExplorerTabCounts = ({
     async () => {
       const base = activeFilterPayload.value.tabCountQuery;
 
-      const [unanswered, all, answered, administered, draft] = await Promise.all(
-        [
+      const [unanswered, all, answered, administered, draft] =
+        await Promise.all([
           fetchQuestionnaireCount({
             ...base,
             onlyTargetingMe: true,
@@ -61,8 +64,7 @@ export const useExplorerTabCounts = ({
             ...base,
             hasMyDraft: true,
           }),
-        ],
-      );
+        ]);
 
       return {
         unanswered,
@@ -75,27 +77,27 @@ export const useExplorerTabCounts = ({
     { watch: [tabCountWatchKey] },
   );
 
-  const normalizedTabCounts = computed<Partial<Record<TabKey, number | string>>>(
-    () => {
-      if (tabCountsLoading.value) {
-        return {
-          unanswered: '?',
-          all: '?',
-          answered: '?',
-          administered: '?',
-          draft: '?',
-        };
-      }
-
+  const normalizedTabCounts = computed<
+    Partial<Record<TabKey, number | string>>
+  >(() => {
+    if (tabCountsLoading.value) {
       return {
-        unanswered: tabCounts.value?.unanswered ?? 0,
-        all: tabCounts.value?.all ?? 0,
-        answered: tabCounts.value?.answered ?? 0,
-        administered: tabCounts.value?.administered ?? 0,
-        draft: tabCounts.value?.draft ?? 0,
+        unanswered: '?',
+        all: '?',
+        answered: '?',
+        administered: '?',
+        draft: '?',
       };
-    },
-  );
+    }
+
+    return {
+      unanswered: tabCounts.value?.unanswered ?? 0,
+      all: tabCounts.value?.all ?? 0,
+      answered: tabCounts.value?.answered ?? 0,
+      administered: tabCounts.value?.administered ?? 0,
+      draft: tabCounts.value?.draft ?? 0,
+    };
+  });
 
   return {
     normalizedTabCounts,

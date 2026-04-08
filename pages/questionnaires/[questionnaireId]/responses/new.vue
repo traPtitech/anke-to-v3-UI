@@ -9,7 +9,9 @@ const { data, error } = useGetQuestionnaire(questionnaireId);
 
 usePageSeo({
   title: computed(() =>
-    data.value ? `回答作成: ${data.value.title}` : `回答作成 #${questionnaireId}`,
+    data.value
+      ? `回答作成: ${data.value.title}`
+      : `回答作成 #${questionnaireId}`,
   ),
   description: 'アンケートへの新規回答を作成します。',
 });

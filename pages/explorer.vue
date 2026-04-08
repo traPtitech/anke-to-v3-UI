@@ -2,9 +2,7 @@
 import ExplorerFilterPanel from '~/components/explorer/explorer-filter-panel.vue';
 import ExplorerLoadingSkeleton from '~/components/explorer/explorer-loading-skeleton.vue';
 import { toApiSort } from '~/components/explorer/filter-sort';
-import type {
-  ExplorerFilterPayload,
-} from '~/components/explorer/filter-types';
+import type { ExplorerFilterPayload } from '~/components/explorer/filter-types';
 import {
   DEFAULT_SORT_CATEGORY,
   DEFAULT_SORT_DIRECTION,

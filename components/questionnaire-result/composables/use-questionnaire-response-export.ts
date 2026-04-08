@@ -102,7 +102,9 @@ const toCsv = (
     ];
   });
 
-  return [header, ...rows].map((row) => row.map(escapeCsvCell).join(',')).join('\n');
+  return [header, ...rows]
+    .map((row) => row.map(escapeCsvCell).join(','))
+    .join('\n');
 };
 
 const toMarkdown = (
