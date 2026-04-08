@@ -3,11 +3,21 @@ import ButtonLink from '~/components/ui/button-link.vue';
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import { usePageSeo } from '~/composables/use-page-seo';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestion } from '~/models/question';
 
 const questionnaireId = useRouteQuestionnaireId();
 const { data, error, refresh } = useGetQuestionnaire(questionnaireId);
+
+usePageSeo({
+  title: computed(() =>
+    data.value
+      ? `質問一覧: ${data.value.title}`
+      : `質問一覧 #${questionnaireId}`,
+  ),
+  description: 'アンケートに含まれる質問を一覧で確認できます。',
+});
 
 const questionTypeLabelMap = {
   Text: '短文',

@@ -2,6 +2,7 @@
 import QuestionnaireResult from '~/components/questionnaire-result/questionnaire-result.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import { usePageSeo } from '~/composables/use-page-seo';
 import {
   useGetQuestionnaire,
   useGetQuestionnaireResponses,
@@ -18,6 +19,15 @@ const {
   error: responsesError,
   refresh: refreshResponses,
 } = useGetQuestionnaireResponses(questionnaireId);
+
+usePageSeo({
+  title: computed(() =>
+    questionnaire.value
+      ? `アンケート結果: ${questionnaire.value.title}`
+      : `アンケート結果 #${questionnaireId}`,
+  ),
+  description: 'アンケートの集計結果と回答一覧を確認できます。',
+});
 
 const handleRetry = async () => {
   await Promise.all([refreshQuestionnaire(), refreshResponses()]);

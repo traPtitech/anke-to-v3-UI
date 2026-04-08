@@ -2,6 +2,7 @@
 import QuestionnaireDetail from '~/components/questionnaire-detail/questionnaire-detail.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import { usePageSeo } from '~/composables/use-page-seo';
 import {
   useGetQuestionnaire,
   useGetQuestionnaireResponses,
@@ -19,6 +20,15 @@ const {
   refresh: refreshMyResponses,
 } = useGetQuestionnaireResponses(questionnaireId, {
   onlyMyResponse: true,
+});
+
+usePageSeo({
+  title: computed(() =>
+    questionnaire.value
+      ? `アンケート詳細: ${questionnaire.value.title}`
+      : `アンケート詳細 #${questionnaireId}`,
+  ),
+  description: 'アンケートの詳細・回答状況・各種操作を確認できます。',
 });
 
 const handleRetry = async () => {

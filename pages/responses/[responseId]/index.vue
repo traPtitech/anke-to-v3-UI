@@ -2,6 +2,7 @@
 import ResponseDetail from '~/components/response-detail/response-detail.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import { usePageSeo } from '~/composables/use-page-seo';
 import {
   useGetQuestionnaire,
   useGetResponse,
@@ -28,6 +29,15 @@ const questionnaire = computed(
 const questionnaireError = computed(
   () => questionnaireRequest.value?.error.value ?? null,
 );
+
+usePageSeo({
+  title: computed(() =>
+    questionnaire.value
+      ? `回答詳細: ${questionnaire.value.title}`
+      : `回答詳細 #${responseId}`,
+  ),
+  description: '回答内容の詳細を確認できます。',
+});
 
 const handleRetry = async () => {
   await refreshResponse();

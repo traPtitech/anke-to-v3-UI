@@ -2,6 +2,7 @@
 import EditResponseForm from '~/components/response-form/edit-response-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import { usePageSeo } from '~/composables/use-page-seo';
 import {
   useGetQuestionnaire,
   useGetResponse,
@@ -28,6 +29,15 @@ const questionnaire = computed(
 const questionnaireError = computed(
   () => questionnaireRequest.value?.error.value ?? null,
 );
+
+usePageSeo({
+  title: computed(() =>
+    questionnaire.value
+      ? `回答編集: ${questionnaire.value.title}`
+      : `回答編集 #${responseId}`,
+  ),
+  description: '送信済み回答の内容を編集します。',
+});
 
 const handleRetry = async () => {
   await refreshResponse();

@@ -1,10 +1,18 @@
 <script lang="ts" setup>
 import NewResponseForm from '~/components/response-form/new-response-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
+import { usePageSeo } from '~/composables/use-page-seo';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
 const { data, error } = useGetQuestionnaire(questionnaireId);
+
+usePageSeo({
+  title: computed(() =>
+    data.value ? `回答作成: ${data.value.title}` : `回答作成 #${questionnaireId}`,
+  ),
+  description: 'アンケートへの新規回答を作成します。',
+});
 </script>
 
 <template>

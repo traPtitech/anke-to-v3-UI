@@ -2,10 +2,20 @@
 import EditQuestionnaireForm from '~/components/questionnaire-form/edit-questionnaire-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import { usePageSeo } from '~/composables/use-page-seo';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
 const { data, error, refresh } = useGetQuestionnaire(questionnaireId);
+
+usePageSeo({
+  title: computed(() =>
+    data.value
+      ? `アンケート編集: ${data.value.title}`
+      : `アンケート編集 #${questionnaireId}`,
+  ),
+  description: 'アンケートのタイトルや質問内容を編集します。',
+});
 
 const handleRetry = async () => {
   await refresh();
