@@ -4,6 +4,7 @@ import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/res
 import ResultTitleContainer from '~/components/ui/questionnaire/result-title-container.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
+import { useQuestionnaireResponseExport } from './composables/use-questionnaire-response-export';
 import { useQuestionnaireResult } from './composables/use-questionnaire-result';
 import QuestionResult from './question-result.vue';
 
@@ -16,6 +17,15 @@ const { results } = useQuestionnaireResult(
   props.questionnaire,
   props.responses,
 );
+
+const { exportResponses } = useQuestionnaireResponseExport({
+  questionnaire: computed(() => props.questionnaire),
+  responses: computed(() => props.responses),
+});
+
+const handleExport = (format: 'md' | 'csv' | 'json') => {
+  exportResponses(format);
+};
 </script>
 
 <template>
@@ -32,7 +42,35 @@ const { results } = useQuestionnaireResult(
     </div>
 
     <section class="result-info-section">
-      <p class="section-label">アンケート情報</p>
+      <div class="result-info-header">
+        <p class="section-label">アンケート情報</p>
+        <div class="export-actions">
+          <Button
+            severity="secondary"
+            size="small"
+            outlined
+            @click="handleExport('md')"
+          >
+            Markdown
+          </Button>
+          <Button
+            severity="secondary"
+            size="small"
+            outlined
+            @click="handleExport('csv')"
+          >
+            CSV
+          </Button>
+          <Button
+            severity="secondary"
+            size="small"
+            outlined
+            @click="handleExport('json')"
+          >
+            JSON
+          </Button>
+        </div>
+      </div>
       <ResultTitleContainer :questionnaire="props.questionnaire" />
       <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
     </section>
@@ -95,6 +133,20 @@ const { results } = useQuestionnaireResult(
   font-weight: 700;
   color: var(--p-text-secondary);
   letter-spacing: 0.04em;
+}
+
+.result-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.export-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .result-questions-header {
