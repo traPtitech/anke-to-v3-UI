@@ -17,9 +17,6 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   css: ['ress', '~/assets/style/global.css', '~/assets/style/hljs-github.css'],
-  appConfig: {
-    nuxtIcon: {},
-  },
   compatibilityDate: '2025-05-15',
   vite: {
     css: {
@@ -33,15 +30,18 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
-  icon: {
-    mode: 'svg',
-  },
   eslint: {
     checker: {
       cache: true,
     },
     config: {
       stylistic: true,
+    },
+  },
+  icon: {
+    mode: 'svg',
+    clientBundle: {
+      scan: true,
     },
   },
   primevue: {
