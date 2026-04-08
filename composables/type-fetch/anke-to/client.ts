@@ -151,15 +151,6 @@ export const useGetQuestionnaireResponses = (
     () => fetchQuestionnaireResponses(questionnaireID, params),
   );
 
-export const useGetMyResponses = () =>
-  useAsyncData(`/responses/myResponses`, async () => {
-    const res = await client.GET('/responses/myResponses');
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
-  });
-
 export const useGetResponse = (responseID: number) =>
   useAsyncData(`/responses/${responseID}`, async () => {
     const res = await client.GET('/responses/{responseID}', {
