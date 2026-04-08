@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
 import ResultTitleContainer from '~/components/ui/questionnaire/result-title-container.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
@@ -20,26 +21,36 @@ const { results } = useQuestionnaireResult(
 <template>
   <div class="questionnaire-result-container">
     <div class="result-header">
-      <Button
-        class="p-button-icon-only"
-        variant="text"
-        @click="
-          $router.push(
-            `/questionnaires/${props.questionnaire.questionnaire_id}`,
-          )
-        "
+      <ButtonLink
+        class="result-back-link"
+        variant="secondary"
+        :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       >
         <Icon name="mdi:chevron-left" size="24px" />
-      </Button>
+        <span>アンケート詳細画面に戻る</span>
+      </ButtonLink>
     </div>
-    <ResultTitleContainer :questionnaire="props.questionnaire" />
-    <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
-    <QuestionResult
-      v-for="(result, i) in results"
-      :key="i"
-      :result="result"
-      :is-anonymous="props.questionnaire.is_anonymous"
-    />
+
+    <section class="result-info-section">
+      <p class="section-label">アンケート情報</p>
+      <ResultTitleContainer :questionnaire="props.questionnaire" />
+      <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
+    </section>
+
+    <section class="result-questions-section">
+      <div class="result-questions-header">
+        <h2>質問ごとの結果</h2>
+      </div>
+
+      <QuestionResult
+        v-for="(result, i) in results"
+        :key="i"
+        :result="result"
+        :index="i + 1"
+        :total="results.length"
+        :is-anonymous="props.questionnaire.is_anonymous"
+      />
+    </section>
   </div>
 </template>
 
@@ -48,6 +59,7 @@ const { results } = useQuestionnaireResult(
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding-bottom: 50vh;
@@ -56,5 +68,46 @@ const { results } = useQuestionnaireResult(
 .result-header {
   display: flex;
   align-items: center;
+}
+
+.result-back-link {
+  font-weight: 600;
+}
+
+.result-info-section,
+.result-questions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  padding: 20px;
+  background-color: var(--p-surface-0);
+}
+
+.result-questions-section {
+  gap: 14px;
+}
+
+.section-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--p-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.result-questions-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--p-surface-200);
+}
+
+.result-questions-header h2 {
+  margin: 0;
+  font-size: 19px;
 }
 </style>

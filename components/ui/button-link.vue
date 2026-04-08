@@ -1,19 +1,67 @@
 <script setup lang="ts">
-const props = defineProps<{
-  to?: string;
-  disabled?: boolean;
-  title?: string;
-}>();
+import type { RouteLocationRaw } from 'vue-router';
+
+const props = withDefaults(
+  defineProps<{
+    to: RouteLocationRaw;
+    variant?: 'primary' | 'secondary' | 'ghost';
+    size?: 'md' | 'sm';
+    disabled?: boolean;
+    title?: string;
+    block?: boolean;
+  }>(),
+  {
+    variant: 'secondary',
+    size: 'md',
+    disabled: false,
+    block: false,
+  },
+);
+
+const severity = computed(() =>
+  props.variant === 'primary' ? 'primary' : 'secondary',
+);
+
+const buttonVariant = computed(() => {
+  if (props.variant === 'secondary') {
+    return 'outlined';
+  }
+
+  if (props.variant === 'ghost') {
+    return 'text';
+  }
+
+  return undefined;
+});
+
+const handleClick = (event: MouseEvent) => {
+  if (!props.disabled) {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+};
 </script>
 
 <template>
-  <Button v-slot="slotProps" as-child variant="link" :disabled="props.disabled">
+  <Button
+    v-slot="slotProps"
+    as-child
+    :severity="severity"
+    :variant="buttonVariant"
+    :size="props.size === 'sm' ? 'small' : undefined"
+    :disabled="props.disabled"
+    :class="{ 'button-link-block': props.block }"
+    :pt="{ root: { title: props.title } }"
+  >
     <NuxtLink
       v-bind="slotProps"
       :to="props.to"
-      class="button-link"
-      :disabled="props.disabled"
-      :title="props.title"
+      class="button-link-anchor"
+      :aria-disabled="props.disabled ? 'true' : undefined"
+      :tabindex="props.disabled ? -1 : undefined"
+      @click="handleClick"
     >
       <slot />
     </NuxtLink>
@@ -21,30 +69,27 @@ const props = defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.button-link {
+.button-link-anchor {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  gap: 6px;
   text-decoration: none;
-  font-weight: bold;
-  padding: 8px 16px;
-  border-radius: var(--p-border-radius-md);
-  transition: background-color 0.3s ease;
-  background-color: var(--p-primary-50);
-
-  &:hover {
-    background-color: var(--p-primary-100);
-  }
-
-  &:active {
-    background-color: var(--p-primary-200);
-  }
 }
 
-.button-link[disabled='true'] {
+.button-link-anchor[aria-disabled='true'] {
   pointer-events: none;
-  opacity: 0.6;
-  color: var(--p-text-disabled);
-  background-color: var(--p-surface-100);
+  cursor: not-allowed;
+  opacity: var(--p-disabled-opacity, 0.6);
+}
+
+.button-link-anchor.p-button[aria-disabled='true'] {
+  box-shadow: none;
+  filter: saturate(0.85);
+}
+
+.button-link-block {
+  width: 100%;
+  justify-content: center;
 }
 </style>

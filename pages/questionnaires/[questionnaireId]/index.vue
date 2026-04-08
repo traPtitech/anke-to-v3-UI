@@ -1,15 +1,55 @@
 <script lang="ts" setup>
 import QuestionnaireDetail from '~/components/questionnaire-detail/questionnaire-detail.vue';
-import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
+import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
+import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import {
+  useGetQuestionnaire,
+  useGetQuestionnaireResponses,
+} from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
-const { data, error } = useGetQuestionnaire(questionnaireId);
+const {
+  data: questionnaire,
+  error: questionnaireError,
+  refresh: refreshQuestionnaire,
+} = useGetQuestionnaire(questionnaireId);
+const {
+  data: myResponses,
+  error: myResponsesError,
+  refresh: refreshMyResponses,
+} = useGetQuestionnaireResponses(questionnaireId, {
+  onlyMyResponse: true,
+});
+
+const handleRetry = async () => {
+  await Promise.all([refreshQuestionnaire(), refreshMyResponses()]);
+};
 </script>
 
 <template>
-  <div v-if="error" class="error">
-    {{ error.message }}
+  <div class="detail-page-state">
+    <ErrorReloadPanel
+      v-if="questionnaireError || myResponsesError"
+      title="アンケート詳細の取得に失敗しました"
+      :message="questionnaireError?.message || myResponsesError?.message"
+      @retry="handleRetry"
+    />
+    <DetailLoadingIndicator
+      v-else-if="questionnaire === undefined || myResponses === undefined"
+      variant="questionnaire"
+    />
+    <QuestionnaireDetail
+      v-else
+      :detail="questionnaire"
+      :my-responses="myResponses"
+    />
   </div>
-  <div v-else-if="data === undefined">Loading...</div>
-  <QuestionnaireDetail v-else :detail="data" />
 </template>
+
+<style scoped lang="scss">
+.detail-page-state {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+</style>

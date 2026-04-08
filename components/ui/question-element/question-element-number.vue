@@ -4,6 +4,9 @@ import {
   type QuestionElementMode,
   type QuestionElementNumber,
 } from './composables';
+import QuestionAnswerEmpty from './question-answer-empty.vue';
+import QuestionAnswerText from './question-answer-text.vue';
+import QuestionAnswerView from './question-answer-view.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;
@@ -25,13 +28,20 @@ const answerModel = computed({
 </script>
 
 <template>
+  <QuestionAnswerView v-if="props.mode === 'view'">
+    <QuestionAnswerText
+      v-if="question.answer !== undefined"
+      :value="question.answer"
+    />
+    <QuestionAnswerEmpty v-else />
+  </QuestionAnswerView>
   <InputNumber
+    v-else
     v-model="answerModel"
     class="question-element-number"
     placeholder="回答を入力"
     :input-props="{ required: question.is_required }"
-    :class="{ 'p-invalid': props.mode === 'edit' && !valid }"
-    :readonly="props.mode === 'view'"
+    :class="{ 'p-invalid': !valid }"
   />
 </template>
 

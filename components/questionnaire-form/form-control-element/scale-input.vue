@@ -9,13 +9,13 @@ const question = defineModel<QuestionSettingsScale>({
 <template>
   <div class="scale-input-container">
     <div class="scale-input-group">
-      <Dropdown
+      <Select
         v-model="question.min_value"
         placeholder="最小値"
         :options="[0, 1]"
-        class="scale-input-dropdown"
+        class="scale-input-Select"
         scroll-height="320px"
-        panel-class="scale-input-dropdown-panel"
+        panel-class="scale-input-Select-panel"
       />
       <InputText
         v-model="question.min_label"
@@ -24,7 +24,7 @@ const question = defineModel<QuestionSettingsScale>({
       />
     </div>
     <div class="scale-input-group">
-      <Dropdown
+      <Select
         v-model="question.max_value"
         placeholder="最大値"
         :options="[2, 3, 4, 5, 6, 7, 8, 9, 10]"

@@ -5,14 +5,24 @@ import FormControl from './form-control.vue';
 import QuestionnaireMetadataInput from './questionnaire-metadata-input.vue';
 import {
   addQuestion,
-  checkValidity,
   copyQuestion,
+  getValidationErrors,
   removeQuestion,
 } from './store';
 import type { QuestionnaireFormSettings } from './type';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
-const validationResult = computed(() => checkValidity(state.value));
+const validationErrors = computed(() =>
+  getValidationErrors(state.value).filter(({ display }) => display),
+);
+const focusedQuestionId = ref<number | null>(null);
+
+const handleAddQuestion = (
+  type: Parameters<typeof addQuestion>[1],
+  index?: number,
+) => {
+  focusedQuestionId.value = addQuestion(state.value, type, index);
+};
 </script>
 
 <template>
@@ -35,43 +45,62 @@ const validationResult = computed(() => checkValidity(state.value));
         :key="question.question_id"
         class="question-container"
       >
-        <div class="question-side-buttons">
-          <div class="drag-handle">
-            <Icon
-              size="24px"
-              name="ic:outline-drag-indicator"
-              class="drag-icon"
+        <div class="question-card">
+          <div class="question-card-number">{{ i + 1 }} 問目</div>
+          <div class="question-card-required-switch">
+            <label>必須</label>
+            <ToggleSwitch v-model="question.is_required" />
+          </div>
+          <div class="question-card-body">
+            <div class="question-side-buttons">
+              <div class="drag-handle">
+                <Icon
+                  size="24px"
+                  name="ic:outline-drag-indicator"
+                  class="drag-icon"
+                />
+              </div>
+              <Button
+                text
+                class="p-button-icon-only question-add-button"
+                title="質問を追加"
+                @click="handleAddQuestion(question.question_type, i)"
+              >
+                <Icon size="24px" name="mdi:plus-circle-outline" />
+              </Button>
+            </div>
+            <FormControl
+              class="question-control"
+              :model-value="question"
+              :auto-focus-title="focusedQuestionId === question.question_id"
+              @update:model-value="Object.assign(state.questions[i], $event)"
+              @copy="copyQuestion(state, question.question_id, i)"
+              @delete="removeQuestion(state, question.question_id)"
             />
           </div>
-          <Button
-            text
-            class="p-button-icon-only question-add-button"
-            title="質問を追加"
-            @click="addQuestion(state, question.question_type, i)"
-          >
-            <Icon size="24px" name="mdi:plus-circle-outline" />
-          </Button>
         </div>
-        <FormControl
-          class="question-control"
-          :model-value="question"
-          @update:model-value="Object.assign(state.questions[i], $event)"
-          @copy="copyQuestion(state, question.question_id, i)"
-          @delete="removeQuestion(state, question.question_id)"
-        />
       </Draggable>
     </Container>
-    <AddQuestionButtons @add-question="addQuestion(state, $event)" />
+    <AddQuestionButtons @add-question="handleAddQuestion" />
     <div class="form-action-buttons-container">
       <div class="form-action-buttons">
         <slot name="buttons" />
       </div>
-      <small v-if="!validationResult.ok" class="form-validation-error-message">
-        <Icon size="20px" name="mdi:alert-circle" />
-        <span>
-          {{ validationResult.message }}
-        </span>
-      </small>
+      <div
+        v-if="validationErrors.length > 0"
+        class="form-validation-error-messages"
+      >
+        <small
+          v-for="{ message } in validationErrors"
+          :key="message"
+          class="form-validation-error-message"
+        >
+          <Icon size="20px" name="mdi:alert-circle" />
+          <span>
+            {{ message }}
+          </span>
+        </small>
+      </div>
     </div>
   </form>
 </template>
@@ -81,6 +110,7 @@ const validationResult = computed(() => checkValidity(state.value));
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
   max-width: 1024px;
   padding-bottom: 320px;
   margin: 0 auto;
@@ -95,13 +125,40 @@ const validationResult = computed(() => checkValidity(state.value));
   min-height: 32px;
 }
 
-/* smooth-dndのスタイルを上書きするために詳細度を上げる */
 .question-container.question-container.question-container {
+  position: relative;
   border: 1px solid var(--p-surface-300);
   border-radius: var(--p-border-radius-md);
-  padding: 16px;
+  padding: 16px 16px 16px 16px;
+}
+
+.question-card {
+  position: relative;
+}
+
+.question-card-number {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  font-weight: bold;
+  line-height: 1;
+  color: var(--p-text-color);
+}
+
+.question-card-required-switch {
+  position: absolute;
+  top: -8px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.question-card-body {
   display: flex;
   gap: 8px;
+  padding-top: 32px;
 }
 
 @media screen and (max-width: variables.$breakpoint-sm) {
@@ -135,7 +192,6 @@ const validationResult = computed(() => checkValidity(state.value));
 
 .form-action-buttons-container {
   position: fixed;
-  top: 32px;
   transform: translateX(1056px);
   display: flex;
   flex-direction: column;
@@ -155,6 +211,12 @@ const validationResult = computed(() => checkValidity(state.value));
   gap: 4px;
   color: var(--p-red-600);
   justify-content: end;
+}
+
+.form-validation-error-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 @media screen and (max-width: 1600px) {

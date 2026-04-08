@@ -8,7 +8,38 @@ import FormControlElementTextInput from './form-control-element/text-input.vue';
 import FormControlElementTextLongInput from './form-control-element/text-long-input.vue';
 import type { QuestionSettings } from './type';
 
+const props = defineProps<{
+  autoFocusTitle?: boolean;
+}>();
+
 const question = defineModel<QuestionSettings>({ required: true });
+const formControlContainer = ref<HTMLElement>();
+const hasFocusedInsideCard = ref(false);
+const hasQuestionCardBeenBlurred = ref(false);
+const isQuestionTitleFocused = ref(false);
+
+const showQuestionTitleRequiredErrorAfterBlur = computed(
+  () => !isQuestionTitleFocused.value && question.value.title.trim() === '',
+);
+const showChoiceOptionRequiredErrorAfterBlur = computed(
+  () => hasQuestionCardBeenBlurred.value,
+);
+
+const handleCardFocusIn = () => {
+  hasFocusedInsideCard.value = true;
+};
+
+const handleCardFocusOut = (event: FocusEvent) => {
+  if (!hasFocusedInsideCard.value) return;
+  const nextFocusedElement = event.relatedTarget as Node | null;
+  if (
+    nextFocusedElement &&
+    formControlContainer.value?.contains(nextFocusedElement)
+  ) {
+    return;
+  }
+  hasQuestionCardBeenBlurred.value = true;
+};
 
 defineEmits<{
   (e: 'copy'): void;
@@ -25,11 +56,44 @@ const typeText: Record<GatewayQuestionType, string> = {
 };
 
 const questionType = computed(() => typeText[question.value.question_type]);
+
+watch(
+  () => props.autoFocusTitle,
+  (shouldFocus) => {
+    if (!shouldFocus) return;
+    nextTick(() => {
+      document
+        .getElementById(`question-title-input-${question.value.question_id}`)
+        ?.focus();
+    });
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
-  <div class="form-control-container">
-    <InputText v-model="question.title" required placeholder="質問" />
+  <div
+    ref="formControlContainer"
+    class="form-control-container"
+    @focusin="handleCardFocusIn"
+    @focusout="handleCardFocusOut"
+  >
+    <InputText
+      :id="`question-title-input-${question.question_id}`"
+      v-model="question.title"
+      :class="{ 'p-invalid': showQuestionTitleRequiredErrorAfterBlur }"
+      required
+      placeholder="質問 (必須)"
+      @focus="isQuestionTitleFocused = true"
+      @blur="isQuestionTitleFocused = false"
+    />
+    <small
+      v-if="showQuestionTitleRequiredErrorAfterBlur"
+      class="invalid-message"
+    >
+      <Icon name="mdi:alert-circle" size="20px" />
+      <span>質問のタイトルを入力してください</span>
+    </small>
     <Textarea
       v-model="question.description"
       placeholder="詳細な説明 (任意)"
@@ -52,10 +116,16 @@ const questionType = computed(() => typeText[question.value.question_type]);
     <FormControlElementSingleChoiceInput
       v-if="question.question_type === 'SingleChoice'"
       v-model="question"
+      :show-choice-option-required-error="
+        showChoiceOptionRequiredErrorAfterBlur
+      "
     />
     <FormControlElementMultipleChoiceInput
       v-if="question.question_type === 'MultipleChoice'"
       v-model="question"
+      :show-choice-option-required-error="
+        showChoiceOptionRequiredErrorAfterBlur
+      "
     />
     <FormControlElementScaleInput
       v-if="question.question_type === 'Scale'"
@@ -65,10 +135,6 @@ const questionType = computed(() => typeText[question.value.question_type]);
     <div class="form-control-footer">
       <div>質問タイプ: {{ questionType }}</div>
       <div class="form-control-footer-actions">
-        <div class="form-control-required-switch">
-          <label>必須</label>
-          <InputSwitch v-model="question.is_required" />
-        </div>
         <div class="form-control-footer-buttons">
           <Button
             class="p-button-icon-only p-button-text"
@@ -101,6 +167,13 @@ const questionType = computed(() => typeText[question.value.question_type]);
   font-size: 14px;
 }
 
+.invalid-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--p-red-500);
+}
+
 .form-control-footer {
   display: flex;
   justify-content: space-between;
@@ -118,12 +191,5 @@ const questionType = computed(() => typeText[question.value.question_type]);
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.form-control-required-switch {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
 }
 </style>

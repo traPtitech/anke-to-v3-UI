@@ -4,6 +4,9 @@ import {
   type QuestionElementMultipleChoice,
   useQuestionValidity,
 } from './composables';
+import QuestionAnswerChip from './question-answer-chip.vue';
+import QuestionAnswerEmpty from './question-answer-empty.vue';
+import QuestionAnswerView from './question-answer-view.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;
@@ -17,7 +20,21 @@ const name = `question-element-multiple-choice-${useId()}`;
 </script>
 
 <template>
+  <QuestionAnswerView v-if="props.mode === 'view'">
+    <QuestionAnswerChip
+      v-for="option in question.options"
+      :key="option"
+      :selected="question.answer?.includes(option) ?? false"
+    >
+      {{ option }}
+    </QuestionAnswerChip>
+    <QuestionAnswerEmpty
+      v-if="!question.answer || question.answer.length === 0"
+      :break-before="question.options.length > 0"
+    />
+  </QuestionAnswerView>
   <CheckboxGroup
+    v-else
     v-model="question.answer"
     class="question-element-multiple-choice-container"
   >
@@ -31,8 +48,7 @@ const name = `question-element-multiple-choice-${useId()}`;
         :input-id="`${optionIds[i]}`"
         :name="name"
         :required="question.is_required"
-        :class="{ 'p-invalid': props.mode === 'edit' && !valid }"
-        :readonly="props.mode === 'view'"
+        :class="{ 'p-invalid': !valid }"
       />
       <label
         :for="`${optionIds[i]}`"

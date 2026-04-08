@@ -11,7 +11,6 @@ import QuestionElementScale from './question-element-scale.vue';
 import QuestionElementSingleChoice from './question-element-single-choice.vue';
 import QuestionElementTextLong from './question-element-text-long.vue';
 import QuestionElementText from './question-element-text.vue';
-import QuestionTypeBadge from './question-type-badge.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;
@@ -19,6 +18,18 @@ const props = defineProps<{
 
 const question = defineModel<QuestionElement>({ required: true });
 const { valid } = useQuestionValidity(question.value);
+const questionTypeLabelMap = {
+  Text: '短文',
+  TextLong: '長文',
+  Number: '数値',
+  SingleChoice: '単一選択',
+  MultipleChoice: '複数選択',
+  Scale: '評価',
+} satisfies Record<QuestionElement['question_type'], string>;
+
+const questionTypeLabel = computed(
+  () => questionTypeLabelMap[question.value.question_type],
+);
 </script>
 
 <template>
@@ -35,8 +46,8 @@ const { valid } = useQuestionValidity(question.value);
           必須
         </span>
         <span v-else class="question-element-non-required-chip">任意</span>
+        <span class="question-element-type-chip">{{ questionTypeLabel }}</span>
       </p>
-      <QuestionTypeBadge :question="question" />
     </div>
     <MarkdownBlock
       class="question-element-description"
@@ -81,9 +92,10 @@ const { valid } = useQuestionValidity(question.value);
 
 <style lang="scss" scoped>
 .question-element-container {
-  padding: 16px;
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
+  padding: 20px 24px;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 12px;
+  background-color: var(--p-surface-0);
 }
 
 .question-element-header {
@@ -91,13 +103,15 @@ const { valid } = useQuestionValidity(question.value);
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .question-element-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--p-text-color);
+  margin-bottom: 4px;
+  line-height: 1.4;
 }
 
 .question-element-title-main {
@@ -105,29 +119,38 @@ const { valid } = useQuestionValidity(question.value);
 }
 
 .question-element-required-chip,
-.question-element-non-required-chip {
+.question-element-non-required-chip,
+.question-element-type-chip {
   vertical-align: middle;
   display: inline-block;
-  padding: 4px 8px;
+  padding: 2px 8px;
   border-radius: var(--p-border-radius-md);
-  font-size: 12px;
-  font-weight: bold;
-  color: white;
+  font-size: 11px;
+  font-weight: 700;
   flex-shrink: 0;
   margin-left: 8px;
 }
 
 .question-element-required-chip {
   background-color: hsl(0, 62%, 50%);
+  color: white;
 }
 
 .question-element-non-required-chip {
-  background-color: hsl(0, 0%, 60%);
+  background-color: var(--p-surface-200);
+  color: var(--p-text-muted-color);
+}
+
+.question-element-type-chip {
+  background-color: var(--p-surface-100);
+  color: var(--p-text-secondary);
 }
 
 .question-element-description {
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--p-text-muted-color);
   margin-bottom: 16px;
+  line-height: 1.6;
 }
 
 .error-message {

@@ -1,4 +1,4 @@
-import { useUsers } from "~/composables/type-fetch/anke-to/client";
+import { useUsers } from '~/composables/type-fetch/anke-to/client';
 
 export const useTraqId = () => {
   const { data: users } = useUsers();

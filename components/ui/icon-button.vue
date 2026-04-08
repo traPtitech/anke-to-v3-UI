@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
   <Button
-    :outlined="props.variant === 'secondary'"
+    :severity="variant"
     :disabled="props.disabled"
     :pt="{ root: { title: props.title } }"
     class="icon-button"

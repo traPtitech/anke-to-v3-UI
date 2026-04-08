@@ -1,11 +1,11 @@
-import { type Store, traQMarkdownIt } from "@traptitech/traq-markdown-it";
+import { type Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
 import {
   useChannels,
   useGroups,
   useMe,
   useStamps,
   useUsers,
-} from "~/composables/type-fetch/anke-to/client";
+} from '~/composables/type-fetch/anke-to/client';
 
 type User = {
   id: string;
@@ -35,19 +35,23 @@ const createMarkdownRenderer = () => {
   );
 
   const traqUsers = computed<User[]>(() => {
-    return users.value?.map((u) => ({
-      id: u.id,
-      name: u.name,
-      iconFileId: u.icon_file_id,
-    })) ?? [];
+    return (
+      users.value?.map((u) => ({
+        id: u.id,
+        name: u.name,
+        iconFileId: u.icon_file_id,
+      })) ?? []
+    );
   });
 
   const traqStamps = computed<Stamp[]>(() => {
-    return stamps.value?.map((s) => ({
-      id: s.id,
-      name: s.name,
-      fileId: s.file_id,
-    })) ?? [];
+    return (
+      stamps.value?.map((s) => ({
+        id: s.id,
+        name: s.name,
+        fileId: s.file_id,
+      })) ?? []
+    );
   });
 
   const userIconFileIdMap = computed(() => {
@@ -95,7 +99,7 @@ const createMarkdownRenderer = () => {
     },
   };
 
-  const markdownIt = new traQMarkdownIt(store, undefined, "https://q.trap.jp");
+  const markdownIt = new traQMarkdownIt(store, undefined, 'https://q.trap.jp');
 
   const renderToHtml = (content: string) => {
     return markdownIt.render(content).renderedText;
@@ -109,16 +113,15 @@ const createMarkdownRenderer = () => {
 
 export const provideMarkdownRenderer = () => {
   const renderer = createMarkdownRenderer();
-  provide("markdownRenderer", renderer);
+  provide('markdownRenderer', renderer);
   return renderer;
 };
 
 export const useMarkdownRenderer = () => {
-  const renderer = inject<ReturnType<typeof createMarkdownRenderer>>(
-    "markdownRenderer",
-  );
+  const renderer =
+    inject<ReturnType<typeof createMarkdownRenderer>>('markdownRenderer');
   if (!renderer) {
-    throw new Error("Markdown renderer is not provided");
+    throw new Error('Markdown renderer is not provided');
   }
   return renderer;
 };

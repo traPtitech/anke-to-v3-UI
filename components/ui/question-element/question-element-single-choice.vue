@@ -4,6 +4,9 @@ import {
   type QuestionElementMode,
   type QuestionElementSingleChoice,
 } from './composables';
+import QuestionAnswerChip from './question-answer-chip.vue';
+import QuestionAnswerEmpty from './question-answer-empty.vue';
+import QuestionAnswerView from './question-answer-view.vue';
 
 const props = defineProps<{
   mode: QuestionElementMode;
@@ -17,7 +20,20 @@ const optionIds = question.value.options.map(() => useId());
 </script>
 
 <template>
-  <div class="question-element-single-choice-container">
+  <QuestionAnswerView v-if="props.mode === 'view'">
+    <QuestionAnswerChip
+      v-for="option in question.options"
+      :key="option"
+      :selected="question.answer === option"
+    >
+      {{ option }}
+    </QuestionAnswerChip>
+    <QuestionAnswerEmpty
+      v-if="!question.answer"
+      :break-before="question.options.length > 0"
+    />
+  </QuestionAnswerView>
+  <div v-else class="question-element-single-choice-container">
     <div
       v-for="(option, i) in question.options"
       :key="i"
@@ -31,8 +47,7 @@ const optionIds = question.value.options.map(() => useId());
         :aria-required="question.is_required"
         :input-props="{ required: question.is_required }"
         :pt="{ hiddenInput: { required: question.is_required } }"
-        :class="{ 'p-invalid': props.mode === 'edit' && !valid }"
-        :readonly="props.mode === 'view'"
+        :class="{ 'p-invalid': !valid }"
       />
       <label :for="optionIds[i]" class="question-element-single-choice-label">
         {{ option }}

@@ -2,8 +2,139 @@
   box-sizing: border-box;
 }
 
+:root {
+  --app-primary-500: var(--p-primary-500);
+  --app-primary-600: var(--p-primary-600);
+  --app-primary-700: var(--p-primary-700);
+  --app-secondary-bg: color-mix(
+    in srgb,
+    var(--p-surface-0) 88%,
+    var(--p-surface-100)
+  );
+  --app-secondary-border: var(--p-surface-300);
+  --app-secondary-border-hover: var(--p-surface-400);
+  --app-secondary-text: var(--p-text-color);
+  --app-primary-disabled-bg: color-mix(
+    in srgb,
+    var(--p-primary-500) 12%,
+    var(--p-surface-0)
+  );
+  --app-primary-disabled-border: color-mix(
+    in srgb,
+    var(--p-primary-500) 24%,
+    var(--p-surface-0)
+  );
+  --app-primary-disabled-text: color-mix(
+    in srgb,
+    var(--p-primary-500) 60%,
+    var(--p-surface-0)
+  );
+  --app-secondary-disabled-bg: var(--p-surface-100);
+  --app-secondary-disabled-border: var(--p-surface-200);
+  --app-secondary-disabled-text: var(--p-text-muted-color);
+
+  --p-button-outlined-primary-border-color: var(--app-primary-500);
+  --p-button-outlined-primary-color: var(--app-primary-600);
+}
+
 .p-button {
-  font-weight: 500;
+  font-weight: 600;
+  border-radius: var(--p-border-radius-md);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.p-button.p-button-primary:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-primary-500) 24%, white);
+}
+
+.p-button.p-button-primary:disabled,
+.p-button.p-button-primary.p-disabled {
+  opacity: 1;
+  background-color: var(--app-primary-disabled-bg);
+  border-color: var(--app-primary-disabled-border);
+  color: var(--app-primary-disabled-text);
+}
+
+.p-button.p-button-secondary:disabled,
+.p-button.p-button-secondary.p-disabled {
+  opacity: 1;
+  background-color: var(--app-secondary-disabled-bg);
+  border-color: var(--app-secondary-disabled-border);
+  color: var(--app-secondary-disabled-text);
+}
+
+.p-button.p-button-primary {
+  background-color: var(--app-primary-500);
+  border-color: var(--app-primary-500);
+  color: white;
+}
+
+.p-button.p-button-primary:hover:not(:disabled) {
+  background-color: var(--app-primary-600);
+  border-color: var(--app-primary-600);
+}
+
+.p-button.p-button-primary:active:not(:disabled) {
+  background-color: var(--app-primary-700);
+  border-color: var(--app-primary-700);
+}
+
+.p-button.p-button-outlined.p-button-primary {
+  color: var(--app-primary-600);
+  border-color: var(--app-primary-600);
+  background-color: color-mix(in srgb, var(--app-primary-500) 7%, white);
+}
+
+.p-button.p-button-outlined.p-button-primary:hover:not(:disabled) {
+  color: var(--app-primary-700);
+  background-color: color-mix(in srgb, var(--app-primary-500) 12%, white);
+  border-color: var(--app-primary-700);
+}
+
+.p-button.p-button-outlined.p-button-primary:active:not(:disabled) {
+  color: var(--app-primary-700);
+  background-color: color-mix(in srgb, var(--app-primary-500) 18%, white);
+  border-color: var(--app-primary-700);
+}
+
+.p-button.p-button-secondary {
+  background-color: var(--app-secondary-bg);
+  border-color: var(--app-secondary-border);
+  color: var(--app-secondary-text);
+}
+
+.p-button.p-button-secondary:hover:not(:disabled) {
+  background-color: var(--p-surface-100);
+  border-color: var(--app-secondary-border-hover);
+}
+
+.p-button.p-button-outlined.p-button-secondary {
+  background-color: transparent;
+  border-color: var(--app-secondary-border);
+  color: var(--app-secondary-text);
+}
+
+.p-button.p-button-outlined.p-button-secondary:hover:not(:disabled) {
+  background-color: var(--p-surface-100);
+  border-color: var(--app-secondary-border-hover);
+}
+
+.p-button.p-button-text.p-button-primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--app-primary-500) 8%, white);
+}
+
+.p-button.p-button-danger.p-button-outlined {
+  border-color: var(--p-orange-400);
+  color: var(--p-orange-700);
+}
+
+.p-button.p-button-danger.p-button-outlined:hover:not(:disabled) {
+  background-color: var(--p-orange-50);
 }
 
 /* PrimeVue のスタイルを上書きできるように詳細度を上げる */
@@ -18,11 +149,7 @@
   color: var(--p-gray-400);
 }
 
-.p-button.p-button-icon-only {
-  height: 3rem;
-}
-
-.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+.p-select-panel .p-select-items .p-select-item {
   padding: 8px 16px;
 }
 
@@ -70,6 +197,16 @@
   background-color: hsl(0, 30%, 85%);
 }
 
-span.iconify {
+.p-menu-list {
+  padding: 0;
+}
+
+.questionnaire-form-container
+  .smooth-dnd-container.vertical
+  > .smooth-dnd-draggable-wrapper {
+  overflow: visible;
+}
+
+svg.iconify {
   flex-shrink: 0;
 }

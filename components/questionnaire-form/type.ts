@@ -1,28 +1,28 @@
-import type { components } from "~/composables/type-fetch/anke-to/openapi";
+import type { components } from '~/composables/type-fetch/anke-to/openapi';
 
-export type UserSpecifier = components["schemas"]["UsersAndGroups"];
+export type UserSpecifier = components['schemas']['UsersAndGroups'];
 
-export type QuestionSettingsBase = components["schemas"]["QuestionBase"] & {
+export type QuestionSettingsBase = components['schemas']['QuestionBase'] & {
   question_id: number;
 };
 
 export type QuestionSettingsText =
-  components["schemas"]["QuestionSettingsText"];
+  components['schemas']['QuestionSettingsText'];
 
 export type QuestionSettingsTextLong =
-  components["schemas"]["QuestionSettingsTextLong"];
+  components['schemas']['QuestionSettingsTextLong'];
 
 export type QuestionSettingsNumber =
-  components["schemas"]["QuestionSettingsNumber"];
+  components['schemas']['QuestionSettingsNumber'];
 
 export type QuestionSettingsSingleChoice =
-  components["schemas"]["QuestionSettingsSingleChoice"];
+  components['schemas']['QuestionSettingsSingleChoice'];
 
 export type QuestionSettingsMultipleChoice =
-  components["schemas"]["QuestionSettingsMultipleChoice"];
+  components['schemas']['QuestionSettingsMultipleChoice'];
 
 export type QuestionSettingsScale =
-  components["schemas"]["QuestionSettingsScale"];
+  components['schemas']['QuestionSettingsScale'];
 
 export type QuestionSettingsByType =
   | QuestionSettingsText
@@ -34,8 +34,9 @@ export type QuestionSettingsByType =
 
 export type QuestionSettings = QuestionSettingsBase & QuestionSettingsByType;
 
-export type QuestionnaireFormSettings =
-  & Omit<components["schemas"]["NewQuestionnaire"], "questions">
-  & {
-    questions: QuestionSettings[];
-  };
+export type QuestionnaireFormSettings = Omit<
+  components['schemas']['NewQuestionnaire'],
+  'questions'
+> & {
+  questions: QuestionSettings[];
+};

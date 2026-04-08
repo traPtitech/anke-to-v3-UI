@@ -6,7 +6,11 @@
 
 <style scoped lang="scss">
 .questionnaire-label {
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--p-text-muted-color);
+  margin-bottom: 4px;
 }
 </style>

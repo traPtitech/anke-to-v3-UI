@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonLink from '~/components/ui/button-link.vue';
 import {
   useGetMyRemindStatus,
   useMe,
@@ -6,7 +7,14 @@ import {
 import { useQuestionnaireActions } from './action';
 import type { QuestionnaireDetail, ResShareType } from './type';
 
-const props = defineProps<{ detail: QuestionnaireDetail }>();
+const props = defineProps<{
+  detail: QuestionnaireDetail;
+  myResponses: {
+    response_id: number;
+    modified_at: string;
+    is_draft: boolean;
+  }[];
+}>();
 
 const { data: me } = useMe();
 const { actionRespondLater, actionNotRespond } = useQuestionnaireActions();
@@ -14,15 +22,25 @@ const { data: myRemindStatus } = useGetMyRemindStatus(
   props.detail.questionnaire_id,
 );
 
+const latestDraft = computed(() => {
+  const drafts = props.myResponses.filter((r) => r.is_draft);
+  if (drafts.length === 0) return null;
+  return drafts.reduce(
+    (latest, current) =>
+      new Date(current.modified_at) > new Date(latest.modified_at)
+        ? current
+        : latest,
+    drafts[0],
+  );
+});
+
 const canRespond = computed(() => {
-  // 既に回答済み
   if (
     !props.detail.is_duplicate_answer_allowed &&
     props.detail.respondents.includes(me.value?.name ?? '')
   )
     return false;
 
-  // 期限なし
   if (props.detail.response_due_date_time === undefined) return true;
 
   const now = new Date();
@@ -47,61 +65,78 @@ const isRemindEnabled = computed(
   () => myRemindStatus.value?.is_remind_enabled ?? false,
 );
 
-const isRespondLaterDisabled = computed(
-  () => !canRespond.value || isRemindEnabled.value,
+const remindSwitchId = computed(
+  () => `questionnaire-remind-switch-${props.detail.questionnaire_id}`,
 );
 
-const isNotRespondDisabled = computed(
-  () => !canRespond.value || !isRemindEnabled.value,
-);
+const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
+  const isEnabled = nextValue ?? false;
+
+  if (isEnabled === isRemindEnabled.value) {
+    return;
+  }
+
+  if (isEnabled) {
+    void actionRespondLater(props.detail.questionnaire_id);
+    return;
+  }
+
+  void actionNotRespond(props.detail.questionnaire_id);
+};
 </script>
 
 <template>
   <div class="questionnaire-actions-container">
-    <div class="questionnaire-actions-row questionnaire-actions-row-primary">
-      <Button
-        class="questionnaire-action-button"
+    <div class="questionnaire-actions-row-primary">
+      <ButtonLink
+        v-if="latestDraft && canRespond"
+        class="questionnaire-action-button questionnaire-action-button-respond"
+        variant="primary"
+        :to="`/responses/${latestDraft.response_id}/edit`"
+      >
+        <Icon name="mdi:file-document-edit" size="20px" />
+        <span>下書きの続きを書く</span>
+      </ButtonLink>
+      <ButtonLink
+        v-else
+        class="questionnaire-action-button questionnaire-action-button-respond"
+        variant="primary"
+        :to="`/questionnaires/${detail.questionnaire_id}/responses/new`"
         :disabled="!canRespond"
-        @click="
-          $router.push(
-            `/questionnaires/${detail.questionnaire_id}/responses/new`,
-          )
-        "
       >
-        <Icon name="mdi:send" size="24px" />
+        <Icon name="mdi:send" size="20px" />
         <span>回答する</span>
-      </Button>
-      <Button
+      </ButtonLink>
+      <ButtonLink
         class="questionnaire-action-button"
-        outlined
+        variant="secondary"
+        :to="`/questionnaires/${detail.questionnaire_id}/result`"
         :disabled="!canViewResult"
-        @click="
-          $router.push(`/questionnaires/${detail.questionnaire_id}/result`)
-        "
       >
-        <Icon name="mdi:text-box-multiple-outline" size="24px" />
+        <Icon name="mdi:text-box-multiple-outline" size="20px" />
         <span>結果を見る</span>
-      </Button>
+      </ButtonLink>
     </div>
-    <div class="questionnaire-actions-row questionnaire-actions-row-secondary">
-      <Button
+    <div class="questionnaire-actions-row-secondary">
+      <ButtonLink
         class="questionnaire-action-button"
-        outlined
-        :disabled="isRespondLaterDisabled"
-        @click="actionRespondLater(detail.questionnaire_id)"
+        variant="secondary"
+        size="sm"
+        :to="`/questionnaires/${detail.questionnaire_id}/questions`"
       >
-        <Icon name="mdi:send-clock" size="24px" />
-        <span>後で回答する</span>
-      </Button>
-      <Button
-        class="questionnaire-action-button"
-        outlined
-        :disabled="isNotRespondDisabled"
-        @click="actionNotRespond(detail.questionnaire_id)"
-      >
-        <Icon name="mdi:flag" size="24px" />
-        <span>回答しない</span>
-      </Button>
+        <Icon name="mdi:format-list-bulleted" size="18px" />
+        <span>質問一覧を見る</span>
+      </ButtonLink>
+      <div class="remind-switch-item">
+        <ToggleSwitch
+          :input-id="remindSwitchId"
+          :model-value="isRemindEnabled"
+          @update:model-value="handleRemindSwitchUpdate"
+        />
+        <label class="remind-switch-label" :for="remindSwitchId">
+          このアンケートに関するリマインドを受け取る
+        </label>
+      </div>
     </div>
   </div>
 </template>
@@ -111,25 +146,46 @@ const isNotRespondDisabled = computed(
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 12px 0;
 }
 
-.questionnaire-actions-row {
+.questionnaire-actions-row-primary {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
 }
 
-@container (max-width: 360px) {
-  .questionnaire-actions-row {
-    grid-template-columns: 1fr;
-  }
+.questionnaire-actions-row-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .questionnaire-action-button {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
+  flex: 1;
+  justify-content: center;
+}
+
+.remind-switch-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.remind-switch-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--p-text-color);
+  cursor: pointer;
+}
+
+@container (max-width: 480px) {
+  .questionnaire-actions-row-primary {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

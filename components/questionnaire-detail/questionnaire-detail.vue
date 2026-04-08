@@ -3,68 +3,141 @@ import QuestionnaireBasicInfoContainer from '~/components/ui/questionnaire/basic
 import QuestionnaireMiscInfoContainer from '~/components/ui/questionnaire/misc-info-container.vue';
 import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
 import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
+import { useMe } from '~/composables/type-fetch/anke-to/client';
+import type { GatewayResponse } from '~/models/response';
 import QuestionnaireActions from './questionnaire-actions.vue';
 import QuestionnaireAdminActions from './questionnaire-admin-actions.vue';
 import QuestionnaireMyResponsesContainer from './questionnaire-my-responses-container.vue';
 import type { QuestionnaireDetail } from './type';
 
-defineProps<{ detail: QuestionnaireDetail }>();
+const props = defineProps<{
+  detail: QuestionnaireDetail;
+  myResponses: GatewayResponse[];
+}>();
+
+const { data: me } = useMe();
+const isQuestionnaireAdmin = computed(() =>
+  props.detail.admins.includes(me.value?.name ?? ''),
+);
 </script>
 
 <template>
-  <div class="questionnaire-detail-container">
-    <QuestionnaireTitleContainer :questionnaire="detail" />
-    <QuestionnaireBasicInfoContainer :questionnaire="detail" />
-    <QuestionnaireActions :detail="detail" />
-    <QuestionnaireRespondentsContainer :questionnaire="detail" />
-    <QuestionnaireMiscInfoContainer :questionnaire="detail" />
-    <QuestionnaireMyResponsesContainer :detail="detail" />
-    <QuestionnaireAdminActions :detail="detail" />
+  <div class="detail-page">
+    <div class="detail-title-area">
+      <QuestionnaireTitleContainer :questionnaire="detail" />
+    </div>
+
+    <div class="detail-columns">
+      <div class="detail-main">
+        <section class="main-section">
+          <QuestionnaireActions :detail="detail" :my-responses="myResponses" />
+        </section>
+
+        <section class="main-section">
+          <QuestionnaireMyResponsesContainer
+            :detail="detail"
+            :responses="myResponses"
+          />
+        </section>
+
+        <section v-if="isQuestionnaireAdmin" class="main-section">
+          <QuestionnaireAdminActions :detail="detail" />
+        </section>
+      </div>
+
+      <aside class="detail-sidebar">
+        <QuestionnaireBasicInfoContainer :questionnaire="detail" />
+        <QuestionnaireRespondentsContainer :questionnaire="detail" />
+        <QuestionnaireMiscInfoContainer :questionnaire="detail" />
+      </aside>
+    </div>
   </div>
 </template>
 
-<style lang="scss">
-.questionnaire-detail-container {
+<style lang="scss" scoped>
+.detail-page {
+  --detail-section-radius: 6px;
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  container-type: inline-size;
+  gap: 24px;
   padding-bottom: 50vh;
+  container-type: inline-size;
 }
 
-.questionnaire-detail-element-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+.detail-title-area {
+  border: 1px solid var(--p-surface-200);
+  background-color: var(--p-surface-0);
+  border-radius: var(--detail-section-radius);
   padding: 32px;
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
 }
 
-.questionnaire-detail-element {
+.detail-title-area h1 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
-.questionnaire-detail-element-label {
-  font-weight: bold;
-  font-size: 14px;
+.detail-columns {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
 }
 
-@media screen and (max-width: variables.$breakpoint-lg) {
-  .questionnaire-target-container {
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.main-section {
+  padding: 24px;
+  border-radius: var(--detail-section-radius);
+  border: 1px solid var(--p-surface-200);
+  background-color: var(--p-surface-0);
+}
+
+.detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 20px;
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--detail-section-radius);
+  background-color: var(--p-surface-0);
+  position: sticky;
+  top: 24px;
+}
+
+@container (max-width: 768px) {
+  .detail-columns {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .detail-sidebar {
+    position: static;
   }
 }
 
-@media screen and (max-width: variables.$breakpoint-md) {
-  .questionnaire-detail-element-container {
-    grid-template-columns: 1fr;
+@container (max-width: 480px) {
+  .detail-title-area {
+    padding: 20px;
   }
-}
 
-@media screen and (max-width: variables.$breakpoint-sm) {
-  .questionnaire-detail-element-container {
+  .detail-title-area h1 {
+    font-size: 20px;
+  }
+
+  .main-section {
+    padding: 16px;
+  }
+
+  .detail-sidebar {
     padding: 16px;
   }
 }

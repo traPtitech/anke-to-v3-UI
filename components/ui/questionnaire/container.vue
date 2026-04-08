@@ -16,26 +16,16 @@ const props = defineProps<{
 
 <style scoped lang="scss">
 .questionnaire-grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  padding: 32px;
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
-}
-
-@media screen and (max-width: variables.$breakpoint-md) {
-  .questionnaire-grid-container {
-    grid-template-columns: 1fr;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0;
 }
 
 .questionnaire-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 32px;
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
+  padding: 0;
 }
 </style>

@@ -2,7 +2,6 @@
 import UserAndGroupList from '~/components/questionnaire-detail/user-and-group-list.vue';
 import UserList from '~/components/questionnaire-detail/user-list.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
-import QuestionnaireContainer from './container.vue';
 import QuestionnaireLabel from './label.vue';
 
 const props = defineProps<{
@@ -29,31 +28,67 @@ const nonAnsweredTargets = computed(() =>
 </script>
 
 <template>
-  <QuestionnaireContainer grid>
-    <div>
-      <QuestionnaireLabel>対象者</QuestionnaireLabel>
-      <UserAndGroupList
-        :specifier="props.questionnaire.target"
-        :actual-users="props.questionnaire.targets"
-      />
-    </div>
-    <div class="questionnaire-target-result">
-      <div>
-        <QuestionnaireLabel>回答した人</QuestionnaireLabel>
-        <UserList :users="props.questionnaire.respondents" />
+  <div class="sidebar-section">
+    <h3 class="sidebar-section-title">
+      <Icon name="mdi:account-multiple-outline" size="16px" />
+      <span>ユーザー</span>
+    </h3>
+    <div class="sidebar-people-list">
+      <div class="sidebar-people-item">
+        <QuestionnaireLabel>対象者</QuestionnaireLabel>
+        <UserAndGroupList
+          :specifier="props.questionnaire.target"
+          :actual-users="props.questionnaire.targets"
+          user-dialog-title="対象ユーザー一覧"
+          group-dialog-title="対象グループ一覧"
+        />
       </div>
-      <div>
-        <QuestionnaireLabel>まだ回答してない人</QuestionnaireLabel>
-        <UserList :users="nonAnsweredTargets" />
+      <div class="sidebar-people-item">
+        <QuestionnaireLabel>回答済み</QuestionnaireLabel>
+        <UserList
+          :users="props.questionnaire.respondents"
+          dialog-title="回答済みユーザー一覧"
+        />
+      </div>
+      <div class="sidebar-people-item">
+        <QuestionnaireLabel>未回答</QuestionnaireLabel>
+        <UserList
+          :users="nonAnsweredTargets"
+          dialog-title="未回答ユーザー一覧"
+        />
       </div>
     </div>
-  </QuestionnaireContainer>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.questionnaire-target-result {
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--p-text-color);
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--p-surface-200);
+}
+
+.sidebar-people-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.sidebar-people-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 </style>

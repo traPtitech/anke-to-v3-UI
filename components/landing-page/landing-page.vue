@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { type GatewayQuestionnaireSummary } from '~/models/questionnaire';
+import ButtonLink from '~/components/ui/button-link.vue';
+import type { GatewayQuestionnaireSummary } from '~/models/questionnaire';
 
-const props = defineProps<{
+const _props = defineProps<{
   questionnaires: GatewayQuestionnaireSummary[];
   questionnairesDraft: GatewayQuestionnaireSummary[];
   questionnairesHasDraft: GatewayQuestionnaireSummary[];
@@ -9,14 +10,6 @@ const props = defineProps<{
   questionnairesAdministeredByMe: GatewayQuestionnaireSummary[];
   questionnairesRespondedByMe: GatewayQuestionnaireSummary[];
 }>();
-
-const goToCreate = () => navigateTo('/questionnaires/new');
-const goToExplorer = () => navigateTo('/explorer');
-const goToExplorerTargetingMe = () =>
-  navigateTo({ path: '/explorer', query: { onlyTargetingMe: 'true' } });
-const goToExplorerDraft = () =>
-  navigateTo({ path: '/explorer', query: { isDraft: 'true' } });
-const goToAdministrates = () => navigateTo('/administrates');
 </script>
 
 <template>
@@ -26,39 +19,46 @@ const goToAdministrates = () => navigateTo('/administrates');
         <img src="~/assets/img/logo.svg" alt="anke-to" width="320" />
       </div>
       <div class="quick-links">
-        <Button
-          label="新規アンケート作成"
-          icon="pi pi-plus"
-          @click="goToCreate"
-        />
-        <Button
-          label="すべてのアンケート"
-          icon="pi pi-list"
-          severity="secondary"
-          outlined
-          @click="goToExplorer"
-        />
-        <Button
-          label="自分が対象のアンケート"
-          icon="pi pi-user"
-          severity="secondary"
-          outlined
-          @click="goToExplorerTargetingMe"
-        />
-        <Button
-          label="下書きアンケート"
-          icon="pi pi-pencil"
-          severity="secondary"
-          outlined
-          @click="goToExplorerDraft"
-        />
-        <Button
-          label="自分が管理しているアンケート"
-          icon="pi pi-cog"
-          severity="secondary"
-          outlined
-          @click="goToAdministrates"
-        />
+        <ButtonLink
+          class="quick-link-button"
+          to="/questionnaires/new"
+          variant="primary"
+        >
+          <Icon name="mdi:plus" size="18px" />
+          <span>新規アンケート作成</span>
+        </ButtonLink>
+        <ButtonLink
+          class="quick-link-button"
+          to="/explorer"
+          variant="secondary"
+        >
+          <Icon name="mdi:view-list" size="18px" />
+          <span>すべてのアンケート</span>
+        </ButtonLink>
+        <ButtonLink
+          class="quick-link-button"
+          :to="{ path: '/explorer', query: { filter: 'targeting' } }"
+          variant="secondary"
+        >
+          <Icon name="mdi:account" size="18px" />
+          <span>自分が対象のアンケート</span>
+        </ButtonLink>
+        <ButtonLink
+          class="quick-link-button"
+          :to="{ path: '/explorer', query: { filter: 'draft' } }"
+          variant="secondary"
+        >
+          <Icon name="mdi:pencil" size="18px" />
+          <span>下書きアンケート</span>
+        </ButtonLink>
+        <ButtonLink
+          class="quick-link-button"
+          to="/administrates"
+          variant="secondary"
+        >
+          <Icon name="mdi:cog-outline" size="18px" />
+          <span>自分が管理しているアンケート</span>
+        </ButtonLink>
       </div>
     </div>
   </div>
@@ -77,11 +77,7 @@ const goToAdministrates = () => navigateTo('/administrates');
   padding: 20px;
   border: 1px solid var(--p-surface-300);
   border-radius: var(--p-border-radius-lg);
-  background: linear-gradient(
-    180deg,
-    var(--p-surface-0) 0%,
-    var(--p-surface-50) 100%
-  );
+  background-color: var(--p-surface-0);
 }
 
 .title-logo {
@@ -125,6 +121,10 @@ const goToAdministrates = () => navigateTo('/administrates');
   display: flex;
   justify-content: center;
   gap: 12px;
+}
+
+.quick-link-button {
+  white-space: nowrap;
 }
 
 .questionnaire-list-containers {

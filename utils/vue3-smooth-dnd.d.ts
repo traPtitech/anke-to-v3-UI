@@ -1,9 +1,9 @@
 /* eslint-disable */
 
-declare module "vue3-smooth-dnd" {
-  export * from "smooth-dnd";
+declare module 'vue3-smooth-dnd' {
+  export * from 'smooth-dnd';
 
-  export const Container: import("vue").DefineComponent<
+  export const Container: import('vue').DefineComponent<
     {
       orientation?: string;
       removeOnDropOut?: boolean;
@@ -32,14 +32,14 @@ declare module "vue3-smooth-dnd" {
     {},
     {
       drop?: Function;
-      "drag-start"?: Function;
-      "drag-end"?: Function;
-      "drag-enter"?: Function;
-      "drag-leave"?: Function;
-      "drop-ready"?: Function;
+      'drag-start'?: Function;
+      'drag-end'?: Function;
+      'drag-enter'?: Function;
+      'drag-leave'?: Function;
+      'drop-ready'?: Function;
     }
   >;
-  export const Draggable: import("vue").DefineComponent<
+  export const Draggable: import('vue').DefineComponent<
     { tag?: string },
     {},
     any

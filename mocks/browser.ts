@@ -1,7 +1,7 @@
-import { handlers } from "./handlers";
+import { handlers } from './handlers';
 
 export const setupMockWorker = async () => {
-  const { setupWorker } = await import("msw/browser");
+  const { setupWorker } = await import('msw/browser');
 
   const worker = setupWorker(...handlers);
 
