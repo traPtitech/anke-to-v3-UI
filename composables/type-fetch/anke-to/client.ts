@@ -3,12 +3,21 @@ import type { paths } from './openapi';
 
 const client = createClient<paths>({ baseUrl: '/api' });
 
+const hashOption = (option: object | undefined) => {
+  if (!option) return '';
+  return `${Object.entries(option)
+    .toSorted(([keyA], [keyB]) => keyA.localeCompare(keyB))
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&')}`;
+};
+
 export type GetQuestionnairesOption =
   paths['/questionnaires']['get']['parameters']['query'];
+
 export const useGetQuestionnaires = (option?: GetQuestionnairesOption) =>
-  useAsyncData('/questionnaires', async () => {
-    return await fetchQuestionnaires(option);
-  });
+  useAsyncData(`/questionnaires!${hashOption(option)}`, () =>
+    fetchQuestionnaires(option),
+  );
 
 export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
   const res = await client.GET('/questionnaires', {
@@ -21,9 +30,7 @@ export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
 };
 
 export const useGetQuestionnaire = (id: number) =>
-  useAsyncData(`/questionnaires/${id}`, async () => {
-    return await fetchQuestionnaire(id);
-  });
+  useAsyncData(`/questionnaires/${id}`, () => fetchQuestionnaire(id));
 
 export const fetchQuestionnaire = async (questionnaireID: number) => {
   const res = await client.GET('/questionnaires/{questionnaireID}', {
@@ -139,9 +146,10 @@ export const useGetQuestionnaireResponses = (
   questionnaireID: number,
   params?: GetQuestionnaireResponsesParams,
 ) =>
-  useAsyncData(`/questionnaires/${questionnaireID}/responses`, async () => {
-    return await fetchQuestionnaireResponses(questionnaireID, params);
-  });
+  useAsyncData(
+    `/questionnaires/${questionnaireID}/responses!${hashOption(params)}`,
+    () => fetchQuestionnaireResponses(questionnaireID, params),
+  );
 
 export const useGetMyResponses = () =>
   useAsyncData(`/responses/myResponses`, async () => {
