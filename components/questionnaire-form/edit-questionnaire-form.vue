@@ -28,16 +28,11 @@ const savedSnapshot = ref(JSON.stringify(state));
 const isDirty = computed(() => JSON.stringify(state) !== savedSnapshot.value);
 
 const handleBackToDetail = async () => {
-  if (!isDirty.value) {
-    await navigateTo(`/questionnaires/${props.questionnaire.questionnaire_id}`);
-    return;
-  }
-
-  const shouldLeave = confirm(
-    '保存していない変更は破棄されます。アンケート詳細画面に戻りますか？',
-  );
-  if (!shouldLeave) {
-    return;
+  if (isDirty.value) {
+    const shouldLeave = confirm(
+      '保存していない変更は破棄されます。アンケート詳細画面に戻りますか？',
+    );
+    if (!shouldLeave) return;
   }
 
   await navigateTo(`/questionnaires/${props.questionnaire.questionnaire_id}`);
@@ -115,18 +110,18 @@ const handleSend = async () => {
 
 <template>
   <div class="edit-questionnaire-container">
-    <ButtonLink
-      :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
-      class="edit-back-link"
-      variant="secondary"
-      @click.prevent="handleBackToDetail"
-    >
-      <Icon name="mdi:chevron-left" size="24px" />
-      <span>
-        アンケート詳細画面に戻る
-        <template v-if="isDirty">（未保存の変更は破棄されます）</template>
-      </span>
-    </ButtonLink>
+    <div class="edit-questionnaire-nav">
+      <ButtonLink
+        :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
+        class="edit-back-link"
+        variant="secondary"
+        size="sm"
+        @click.prevent="handleBackToDetail"
+      >
+        <Icon name="mdi:chevron-left" size="20px" />
+        <span>アンケート詳細に戻る</span>
+      </ButtonLink>
+    </div>
 
     <QuestionnaireFormBase v-model="state">
       <template #buttons>
@@ -151,6 +146,14 @@ const handleSend = async () => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.edit-questionnaire-nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
 }
 
 .edit-back-link {

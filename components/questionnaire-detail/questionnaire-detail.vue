@@ -4,12 +4,16 @@ import QuestionnaireMiscInfoContainer from '~/components/ui/questionnaire/misc-i
 import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/respondents-container.vue';
 import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
 import { useMe } from '~/composables/type-fetch/anke-to/client';
+import type { GatewayResponse } from '~/models/response';
 import QuestionnaireActions from './questionnaire-actions.vue';
 import QuestionnaireAdminActions from './questionnaire-admin-actions.vue';
 import QuestionnaireMyResponsesContainer from './questionnaire-my-responses-container.vue';
 import type { QuestionnaireDetail } from './type';
 
-const props = defineProps<{ detail: QuestionnaireDetail }>();
+const props = defineProps<{
+  detail: QuestionnaireDetail;
+  myResponses: GatewayResponse[];
+}>();
 
 const { data: me } = useMe();
 const isQuestionnaireAdmin = computed(() =>
@@ -26,11 +30,14 @@ const isQuestionnaireAdmin = computed(() =>
     <div class="detail-columns">
       <div class="detail-main">
         <section class="main-section">
-          <QuestionnaireActions :detail="detail" />
+          <QuestionnaireActions :detail="detail" :my-responses="myResponses" />
         </section>
 
         <section class="main-section">
-          <QuestionnaireMyResponsesContainer :detail="detail" />
+          <QuestionnaireMyResponsesContainer
+            :detail="detail"
+            :responses="myResponses"
+          />
         </section>
 
         <section v-if="isQuestionnaireAdmin" class="main-section">

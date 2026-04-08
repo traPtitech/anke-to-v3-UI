@@ -22,14 +22,18 @@ export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
 
 export const useGetQuestionnaire = (id: number) =>
   useAsyncData(`/questionnaires/${id}`, async () => {
-    const res = await client.GET('/questionnaires/{questionnaireID}', {
-      params: { path: { questionnaireID: id } },
-    });
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
+    return await fetchQuestionnaire(id);
   });
+
+export const fetchQuestionnaire = async (questionnaireID: number) => {
+  const res = await client.GET('/questionnaires/{questionnaireID}', {
+    params: { path: { questionnaireID } },
+  });
+  if (res.data === undefined) {
+    throw new Error('No data returned from the API');
+  }
+  return res.data;
+};
 
 export const fetchMyRemindStatus = async (questionnaireID: number) => {
   const res = await client.GET(
@@ -118,21 +122,25 @@ export const patchQuestionnaireById = async (
 type GetQuestionnaireResponsesParams =
   paths['/questionnaires/{questionnaireID}/responses']['get']['parameters']['query'];
 
+export const fetchQuestionnaireResponses = async (
+  questionnaireID: number,
+  params?: GetQuestionnaireResponsesParams,
+) => {
+  const res = await client.GET('/questionnaires/{questionnaireID}/responses', {
+    params: { path: { questionnaireID }, query: params },
+  });
+  if (res.data === undefined) {
+    throw new Error('No data returned from the API');
+  }
+  return res.data;
+};
+
 export const useGetQuestionnaireResponses = (
   questionnaireID: number,
   params?: GetQuestionnaireResponsesParams,
 ) =>
   useAsyncData(`/questionnaires/${questionnaireID}/responses`, async () => {
-    const res = await client.GET(
-      '/questionnaires/{questionnaireID}/responses',
-      {
-        params: { path: { questionnaireID }, query: params },
-      },
-    );
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
+    return await fetchQuestionnaireResponses(questionnaireID, params);
   });
 
 export const useGetMyResponses = () =>
@@ -193,7 +201,10 @@ export const patchResponse = async (
   await refreshNuxtData(`/responses/${responseID}`);
 };
 
-export const deleteResponse = async (responseID: number) => {
+export const deleteResponse = async (
+  responseID: number,
+  questionnaireId?: number,
+) => {
   const res = await client.DELETE('/responses/{responseID}', {
     params: { path: { responseID } },
   });
@@ -202,7 +213,11 @@ export const deleteResponse = async (responseID: number) => {
     throw new Error('Failed to delete response');
   }
 
+  await refreshNuxtData('/responses/myResponses');
   await refreshNuxtData(`/responses/${responseID}`);
+  if (questionnaireId !== undefined) {
+    await refreshNuxtData(`/questionnaires/${questionnaireId}/responses`);
+  }
 };
 
 export const useMe = () =>

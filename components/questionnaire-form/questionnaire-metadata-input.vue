@@ -91,13 +91,18 @@ const isAnonymousId = useId();
       <div class="form-element">
         <label class="form-bottom-switch" :for="allowDuplicateId">
           <Checkbox
+            v-model="state.is_duplicate_answer_allowed"
             :input-id="allowDuplicateId"
-            :value="state.is_duplicate_answer_allowed"
+            binary
           />
           <p class="form-label">複数回答を許可</p>
         </label>
         <label class="form-element form-bottom-switch" :for="isAnonymousId">
-          <Checkbox :value="state.is_anonymous" :input-id="isAnonymousId" />
+          <Checkbox
+            v-model="state.is_anonymous"
+            :input-id="isAnonymousId"
+            binary
+          />
           <p class="form-label">匿名回答</p>
         </label>
       </div>

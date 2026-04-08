@@ -1,17 +1,12 @@
 <script lang="ts" setup>
 import type { QuestionnaireDetail } from '~/components/questionnaire-detail/type';
-import {
-  deleteResponse,
-  useGetQuestionnaireResponses,
-} from '~/composables/type-fetch/anke-to/client';
+import { deleteResponse } from '~/composables/type-fetch/anke-to/client';
+import type { GatewayResponse } from '~/models/response';
 
-const props = defineProps<{ detail: QuestionnaireDetail }>();
-const { data, refresh } = useGetQuestionnaireResponses(
-  props.detail.questionnaire_id,
-  {
-    onlyMyResponse: true,
-  },
-);
+const props = defineProps<{
+  detail: QuestionnaireDetail;
+  responses: GatewayResponse[];
+}>();
 
 const deleting = ref<number | null>(null);
 const isDueOver = computed(() => {
@@ -27,8 +22,7 @@ const handleDelete = async (responseId: number) => {
   if (!confirm('この回答を削除します。よろしいですか？')) return;
   deleting.value = responseId;
   try {
-    await deleteResponse(responseId);
-    await refresh();
+    await deleteResponse(responseId, props.detail.questionnaire_id);
   } catch {
     alert('削除に失敗しました');
   } finally {
@@ -46,13 +40,12 @@ const handleDelete = async (responseId: number) => {
     <small v-if="isDueOver" class="due-over-note">
       回答期限を過ぎているため、回答の編集・削除はできません。
     </small>
-    <div v-if="data === undefined" class="status-text">読み込み中...</div>
-    <div v-else-if="data.length === 0" class="status-text">
+    <div v-if="responses.length === 0" class="status-text">
       まだ回答していません
     </div>
     <div v-else class="response-list">
       <div
-        v-for="response in data"
+        v-for="response in responses"
         :key="response.response_id"
         class="response-item"
       >

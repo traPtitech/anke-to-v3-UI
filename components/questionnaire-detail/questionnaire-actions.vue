@@ -2,13 +2,19 @@
 import ButtonLink from '~/components/ui/button-link.vue';
 import {
   useGetMyRemindStatus,
-  useGetQuestionnaireResponses,
   useMe,
 } from '~/composables/type-fetch/anke-to/client';
 import { useQuestionnaireActions } from './action';
 import type { QuestionnaireDetail, ResShareType } from './type';
 
-const props = defineProps<{ detail: QuestionnaireDetail }>();
+const props = defineProps<{
+  detail: QuestionnaireDetail;
+  myResponses: {
+    response_id: number;
+    modified_at: string;
+    is_draft: boolean;
+  }[];
+}>();
 
 const { data: me } = useMe();
 const { actionRespondLater, actionNotRespond } = useQuestionnaireActions();
@@ -16,16 +22,8 @@ const { data: myRemindStatus } = useGetMyRemindStatus(
   props.detail.questionnaire_id,
 );
 
-const { data: responses } = useGetQuestionnaireResponses(
-  props.detail.questionnaire_id,
-  {
-    onlyMyResponse: true,
-  },
-);
-
 const latestDraft = computed(() => {
-  if (!responses.value) return null;
-  const drafts = responses.value.filter((r) => r.is_draft);
+  const drafts = props.myResponses.filter((r) => r.is_draft);
   if (drafts.length === 0) return null;
   return drafts.reduce(
     (latest, current) =>
@@ -120,6 +118,15 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
       </ButtonLink>
     </div>
     <div class="questionnaire-actions-row-secondary">
+      <ButtonLink
+        class="questionnaire-action-button"
+        variant="secondary"
+        size="sm"
+        :to="`/questionnaires/${detail.questionnaire_id}/questions`"
+      >
+        <Icon name="mdi:format-list-bulleted" size="18px" />
+        <span>質問一覧を見る</span>
+      </ButtonLink>
       <div class="remind-switch-item">
         <ToggleSwitch
           :input-id="remindSwitchId"
@@ -151,6 +158,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
 }
 
