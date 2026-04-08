@@ -33,8 +33,8 @@ const questionnaireError = computed(
 usePageSeo({
   title: computed(() =>
     questionnaire.value
-      ? `回答詳細: ${questionnaire.value.title}`
-      : `回答詳細 #${responseId}`,
+      ? `「${questionnaire.value.title}」への回答`
+      : '読み込み中...',
   ),
   description: '回答内容の詳細を確認できます。',
 });

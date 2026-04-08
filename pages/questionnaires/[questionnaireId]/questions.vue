@@ -12,9 +12,7 @@ const { data, error, refresh } = useGetQuestionnaire(questionnaireId);
 
 usePageSeo({
   title: computed(() =>
-    data.value
-      ? `質問一覧: ${data.value.title}`
-      : `質問一覧 #${questionnaireId}`,
+    data.value ? `「${data.value.title}」の質問一覧` : '読み込み中...',
   ),
   description: 'アンケートに含まれる質問を一覧で確認できます。',
 });

@@ -33,8 +33,8 @@ const questionnaireError = computed(
 usePageSeo({
   title: computed(() =>
     questionnaire.value
-      ? `回答編集: ${questionnaire.value.title}`
-      : `回答編集 #${responseId}`,
+      ? `「${questionnaire.value.title}」への回答を編集`
+      : '読み込み中...',
   ),
   description: '送信済み回答の内容を編集します。',
 });

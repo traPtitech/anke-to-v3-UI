@@ -24,9 +24,7 @@ const {
 
 usePageSeo({
   title: computed(() =>
-    questionnaire.value
-      ? `アンケート詳細: ${questionnaire.value.title}`
-      : `アンケート詳細 #${questionnaireId}`,
+    questionnaire.value ? questionnaire.value.title : '読み込み中...',
   ),
   description: 'アンケートの詳細・回答状況・各種操作を確認できます。',
 });

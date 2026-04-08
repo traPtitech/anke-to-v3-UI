@@ -23,8 +23,8 @@ const {
 usePageSeo({
   title: computed(() =>
     questionnaire.value
-      ? `アンケート結果: ${questionnaire.value.title}`
-      : `アンケート結果 #${questionnaireId}`,
+      ? `「${questionnaire.value.title}」の結果`
+      : '読み込み中...',
   ),
   description: 'アンケートの集計結果と回答一覧を確認できます。',
 });

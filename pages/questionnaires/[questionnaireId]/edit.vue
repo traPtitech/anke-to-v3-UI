@@ -10,9 +10,7 @@ const { data, error, refresh } = useGetQuestionnaire(questionnaireId);
 
 usePageSeo({
   title: computed(() =>
-    data.value
-      ? `アンケート編集: ${data.value.title}`
-      : `アンケート編集 #${questionnaireId}`,
+    data.value ? `「${data.value.title}」を編集` : '読み込み中...',
   ),
   description: 'アンケートのタイトルや質問内容を編集します。',
 });
