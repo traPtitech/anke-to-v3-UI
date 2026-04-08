@@ -24,7 +24,8 @@ const userIconSrc = computed(() => {
         <Icon class="search-icon" name="mdi:magnify" size="24px" />
         <InputText
           v-model="searchText"
-          placeholder="タイトル・説明を検索"
+          placeholder="タイトルで検索"
+          aria-label="アンケートのタイトルで検索"
           class="search-input"
         />
       </div>
@@ -46,6 +47,7 @@ const userIconSrc = computed(() => {
         class="header-action-responses"
         :to="{ path: '/explorer', hash: '#answered' }"
         title="自分の回答一覧へ"
+        aria-label="自分の回答一覧へ"
       >
         <img
           v-if="userIconSrc"
@@ -140,6 +142,9 @@ const userIconSrc = computed(() => {
 }
 
 .header-action-responses {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
   min-height: 40px;

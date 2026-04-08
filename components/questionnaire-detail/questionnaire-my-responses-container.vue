@@ -77,12 +77,14 @@ const handleDelete = async (responseId: number) => {
             class="action-btn edit-btn"
             :to="`/responses/${response.response_id}/edit`"
             title="編集する"
+            aria-label="編集する"
           >
             <Icon name="mdi:pencil-outline" size="16px" />
           </NuxtLink>
           <button
             class="action-btn delete-btn"
             title="削除する"
+            aria-label="削除する"
             :disabled="deleting === response.response_id"
             @click="handleDelete(response.response_id)"
           >

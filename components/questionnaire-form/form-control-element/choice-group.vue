@@ -238,8 +238,7 @@ const showChoiceCountRequiredError = (optionId: number, index: number) =>
 
 .choice-group-trailing-cell {
   grid-area: trailing;
-  display: flex;
-  align-items: center;
+  width: 44px;
 }
 
 .invalid-message {

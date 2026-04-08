@@ -103,6 +103,8 @@ watch(hasTargets, (value) => {
   if (!value) return;
   useCustomDueTime.value = true;
 });
+
+const responseDueDateNoDueId = useId();
 </script>
 
 <template>
@@ -115,7 +117,7 @@ watch(hasTargets, (value) => {
 
           <ToggleSwitch
             v-model="useCustomDueTime"
-            input-id="response-due-date-no-due"
+            :input-id="responseDueDateNoDueId"
             binary
           />
         </label>

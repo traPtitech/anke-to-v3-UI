@@ -13,6 +13,7 @@ const props = withDefaults(
       :first="0"
       :rows="1"
       :total-records="1"
+      tabindex="-1"
       template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
     />
 
@@ -34,6 +35,7 @@ const props = withDefaults(
       :rows="1"
       :total-records="1"
       template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+      tabindex="-1"
     />
   </div>
 </template>

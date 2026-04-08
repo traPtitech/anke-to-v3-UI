@@ -20,6 +20,13 @@ const filterHasMyDraft = defineModel<boolean>('filterHasMyDraft', {
 const filterUnpublishedOnly = defineModel<boolean>('filterUnpublishedOnly', {
   required: true,
 });
+
+const targetingMeId = useId();
+const administratedByMeId = useId();
+const hasMyResponseId = useId();
+const unansweredByMeId = useId();
+const hasMyDraftId = useId();
+const unpublishedOnlyId = useId();
 </script>
 
 <template>
@@ -27,34 +34,34 @@ const filterUnpublishedOnly = defineModel<boolean>('filterUnpublishedOnly', {
     <div class="advanced-filter-grid">
       <div class="advanced-filter-block">
         <div class="advanced-filter-title">回答</div>
-        <label class="advanced-switch-item" for="advanced-targeting">
+        <label class="advanced-switch-item" :for="targetingMeId">
           <Checkbox
             v-model="filterTargetingMe"
-            input-id="advanced-targeting"
+            :input-id="targetingMeId"
             binary
           />
           <span>自分が対象</span>
         </label>
-        <label class="advanced-switch-item" for="advanced-answered">
+        <label class="advanced-switch-item" :for="hasMyResponseId">
           <Checkbox
             v-model="filterHasMyResponse"
-            input-id="advanced-answered"
+            :input-id="hasMyResponseId"
             binary
           />
           <span>自分が回答済み</span>
         </label>
-        <label class="advanced-switch-item" for="advanced-unanswered">
+        <label class="advanced-switch-item" :for="unansweredByMeId">
           <Checkbox
             v-model="filterUnansweredByMe"
-            input-id="advanced-unanswered"
+            :input-id="unansweredByMeId"
             binary
           />
           <span>自分が未回答</span>
         </label>
-        <label class="advanced-switch-item" for="advanced-draft">
+        <label class="advanced-switch-item" :for="hasMyDraftId">
           <Checkbox
             v-model="filterHasMyDraft"
-            input-id="advanced-draft"
+            :input-id="hasMyDraftId"
             binary
           />
           <span>自分の下書きあり</span>
@@ -63,18 +70,18 @@ const filterUnpublishedOnly = defineModel<boolean>('filterUnpublishedOnly', {
 
       <div class="advanced-filter-block">
         <div class="advanced-filter-title">管理</div>
-        <label class="advanced-switch-item" for="advanced-admin">
+        <label class="advanced-switch-item" :for="administratedByMeId">
           <Checkbox
             v-model="filterAdministratedByMe"
-            input-id="advanced-admin"
+            :input-id="administratedByMeId"
             binary
           />
           <span>自分が管理中</span>
         </label>
-        <label class="advanced-switch-item" for="advanced-unpublished">
+        <label class="advanced-switch-item" :for="unpublishedOnlyId">
           <Checkbox
             v-model="filterUnpublishedOnly"
-            input-id="advanced-unpublished"
+            :input-id="unpublishedOnlyId"
             binary
           />
           <span>未公開 (下書き)</span>

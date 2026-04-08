@@ -24,6 +24,8 @@ const toggleSortMenu = (event: MouseEvent) => {
 const updateOnlyActiveDue = (value: boolean | undefined) => {
   emit('update:onlyActiveDue', value ?? false);
 };
+
+const toggleActiveId = useId();
 </script>
 
 <template>
@@ -79,9 +81,9 @@ const updateOnlyActiveDue = (value: boolean | undefined) => {
 
     <div class="quick-actions">
       <div class="due-toggle">
-        <label for="toggle-active-due">期限内のみ</label>
+        <label :for="toggleActiveId">期限内のみ</label>
         <ToggleSwitch
-          input-id="toggle-active-due"
+          :input-id="toggleActiveId"
           :model-value="props.onlyActiveDue"
           @update:model-value="updateOnlyActiveDue"
         />

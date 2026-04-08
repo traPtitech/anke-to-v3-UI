@@ -29,6 +29,9 @@ const responseViewableByOptions = Object.entries(
   label,
   value: value as GatewayResponseShareType,
 }));
+
+const allowDuplicateId = useId();
+const isAnonymousId = useId();
 </script>
 
 <template>
@@ -86,15 +89,15 @@ const responseViewableByOptions = Object.entries(
         </small>
       </div>
       <div class="form-element">
-        <label class="form-bottom-switch" for="allow-duplicate">
+        <label class="form-bottom-switch" :for="allowDuplicateId">
           <Checkbox
-            input-id="allow-duplicate"
+            :input-id="allowDuplicateId"
             :value="state.is_duplicate_answer_allowed"
           />
           <p class="form-label">複数回答を許可</p>
         </label>
-        <label class="form-element form-bottom-switch" for="is-anonymous">
-          <Checkbox :value="state.is_anonymous" input-id="is-anonymous" />
+        <label class="form-element form-bottom-switch" :for="isAnonymousId">
+          <Checkbox :value="state.is_anonymous" :input-id="isAnonymousId" />
           <p class="form-label">匿名回答</p>
         </label>
       </div>
