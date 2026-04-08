@@ -38,7 +38,6 @@ const handleSelectTab = (key: string) => {
 
 <style scoped lang="scss">
 .tab-row {
-  border-bottom: 1px solid var(--p-surface-300);
   padding: 10px 0;
   background-color: var(--p-surface-0);
 }

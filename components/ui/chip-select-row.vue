@@ -65,6 +65,8 @@ const emit = defineEmits<{
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  flex: 1;
   gap: 4px;
   padding: 10px 14px;
 }

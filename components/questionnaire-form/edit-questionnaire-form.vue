@@ -152,7 +152,7 @@ const handleSend = async () => {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 1024px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 

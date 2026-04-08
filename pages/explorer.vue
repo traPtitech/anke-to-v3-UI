@@ -239,6 +239,8 @@ watch(pageMax, (max) => {
 <style scoped lang="scss">
 .explorer-page {
   width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 16px;

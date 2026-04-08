@@ -90,7 +90,8 @@ const {
 .explorer-filter-panel {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  padding-top: 8px;
 }
 
 .filter-shell {

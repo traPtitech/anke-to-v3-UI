@@ -111,7 +111,7 @@ const handleAddQuestion = (
   flex-direction: column;
   gap: 16px;
   width: 100%;
-  max-width: 1024px;
+  max-width: 1080px;
   padding-bottom: 320px;
   margin: 0 auto;
   padding-right: 176px;
