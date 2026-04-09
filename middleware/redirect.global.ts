@@ -10,6 +10,7 @@ const legacyExplorerRedirectFilterByPath: Record<string, string | undefined> = {
   '/responses': buildTabFilterQuery('answered'),
 };
 
+// v1 からパスが変わった部分などをリダイレクトで対応する
 export default defineNuxtRouteMiddleware((to, _from) => {
   // before: /
   // after: /explorer
@@ -54,6 +55,18 @@ export default defineNuxtRouteMiddleware((to, _from) => {
     if (match !== null) {
       return {
         path: `/questionnaires/${match[1]}/result`,
+        query: to.query,
+      };
+    }
+  }
+
+  {
+    // before: /responses/new/:id
+    // after: /questionnaires/:id/responses/new
+    const match = to.path.match(/\/responses\/new\/(\d+)/);
+    if (match !== null) {
+      return {
+        path: `/questionnaires/${match[1]}/responses/new`,
         query: to.query,
       };
     }
