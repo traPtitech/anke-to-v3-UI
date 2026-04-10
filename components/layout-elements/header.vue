@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import ButtonLink from '~/components/ui/button-link.vue';
+import { buildTabFilterQuery } from '~/components/explorer/filter-query';
+import { explorerQueryKeys } from '~/composables/explorer/query-params';
 import { useMe } from '~/composables/type-fetch/anke-to/client';
 
 const searchText = defineModel<string>('search', { default: '' });
@@ -11,6 +13,8 @@ const userIconSrc = computed(() => {
   if (!name) return undefined;
   return `https://q.trap.jp/api/v3/public/icon/${name}`;
 });
+
+const answeredFilterQuery = buildTabFilterQuery('answered');
 </script>
 
 <template>
@@ -45,7 +49,12 @@ const userIconSrc = computed(() => {
       </ButtonLink>
       <NuxtLink
         class="header-action-responses"
-        :to="{ path: '/explorer', hash: '#answered' }"
+        :to="{
+          path: '/explorer',
+          query: {
+            [explorerQueryKeys.filter]: answeredFilterQuery,
+          },
+        }"
         title="自分の回答一覧へ"
         aria-label="自分の回答一覧へ"
       >

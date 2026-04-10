@@ -1,17 +1,15 @@
 import { getQueryValue } from './filter-query';
 
 export type SetQueryParamsOptions = {
-  clearHash?: boolean;
   removeKeys?: string[];
 };
 
 type QueryRoute = {
   query: Record<string, unknown>;
-  hash: string;
 };
 
 type QueryRouter = {
-  replace: (to: { query: Record<string, string>; hash: string }) => unknown;
+  replace: (to: { query: Record<string, string> }) => unknown;
 };
 
 export const toStringQueryRecord = (
@@ -75,14 +73,11 @@ export const setRouteQueryParams = async ({
     nextQuery[key] = value;
   });
 
-  const shouldClearHash = options.clearHash === true && route.hash.length > 0;
-
-  if (!hasQueryChanged(currentQuery, nextQuery) && !shouldClearHash) {
+  if (!hasQueryChanged(currentQuery, nextQuery)) {
     return;
   }
 
   await router.replace({
     query: nextQuery,
-    hash: shouldClearHash ? '' : route.hash,
   });
 };

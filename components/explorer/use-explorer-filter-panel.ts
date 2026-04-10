@@ -1,9 +1,11 @@
 import type { MenuItem } from 'primevue/menuitem';
 import type { Ref } from 'vue';
-import { explorerQueryKeys } from '~/composables/explorer/query-params';
 import {
-  buildFilterSetFromAdvancedState,
+  applyAdvancedFilterState,
+  findSelectedTab,
   parseAdvancedFilterState,
+  setFilterEnabled,
+  tabs,
 } from './filter-domain';
 import {
   buildFilterSignature,
@@ -11,30 +13,13 @@ import {
   buildTabCountQuery,
 } from './filter-payload';
 import {
-  findSelectedTab,
-  getQueryValue,
-  legacyFilterQueryKeys,
-  normalizeFilterSet,
-  parseFilterSet,
-  resolveTabFromHash,
-  serializeFilterSet,
-  tabFilterPresets,
-  tabs,
-} from './filter-query';
-import {
-  type SetQueryParamsOptions,
-  setRouteQueryParams,
-} from './filter-route';
-import {
   buildSortMenuLabel,
   getSortDirectionIcon,
   getSortDirectionLabel,
-  isSortCategory,
   sortDirectionOptions,
   sortFieldOptions,
 } from './filter-sort';
 import {
-  DEFAULT_SORT_CATEGORY,
   DEFAULT_SORT_DIRECTION,
   type ExplorerAdvancedFilterState,
   type ExplorerFilterPayload,
@@ -43,6 +28,7 @@ import {
   type SortDirection,
   type TabKey,
 } from './filter-types';
+import { useExplorerFilterUrlSync } from './use-explorer-filter-url-sync';
 
 type UseExplorerFilterPanelParams = {
   tabCounts: Ref<Partial<Record<TabKey, number | string>>>;
@@ -55,8 +41,14 @@ export const useExplorerFilterPanel = ({
   tabCountsLoading,
   onChange,
 }: UseExplorerFilterPanelParams) => {
-  const router = useRouter();
-  const route = useRoute();
+  const {
+    filterSet: currentFilterSet,
+    searchQuery,
+    sortState,
+    setFilterSet,
+    setSortState,
+    setTab,
+  } = useExplorerFilterUrlSync();
 
   const isFilterExpanded = ref(false);
 
@@ -85,47 +77,16 @@ export const useExplorerFilterPanel = ({
     dateSortDirectionPreference.value = direction;
   };
 
-  const setQueryParams = async (
-    patch: Record<string, string | undefined>,
-    options: SetQueryParamsOptions = {},
-  ) => {
-    const removeKeys = Object.hasOwn(patch, explorerQueryKeys.filter)
-      ? legacyFilterQueryKeys
-      : options.removeKeys;
-
-    await setRouteQueryParams({
-      router,
-      route,
-      patch,
-      options: {
-        ...options,
-        removeKeys,
-      },
-    });
-  };
-
-  const applyFilterSet = async (nextSet: Set<FilterKey>) => {
-    await setQueryParams({
-      [explorerQueryKeys.filter]: serializeFilterSet(
-        normalizeFilterSet(nextSet),
-      ),
-    });
-  };
-
-  const currentFilterSet = computed(() => parseFilterSet(route.query));
-
   const hasFilter = (key: FilterKey) => currentFilterSet.value.has(key);
 
   const setFilter = (key: FilterKey, enabled: boolean) => {
-    const nextSet = new Set(currentFilterSet.value);
+    const nextSet = setFilterEnabled({
+      filters: currentFilterSet.value,
+      key,
+      enabled,
+    });
 
-    if (enabled) {
-      nextSet.add(key);
-    } else {
-      nextSet.delete(key);
-    }
-
-    void applyFilterSet(nextSet);
+    void setFilterSet(nextSet);
   };
 
   const parsedAdvancedFilterState = computed(() =>
@@ -135,13 +96,12 @@ export const useExplorerFilterPanel = ({
   const advancedFilterState = computed<ExplorerAdvancedFilterState>({
     get: () => parsedAdvancedFilterState.value,
     set: (nextState) => {
-      const nextSet = buildFilterSetFromAdvancedState(nextState);
+      const nextSet = applyAdvancedFilterState({
+        currentFilters: currentFilterSet.value,
+        nextState,
+      });
 
-      if (hasFilter('due')) {
-        nextSet.add('due');
-      }
-
-      void applyFilterSet(nextSet);
+      void setFilterSet(nextSet);
     },
   });
 
@@ -150,46 +110,17 @@ export const useExplorerFilterPanel = ({
     set: (value) => setFilter('due', value),
   });
 
-  const searchQuery = computed(
-    () => getQueryValue(route.query[explorerQueryKeys.search]) ?? '',
+  watch(
+    sortState,
+    ({ category, direction }) => {
+      setSortDirectionPreference(category, direction);
+    },
+    { immediate: true },
   );
 
-  const resolveSortFromQuery = (): {
-    category: SortCategory;
-    direction: SortDirection;
-  } => {
-    const rawSort = getQueryValue(route.query[explorerQueryKeys.sort]);
-    const category =
-      rawSort !== undefined && isSortCategory(rawSort)
-        ? rawSort
-        : DEFAULT_SORT_CATEGORY;
-
-    const rawReversed = getQueryValue(route.query[explorerQueryKeys.reversed]);
-    if (rawReversed === '1') {
-      return {
-        category,
-        direction: 'desc',
-      };
-    }
-
-    if (rawReversed === '0') {
-      return {
-        category,
-        direction: 'asc',
-      };
-    }
-
-    return {
-      category,
-      direction: getSortDirectionPreference(category),
-    };
-  };
-
-  const sortCategory = computed<SortCategory>(
-    () => resolveSortFromQuery().category,
-  );
+  const sortCategory = computed<SortCategory>(() => sortState.value.category);
   const sortDirection = computed<SortDirection>(
-    () => resolveSortFromQuery().direction,
+    () => sortState.value.direction,
   );
 
   const sortMenuLabel = computed(() =>
@@ -202,11 +133,7 @@ export const useExplorerFilterPanel = ({
   ) => {
     setSortDirectionPreference(category, direction);
 
-    await setQueryParams({
-      [explorerQueryKeys.sort]:
-        category === DEFAULT_SORT_CATEGORY ? undefined : category,
-      [explorerQueryKeys.reversed]: direction === 'desc' ? '1' : undefined,
-    });
+    await setSortState(category, direction);
   };
 
   const setSortCategory = (category: SortCategory) => {
@@ -276,56 +203,9 @@ export const useExplorerFilterPanel = ({
     findSelectedTab(currentFilterSet.value),
   );
 
-  const applyTabPreset = async (
-    tab: TabKey,
-    options: SetQueryParamsOptions = {},
-  ) => {
-    await setQueryParams(
-      {
-        [explorerQueryKeys.filter]: serializeFilterSet(
-          new Set(tabFilterPresets[tab]),
-        ),
-      },
-      options,
-    );
-  };
-
   const selectTab = (tab: TabKey) => {
-    void applyTabPreset(tab);
+    void setTab(tab);
   };
-
-  watch(
-    () => route.hash,
-    (hash) => {
-      const tab = resolveTabFromHash(hash);
-      if (!tab) {
-        return;
-      }
-
-      void applyTabPreset(tab, { clearHash: true });
-    },
-    { immediate: true },
-  );
-
-  const hasLegacyFilterQuery = computed(() => {
-    return legacyFilterQueryKeys.some(
-      (key) => getQueryValue(route.query[key]) !== undefined,
-    );
-  });
-
-  watch(
-    hasLegacyFilterQuery,
-    (hasLegacy) => {
-      if (!hasLegacy) {
-        return;
-      }
-
-      void setQueryParams({
-        [explorerQueryKeys.filter]: serializeFilterSet(currentFilterSet.value),
-      });
-    },
-    { immediate: true },
-  );
 
   const listQuery = computed(() =>
     buildListQuery({

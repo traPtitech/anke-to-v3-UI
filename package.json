@@ -29,6 +29,7 @@
     "@primevue/nuxt-module": "^4.5.4",
     "@typescript-eslint/eslint-plugin": "^8.58.1",
     "@typescript-eslint/parser": "^8.58.1",
+    "@vue/test-utils": "^2.4.6",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unused-imports": "^4.4.1",
