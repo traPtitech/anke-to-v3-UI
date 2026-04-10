@@ -1,3 +1,4 @@
+import { normalizeAdvancedFilterSet } from './filter-domain';
 import type { ExplorerTabItem, FilterKey, TabKey } from './filter-types';
 import {
   explorerLegacyFilterQueryKeys,
@@ -63,23 +64,10 @@ export const getQueryValue = (value: unknown): string | undefined => {
 };
 
 export const normalizeFilterSet = (rawSet: Set<FilterKey>): Set<FilterKey> => {
-  const normalized = new Set(rawSet);
+  const normalized = normalizeAdvancedFilterSet(rawSet);
 
-  if (normalized.has('unpublished')) {
-    normalized.add('administered');
-  }
-
-  if (normalized.has('unanswered')) {
-    normalized.add('targeting');
-    normalized.delete('answered');
-  }
-
-  if (normalized.has('answered')) {
-    normalized.delete('unanswered');
-  }
-
-  if (!normalized.has('administered')) {
-    normalized.delete('unpublished');
+  if (rawSet.has('due')) {
+    normalized.add('due');
   }
 
   return normalized;

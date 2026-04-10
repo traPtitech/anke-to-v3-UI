@@ -2,6 +2,10 @@ import type { MenuItem } from 'primevue/menuitem';
 import type { Ref } from 'vue';
 import { explorerQueryKeys } from '~/composables/explorer/query-params';
 import {
+  buildFilterSetFromAdvancedState,
+  parseAdvancedFilterState,
+} from './filter-domain';
+import {
   buildFilterSignature,
   buildListQuery,
   buildTabCountQuery,
@@ -32,6 +36,7 @@ import {
 import {
   DEFAULT_SORT_CATEGORY,
   DEFAULT_SORT_DIRECTION,
+  type ExplorerAdvancedFilterState,
   type ExplorerFilterPayload,
   type FilterKey,
   type SortCategory,
@@ -123,34 +128,21 @@ export const useExplorerFilterPanel = ({
     void applyFilterSet(nextSet);
   };
 
-  const filterTargetingMe = computed<boolean>({
-    get: () => hasFilter('targeting'),
-    set: (value) => setFilter('targeting', value),
-  });
+  const parsedAdvancedFilterState = computed(() =>
+    parseAdvancedFilterState(currentFilterSet.value),
+  );
 
-  const filterAdministratedByMe = computed<boolean>({
-    get: () => hasFilter('administered'),
-    set: (value) => setFilter('administered', value),
-  });
+  const advancedFilterState = computed<ExplorerAdvancedFilterState>({
+    get: () => parsedAdvancedFilterState.value,
+    set: (nextState) => {
+      const nextSet = buildFilterSetFromAdvancedState(nextState);
 
-  const filterHasMyResponse = computed<boolean>({
-    get: () => hasFilter('answered'),
-    set: (value) => setFilter('answered', value),
-  });
+      if (hasFilter('due')) {
+        nextSet.add('due');
+      }
 
-  const filterUnansweredByMe = computed<boolean>({
-    get: () => hasFilter('unanswered'),
-    set: (value) => setFilter('unanswered', value),
-  });
-
-  const filterHasMyDraft = computed<boolean>({
-    get: () => hasFilter('draft'),
-    set: (value) => setFilter('draft', value),
-  });
-
-  const filterUnpublishedOnly = computed<boolean>({
-    get: () => hasFilter('unpublished'),
-    set: (value) => setFilter('unpublished', value),
+      void applyFilterSet(nextSet);
+    },
   });
 
   const onlyActiveDue = computed<boolean>({
@@ -374,12 +366,7 @@ export const useExplorerFilterPanel = ({
     sortMenuItems,
     sortMenuLabel,
     onlyActiveDue,
-    filterTargetingMe,
-    filterAdministratedByMe,
-    filterHasMyResponse,
-    filterUnansweredByMe,
-    filterHasMyDraft,
-    filterUnpublishedOnly,
+    advancedFilterState,
     selectedTab,
     selectTab,
     tabCount,

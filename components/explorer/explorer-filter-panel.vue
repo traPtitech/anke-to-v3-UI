@@ -26,12 +26,7 @@ const {
   sortMenuItems,
   sortMenuLabel,
   onlyActiveDue,
-  filterTargetingMe,
-  filterAdministratedByMe,
-  filterHasMyResponse,
-  filterUnansweredByMe,
-  filterHasMyDraft,
-  filterUnpublishedOnly,
+  advancedFilterState,
   selectedTab,
   selectTab,
   tabCount,
@@ -75,12 +70,7 @@ const {
           </AccordionHeader>
           <AccordionContent>
             <ExplorerAdvancedFilterGrid
-              v-model:filter-targeting-me="filterTargetingMe"
-              v-model:filter-administrated-by-me="filterAdministratedByMe"
-              v-model:filter-has-my-response="filterHasMyResponse"
-              v-model:filter-unanswered-by-me="filterUnansweredByMe"
-              v-model:filter-has-my-draft="filterHasMyDraft"
-              v-model:filter-unpublished-only="filterUnpublishedOnly"
+              v-model:advanced-filter-state="advancedFilterState"
             />
           </AccordionContent>
         </AccordionPanel>

@@ -1,91 +1,136 @@
 <script setup lang="ts">
-const filterTargetingMe = defineModel<boolean>('filterTargetingMe', {
-  required: true,
-});
-const filterAdministratedByMe = defineModel<boolean>(
-  'filterAdministratedByMe',
+import type {
+  AdministrationScope,
+  DraftScope,
+  ExplorerAdvancedFilterState,
+  ResponseScope,
+  TargetScope,
+} from './filter-types';
+
+type SelectOption<T extends string> = {
+  label: string;
+  value: T;
+};
+
+const advancedFilterState = defineModel<ExplorerAdvancedFilterState>(
+  'advancedFilterState',
   {
     required: true,
   },
 );
-const filterHasMyResponse = defineModel<boolean>('filterHasMyResponse', {
-  required: true,
-});
-const filterUnansweredByMe = defineModel<boolean>('filterUnansweredByMe', {
-  required: true,
-});
-const filterHasMyDraft = defineModel<boolean>('filterHasMyDraft', {
-  required: true,
-});
-const filterUnpublishedOnly = defineModel<boolean>('filterUnpublishedOnly', {
-  required: true,
+
+const targetScope = computed<TargetScope>({
+  get: () => advancedFilterState.value.targetScope,
+  set: (value) => {
+    advancedFilterState.value = {
+      ...advancedFilterState.value,
+      targetScope: value,
+    };
+  },
 });
 
-const targetingMeId = useId();
-const administratedByMeId = useId();
-const hasMyResponseId = useId();
-const unansweredByMeId = useId();
-const hasMyDraftId = useId();
-const unpublishedOnlyId = useId();
+const responseScope = computed<ResponseScope>({
+  get: () => advancedFilterState.value.responseScope,
+  set: (value) => {
+    advancedFilterState.value = {
+      ...advancedFilterState.value,
+      responseScope: value,
+    };
+  },
+});
+
+const draftScope = computed<DraftScope>({
+  get: () => advancedFilterState.value.draftScope,
+  set: (value) => {
+    advancedFilterState.value = {
+      ...advancedFilterState.value,
+      draftScope: value,
+    };
+  },
+});
+
+const administrationScope = computed<AdministrationScope>({
+  get: () => advancedFilterState.value.administrationScope,
+  set: (value) => {
+    advancedFilterState.value = {
+      ...advancedFilterState.value,
+      administrationScope: value,
+    };
+  },
+});
+
+const targetScopeOptions = [
+  { label: 'フィルタなし', value: 'all' },
+  { label: '自分が対象', value: 'targetingMe' },
+] satisfies SelectOption<TargetScope>[];
+
+const responseScopeOptions = [
+  { label: 'フィルタなし', value: 'all' },
+  { label: '自分が回答済み', value: 'answered' },
+  { label: '自分が未回答', value: 'unanswered' },
+] satisfies SelectOption<ResponseScope>[];
+
+const draftScopeOptions = [
+  { label: 'フィルタなし', value: 'all' },
+  { label: '下書きあり', value: 'hasMyDraft' },
+] satisfies SelectOption<DraftScope>[];
+
+const administrationScopeOptions = [
+  { label: 'フィルタなし', value: 'all' },
+  { label: '管理中 (公開済み)', value: 'published' },
+  { label: '管理中 (下書き)', value: 'draft' },
+] satisfies SelectOption<AdministrationScope>[];
 </script>
 
 <template>
   <div class="advanced-filter-panel">
     <div class="advanced-filter-grid">
       <div class="advanced-filter-block">
-        <div class="advanced-filter-title">回答</div>
-        <label class="advanced-switch-item" :for="targetingMeId">
-          <Checkbox
-            v-model="filterTargetingMe"
-            :input-id="targetingMeId"
-            binary
-          />
-          <span>自分が対象</span>
-        </label>
-        <label class="advanced-switch-item" :for="hasMyResponseId">
-          <Checkbox
-            v-model="filterHasMyResponse"
-            :input-id="hasMyResponseId"
-            binary
-          />
-          <span>自分が回答済み</span>
-        </label>
-        <label class="advanced-switch-item" :for="unansweredByMeId">
-          <Checkbox
-            v-model="filterUnansweredByMe"
-            :input-id="unansweredByMeId"
-            binary
-          />
-          <span>自分が未回答</span>
-        </label>
-        <label class="advanced-switch-item" :for="hasMyDraftId">
-          <Checkbox
-            v-model="filterHasMyDraft"
-            :input-id="hasMyDraftId"
-            binary
-          />
-          <span>自分の下書きあり</span>
-        </label>
+        <div class="advanced-filter-title">対象</div>
+        <SelectButton
+          v-model="targetScope"
+          :options="targetScopeOptions"
+          option-label="label"
+          option-value="value"
+          :allow-empty="false"
+          class="filter-select"
+        />
+      </div>
+
+      <div class="advanced-filter-block">
+        <div class="advanced-filter-title">回答状態</div>
+        <SelectButton
+          v-model="responseScope"
+          :options="responseScopeOptions"
+          option-label="label"
+          option-value="value"
+          :allow-empty="false"
+          class="filter-select"
+        />
+      </div>
+
+      <div class="advanced-filter-block">
+        <div class="advanced-filter-title">下書き</div>
+        <SelectButton
+          v-model="draftScope"
+          :options="draftScopeOptions"
+          option-label="label"
+          option-value="value"
+          :allow-empty="false"
+          class="filter-select"
+        />
       </div>
 
       <div class="advanced-filter-block">
         <div class="advanced-filter-title">管理</div>
-        <label class="advanced-switch-item" :for="administratedByMeId">
-          <Checkbox
-            v-model="filterAdministratedByMe"
-            :input-id="administratedByMeId"
-            binary
-          />
-          <span>自分が管理中</span>
-        </label>
-        <label class="advanced-switch-item" :for="unpublishedOnlyId">
-          <Checkbox
-            v-model="filterUnpublishedOnly"
-            :input-id="unpublishedOnlyId"
-            binary
-          />
-          <span>未公開 (下書き)</span>
-        </label>
+        <SelectButton
+          v-model="administrationScope"
+          :options="administrationScopeOptions"
+          option-label="label"
+          option-value="value"
+          :allow-empty="false"
+          class="filter-select"
+        />
       </div>
     </div>
   </div>
@@ -104,13 +149,6 @@ const unpublishedOnlyId = useId();
   gap: 12px;
 }
 
-.advanced-filter-block {
-  border: 1px solid var(--p-surface-300);
-  border-radius: var(--p-border-radius-md);
-  padding: 10px;
-  background-color: var(--p-surface-0);
-}
-
 .advanced-filter-title {
   margin-bottom: 8px;
   font-size: 13px;
@@ -118,16 +156,13 @@ const unpublishedOnlyId = useId();
   color: var(--p-text-secondary);
 }
 
-.advanced-switch-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.filter-select {
   width: 100%;
-  cursor: pointer;
 }
 
-.advanced-switch-item + .advanced-switch-item {
-  margin-top: 8px;
+:deep(.filter-select .p-togglebutton) {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 @media screen and (max-width: 900px) {

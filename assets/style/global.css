@@ -201,6 +201,21 @@
   padding: 0;
 }
 
+.p-selectbutton .p-togglebutton {
+  background-color: var(--p-surface-100);
+  border: none;
+  padding: 0;
+}
+
+.p-selectbutton .p-togglebutton-content {
+  padding: 8px 16px;
+}
+.p-selectbutton .p-togglebutton-checked .p-togglebutton-content {
+  background-color: color-mix(in srgb, var(--p-primary-color) 15%, white);
+  color: var(--p-primary-color);
+  border-radius: var(--p-border-radius-md);
+}
+
 .questionnaire-form-container
   .smooth-dnd-container.vertical
   > .smooth-dnd-draggable-wrapper {

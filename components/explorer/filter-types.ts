@@ -18,6 +18,21 @@ export type FilterKey =
   | 'due'
   | 'unpublished';
 
+export type TargetScope = 'all' | 'targetingMe';
+
+export type ResponseScope = 'all' | 'answered' | 'unanswered';
+
+export type DraftScope = 'all' | 'hasMyDraft';
+
+export type AdministrationScope = 'all' | 'published' | 'draft';
+
+export type ExplorerAdvancedFilterState = {
+  targetScope: TargetScope;
+  responseScope: ResponseScope;
+  draftScope: DraftScope;
+  administrationScope: AdministrationScope;
+};
+
 export type SortCategory = 'createdAt' | 'modifiedAt' | 'title';
 
 export type SortDirection = 'asc' | 'desc';

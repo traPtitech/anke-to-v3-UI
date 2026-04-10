@@ -1,3 +1,4 @@
+import { parseAdvancedFilterState } from './filter-domain';
 import { serializeFilterSet } from './filter-query';
 import { toApiSort } from './filter-sort';
 import type {
@@ -6,10 +7,6 @@ import type {
   SortCategory,
   SortDirection,
 } from './filter-types';
-
-const hasFilter = (filters: Set<FilterKey>, key: FilterKey): boolean => {
-  return filters.has(key);
-};
 
 export const buildListQuery = ({
   searchQuery,
@@ -23,32 +20,34 @@ export const buildListQuery = ({
   sortDirection: SortDirection;
 }): ExplorerFilterPayload['listQuery'] => {
   const trimmedSearch = searchQuery.trim();
+  const advancedFilter = parseAdvancedFilterState(filters);
+  const responseScope = advancedFilter.responseScope;
+  const administrationScope = advancedFilter.administrationScope;
 
   return {
     search: trimmedSearch || undefined,
     sort: toApiSort(sortCategory, sortDirection),
     onlyTargetingMe:
-      hasFilter(filters, 'targeting') || hasFilter(filters, 'unanswered')
+      advancedFilter.targetScope === 'targetingMe' ||
+      responseScope === 'unanswered'
         ? true
         : undefined,
-    onlyAdministratedByMe: hasFilter(filters, 'administered')
-      ? true
-      : undefined,
+    onlyAdministratedByMe: administrationScope !== 'all' ? true : undefined,
     notOverDue:
-      hasFilter(filters, 'due') || hasFilter(filters, 'unanswered')
+      filters.has('due') || responseScope === 'unanswered' ? true : undefined,
+    hasMyResponse:
+      responseScope === 'answered'
         ? true
-        : undefined,
-    hasMyResponse: hasFilter(filters, 'answered')
-      ? true
-      : hasFilter(filters, 'unanswered')
-        ? false
-        : undefined,
-    hasMyDraft: hasFilter(filters, 'draft') ? true : undefined,
-    isDraft: hasFilter(filters, 'unpublished')
-      ? true
-      : hasFilter(filters, 'unanswered')
-        ? false
-        : undefined,
+        : responseScope === 'unanswered'
+          ? false
+          : undefined,
+    hasMyDraft: advancedFilter.draftScope === 'hasMyDraft' ? true : undefined,
+    isDraft:
+      administrationScope === 'draft'
+        ? true
+        : administrationScope === 'published' || responseScope === 'unanswered'
+          ? false
+          : undefined,
   };
 };
 
@@ -63,7 +62,7 @@ export const buildTabCountQuery = ({
 
   return {
     search: trimmedSearch || undefined,
-    notOverDue: hasFilter(filters, 'due') ? true : undefined,
+    notOverDue: filters.has('due') ? true : undefined,
   };
 };
 
