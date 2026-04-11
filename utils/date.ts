@@ -1,3 +1,5 @@
+import { ref } from 'vue';
+
 export const setTime = (
   date: Date,
   hours: number,
@@ -36,6 +38,18 @@ const week = day * 7;
 const month = day * 30;
 const year = day * 365;
 
+const nowTimestamp = ref(Date.now());
+let isNowTickerStarted = false;
+
+const startNowTicker = () => {
+  if (isNowTickerStarted) return;
+  isNowTickerStarted = true;
+
+  setInterval(() => {
+    nowTimestamp.value = Date.now();
+  }, 1000);
+};
+
 const formatPastRelativeDate = (diff: number) => {
   if (diff < minute) return '今さっき';
   if (diff < hour) return `${Math.floor(diff / minute)}分前`;
@@ -46,7 +60,7 @@ const formatPastRelativeDate = (diff: number) => {
   return `${Math.floor(diff / year)}年前`;
 };
 
-export const formatFutureRelativeDate = (diff: number) => {
+const formatFutureRelativeDate = (diff: number) => {
   if (diff < minute) return '1分以内';
   if (diff < hour) return `${Math.floor(diff / minute)}分後`;
   if (diff < day) return `${Math.floor(diff / hour)}時間後`;
@@ -57,8 +71,8 @@ export const formatFutureRelativeDate = (diff: number) => {
 };
 
 export const formatRelativeDate = (date: Date) => {
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
+  startNowTicker();
+  const diff = nowTimestamp.value - date.getTime();
   return diff > 0
     ? formatPastRelativeDate(diff)
     : formatFutureRelativeDate(-diff);
