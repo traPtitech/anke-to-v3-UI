@@ -345,6 +345,10 @@ export const responseHandlers = [
   http.get('/api/responses/myResponses', (req) => {
     const sort =
       new URL(req.request.url).searchParams.get('sort') ?? 'submitted_at';
+    const page = Number(
+      new URL(req.request.url).searchParams.get('page') ?? '1',
+    );
+    const pageSize = 20;
 
     const sortedResponses = questionnairesData
       .map((q) => {
@@ -364,7 +368,17 @@ export const responseHandlers = [
       })
       .filter((qr) => qr.responses.length > 0);
 
-    const response: GetMyResponsesResponse = sortedResponses;
+    const startIndex = (page - 1) * pageSize;
+    const pagedResponses = sortedResponses.slice(
+      startIndex,
+      startIndex + pageSize,
+    );
+    const totalPage = Math.ceil(sortedResponses.length / pageSize);
+
+    const response: GetMyResponsesResponse = {
+      page_max: totalPage,
+      response_groups: pagedResponses,
+    };
 
     return HttpResponse.json(response);
   }),

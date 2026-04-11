@@ -401,6 +401,7 @@ export const questionnaireHandlers = [
 
     const response: GetQuestionnairesResponse = {
       page_max: Math.ceil(filteredQuestionnaires.length / pageSize),
+      total_records: filteredQuestionnaires.length,
       questionnaires: pagedQuestionnaires,
     };
 
