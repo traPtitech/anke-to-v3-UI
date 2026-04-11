@@ -14,10 +14,19 @@ const hashOption = (option: object | undefined) => {
 export type GetQuestionnairesOption =
   paths['/questionnaires']['get']['parameters']['query'];
 
-export const useGetQuestionnaires = (option?: GetQuestionnairesOption) =>
-  useAsyncData(`/questionnaires!${hashOption(option)}`, () =>
-    fetchQuestionnaires(option),
-  );
+const cachedGetQuestionnairesKeys = new Set<string>();
+
+const refreshGetQuestionnaires = async () => {
+  const keys = Array.from(cachedGetQuestionnairesKeys);
+  cachedGetQuestionnairesKeys.clear();
+  await Promise.all(keys.map((key) => refreshNuxtData(key)));
+};
+
+export const useGetQuestionnaires = (option?: GetQuestionnairesOption) => {
+  const key = `/questionnaires!${hashOption(option)}`;
+  cachedGetQuestionnairesKeys.add(key);
+  return useAsyncData(key, () => fetchQuestionnaires(option));
+};
 
 export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
   const res = await client.GET('/questionnaires', {
@@ -68,7 +77,7 @@ export const postNewQuestionnaire = async (data: PostQuestionnaireBody) => {
     throw new Error('No data returned from the API');
   }
 
-  await refreshNuxtData('/questionnaires');
+  await refreshGetQuestionnaires();
 
   return res.data;
 };
@@ -91,7 +100,6 @@ export const patchMyRemindStatus = async (
     throw new Error('Failed to patch remind status');
   }
 
-  await refreshNuxtData(`/questionnaires/${questionnaireID}`);
   await refreshNuxtData(`/questionnaires/${questionnaireID}/myRemindStatus`);
 };
 
@@ -103,7 +111,7 @@ export const deleteQuestionnaireById = async (questionnaireID: number) => {
     throw new Error('Failed to delete questionnaire');
   }
 
-  await refreshNuxtData('/questionnaires');
+  await refreshGetQuestionnaires();
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
@@ -122,7 +130,7 @@ export const patchQuestionnaireById = async (
     throw new Error('Failed to patch questionnaire');
   }
 
-  await refreshNuxtData('/questionnaires');
+  await refreshGetQuestionnaires();
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
@@ -142,14 +150,26 @@ export const fetchQuestionnaireResponses = async (
   return res.data;
 };
 
+const cachedGetQuestionnaireResponsesKeys = new Set<string>();
+
+const refreshGetQuestionnaireResponses = async (questionnaireID: number) => {
+  const keys = Array.from(cachedGetQuestionnaireResponsesKeys).filter((key) =>
+    key.startsWith(`/questionnaires/${questionnaireID}/responses`),
+  );
+  keys.forEach((key) => cachedGetQuestionnaireResponsesKeys.delete(key));
+  await Promise.all(keys.map((key) => refreshNuxtData(key)));
+};
+
 export const useGetQuestionnaireResponses = (
   questionnaireID: number,
   params?: GetQuestionnaireResponsesParams,
-) =>
-  useAsyncData(
-    `/questionnaires/${questionnaireID}/responses!${hashOption(params)}`,
-    () => fetchQuestionnaireResponses(questionnaireID, params),
+) => {
+  const key = `/questionnaires/${questionnaireID}/responses!${hashOption(params)}`;
+  cachedGetQuestionnaireResponsesKeys.add(key);
+  return useAsyncData(key, () =>
+    fetchQuestionnaireResponses(questionnaireID, params),
   );
+};
 
 export const useGetResponse = (responseID: number) =>
   useAsyncData(`/responses/${responseID}`, async () => {
@@ -212,10 +232,9 @@ export const deleteResponse = async (
     throw new Error('Failed to delete response');
   }
 
-  await refreshNuxtData('/responses/myResponses');
   await refreshNuxtData(`/responses/${responseID}`);
   if (questionnaireId !== undefined) {
-    await refreshNuxtData(`/questionnaires/${questionnaireId}/responses`);
+    await refreshGetQuestionnaireResponses(questionnaireId);
   }
 };
 
