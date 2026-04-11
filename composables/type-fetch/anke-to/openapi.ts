@@ -66,7 +66,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** @description アンケートの全ての回答を取得します。匿名回答の場合はRespondentが空文字列になります。 */
+    /** @description アンケートの全ての回答を取得します。匿名回答の場合はrespondentを返しません。 */
     get: operations['getQuestionnaireResponses'];
     put?: never;
     /** @description 新しい回答を作成します。アンケートが複数回答可能でない場合、過去の回答が削除されます。 */
@@ -103,7 +103,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** @description 自分のすべての回答のリストを取得します。 */
+    /** @description 自分のすべての回答のリストを、アンケートごとにまとめてページ単位で取得します。 */
     get: operations['getMyResponses'];
     put?: never;
     post?: never;
@@ -252,7 +252,7 @@ export interface components {
       components['schemas']['QuestionnaireModifiedAt'] &
       components['schemas']['QuestionnaireTargetsAndAdmins'] & {
         questions: components['schemas']['Question'][];
-        /** @description 回答者の一覧。匿名回答の場合はnull。 */
+        /** @description 回答者の一覧。匿名アンケートでも返る。 */
         respondents: components['schemas']['TraqId'][];
         /** @description 対象者の一覧。（前回対象者を編集した時点で解析したグループ情報に基づいて作成されたもの） */
         targets: components['schemas']['TraqId'][];
@@ -290,6 +290,11 @@ export interface components {
        * @example 1
        */
       page_max: number;
+      /**
+       * @description 現在の検索条件に一致するアンケートの総件数
+       * @example 42
+       */
+      total_records: number;
       questionnaires: components['schemas']['QuestionnaireSummary'][];
     };
     QuestionnaireID: {
@@ -405,7 +410,9 @@ export interface components {
       max_length?: number;
     };
     QuestionSettingsNumber: components['schemas']['QuestionTypeNumber'] & {
+      /** Format: double */
       min_value?: number;
+      /** Format: double */
       max_value?: number;
     };
     QuestionSettingsSingleChoice: components['schemas']['QuestionTypeSingleChoice'] & {
@@ -452,6 +459,7 @@ export interface components {
     Response: components['schemas']['QuestionnaireID'] & {
       /** @example 1 */
       response_id: number;
+      /** @description 回答者のtraQ ID。匿名回答の場合は返しません。 */
       respondent?: components['schemas']['TraqId'];
       /** @example true */
       is_anonymous: boolean;
@@ -474,7 +482,14 @@ export interface components {
       response_id?: number;
     } & components['schemas']['NewResponse'];
     Responses: components['schemas']['Response'][];
-    ResponsesWithQuestionnaireInfo: components['schemas']['ResponseWithQuestionnaireInfoItem'][];
+    ResponsesWithQuestionnaireInfo: {
+      /**
+       * @description 合計のページ数
+       * @example 1
+       */
+      page_max: number;
+      response_groups: components['schemas']['ResponseWithQuestionnaireInfoItem'][];
+    };
     QuestionnaireInfo: components['schemas']['QuestionnaireTitle'] &
       components['schemas']['QuestionnaireResponseDueDateTime'] &
       components['schemas']['QuestionnaireCreatedAt'] &
@@ -522,6 +537,7 @@ export interface components {
       answer: string;
     };
     ResponseBodyBaseNumber: {
+      /** Format: double */
       answer: number;
     };
     ResponseBodyBaseInteger: {
@@ -531,7 +547,7 @@ export interface components {
       users: components['schemas']['Users'];
       groups: components['schemas']['Groups'];
     };
-    /** @description 回答者の一覧。匿名回答の場合はnull。 */
+    /** @description ユーザーIDの一覧。 */
     Users: components['schemas']['TraqId'][];
     /**
      * @description traQ ID
@@ -594,7 +610,7 @@ export interface components {
     onlyAdministratedByMeInQuery: boolean;
     /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。 */
     onlyMyResponseInQuery: boolean;
-    /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
+    /** @description trueの場合、下書きのみを取得する。falseの場合、下書きではないもののみを取得する。存在しない場合はすべて取得する。 */
     isDraftInQuery: boolean;
     /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。 */
     notOverDueInQuery: boolean;
@@ -610,6 +626,8 @@ export interface components {
      *     存在しない場合、すべてのアンケートを取得する。
      */
     hasMyDraftInQuery: boolean;
+    /** @description trueの場合、questionnaires は空配列で返し、件数情報のみ取得する。page は無視される。 */
+    countOnlyInQuery: boolean;
     /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。 */
     questionnaireIDsInQuery: number[];
     /** @description アンケートID */
@@ -638,8 +656,6 @@ export interface operations {
         onlyAdministratedByMe?: components['parameters']['onlyAdministratedByMeInQuery'];
         /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。 */
         notOverDue?: components['parameters']['notOverDueInQuery'];
-        /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
-        isDraft?: components['parameters']['isDraftInQuery'];
         /**
          * @description trueの場合、自分の回答（下書きを除く）が存在するアンケートのみを取得する。
          *     falseの場合、自分の回答（下書きを除く）が存在しないアンケートのみを取得する。
@@ -652,6 +668,8 @@ export interface operations {
          *     存在しない場合、すべてのアンケートを取得する。
          */
         hasMyDraft?: components['parameters']['hasMyDraftInQuery'];
+        /** @description trueの場合、questionnaires は空配列で返し、件数情報のみ取得する。page は無視される。 */
+        countOnly?: components['parameters']['countOnlyInQuery'];
       };
       header?: never;
       path?: never;
@@ -951,7 +969,7 @@ export interface operations {
         sort?: components['parameters']['responseSortInQuery'];
         /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。 */
         onlyMyResponse?: components['parameters']['onlyMyResponseInQuery'];
-        /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
+        /** @description trueの場合、下書きのみを取得する。falseの場合、下書きではないもののみを取得する。存在しない場合はすべて取得する。 */
         isDraft?: components['parameters']['isDraftInQuery'];
       };
       header?: never;
@@ -1220,11 +1238,11 @@ export interface operations {
   getMyResponses: {
     parameters: {
       query?: {
-        /** @description 並び順 (作成日時が新しい "submitted_at", 作成日時が古い "-submitted_at", TraqIDの昇順 "traqid", TraqIDの降順 "-traqid", 更新日時が新しい "modified_at", 更新日時が古い "-modified_at" ) */
-        sort?: components['parameters']['responseSortInQuery'];
+        /** @description 何ページ目か (未定義の場合は1ページ目) */
+        page?: components['parameters']['pageInQuery'];
         /** @description 取得したい情報のアンケートをフィルタリングするためのパラメータ。複数指定可能。 */
         questionnaireIDs?: components['parameters']['questionnaireIDsInQuery'];
-        /** @description trueの場合、下書きのアンケート/回答のみを取得する。falseの場合、下書きではないアンケート/回答のみを取得する。存在しない場合はすべてのアンケート/回答を取得する */
+        /** @description trueの場合、下書きのみを取得する。falseの場合、下書きではないもののみを取得する。存在しない場合はすべて取得する。 */
         isDraft?: components['parameters']['isDraftInQuery'];
       };
       header?: never;
@@ -1233,7 +1251,7 @@ export interface operations {
     };
     requestBody?: never;
     responses: {
-      /** @description 正常に取得できました。回答の配列を返します。 */
+      /** @description 正常に取得できました。ページ情報付きの回答一覧を返します。 */
       200: {
         headers: {
           [name: string]: unknown;
@@ -1241,6 +1259,13 @@ export interface operations {
         content: {
           'application/json': components['schemas']['ResponsesWithQuestionnaireInfo'];
         };
+      };
+      /** @description 与えられた情報の形式が異なります */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description 自分の回答のリストを取得できませんでした */
       500: {
