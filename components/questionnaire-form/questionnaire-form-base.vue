@@ -192,7 +192,7 @@ const handleAddQuestion = (
 
 .form-action-buttons-container {
   position: fixed;
-  transform: translateX(1056px);
+  transform: translateX(1096px);
   display: flex;
   flex-direction: column;
   gap: 8px;

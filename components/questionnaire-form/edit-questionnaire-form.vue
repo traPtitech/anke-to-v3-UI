@@ -110,17 +110,19 @@ const handleSend = async () => {
 
 <template>
   <div class="edit-questionnaire-container">
-    <div class="edit-questionnaire-nav">
-      <ButtonLink
-        :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
-        class="edit-back-link"
-        variant="secondary"
-        size="sm"
-        @click.prevent="handleBackToDetail"
-      >
-        <Icon name="mdi:chevron-left" size="20px" />
-        <span>アンケート詳細に戻る</span>
-      </ButtonLink>
+    <div class="edit-questionnaire-nav-container">
+      <div class="edit-questionnaire-nav">
+        <ButtonLink
+          :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
+          class="edit-back-link"
+          variant="secondary"
+          size="sm"
+          @click.prevent="handleBackToDetail"
+        >
+          <Icon name="mdi:chevron-left" size="20px" />
+          <span>アンケート詳細に戻る</span>
+        </ButtonLink>
+      </div>
     </div>
 
     <QuestionnaireFormBase v-model="state">
@@ -148,6 +150,10 @@ const handleSend = async () => {
   gap: 10px;
 }
 
+.edit-questionnaire-nav-container {
+  padding-right: 176px;
+}
+
 .edit-questionnaire-nav {
   display: flex;
   align-items: center;
@@ -159,5 +165,11 @@ const handleSend = async () => {
 .edit-back-link {
   width: fit-content;
   font-weight: 600;
+}
+
+@media screen and (max-width: 1600px) {
+  .edit-questionnaire-nav-container {
+    padding-right: 0;
+  }
 }
 </style>
