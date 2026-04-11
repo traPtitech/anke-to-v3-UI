@@ -67,7 +67,7 @@ export const useExplorerQuestionnaires = ({
   );
 
   const totalRecordsForPaginator = computed(
-    () => pageMax.value * EXPLORER_PAGE_SIZE,
+    () => questionnairePage.value?.total_records ?? 0,
   );
 
   const handlePageChange = (event: { page: number }) => {

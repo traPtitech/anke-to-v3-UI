@@ -6,25 +6,11 @@ import {
   fetchQuestionnaires,
   type GetQuestionnairesOption,
 } from '~/composables/type-fetch/anke-to/client';
-import { EXPLORER_PAGE_SIZE } from './use-explorer-questionnaires';
 
 const fetchQuestionnaireCount = async (option: GetQuestionnairesOption) => {
-  const firstPage = await fetchQuestionnaires({
-    ...option,
-    page: 1,
-  });
+  const firstPage = await fetchQuestionnaires(option);
 
-  const max = Math.max(1, firstPage.page_max ?? 1);
-  if (max === 1) {
-    return firstPage.questionnaires.length;
-  }
-
-  const lastPage = await fetchQuestionnaires({
-    ...option,
-    page: max,
-  });
-
-  return (max - 1) * EXPLORER_PAGE_SIZE + lastPage.questionnaires.length;
+  return firstPage.total_records;
 };
 
 export const useExplorerTabCounts = ({
