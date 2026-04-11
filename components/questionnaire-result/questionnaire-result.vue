@@ -4,12 +4,8 @@ import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/res
 import ResultTitleContainer from '~/components/ui/questionnaire/result-title-container.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
-import {
-  type ExportFormat,
-  type ExportTarget,
-  useQuestionnaireResponseExport,
-} from './composables/use-questionnaire-response-export';
 import { useQuestionnaireResult } from './composables/use-questionnaire-result';
+import QuestionnaireResultExportDialog from './questionnaire-result-export-dialog.vue';
 import QuestionResult from './question-result.vue';
 
 const props = defineProps<{
@@ -21,62 +17,6 @@ const { results } = useQuestionnaireResult(
   props.questionnaire,
   props.responses,
 );
-
-const toast = useToast();
-
-const { createPreviewText, downloadExportText } =
-  useQuestionnaireResponseExport({
-    questionnaire: computed(() => props.questionnaire),
-    responses: computed(() => props.responses),
-  });
-
-const isExportDialogVisible = ref(false);
-const exportTarget = ref<ExportTarget>('summary');
-const exportFormat = ref<ExportFormat>('md');
-
-const exportTargetOptions: { value: ExportTarget; label: string }[] = [
-  { value: 'summary', label: '集計結果' },
-  { value: 'responses', label: '個別の回答' },
-];
-
-const exportFormatOptions: { value: ExportFormat; label: string }[] = [
-  { value: 'md', label: 'Markdown (.md)' },
-  { value: 'csv', label: 'CSV (.csv)' },
-  { value: 'json', label: 'JSON (.json)' },
-];
-
-const exportPreviewText = computed(() =>
-  createPreviewText({
-    target: exportTarget.value,
-    format: exportFormat.value,
-  }),
-);
-
-const handleCopyExportText = async () => {
-  try {
-    await navigator.clipboard.writeText(exportPreviewText.value);
-    toast.add({
-      severity: 'success',
-      summary: 'コピーしました',
-      detail: '出力テキストをクリップボードへコピーしました。',
-      life: 3000,
-    });
-  } catch {
-    toast.add({
-      severity: 'error',
-      summary: 'コピーに失敗しました',
-      detail: 'ブラウザの権限設定を確認してください。',
-      life: 4000,
-    });
-  }
-};
-
-const handleDownloadExportText = () => {
-  downloadExportText({
-    target: exportTarget.value,
-    format: exportFormat.value,
-  });
-};
 </script>
 
 <template>
@@ -91,69 +31,11 @@ const handleDownloadExportText = () => {
         <span>アンケート詳細画面に戻る</span>
       </ButtonLink>
 
-      <Button
-        class="result-export-trigger"
-        severity="secondary"
-        outlined
-        @click="isExportDialogVisible = true"
-      >
-        <Icon name="mdi:file-export-outline" size="18px" />
-        <span>出力</span>
-      </Button>
+      <QuestionnaireResultExportDialog
+        :questionnaire="props.questionnaire"
+        :responses="props.responses"
+      />
     </div>
-
-    <Dialog
-      v-model:visible="isExportDialogVisible"
-      modal
-      header="出力"
-      :style="{ width: 'min(840px, 96vw)' }"
-    >
-      <div class="export-dialog-content">
-        <div class="export-option-grid">
-          <label class="export-option-label">
-            <span>出力対象</span>
-            <Select
-              v-model="exportTarget"
-              :options="exportTargetOptions"
-              option-label="label"
-              option-value="value"
-              class="export-select"
-            />
-          </label>
-
-          <label class="export-option-label">
-            <span>出力形式</span>
-            <Select
-              v-model="exportFormat"
-              :options="exportFormatOptions"
-              option-label="label"
-              option-value="value"
-              class="export-select"
-            />
-          </label>
-        </div>
-
-        <label class="export-option-label">
-          <span>出力プレビュー（readonly）</span>
-          <textarea
-            :value="exportPreviewText"
-            class="export-preview"
-            readonly
-          />
-        </label>
-
-        <div class="export-dialog-actions">
-          <Button severity="secondary" outlined @click="handleCopyExportText">
-            <Icon name="mdi:content-copy" size="16px" />
-            <span>コピー</span>
-          </Button>
-          <Button severity="secondary" @click="handleDownloadExportText">
-            <Icon name="mdi:download" size="16px" />
-            <span>ダウンロード</span>
-          </Button>
-        </div>
-      </div>
-    </Dialog>
 
     <section class="result-info-section">
       <div class="result-info-header">
@@ -201,12 +83,6 @@ const handleDownloadExportText = () => {
 
 .result-back-link {
   font-weight: 600;
-}
-
-.result-export-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .result-info-section,
