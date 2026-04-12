@@ -94,21 +94,22 @@ const {
   overflow: hidden;
 }
 
-:deep(.advanced-filter-accordion .p-accordionpanel),
-:deep(.advanced-filter-accordion .p-accordioncontent) {
+.advanced-filter-accordion :deep(.p-accordionpanel),
+.advanced-filter-accordion :deep(.p-accordioncontent) {
   border: none;
 }
 
-:deep(.advanced-filter-accordion .p-accordioncontent) {
+.advanced-filter-accordion :deep(.p-accordioncontent) {
   transition: max-height 0.12s ease-out;
 }
 
-:deep(.advanced-filter-accordion .p-accordionheader) {
+.advanced-filter-accordion :deep(.p-accordionheader) {
   display: none;
 }
 
-:deep(.advanced-filter-accordion .p-accordioncontent-content) {
+.advanced-filter-accordion :deep(.p-accordioncontent-content) {
   padding: 0;
+  border: none;
 }
 
 .advanced-filter-hidden-header {
