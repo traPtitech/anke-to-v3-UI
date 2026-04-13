@@ -14,7 +14,7 @@ import {
 
 const toast = useToast();
 
-const { state } = useStoreNewQuestionnaireForm();
+const { state, reset } = useStoreNewQuestionnaireForm();
 const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 const { data: me } = useMe();
 
@@ -32,6 +32,7 @@ const handleSave = async () => {
     });
     return;
   }
+
   try {
     const result = await postNewQuestionnaire(
       convertToBody({ ...state, is_published: false }),
@@ -39,6 +40,7 @@ const handleSave = async () => {
     if (!result) {
       throw new Error('Failed to create questionnaire');
     }
+    reset();
     await navigateTo({
       path: `/questionnaires/${result.questionnaire_id}/edit`,
     });
@@ -59,18 +61,7 @@ const handleSave = async () => {
 
 const handleSend = async () => {
   const validationErrors = getValidationErrors(state);
-  if (validationErrors.length > 0) {
-    validationErrors
-      .filter(({ display }) => display)
-      .forEach(({ message }) => {
-        toast.add({
-          summary: message,
-          severity: 'error',
-          life: 3000,
-        });
-      });
-    return;
-  }
+  if (validationErrors.length > 0) return;
 
   try {
     const result = await postNewQuestionnaire(
@@ -79,6 +70,7 @@ const handleSend = async () => {
     if (!result) {
       throw new Error('Failed to create questionnaire');
     }
+    reset();
     await navigateTo({
       path: `/questionnaires/${result.questionnaire_id}`,
     });

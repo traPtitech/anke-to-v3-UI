@@ -78,9 +78,12 @@ export const useStoreNewQuestionnaireForm = defineStore(
   'NewQuestionnaireForm',
   () => {
     const state = ref<QuestionnaireFormSettings>(
-      defaultQuestionnaireFormSettings,
+      structuredClone(defaultQuestionnaireFormSettings),
     );
-    return { state };
+    const reset = () => {
+      state.value = structuredClone(defaultQuestionnaireFormSettings);
+    };
+    return { state, reset };
   },
 );
 
