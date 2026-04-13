@@ -27,16 +27,29 @@ const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 const savedSnapshot = ref(JSON.stringify(state));
 const isDirty = computed(() => JSON.stringify(state) !== savedSnapshot.value);
 
-const handleBackToDetail = async () => {
+onBeforeRouteLeave((_to, _from, next) => {
   if (isDirty.value) {
     const shouldLeave = confirm(
-      '保存していない変更は破棄されます。アンケート詳細画面に戻りますか？',
+      '保存していない変更は破棄されます。ページを離れますか？',
     );
     if (!shouldLeave) return;
   }
+  next();
+});
 
-  await navigateTo(`/questionnaires/${props.questionnaire.questionnaire_id}`);
+const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  if (isDirty.value) {
+    e.preventDefault();
+  }
 };
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+});
 
 const handleSave = async () => {
   if (state.title.trim() === '') {
@@ -117,7 +130,6 @@ const handleSend = async () => {
           class="edit-back-link"
           variant="secondary"
           size="sm"
-          @click.prevent="handleBackToDetail"
         >
           <Icon name="mdi:chevron-left" size="20px" />
           <span>アンケート詳細に戻る</span>

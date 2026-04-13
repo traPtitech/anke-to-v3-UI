@@ -19,7 +19,7 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
 
 <template>
   <header class="header hide-search-on-mobile">
-    <NuxtLink to="/" class="logo-link" aria-label="anke-to home">
+    <NuxtLink to="/explorer" class="logo-link" aria-label="anke-to home">
       <img src="~/assets/img/logo.svg" alt="anke-to" class="logo-image" />
     </NuxtLink>
 
