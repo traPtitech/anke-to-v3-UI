@@ -7,7 +7,7 @@ COPY . .
 RUN npm run postinstall
 RUN npm run generate
 
-FROM caddy:2.10.2-alpine AS production
+FROM caddy:2-alpine AS production
 
 COPY --from=builder /app/.output/public /usr/share/caddy
 
