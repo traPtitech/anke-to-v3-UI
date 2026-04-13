@@ -33,10 +33,6 @@ const visibleUserCounts = computed(() =>
 const hiddenUserCount = computed(
   () => userCounts.value.length - visibleUserCounts.value.length,
 );
-
-const userIconStyle = (user: string) => ({
-  backgroundImage: `url(https://q.trap.jp/api/v3/public/icon/${encodeURIComponent(user)})`,
-});
 </script>
 
 <template>
@@ -49,9 +45,9 @@ const userIconStyle = (user: string) => ({
         class="user-chip"
         :class="{ 'user-chip-me': me?.name === user }"
       >
-        <span
+        <img
           class="user-chip-avatar"
-          :style="userIconStyle(user)"
+          :src="getUserAvatarUrl(user)"
           aria-hidden="true"
         />
         <span class="user-chip-name">{{ '@' + user }}</span>
@@ -81,9 +77,9 @@ const userIconStyle = (user: string) => ({
           class="dialog-user-item"
           :class="{ 'dialog-user-item-me': me?.name === user }"
         >
-          <span
+          <img
             class="dialog-user-avatar"
-            :style="userIconStyle(user)"
+            :src="getUserAvatarUrl(user)"
             aria-hidden="true"
           />
           <span class="dialog-user-name">{{ '@' + user }}</span>
@@ -134,8 +130,6 @@ const userIconStyle = (user: string) => ({
   width: 18px;
   height: 18px;
   border-radius: 999px;
-  background-size: cover;
-  background-position: center;
   background-color: var(--p-surface-300);
 }
 
@@ -195,8 +189,6 @@ const userIconStyle = (user: string) => ({
   width: 22px;
   height: 22px;
   border-radius: 999px;
-  background-size: cover;
-  background-position: center;
   background-color: var(--p-surface-300);
 }
 

@@ -11,7 +11,7 @@ const { data: me } = useMe();
 const userIconSrc = computed(() => {
   const name = me.value?.name;
   if (!name) return undefined;
-  return `https://q.trap.jp/api/v3/public/icon/${name}`;
+  return getUserAvatarUrl(name);
 });
 
 const answeredFilterQuery = buildTabFilterQuery('answered');

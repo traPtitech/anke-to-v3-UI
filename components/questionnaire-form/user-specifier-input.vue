@@ -41,7 +41,7 @@ const groupIds = computed(() =>
       <template #option="{ option }">
         <div class="user-option">
           <img
-            :src="`https://image-proxy.trap.jp/icon/${option.value}?width=48&height=48&format=webp`"
+            :src="getUserAvatarUrl(option.value)"
             alt=""
             width="24"
             height="24"

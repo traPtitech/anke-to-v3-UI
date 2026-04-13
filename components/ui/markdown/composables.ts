@@ -88,13 +88,10 @@ const createMarkdownRenderer = () => {
       `https://q.trap.jp/channel/${channelId}`,
     generateStampHref: (fileId: string) => {
       const user = userIconFileIdMap.value?.get(fileId);
-      if (user) {
-        return `https://image-proxy.trap.jp/icon/${user.name}?width=48&height=48&format=webp`;
-      }
+      if (user) return getUserAvatarUrl(user.name);
       const stamp = stampFileIdMap.value?.get(fileId);
-      if (stamp) {
-        return `https://image-proxy.trap.jp/stamp/${stamp.id}?width=48&height=48&format=webp`;
-      }
+      if (stamp) return getStampImageUrl(stamp.id);
+
       return `https://q.trap.jp/api/v3/files/${fileId}`;
     },
   };
