@@ -11,18 +11,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
+      - run: npm ci
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm run build
 
-      - name: Testing build App
-        run: npm run build
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
 
-      - name: Test
-        run: npm run test
+      - run: npm run test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      - run: npm run lint
