@@ -122,10 +122,6 @@ const hiddenUserCount = computed(
   white-space: nowrap;
 }
 
-.user-chip:hover {
-  background-color: var(--p-surface-200);
-}
-
 .user-chip-avatar {
   width: 18px;
   height: 18px;
@@ -137,10 +133,6 @@ const hiddenUserCount = computed(
   background-color: var(--p-primary-50);
   color: var(--p-primary-700);
   font-weight: 600;
-}
-
-.user-chip-me:hover {
-  background-color: var(--p-primary-100);
 }
 
 .user-chip-count {

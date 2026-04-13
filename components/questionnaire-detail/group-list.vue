@@ -102,10 +102,6 @@ const hiddenGroupCount = computed(
   white-space: nowrap;
 }
 
-.group-chip:hover {
-  background-color: var(--p-surface-200);
-}
-
 .group-chip-icon {
   color: var(--p-text-muted-color);
 }
@@ -118,10 +114,6 @@ const hiddenGroupCount = computed(
 
 .group-chip-me .group-chip-icon {
   color: var(--p-primary-500);
-}
-
-.group-chip-me:hover {
-  background-color: var(--p-primary-100);
 }
 
 .group-chip-more {
