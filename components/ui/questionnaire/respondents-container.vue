@@ -3,6 +3,7 @@ import UserAndGroupList from '~/components/questionnaire-detail/user-and-group-l
 import UserList from '~/components/questionnaire-detail/user-list.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import QuestionnaireLabel from './label.vue';
+import NoContentMessage from '~/components/ui/no-content-message.vue';
 
 const props = defineProps<{
   questionnaire: GatewayQuestionnaire;
