@@ -11,7 +11,9 @@ import type {
   QuestionSettingsTextLong,
 } from './type';
 
-const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
+const getDefaultQuestionnaireFormSettings = (
+  adminUser?: string,
+): QuestionnaireFormSettings => ({
   title: '',
   description: '',
   response_due_date_time: undefined,
@@ -23,12 +25,12 @@ const defaultQuestionnaireFormSettings: QuestionnaireFormSettings = {
     groups: [],
   },
   admin: {
-    users: [],
+    users: adminUser ? [adminUser] : [],
     groups: [],
   },
   questions: [],
   is_published: false,
-};
+});
 
 const createDefaultQuestionSettingsBase = (): QuestionSettingsBase => ({
   question_id: createId(),
@@ -78,13 +80,28 @@ export const useStoreNewQuestionnaireForm = defineStore(
   'NewQuestionnaireForm',
   () => {
     const state = ref<QuestionnaireFormSettings>(
-      structuredClone(defaultQuestionnaireFormSettings),
+      getDefaultQuestionnaireFormSettings(),
     );
-    const reset = () => {
-      state.value = structuredClone(defaultQuestionnaireFormSettings);
+    const getStateSnapshot = (value: QuestionnaireFormSettings) =>
+      JSON.stringify(value);
+    const cleanSnapshot = ref(getStateSnapshot(state.value));
+    const isDirty = ref(false);
+    const reset = (adminUser?: string) => {
+      const nextState = getDefaultQuestionnaireFormSettings(adminUser);
+      cleanSnapshot.value = getStateSnapshot(nextState);
+      state.value = nextState;
     };
-    return { state, reset };
+
+    watch(
+      state,
+      () => {
+        isDirty.value = getStateSnapshot(state.value) !== cleanSnapshot.value;
+      },
+      { deep: true, immediate: true },
+    );
+    return { state, isDirty, reset };
   },
+  { persist: true },
 );
 
 export const addQuestion = (

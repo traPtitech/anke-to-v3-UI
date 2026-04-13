@@ -49,10 +49,12 @@ const isResponseDueDateTimeInvalidForDate = computed(() => {
   return new Date(state.value.response_due_date_time) < new Date();
 });
 
+const getDefaultDueDate = () => addDays(today, 7);
+
 const useCustomDueTime = ref(state.value.response_due_date_time !== undefined);
 const responseDueDateTimeInput = ref<Date>(
   state.value.response_due_date_time === undefined
-    ? addDays(today, 7)
+    ? getDefaultDueDate()
     : new Date(state.value.response_due_date_time),
 );
 const selectedDueDatePreset = computed<DueDatePreset | null>(() =>
@@ -80,6 +82,23 @@ const handleSelectDueDatePresetByValue = (value: string) => {
   if (preset === undefined) return;
   handleSelectDueDatePreset(preset);
 };
+
+watch(
+  () => state.value.response_due_date_time,
+  (value) => {
+    if (value === undefined) {
+      useCustomDueTime.value = false;
+      responseDueDateTimeInput.value = getDefaultDueDate();
+      return;
+    }
+
+    const nextDueDate = new Date(value);
+    if (Number.isNaN(nextDueDate.getTime())) return;
+
+    useCustomDueTime.value = true;
+    responseDueDateTimeInput.value = nextDueDate;
+  },
+);
 
 watch(
   useCustomDueTime,

@@ -14,17 +14,26 @@ import {
 
 const toast = useToast();
 
-const { state, reset } = useStoreNewQuestionnaireForm();
-const isValidQuestionnaire = computed(() => checkValidity(state).ok);
+const newQuestionnaireFormStore = useStoreNewQuestionnaireForm();
+const { state, isDirty } = storeToRefs(newQuestionnaireFormStore);
+const { reset } = newQuestionnaireFormStore;
+const isValidQuestionnaire = computed(() => checkValidity(state.value).ok);
 const { data: me } = useMe();
 
 onMounted(() => {
   if (me.value === undefined) return;
-  state.admin.users = [me.value.name];
+  if (state.value.admin.users.length > 0) return;
+  state.value.admin.users = [me.value.name];
 });
 
+const handleReset = () => {
+  if (confirm('この操作は取り消せません。本当に入力内容をリセットしますか？')) {
+    reset(me.value?.name);
+  }
+};
+
 const handleSave = async () => {
-  if (state.title.trim() === '') {
+  if (state.value.title.trim() === '') {
     toast.add({
       summary: 'アンケートのタイトルを入力してください。',
       severity: 'error',
@@ -35,12 +44,12 @@ const handleSave = async () => {
 
   try {
     const result = await postNewQuestionnaire(
-      convertToBody({ ...state, is_published: false }),
+      convertToBody({ ...state.value, is_published: false }),
     );
     if (!result) {
       throw new Error('Failed to create questionnaire');
     }
-    reset();
+    reset(me.value?.name);
     await navigateTo({
       path: `/questionnaires/${result.questionnaire_id}/edit`,
     });
@@ -60,17 +69,17 @@ const handleSave = async () => {
 };
 
 const handleSend = async () => {
-  const validationErrors = getValidationErrors(state);
+  const validationErrors = getValidationErrors(state.value);
   if (validationErrors.length > 0) return;
 
   try {
     const result = await postNewQuestionnaire(
-      convertToBody({ ...state, is_published: true }),
+      convertToBody({ ...state.value, is_published: true }),
     );
     if (!result) {
       throw new Error('Failed to create questionnaire');
     }
-    reset();
+    reset(me.value?.name);
     await navigateTo({
       path: `/questionnaires/${result.questionnaire_id}`,
     });
@@ -93,6 +102,14 @@ const handleSend = async () => {
 <template>
   <QuestionnaireFormBase v-model="state">
     <template #buttons>
+      <IconButton
+        variant="secondary"
+        icon="mdi:arrow-u-left-bottom"
+        :disabled="!isDirty"
+        @click="handleReset"
+      >
+        <span>リセット</span>
+      </IconButton>
       <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
         <span>一時保存</span>
       </IconButton>
