@@ -44,6 +44,9 @@ const nonAnsweredTargets = computed(() =>
         />
       </div>
       <div class="sidebar-people-item">
+        <div v-if="props.questionnaire.respondents.length === 0">
+          <NoContentMessage>いません</NoContentMessage>
+        </div>
         <QuestionnaireLabel>回答済み</QuestionnaireLabel>
         <UserList
           :users="props.questionnaire.respondents"
@@ -51,6 +54,9 @@ const nonAnsweredTargets = computed(() =>
         />
       </div>
       <div class="sidebar-people-item">
+        <div v-if="nonAnsweredTargets.length === 0">
+          <NoContentMessage>いません</NoContentMessage>
+        </div>
         <QuestionnaireLabel>未回答</QuestionnaireLabel>
         <UserList
           :users="nonAnsweredTargets"

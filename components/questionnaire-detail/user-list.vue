@@ -36,8 +36,7 @@ const hiddenUserCount = computed(
 </script>
 
 <template>
-  <div v-if="props.users.length === 0" class="empty-message">いません</div>
-  <div v-else class="user-list-wrapper">
+  <div class="user-list-wrapper">
     <div class="user-chip-list">
       <span
         v-for="[user, count] in visibleUserCounts"
@@ -91,11 +90,6 @@ const hiddenUserCount = computed(
 </template>
 
 <style lang="scss" scoped>
-.empty-message {
-  color: var(--p-text-muted-color);
-  font-size: 13px;
-}
-
 .user-list-wrapper {
   width: 100%;
 }

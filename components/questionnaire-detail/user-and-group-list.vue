@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import GroupList from './group-list.vue';
 import UserList from './user-list.vue';
+import NoContentMessage from '~/components/ui/no-content-message.vue';
 
 const props = defineProps<{
   specifier: { users: string[]; groups: string[] };
@@ -17,6 +18,9 @@ const { restUsers, groups } = useResolveUserSpecifier(
 
 <template>
   <div class="user-and-group-list">
+    <div v-if="groups.length === 0 && restUsers.length === 0">
+      <NoContentMessage>いません</NoContentMessage>
+    </div>
     <GroupList :groups="groups" :dialog-title="props.groupDialogTitle" />
     <UserList :users="restUsers" :dialog-title="props.userDialogTitle" />
   </div>
