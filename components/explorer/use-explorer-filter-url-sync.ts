@@ -68,6 +68,15 @@ export const useExplorerFilterUrlSync = () => {
     });
   };
 
+  const setSearchQuery = async (value: string) => {
+    const normalized = value.trim();
+
+    await setQueryParams({
+      [explorerQueryKeys.search]: normalized || undefined,
+      [explorerQueryKeys.page]: undefined,
+    });
+  };
+
   const setTab = async (tab: TabKey) => {
     await setFilterSet(new Set(tabFilterPresets[tab]));
   };
@@ -77,6 +86,7 @@ export const useExplorerFilterUrlSync = () => {
     searchQuery,
     sortState,
     setFilterSet,
+    setSearchQuery,
     setSortState,
     setTab,
   };

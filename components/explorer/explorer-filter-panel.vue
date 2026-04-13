@@ -23,6 +23,7 @@ const emit = defineEmits<{
 const {
   tabs,
   isFilterExpanded,
+  mobileSearchText,
   sortMenuItems,
   sortMenuLabel,
   onlyActiveDue,
@@ -71,6 +72,7 @@ const {
           <AccordionContent>
             <ExplorerAdvancedFilterGrid
               v-model:advanced-filter-state="advancedFilterState"
+              v-model:search="mobileSearchText"
             />
           </AccordionContent>
         </AccordionPanel>

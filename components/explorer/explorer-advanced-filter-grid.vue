@@ -19,6 +19,10 @@ const advancedFilterState = defineModel<ExplorerAdvancedFilterState>(
   },
 );
 
+const searchText = defineModel<string>('search', {
+  required: true,
+});
+
 const targetScope = computed<TargetScope>({
   get: () => advancedFilterState.value.targetScope,
   set: (value) => {
@@ -84,6 +88,16 @@ const administrationScopeOptions = [
 
 <template>
   <div class="advanced-filter-panel">
+    <div class="mobile-search-field">
+      <Icon class="mobile-search-icon" name="mdi:magnify" size="22px" />
+      <InputText
+        v-model="searchText"
+        placeholder="タイトルで検索"
+        aria-label="アンケートのタイトルで検索"
+        class="mobile-search-input"
+      />
+    </div>
+
     <div class="advanced-filter-grid">
       <div class="advanced-filter-block">
         <div class="advanced-filter-title">対象</div>
@@ -149,6 +163,27 @@ const administrationScopeOptions = [
   gap: 12px;
 }
 
+.mobile-search-field {
+  display: none;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.mobile-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--p-text-secondary);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mobile-search-input {
+  width: 100%;
+  padding-left: 40px;
+}
+
 .advanced-filter-title {
   margin-bottom: 8px;
   font-size: 13px;
@@ -166,6 +201,10 @@ const administrationScopeOptions = [
 }
 
 @media screen and (max-width: 900px) {
+  .mobile-search-field {
+    display: block;
+  }
+
   .advanced-filter-grid {
     grid-template-columns: 1fr;
   }

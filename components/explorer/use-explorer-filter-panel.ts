@@ -46,11 +46,45 @@ export const useExplorerFilterPanel = ({
     searchQuery,
     sortState,
     setFilterSet,
+    setSearchQuery,
     setSortState,
     setTab,
   } = useExplorerFilterUrlSync();
 
   const isFilterExpanded = ref(false);
+  const searchInputText = ref(searchQuery.value);
+  const SEARCH_DEBOUNCE_MS = 300;
+  let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const applySearchWithDebounce = (value: string) => {
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer);
+    }
+
+    searchDebounceTimer = setTimeout(() => {
+      void setSearchQuery(value);
+    }, SEARCH_DEBOUNCE_MS);
+  };
+
+  watch(searchQuery, (nextQuery) => {
+    if (nextQuery !== searchInputText.value) {
+      searchInputText.value = nextQuery;
+    }
+  });
+
+  onBeforeUnmount(() => {
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer);
+    }
+  });
+
+  const mobileSearchText = computed<string>({
+    get: () => searchInputText.value,
+    set: (value) => {
+      searchInputText.value = value;
+      applySearchWithDebounce(value);
+    },
+  });
 
   const dateSortDirectionPreference = ref<SortDirection>(
     DEFAULT_SORT_DIRECTION,
@@ -243,6 +277,7 @@ export const useExplorerFilterPanel = ({
   return {
     tabs,
     isFilterExpanded,
+    mobileSearchText,
     sortMenuItems,
     sortMenuLabel,
     onlyActiveDue,
