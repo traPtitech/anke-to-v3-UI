@@ -3,55 +3,32 @@ type InternalOption = {
   label: string;
 };
 
-const toInternal = (value: string[]): InternalOption[] =>
-  value.map((option) => ({
+const toInternal = (value: string[]): InternalOption[] => {
+  const converted = value.map((option) => ({
     id: createId(),
     label: option,
   }));
 
-const fromInternal = (value: InternalOption[]): string[] => {
-  if (value.length === 0) return [];
-
-  const lastIndex = value.length - 1;
-  return value
-    .filter(
-      (option, index) => !(index === lastIndex && option.label.trim() === ''),
-    )
-    .map((option) => option.label);
+  // 新しい選択肢を追加するように常に末尾に空の選択肢を用意する
+  return [...converted, { id: createId(), label: '' }];
 };
+
+const fromInternal = (value: InternalOption[]): string[] =>
+  value.slice(0, -1).map((option) => option.label);
 
 const isSameOptions = (a: string[], b: string[]) =>
   a.length === b.length && a.every((v, i) => v === b[i]);
 
 export const useChoiceGroupFromControl = (options: Ref<string[]>) => {
-  const initializeInternalOptions = () => {
-    const internal = toInternal(options.value);
-    if (internal.length === 0) {
-      internal.push({
-        id: createId(),
-        label: '',
-      });
-    }
-    return internal;
-  };
-
-  const internalOptions = ref<InternalOption[]>(initializeInternalOptions());
+  const internalOptions = ref<InternalOption[]>(toInternal(options.value));
 
   watch(
     () => options.value,
     (newValue) => {
       const currentValue = fromInternal(internalOptions.value);
-      if (isSameOptions(newValue, currentValue)) {
-        return;
-      }
+      if (isSameOptions(newValue, currentValue)) return;
 
       internalOptions.value = toInternal(newValue);
-      if (internalOptions.value.length === 0) {
-        internalOptions.value.push({
-          id: createId(),
-          label: '',
-        });
-      }
     },
   );
 
@@ -59,15 +36,11 @@ export const useChoiceGroupFromControl = (options: Ref<string[]>) => {
     internalOptions,
     (newValue) => {
       const externalValue = fromInternal(newValue);
-      if (isSameOptions(externalValue, options.value)) {
-        return;
-      }
+      if (isSameOptions(externalValue, options.value)) return;
 
       options.value = externalValue;
     },
-    {
-      deep: true,
-    },
+    { deep: true },
   );
 
   const addOption = (index?: number) => {
