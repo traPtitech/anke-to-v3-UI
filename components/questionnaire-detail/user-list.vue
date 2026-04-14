@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useMe } from '~/composables/type-fetch/anke-to/client';
+import UserChip from '~/components/ui/user-chip.vue';
 
 const props = defineProps<{
   users: string[];
@@ -38,20 +39,13 @@ const hiddenUserCount = computed(
 <template>
   <div class="user-list-wrapper">
     <div class="user-chip-list">
-      <span
+      <UserChip
         v-for="[user, count] in visibleUserCounts"
         :key="user"
-        class="user-chip"
-        :class="{ 'user-chip-me': me?.name === user }"
-      >
-        <img
-          class="user-chip-avatar"
-          :src="getUserAvatarUrl(user)"
-          aria-hidden="true"
-        />
-        <span class="user-chip-name">{{ '@' + user }}</span>
-        <span v-if="count > 1" class="user-chip-count">({{ count }})</span>
-      </span>
+        :username="user"
+        :count="count"
+        :highlighted="me?.name === user"
+      />
 
       <button
         v-if="hiddenUserCount > 0"
@@ -100,39 +94,6 @@ const hiddenUserCount = computed(
   flex-wrap: wrap;
   gap: 6px;
   width: 100%;
-}
-
-.user-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px 3px 6px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  background-color: var(--p-surface-100);
-  color: var(--p-text-color);
-  transition: all 0.15s ease;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-.user-chip-avatar {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background-color: var(--p-surface-300);
-}
-
-.user-chip-me {
-  background-color: var(--p-primary-50);
-  color: var(--p-primary-700);
-  font-weight: 600;
-}
-
-.user-chip-count {
-  font-size: 11px;
-  color: var(--p-text-muted-color);
 }
 
 .user-chip-more {

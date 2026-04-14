@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { QuestionResultSingleChoice } from '../composables/use-questionnaire-result';
+import UserChip from '~/components/ui/user-chip.vue';
 
 const props = defineProps<{
   result: QuestionResultSingleChoice;
@@ -25,6 +26,11 @@ const aggregatedResponses = computed(() => {
       ? undefined
       : props.result.responses
           .filter((r) => r.answer === res)
+          .map((r) => r.respondent),
+    respondentsText: props.isAnonymous
+      ? undefined
+      : props.result.responses
+          .filter((r) => r.answer === res)
           .map((r) => `@${r.respondent}`)
           .join(' '),
   }));
@@ -45,11 +51,27 @@ const aggregatedResponses = computed(() => {
     <Column field="countAndRate" header="回答数・回答率" sortable />
     <Column
       v-if="!props.isAnonymous"
-      field="respondents"
+      field="respondentsText"
       header="回答者"
       sortable
-    />
+    >
+      <template #body="{ data }">
+        <div class="respondents-chip-list">
+          <UserChip
+            v-for="respondent in data.respondents"
+            :key="respondent"
+            :username="respondent"
+          />
+        </div>
+      </template>
+    </Column>
   </DataTable>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.respondents-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+</style>

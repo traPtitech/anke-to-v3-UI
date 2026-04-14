@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useMe } from '~/composables/type-fetch/anke-to/client';
+import GroupChip from '~/components/ui/group-chip.vue';
 
 const props = defineProps<{
   groups: { name: string; members: string[] }[];
@@ -32,15 +33,12 @@ const hiddenGroupCount = computed(
 <template>
   <div class="group-list-wrapper">
     <div class="group-chip-list">
-      <span
+      <GroupChip
         v-for="group in visibleGroups"
         :key="group.name"
-        class="group-chip"
-        :class="{ 'group-chip-me': group.members.includes(me?.name || '') }"
-      >
-        <Icon name="mdi:account-group" size="14px" class="group-chip-icon" />
-        <span class="group-chip-name">@{{ group.name }}</span>
-      </span>
+        :name="group.name"
+        :highlighted="group.members.includes(me?.name || '')"
+      />
 
       <button
         v-if="hiddenGroupCount > 0"
@@ -86,35 +84,6 @@ const hiddenGroupCount = computed(
   flex-wrap: wrap;
   gap: 6px;
   width: 100%;
-}
-
-.group-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px 3px 6px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  background-color: var(--p-surface-100);
-  color: var(--p-text-color);
-  transition: all 0.15s ease;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-.group-chip-icon {
-  color: var(--p-text-muted-color);
-}
-
-.group-chip-me {
-  background-color: var(--p-primary-50);
-  color: var(--p-primary-700);
-  font-weight: 600;
-}
-
-.group-chip-me .group-chip-icon {
-  color: var(--p-primary-500);
 }
 
 .group-chip-more {
