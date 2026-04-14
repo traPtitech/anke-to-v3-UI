@@ -5,7 +5,7 @@ import IconButton from '~/components/ui/icon-button.vue';
 import { patchQuestionnaireById } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import QuestionnaireFormBase from './questionnaire-form-base.vue';
-import { checkValidity, getValidationErrors } from './store';
+import { checkValidity } from './store';
 
 const toast = useToast();
 
@@ -96,19 +96,7 @@ const handleSave = async () => {
 };
 
 const handleSend = async () => {
-  const validationErrors = getValidationErrors(state);
-  if (validationErrors.length > 0) {
-    validationErrors
-      .filter(({ display }) => display)
-      .forEach(({ message }) => {
-        toast.add({
-          summary: message,
-          severity: 'error',
-          life: 3000,
-        });
-      });
-    return;
-  }
+  if (!isValidQuestionnaire) return;
 
   try {
     await patchQuestionnaireById(props.questionnaire.questionnaire_id, {

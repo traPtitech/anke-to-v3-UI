@@ -155,28 +155,24 @@ export const removeQuestion = (
   return true;
 };
 
-type Validity = { ok: boolean; errors?: { message: string; display: boolean } };
+type Error = { message: string };
+
+type Validity = { ok: false; errors: Error[] } | { ok: true };
 
 export const getValidationErrors = (
   state: QuestionnaireFormSettings,
-): { message: string; display: boolean }[] => {
-  const errors: { message: string; display: boolean }[] = [];
+): Error[] => {
+  const errors: Error[] = [];
 
   if (state.title.trim() === '') {
-    errors.push({
-      message: 'アンケートのタイトルを入力してください',
-      display: false,
-    });
+    errors.push({ message: 'アンケートのタイトルを入力してください' });
   }
 
   if (
     state.response_due_date_time !== undefined &&
     new Date(state.response_due_date_time) < new Date()
   ) {
-    errors.push({
-      message: '回答期限は未来の日時を指定してください',
-      display: false,
-    });
+    errors.push({ message: '回答期限は未来の日時を指定してください' });
   }
 
   if (
@@ -185,29 +181,19 @@ export const getValidationErrors = (
   ) {
     errors.push({
       message: '対象者が設定されている場合、回答期限は設定必須です',
-      display: false,
     });
   }
 
   if (state.admin.users.length === 0 && state.admin.groups.length === 0) {
-    errors.push({
-      message: 'アンケートの管理者を設定してください',
-      display: false,
-    });
+    errors.push({ message: 'アンケートの管理者を設定してください' });
   }
 
   if (state.questions.length === 0) {
-    errors.push({
-      message: 'アンケートに質問を追加してください',
-      display: true,
-    });
+    errors.push({ message: 'アンケートに質問を追加してください' });
   }
 
   if (state.questions.some((q) => q.title.trim() === '')) {
-    errors.push({
-      message: 'タイトルが空欄の質問があります',
-      display: false,
-    });
+    errors.push({ message: 'タイトルが空欄の質問があります' });
   }
 
   if (
@@ -218,10 +204,7 @@ export const getValidationErrors = (
         q.options.length === 0,
     )
   ) {
-    errors.push({
-      message: '選択肢がない質問があります',
-      display: false,
-    });
+    errors.push({ message: '選択肢がない質問があります' });
   }
 
   if (
@@ -232,10 +215,7 @@ export const getValidationErrors = (
         q.options.some((o) => o.trim() === ''),
     )
   ) {
-    errors.push({
-      message: '選択肢に空欄が含まれる質問があります',
-      display: false,
-    });
+    errors.push({ message: '選択肢に空欄が含まれる質問があります' });
   }
 
   if (
@@ -246,10 +226,7 @@ export const getValidationErrors = (
         new Set(q.options).size !== q.options.length,
     )
   ) {
-    errors.push({
-      message: '選択肢が重複している質問があります',
-      display: false,
-    });
+    errors.push({ message: '選択肢が重複している質問があります' });
   }
 
   return errors;
@@ -261,7 +238,7 @@ export const checkValidity = (state: QuestionnaireFormSettings): Validity => {
   if (errors.length > 0) {
     return {
       ok: false,
-      errors: errors.find(({ display }) => display),
+      errors,
     };
   }
 

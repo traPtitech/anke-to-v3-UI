@@ -12,9 +12,7 @@ import {
 import type { QuestionnaireFormSettings } from './type';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
-const validationErrors = computed(() =>
-  getValidationErrors(state.value).filter(({ display }) => display),
-);
+const validationErrors = computed(() => getValidationErrors(state.value));
 const focusedQuestionId = ref<number | null>(null);
 
 const handleAddQuestion = (
