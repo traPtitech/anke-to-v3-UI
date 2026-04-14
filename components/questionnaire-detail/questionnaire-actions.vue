@@ -130,6 +130,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
       <div class="remind-switch-item">
         <ToggleSwitch
           :input-id="remindSwitchId"
+          :disabled="!canRespond"
           :model-value="isRemindEnabled"
           @update:model-value="handleRemindSwitchUpdate"
         />
