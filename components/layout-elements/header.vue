@@ -36,8 +36,12 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
     </div>
 
     <div class="top-actions">
-      <ButtonLink to="/questionnaires/new" variant="primary">
-        <Icon name="mdi:plus" size="20px" />
+      <ButtonLink
+        to="/questionnaires/new"
+        variant="primary"
+        class="header-create-button"
+      >
+        <Icon name="mdi:plus" size="20px" class="header-create-button-icon" />
         <span>
           <span class="label-desktop">新規作成</span>
           <span class="label-mobile">新規</span>
@@ -123,6 +127,14 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
 .search-input {
   width: 100%;
   padding-left: 42px;
+}
+
+:deep(.header-create-button) {
+  height: 40px;
+}
+
+.header-create-button-icon {
+  transform: translateX(-2px);
 }
 
 .label-mobile {

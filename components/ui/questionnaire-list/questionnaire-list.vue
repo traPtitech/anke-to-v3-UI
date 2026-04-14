@@ -286,6 +286,7 @@ const toggleActionMenu = (
   position: relative;
   overflow: hidden;
   max-height: 4rem;
+  min-height: 1rem;
 }
 
 .card-description::after {
