@@ -37,9 +37,6 @@ const { results } = useQuestionnaireResult(
     </div>
 
     <section class="result-info-section">
-      <div class="result-info-header">
-        <p class="section-label">アンケート情報</p>
-      </div>
       <ResultTitleContainer :questionnaire="props.questionnaire" />
       <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
     </section>
@@ -93,20 +90,6 @@ const { results } = useQuestionnaireResult(
 
 .result-questions-section {
   gap: 14px;
-}
-
-.section-label {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--p-text-secondary);
-  letter-spacing: 0.04em;
-}
-
-.result-info-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .export-dialog-content {
