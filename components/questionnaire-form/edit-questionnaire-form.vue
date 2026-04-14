@@ -24,6 +24,13 @@ const createEditableState = () => ({
 
 const state = reactive(createEditableState());
 const isValidQuestionnaire = computed(() => checkValidity(state).ok);
+const isEditingDraft = computed(() => !state.is_published);
+const saveButtonLabel = computed(() =>
+  isEditingDraft.value ? '一時保存' : '下書きに戻す',
+);
+const saveButtonIcon = computed(() =>
+  isEditingDraft.value ? 'mdi:close' : 'mdi:file-undo-outline',
+);
 const savedSnapshot = ref(JSON.stringify(state));
 const isDirty = computed(() => JSON.stringify(state) !== savedSnapshot.value);
 
@@ -62,12 +69,16 @@ const handleSave = async () => {
   }
 
   try {
+    const wasEditingDraft = isEditingDraft.value;
     await patchQuestionnaireById(props.questionnaire.questionnaire_id, {
       ...convertToBody({ ...state, is_published: false }),
       questionnaire_id: props.questionnaire.questionnaire_id,
     });
+    state.is_published = false;
     toast.add({
-      summary: 'アンケートを保存しました',
+      summary: wasEditingDraft
+        ? 'アンケートを一時保存しました'
+        : 'アンケートを下書きに戻しました',
       severity: 'success',
       life: 3000,
     });
@@ -75,7 +86,9 @@ const handleSave = async () => {
   } catch (err) {
     console.error(err);
     toast.add({
-      summary: 'アンケートの一時保存に失敗しました',
+      summary: isEditingDraft.value
+        ? 'アンケートの一時保存に失敗しました'
+        : 'アンケートを下書きに戻せませんでした',
       severity: 'error',
       life: 3000,
     });
@@ -140,8 +153,12 @@ const handleSend = async () => {
 
     <QuestionnaireFormBase v-model="state">
       <template #buttons>
-        <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
-          <span>一時保存</span>
+        <IconButton
+          variant="secondary"
+          :icon="saveButtonIcon"
+          @click="handleSave"
+        >
+          <span>{{ saveButtonLabel }}</span>
         </IconButton>
         <IconButton
           variant="primary"
