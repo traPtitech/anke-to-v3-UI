@@ -54,18 +54,16 @@
 
 .p-button.p-button-primary:disabled,
 .p-button.p-button-primary.p-disabled {
-  opacity: 1;
-  background-color: var(--app-primary-disabled-bg);
-  border-color: var(--app-primary-disabled-border);
-  color: var(--app-primary-disabled-text);
+  opacity: var(--p-disabled-opacity, 0.6);
+  box-shadow: none;
+  filter: saturate(0.85);
 }
 
 .p-button.p-button-secondary:disabled,
 .p-button.p-button-secondary.p-disabled {
-  opacity: 1;
-  background-color: var(--app-secondary-disabled-bg);
-  border-color: var(--app-secondary-disabled-border);
-  color: var(--app-secondary-disabled-text);
+  opacity: var(--p-disabled-opacity, 0.6);
+  box-shadow: none;
+  filter: saturate(0.85);
 }
 
 .p-button.p-button-primary {
