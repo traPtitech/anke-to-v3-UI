@@ -123,7 +123,25 @@ watch(hasTargets, (value) => {
   useCustomDueTime.value = true;
 });
 
-const responseDueDateNoDueId = useId();
+const dueHour = computed({
+  get: () => responseDueDateTimeInput.value.getHours(),
+  set: (h: number | null) => {
+    if (h === null) return;
+    const newDate = new Date(responseDueDateTimeInput.value);
+    newDate.setHours(h, newDate.getMinutes(), 0, 0);
+    responseDueDateTimeInput.value = newDate;
+  },
+});
+
+const dueMinute = computed({
+  get: () => responseDueDateTimeInput.value.getMinutes(),
+  set: (m: number | null) => {
+    if (m === null) return;
+    const newDate = new Date(responseDueDateTimeInput.value);
+    newDate.setHours(newDate.getHours(), m, 0, 0);
+    responseDueDateTimeInput.value = newDate;
+  },
+});
 </script>
 
 <template>
@@ -134,11 +152,7 @@ const responseDueDateNoDueId = useId();
         <label class="due-date-mode-option">
           <span>設定する</span>
 
-          <ToggleSwitch
-            v-model="useCustomDueTime"
-            :input-id="responseDueDateNoDueId"
-            binary
-          />
+          <ToggleSwitch v-model="useCustomDueTime" binary />
         </label>
       </div>
     </div>
@@ -156,7 +170,30 @@ const responseDueDateNoDueId = useId();
       hour-format="24"
       show-icon
       icon-display="input"
-    ></DatePicker>
+      :pt="{ timePicker: { style: 'display: none' } }"
+    >
+      <template #footer>
+        <div class="custom-time-picker">
+          <InputNumber
+            v-model="dueHour"
+            :min="0"
+            :max="23"
+            :step="1"
+            show-buttons
+            button-layout="vertical"
+          />
+          <span class="time-colon">:</span>
+          <InputNumber
+            v-model="dueMinute"
+            :min="0"
+            :max="59"
+            :step="1"
+            show-buttons
+            button-layout="vertical"
+          />
+        </div>
+      </template>
+    </DatePicker>
     <ChipSelectRow
       v-if="useCustomDueTime"
       class="due-date-presets"
@@ -216,6 +253,27 @@ const responseDueDateNoDueId = useId();
 .due-date-mode-option > span {
   font-size: 13px;
   font-weight: 500;
+}
+
+.custom-time-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding-block: 8px;
+
+  :deep(.p-inputnumber-input) {
+    width: 3rem;
+    text-align: center;
+    padding-inline: 0.25rem;
+    z-index: 1;
+  }
+}
+
+.time-colon {
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1;
 }
 
 .due-date-presets {
