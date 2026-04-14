@@ -127,8 +127,9 @@ const dueHour = computed({
   get: () => responseDueDateTimeInput.value.getHours(),
   set: (h: number | null) => {
     if (h === null) return;
+    const wrapped = ((h % 24) + 24) % 24;
     const newDate = new Date(responseDueDateTimeInput.value);
-    newDate.setHours(h, newDate.getMinutes(), 0, 0);
+    newDate.setHours(wrapped, newDate.getMinutes(), 0, 0);
     responseDueDateTimeInput.value = newDate;
   },
 });
@@ -137,8 +138,9 @@ const dueMinute = computed({
   get: () => responseDueDateTimeInput.value.getMinutes(),
   set: (m: number | null) => {
     if (m === null) return;
+    const wrapped = ((m % 60) + 60) % 60;
     const newDate = new Date(responseDueDateTimeInput.value);
-    newDate.setHours(newDate.getHours(), m, 0, 0);
+    newDate.setHours(newDate.getHours(), wrapped, 0, 0);
     responseDueDateTimeInput.value = newDate;
   },
 });
@@ -176,8 +178,6 @@ const dueMinute = computed({
         <div class="custom-time-picker">
           <InputNumber
             v-model="dueHour"
-            :min="0"
-            :max="23"
             :step="1"
             show-buttons
             button-layout="vertical"
@@ -185,8 +185,6 @@ const dueMinute = computed({
           <span class="time-colon">:</span>
           <InputNumber
             v-model="dueMinute"
-            :min="0"
-            :max="59"
             :step="1"
             show-buttons
             button-layout="vertical"
