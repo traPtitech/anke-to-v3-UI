@@ -216,6 +216,37 @@
   border-radius: var(--p-border-radius-md);
 }
 
+.p-datepicker-panel {
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.p-datepicker-panel .p-datepicker-prev-button,
+.p-datepicker-panel .p-datepicker-next-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+}
+
+.p-datepicker-panel .p-datepicker-prev-button:hover,
+.p-datepicker-panel .p-datepicker-next-button:hover {
+  background-color: var(--p-surface-100);
+  border: none;
+}
+
+.p-datepicker-weekday-cell {
+  padding: 0;
+}
+
+.p-datepicker-day-cell {
+  padding: 2px;
+}
+
 .questionnaire-form-container
   .smooth-dnd-container.vertical
   > .smooth-dnd-draggable-wrapper {

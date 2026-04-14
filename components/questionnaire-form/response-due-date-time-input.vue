@@ -123,8 +123,6 @@ watch(hasTargets, (value) => {
   useCustomDueTime.value = true;
 });
 
-const responseDueDateNoDueId = useId();
-
 const dueHour = computed({
   get: () => responseDueDateTimeInput.value.getHours(),
   set: (h: number | null) => {
@@ -154,11 +152,7 @@ const dueMinute = computed({
         <label class="due-date-mode-option">
           <span>設定する</span>
 
-          <ToggleSwitch
-            v-model="useCustomDueTime"
-            :input-id="responseDueDateNoDueId"
-            binary
-          />
+          <ToggleSwitch v-model="useCustomDueTime" binary />
         </label>
       </div>
     </div>
@@ -272,6 +266,7 @@ const dueMinute = computed({
     width: 3rem;
     text-align: center;
     padding-inline: 0.25rem;
+    z-index: 1;
   }
 }
 
