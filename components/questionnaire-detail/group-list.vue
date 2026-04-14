@@ -55,6 +55,7 @@ const hiddenGroupCount = computed(
     <Dialog
       v-model:visible="isDialogVisible"
       modal
+      dismissable-mask
       :header="props.dialogTitle ?? 'グループ一覧'"
       :style="{ width: 'min(640px, 92vw)' }"
     >

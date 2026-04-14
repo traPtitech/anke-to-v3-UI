@@ -66,6 +66,7 @@ const hiddenUserCount = computed(
     <Dialog
       v-model:visible="isDialogVisible"
       modal
+      dismissable-mask
       :header="props.dialogTitle ?? 'ユーザー一覧'"
       :style="{ width: 'min(720px, 92vw)' }"
     >

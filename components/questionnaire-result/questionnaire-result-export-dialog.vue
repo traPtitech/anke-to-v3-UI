@@ -84,6 +84,7 @@ const handleDownloadExportText = () => {
     <Dialog
       v-model:visible="isExportDialogVisible"
       modal
+      dismissable-mask
       header="出力"
       :style="{ width: 'min(840px, 96vw)' }"
     >
