@@ -96,7 +96,7 @@ const handleSave = async () => {
 };
 
 const handleSend = async () => {
-  if (!isValidQuestionnaire) return;
+  if (!isValidQuestionnaire.value) return;
 
   try {
     await patchQuestionnaireById(props.questionnaire.questionnaire_id, {
