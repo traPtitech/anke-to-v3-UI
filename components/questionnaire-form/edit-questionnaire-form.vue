@@ -102,6 +102,7 @@ const handleSend = async () => {
       ...convertToBody({ ...state, is_published: true }),
       questionnaire_id: props.questionnaire.questionnaire_id,
     });
+    savedSnapshot.value = JSON.stringify(state);
     await navigateTo({
       path: `/questionnaires/${props.questionnaire.questionnaire_id}`,
     });
