@@ -19,22 +19,22 @@ type DueDatePreset = DueDatePresetItem['value'];
 const getMatchingDueDatePreset = (date: Date): DueDatePreset | null => {
   const dateIso = date.toISOString();
   const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
- 
+
   const matchedPreset = dueDatePresets.find((preset) => {
     const presetDate = addDays(today, preset.days);
- 
+
     if (presetDate.toISOString() === dateIso) return true;
- 
+
     const presetDateKey = `${presetDate.getFullYear()}-${presetDate.getMonth()}-${presetDate.getDate()}`;
     return presetDateKey === dateKey;
   });
- 
+
   return matchedPreset?.value ?? null;
 };
 
 const isResponseDueDateTimeInvalidForTargets = computed(() => {
   if (state.value.response_due_date_time !== undefined) return false;
- 
+
   return (
     state.value.target.users.length > 0 || state.value.target.groups.length > 0
   );
@@ -45,7 +45,7 @@ const hasTargets = computed(
 );
 const isResponseDueDateTimeInvalidForDate = computed(() => {
   if (state.value.response_due_date_time === undefined) return false;
- 
+
   return new Date(state.value.response_due_date_time) < new Date();
 });
 
