@@ -22,12 +22,12 @@ const initialState = getExistingResponseFormState(
   props.response,
 );
 const { state, valid, atLeastOneFilled } = useResponseFormStore(initialState);
-const isEditingDraft = props.response.is_draft;
+const isEditingDraft = computed(() => props.response.is_draft);
 const saveButtonLabel = computed(() =>
-  isEditingDraft ? '一時保存' : '下書きに戻す',
+  isEditingDraft.value ? '一時保存' : '下書きに戻す',
 );
 const saveButtonIcon = computed(() =>
-  isEditingDraft ? 'mdi:close' : 'mdi:file-undo-outline',
+  isEditingDraft.value ? 'mdi:close' : 'mdi:file-undo-outline',
 );
 
 const handleSave = async () => {
@@ -41,12 +41,14 @@ const handleSave = async () => {
   }
 
   try {
+    // patchResponse の後だと既に isEditingDraft が変わってしまっている場合がある
+    const isEditingDraftSnapshot = isEditingDraft.value;
     await patchResponse(state.value.response_id, {
       ...convertToBody(state.value),
       is_draft: true,
     });
     toast.add({
-      summary: isEditingDraft
+      summary: isEditingDraftSnapshot
         ? '回答を一時保存しました'
         : '回答を下書きに戻しました',
       severity: 'success',
@@ -55,7 +57,7 @@ const handleSave = async () => {
   } catch (err) {
     console.error(err);
     toast.add({
-      summary: isEditingDraft
+      summary: isEditingDraft.value
         ? '回答の一時保存に失敗しました'
         : '回答を下書きに戻せませんでした',
       severity: 'error',

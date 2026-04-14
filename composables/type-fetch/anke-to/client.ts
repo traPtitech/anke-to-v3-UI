@@ -182,6 +182,45 @@ export const useGetResponse = (responseID: number) =>
     return res.data;
   });
 
+export const useGetResponseWithQuestionnaire = (responseID: number) => {
+  const {
+    data: response,
+    error: responseError,
+    refresh: refreshResponse,
+  } = useGetResponse(responseID);
+
+  const questionnaireID = computed(
+    () => response.value?.questionnaire_id ?? null,
+  );
+
+  const {
+    data: questionnaire,
+    error: questionnaireError,
+    refresh: refreshQuestionnaire,
+  } = useAsyncData(
+    `questionnaires/${questionnaireID.value ?? 'null'}`,
+    async () => {
+      if (!questionnaireID.value) {
+        return null;
+      }
+      return fetchQuestionnaire(questionnaireID.value);
+    },
+    { watch: [questionnaireID] },
+  );
+
+  const refresh = async () => {
+    await Promise.all([refreshResponse(), refreshQuestionnaire()]);
+  };
+
+  return {
+    response,
+    responseError,
+    questionnaire,
+    questionnaireError,
+    refresh,
+  };
+};
+
 export type PostNewResponseBody =
   paths['/questionnaires/{questionnaireID}/responses']['post']['requestBody']['content']['application/json'];
 export const postNewResponse = async (

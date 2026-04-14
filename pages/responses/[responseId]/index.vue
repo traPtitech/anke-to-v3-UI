@@ -3,32 +3,11 @@ import ResponseDetail from '~/components/response-detail/response-detail.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
-import {
-  useGetQuestionnaire,
-  useGetResponse,
-} from '~/composables/type-fetch/anke-to/client';
+import { useGetResponseWithQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
 const responseId = useRouteResponseId();
-const {
-  data: response,
-  error: responseError,
-  refresh: refreshResponse,
-} = useGetResponse(responseId);
-
-const questionnaireRequest = computed(() => {
-  const questionnaireId = response.value?.questionnaire_id;
-  if (!questionnaireId) {
-    return null;
-  }
-  return useGetQuestionnaire(questionnaireId);
-});
-
-const questionnaire = computed(
-  () => questionnaireRequest.value?.data.value ?? null,
-);
-const questionnaireError = computed(
-  () => questionnaireRequest.value?.error.value ?? null,
-);
+const { response, responseError, questionnaire, questionnaireError, refresh } =
+  useGetResponseWithQuestionnaire(responseId);
 
 usePageSeo({
   title: computed(() =>
@@ -38,13 +17,6 @@ usePageSeo({
   ),
   description: '回答内容の詳細を確認できます。',
 });
-
-const handleRetry = async () => {
-  await refreshResponse();
-  if (questionnaireRequest.value) {
-    await questionnaireRequest.value.refresh();
-  }
-};
 </script>
 
 <template>
@@ -53,7 +25,7 @@ const handleRetry = async () => {
       v-if="responseError || questionnaireError"
       title="回答の取得に失敗しました"
       :message="responseError?.message || questionnaireError?.message"
-      @retry="handleRetry"
+      @retry="refresh"
     />
     <DetailLoadingIndicator
       v-else-if="!questionnaire || !response"
