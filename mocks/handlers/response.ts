@@ -217,7 +217,8 @@ export const responsesData: GatewayResponse[] = [
       {
         question_id: 2,
         question_type: 'TextLong',
-        answer: '長いテキスト回答2\nユーザー2の回答です。',
+        answer:
+          '長いテキスト回答2、これはすごい長いです、かなり長いです、どれぐらい長いかと言うと、1行にはとても収まり切らないぐらい長いです、本当に長いです、ここまで読んでますか？きっと読み飛ばしてますよね、はぁ、そうですか、ここまで読んでくれないですね。',
       },
       { question_id: 3, question_type: 'Number', answer: 72 },
       { question_id: 4, question_type: 'SingleChoice', answer: '選択肢2' },
