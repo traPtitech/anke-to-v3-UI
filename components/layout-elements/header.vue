@@ -36,13 +36,9 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
     </div>
 
     <div class="top-actions">
-      <ButtonLink
-        class="header-action-create"
-        to="/questionnaires/new"
-        variant="primary"
-      >
-        <Icon class="header-action-create-icon" name="mdi:plus" size="20px" />
-        <span class="header-action-create-label">
+      <ButtonLink to="/questionnaires/new" variant="primary">
+        <Icon name="mdi:plus" size="20px" />
+        <span>
           <span class="label-desktop">新規作成</span>
           <span class="label-mobile">新規</span>
         </span>
@@ -129,23 +125,6 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
   padding-left: 42px;
 }
 
-.header-action-create {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.header-action-create-icon {
-  display: block;
-  transform: translateX(-15%);
-}
-
-.header-action-create-label {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-}
-
 .label-mobile {
   display: none;
 }
@@ -160,6 +139,7 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
   padding: 0;
   overflow: hidden;
   border-radius: 999px;
+  color: var(--p-text-color);
 }
 
 .header-action-user-icon {

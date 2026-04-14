@@ -90,7 +90,6 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
     <div class="questionnaire-actions-row-primary">
       <ButtonLink
         v-if="latestDraft && canRespond"
-        class="questionnaire-action-button questionnaire-action-button-respond"
         variant="primary"
         :to="`/responses/${latestDraft.response_id}/edit`"
       >
@@ -99,7 +98,6 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
       </ButtonLink>
       <ButtonLink
         v-else
-        class="questionnaire-action-button questionnaire-action-button-respond"
         variant="primary"
         :to="`/questionnaires/${detail.questionnaire_id}/responses/new`"
         :disabled="!canRespond"
@@ -108,7 +106,6 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
         <span>回答する</span>
       </ButtonLink>
       <ButtonLink
-        class="questionnaire-action-button"
         variant="secondary"
         :to="`/questionnaires/${detail.questionnaire_id}/result`"
         :disabled="!canViewResult"
@@ -119,7 +116,6 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
     </div>
     <div class="questionnaire-actions-row-secondary">
       <ButtonLink
-        class="questionnaire-action-button"
         variant="secondary"
         size="sm"
         :to="`/questionnaires/${detail.questionnaire_id}/questions`"

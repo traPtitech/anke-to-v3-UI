@@ -30,7 +30,6 @@ const canAnswer = computed(
     <div class="admin-actions-body">
       <div class="admin-actions-main">
         <ButtonLink
-          class="admin-action-btn"
           size="sm"
           variant="secondary"
           :to="`/questionnaires/${detail.questionnaire_id}/edit`"
@@ -110,13 +109,6 @@ const canAnswer = computed(
 
 .admin-actions-danger {
   margin-left: auto;
-}
-
-.admin-action-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
 }
 
 .admin-action-btn-danger {

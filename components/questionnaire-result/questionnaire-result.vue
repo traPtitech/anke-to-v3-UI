@@ -23,7 +23,6 @@ const { results } = useQuestionnaireResult(
   <div class="questionnaire-result-container">
     <div class="result-header">
       <ButtonLink
-        class="result-back-link"
         variant="secondary"
         :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       >
@@ -79,10 +78,6 @@ const { results } = useQuestionnaireResult(
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-}
-
-.result-back-link {
-  font-weight: 600;
 }
 
 .result-info-section,

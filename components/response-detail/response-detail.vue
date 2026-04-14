@@ -27,7 +27,6 @@ const isDueOver = computed(() => {
   <div class="response-detail-container">
     <div class="response-detail-nav">
       <ButtonLink
-        class="back-link"
         variant="secondary"
         :to="`/questionnaires/${questionnaire.questionnaire_id}`"
       >
@@ -64,7 +63,6 @@ const isDueOver = computed(() => {
     <div class="response-detail-footer">
       <ButtonLink
         v-if="!isDueOver"
-        class="response-edit-button-footer"
         variant="primary"
         :to="`/responses/${response.response_id}/edit`"
       >
@@ -92,10 +90,6 @@ const isDueOver = computed(() => {
 .response-detail-nav {
   display: flex;
   align-items: center;
-}
-
-.back-link {
-  font-weight: 600;
 }
 
 .response-detail-title-row {
@@ -168,12 +162,6 @@ const isDueOver = computed(() => {
   display: flex;
   justify-content: flex-end;
   padding-top: 8px;
-}
-
-.response-edit-button-footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .response-edit-note {

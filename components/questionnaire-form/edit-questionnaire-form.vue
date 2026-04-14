@@ -129,7 +129,6 @@ const handleSend = async () => {
       <div class="edit-questionnaire-nav">
         <ButtonLink
           :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
-          class="edit-back-link"
           variant="secondary"
           size="sm"
         >
@@ -178,11 +177,6 @@ const handleSend = async () => {
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
-}
-
-.edit-back-link {
-  width: fit-content;
-  font-weight: 600;
 }
 
 @media screen and (max-width: 1600px) {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import EditResponseForm from '~/components/response-form/edit-response-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
-import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
 import { useGetResponseWithQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
@@ -21,10 +21,11 @@ usePageSeo({
 
 <template>
   <div class="response-edit-page-state">
-    <ErrorReloadPanel
+    <ErrorStatePanel
       v-if="responseError || questionnaireError"
       title="回答編集データの取得に失敗しました"
       :message="responseError?.message || questionnaireError?.message"
+      :show-retry="true"
       @retry="refresh"
     />
     <DetailLoadingIndicator

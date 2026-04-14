@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import EditQuestionnaireForm from '~/components/questionnaire-form/edit-questionnaire-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
-import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 
@@ -22,10 +22,11 @@ const handleRetry = async () => {
 
 <template>
   <div class="edit-page-state">
-    <ErrorReloadPanel
+    <ErrorStatePanel
       v-if="error"
       title="アンケート編集データの取得に失敗しました"
       :message="error.message"
+      :show-retry="true"
       @retry="handleRetry"
     />
     <DetailLoadingIndicator v-else-if="!data" variant="questionnaire" />

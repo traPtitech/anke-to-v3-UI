@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import QuestionnaireDetail from '~/components/questionnaire-detail/questionnaire-detail.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
-import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
 import {
   useGetQuestionnaire,
@@ -36,10 +36,11 @@ const handleRetry = async () => {
 
 <template>
   <div class="detail-page-state">
-    <ErrorReloadPanel
+    <ErrorStatePanel
       v-if="questionnaireError || myResponsesError"
       title="アンケート詳細の取得に失敗しました"
       :message="questionnaireError?.message || myResponsesError?.message"
+      :show-retry="true"
       @retry="handleRetry"
     />
     <DetailLoadingIndicator

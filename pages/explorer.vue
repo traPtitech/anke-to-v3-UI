@@ -8,6 +8,7 @@ import {
   DEFAULT_SORT_DIRECTION,
 } from '~/components/explorer/filter-types';
 import QuestionnaireList from '~/components/ui/questionnaire-list/questionnaire-list.vue';
+import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import {
   EXPLORER_PAGE_SIZE,
   useExplorerQuestionnaires,
@@ -63,13 +64,13 @@ const sortedQuestionnaires = computed<QuestionnaireSummary[]>(
       @change="handleFilterChange"
     />
 
-    <div v-if="error" class="state-box is-error">
-      <p>アンケート一覧の取得に失敗しました</p>
-      <Button class="state-box-retry" severity="secondary" @click="handleRetry">
-        <Icon name="mdi:refresh" size="16px" />
-        <span>再読み込み</span>
-      </Button>
-    </div>
+    <ErrorStatePanel
+      v-if="error"
+      title="アンケート一覧の取得に失敗しました"
+      :message="error.message"
+      :show-retry="true"
+      @retry="handleRetry"
+    />
 
     <ExplorerLoadingSkeleton v-else-if="pending && !questionnairePage" />
 
@@ -121,17 +122,5 @@ const sortedQuestionnaires = computed<QuestionnaireSummary[]>(
   text-align: center;
   color: var(--p-text-secondary);
   background-color: var(--p-surface-0);
-}
-
-.state-box.is-error {
-  border-color: var(--p-red-300);
-  color: var(--p-red-700);
-}
-
-.state-box-retry {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 8px;
 }
 </style>

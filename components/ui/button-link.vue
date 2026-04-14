@@ -8,13 +8,11 @@ const props = withDefaults(
     size?: 'md' | 'sm';
     disabled?: boolean;
     title?: string;
-    block?: boolean;
   }>(),
   {
     variant: 'secondary',
     size: 'md',
     disabled: false,
-    block: false,
   },
 );
 
@@ -52,13 +50,12 @@ const handleClick = (event: MouseEvent) => {
     :variant="buttonVariant"
     :size="props.size === 'sm' ? 'small' : undefined"
     :disabled="props.disabled"
-    :class="{ 'button-link-block': props.block }"
     :pt="{ root: { title: props.title } }"
   >
     <NuxtLink
       v-bind="slotProps"
       :to="props.to"
-      class="button-link-anchor"
+      :class="['button-link-anchor', $attrs.class]"
       :aria-disabled="props.disabled ? 'true' : undefined"
       :tabindex="props.disabled ? -1 : undefined"
       @click="handleClick"

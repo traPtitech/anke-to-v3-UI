@@ -25,7 +25,6 @@ const dueDateString = computed(() => {
   <form class="response-form-container">
     <div class="response-form-nav">
       <ButtonLink
-        class="back-link"
         variant="secondary"
         :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
       >
@@ -102,10 +101,6 @@ const dueDateString = computed(() => {
 .response-form-nav {
   display: flex;
   align-items: center;
-}
-
-.back-link {
-  font-weight: 600;
 }
 
 .response-form-title-row {

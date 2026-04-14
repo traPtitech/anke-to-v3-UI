@@ -2,6 +2,7 @@
 import ButtonLink from '~/components/ui/button-link.vue';
 import NewResponseForm from '~/components/response-form/new-response-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
+import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
 import {
   useGetQuestionnaire,
@@ -48,14 +49,22 @@ usePageSeo({
 </script>
 
 <template>
-  <div v-if="error">
-    <p>アンケートの取得に失敗しました: {{ error.message }}</p>
-  </div>
+  <ErrorStatePanel
+    v-if="error"
+    title="アンケートの取得に失敗しました"
+    :message="error.message"
+  />
   <div v-else-if="!data">
     <DetailLoadingIndicator variant="questionnaire" />
   </div>
-  <div v-else-if="!canRespond" class="cannot-respond-panel">
-    <p class="cannot-respond-message">
+  <div
+    v-else-if="!canRespond"
+    class="state-panel state-panel-warning"
+    role="alert"
+  >
+    <Icon name="mdi:alert-outline" size="72px" class="state-panel-icon" />
+    <p class="state-panel-title">現在このアンケートには回答できません</p>
+    <p class="state-panel-message">
       {{ cannotRespondReason ?? '現在このアンケートには回答できません。' }}
     </p>
     <ButtonLink
@@ -71,23 +80,43 @@ usePageSeo({
 </template>
 
 <style scoped lang="scss">
-.cannot-respond-panel {
+.state-panel {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 16px auto;
   padding: 20px;
-  border: 1px solid var(--p-surface-200);
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: var(--p-surface-0);
 }
 
-.cannot-respond-message {
-  margin: 0;
+.state-panel-warning {
+  border: 1px solid var(--p-surface-300);
   color: var(--p-text-color);
 }
 
-.back-to-detail-link {
-  width: fit-content;
-  font-weight: 600;
+.state-panel-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.state-panel-message {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--p-text-muted-color);
+}
+
+.cannot-respond-message {
+  color: inherit;
+}
+
+:deep(.back-to-detail-link) {
+  margin-top: 1.5rem;
 }
 </style>

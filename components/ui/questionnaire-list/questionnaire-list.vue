@@ -110,13 +110,11 @@ const toggleActionMenu = (
             </div>
 
             <ButtonLink
-              class="respond-main-button"
               variant="primary"
               :to="`/questionnaires/${questionnaire.questionnaire_id}/responses/new`"
               :disabled="!canRespond(questionnaire)"
-              title="回答する"
             >
-              <span class="respond-label">回答する</span>
+              <span>回答する</span>
               <Icon class="send-icon-optical-fix" name="mdi:send" size="20px" />
             </ButtonLink>
           </div>
@@ -346,19 +344,6 @@ const toggleActionMenu = (
   white-space: nowrap;
 }
 
-.respond-main-button {
-  min-height: 40px;
-}
-
-.respond-main-button :deep(.button-link-anchor) {
-  gap: 8px;
-  padding-inline: 12px;
-}
-
-.respond-label {
-  white-space: nowrap;
-}
-
 .send-icon-optical-fix {
   transform: translateX(10%);
 }
@@ -432,10 +417,6 @@ const toggleActionMenu = (
 
   .card-side {
     align-items: stretch;
-  }
-
-  .respond-main-button {
-    width: 100%;
   }
 
   .card-action-menu {

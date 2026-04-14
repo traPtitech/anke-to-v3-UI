@@ -2,7 +2,7 @@
 import ButtonLink from '~/components/ui/button-link.vue';
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
-import ErrorReloadPanel from '~/components/ui/page-state/error-reload-panel.vue';
+import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
 import { useGetQuestionnaire } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestion } from '~/models/question';
@@ -36,10 +36,11 @@ const handleRetry = async () => {
 
 <template>
   <div class="question-list-page-state">
-    <ErrorReloadPanel
+    <ErrorStatePanel
       v-if="error"
       title="質問一覧の取得に失敗しました"
       :message="error.message"
+      :show-retry="true"
       @retry="handleRetry"
     />
     <DetailLoadingIndicator
@@ -49,7 +50,6 @@ const handleRetry = async () => {
     <div v-else class="question-list-page">
       <div class="question-list-nav">
         <ButtonLink
-          class="back-link"
           variant="secondary"
           size="sm"
           :to="`/questionnaires/${data.questionnaire_id}`"
@@ -143,10 +143,6 @@ const handleRetry = async () => {
 .question-list-nav {
   display: flex;
   align-items: center;
-}
-
-.back-link {
-  font-weight: 600;
 }
 
 .question-list-header {
