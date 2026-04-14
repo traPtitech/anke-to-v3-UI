@@ -5,6 +5,7 @@ import QuestionnaireRespondentsContainer from '~/components/ui/questionnaire/res
 import QuestionnaireTitleContainer from '~/components/ui/questionnaire/title-container.vue';
 import { useMe } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayResponse } from '~/models/response';
+import { useQuestionnaireActions } from './action';
 import QuestionnaireActions from './questionnaire-actions.vue';
 import QuestionnaireAdminActions from './questionnaire-admin-actions.vue';
 import QuestionnaireMyResponsesContainer from './questionnaire-my-responses-container.vue';
@@ -16,6 +17,7 @@ const props = defineProps<{
 }>();
 
 const { data: me } = useMe();
+const { actionDuplicate } = useQuestionnaireActions();
 const isQuestionnaireAdmin = computed(() =>
   props.detail.admins.includes(me.value?.name ?? ''),
 );
@@ -29,6 +31,10 @@ const isQuestionnaireAdmin = computed(() =>
 
     <div class="detail-columns">
       <div class="detail-main">
+        <section v-if="isQuestionnaireAdmin" class="main-section">
+          <QuestionnaireAdminActions :detail="detail" />
+        </section>
+
         <section class="main-section">
           <QuestionnaireActions :detail="detail" :my-responses="myResponses" />
         </section>
@@ -40,9 +46,15 @@ const isQuestionnaireAdmin = computed(() =>
           />
         </section>
 
-        <section v-if="isQuestionnaireAdmin" class="main-section">
-          <QuestionnaireAdminActions :detail="detail" />
-        </section>
+        <Button
+          severity="secondary"
+          outlined
+          @click="actionDuplicate(detail)"
+          class="duplicate-button"
+        >
+          <Icon name="mdi:content-copy" size="20px" />
+          <span>コピーして新しいアンケートを作る</span>
+        </Button>
       </div>
 
       <aside class="detail-sidebar">
@@ -99,6 +111,10 @@ const isQuestionnaireAdmin = computed(() =>
   border-radius: var(--detail-section-radius);
   border: 1px solid var(--p-surface-200);
   background-color: var(--p-surface-0);
+}
+
+.duplicate-button {
+  width: 100%;
 }
 
 .detail-sidebar {
