@@ -91,10 +91,10 @@ watch(
       responseDueDateTimeInput.value = getDefaultDueDate();
       return;
     }
- 
+
     const nextDueDate = new Date(value);
     if (Number.isNaN(nextDueDate.getTime())) return;
- 
+
     useCustomDueTime.value = true;
     responseDueDateTimeInput.value = nextDueDate;
   },
@@ -147,6 +147,26 @@ const dueMinute = computed({
 </script>
 
 <template>
+  <div class="response-due-date-time-input">
+    <div class="response-due-date-time-input-title">
+      <p class="form-label">回答期限</p>
+      <div class="due-date-mode-options">
+        <label class="due-date-mode-option">
+          <span>設定する</span>
+
+          <ToggleSwitch
+            v-model="useCustomDueTime"
+            :input-id="responseDueDateNoDueId"
+            binary
+          />
+        </label>
+      </div>
+    </div>
+
+    <DatePicker
+      v-if="useCustomDueTime"
+      v-model="responseDueDateTimeInput"
+      :min-date="minSelectableDueDate"
       :class="{
         'p-invalid': isResponseDueDateTimeInvalidForDate,
       }"
@@ -156,27 +176,6 @@ const dueMinute = computed({
       hour-format="24"
       show-icon
       icon-display="input"
-    ></DatePicker>
-    <ChipSelectRow
-      v-if="useCustomDueTime"
-      class="due-date-presets"
-      :items="dueDatePresetChipItems"
-      :selected-key="selectedDueDatePreset"
-      @select="handleSelectDueDatePresetByValue"
-    />
-    <small
-      v-if="isResponseDueDateTimeInvalidForTargets"
-      class="invalid-message"
-    >
-      <Icon name="mdi:alert-circle" size="20px" />
-      <span>対象者を設定する場合「期限なし」にすることはできません</span>
-    </small>
-
-    <small v-if="isResponseDueDateTimeInvalidForDate" class="invalid-message">
-      hour-format="24"
-      show-icon
-      icon-display="input"
-    ></DatePicker>
       :pt="{ timePicker: { style: 'display: none' } }"
     >
       <template #footer>
@@ -204,6 +203,49 @@ const dueMinute = computed({
     <ChipSelectRow
       v-if="useCustomDueTime"
       class="due-date-presets"
+      :items="dueDatePresetChipItems"
+      :selected-key="selectedDueDatePreset"
+      @select="handleSelectDueDatePresetByValue"
+    />
+    <small
+      v-if="isResponseDueDateTimeInvalidForTargets"
+      class="invalid-message"
+    >
+      <Icon name="mdi:alert-circle" size="20px" />
+      <span>対象者を設定する場合「期限なし」にすることはできません</span>
+    </small>
+
+    <small v-if="isResponseDueDateTimeInvalidForDate" class="invalid-message">
+      <Icon name="mdi:alert-circle" size="20px" />
+      過去の日時を設定することはできません
+    </small>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.response-due-date-time-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.response-due-date-time-input-title {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.due-date-mode-options {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
 .due-date-mode-option {
   display: flex;
   gap: 6px;
@@ -219,28 +261,13 @@ const dueMinute = computed({
   font-weight: 500;
 }
 
-.due-date-presets {
-  margin-top: 2px;
-}
-
-.invalid-message {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--p-red-500);
-}
-</style>
- 
-  font-weight: 500;
-}
-
 .custom-time-picker {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 4px;
   padding-block: 8px;
- 
+
   :deep(.p-inputnumber-input) {
     width: 3rem;
     text-align: center;
@@ -257,3 +284,11 @@ const dueMinute = computed({
 .due-date-presets {
   margin-top: 2px;
 }
+
+.invalid-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--p-red-500);
+}
+</style>
