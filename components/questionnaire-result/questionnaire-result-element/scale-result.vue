@@ -5,7 +5,11 @@ import UserChip from '~/components/ui/user-chip.vue';
 const props = defineProps<{
   result: QuestionResultScale;
   isAnonymous: boolean;
+  questionnaireId: number;
 }>();
+
+const toResponsePath = (responseId: number) =>
+  `/questionnaires/${props.questionnaireId}/result/${responseId}`;
 
 const aggregatedResponses = computed(() => {
   const responses = props.result.responses.map((res) => res.answer);
@@ -26,7 +30,10 @@ const aggregatedResponses = computed(() => {
       ? undefined
       : props.result.responses
           .filter((res) => res.answer === key)
-          .map((res) => res.respondent),
+          .map((res) => ({
+            name: res.respondent,
+            responseId: res.response_id,
+          })),
     respondentsText: props.isAnonymous
       ? undefined
       : props.result.responses
@@ -57,11 +64,14 @@ const aggregatedResponses = computed(() => {
     >
       <template #body="{ data }">
         <div class="respondents-chip-list">
-          <UserChip
+          <NuxtLink
             v-for="respondent in data.respondents"
-            :key="respondent"
-            :username="respondent"
-          />
+            :key="`${respondent.name}-${respondent.responseId}`"
+            class="clickable-user-chip-link"
+            :to="toResponsePath(respondent.responseId)"
+          >
+            <UserChip :username="respondent.name" />
+          </NuxtLink>
         </div>
       </template>
     </Column>

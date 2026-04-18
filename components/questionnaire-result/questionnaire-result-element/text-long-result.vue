@@ -6,20 +6,29 @@ import UserChip from '~/components/ui/user-chip.vue';
 const props = defineProps<{
   result: QuestionResultTextLong;
   isAnonymous: boolean;
+  questionnaireId: number;
 }>();
+
+const toResponsePath = (responseId: number) =>
+  `/questionnaires/${props.questionnaireId}/result/${responseId}`;
 </script>
 
 <template>
   <div class="text-long-result-container">
     <div
-      v-for="(_, i) in props.result.responses"
-      :key="i"
+      v-for="response in props.result.responses"
+      :key="response.response_id"
       class="text-long-result-element"
     >
       <div v-if="!props.isAnonymous" class="text-long-result-element-user">
-        <UserChip :username="props.result.responses[i].respondent" />
+        <NuxtLink
+          class="clickable-user-chip-link"
+          :to="toResponsePath(response.response_id)"
+        >
+          <UserChip :username="response.respondent" />
+        </NuxtLink>
       </div>
-      <MarkdownBlock :content="props.result.responses[i].answer" />
+      <MarkdownBlock :content="response.answer" />
     </div>
   </div>
 </template>
