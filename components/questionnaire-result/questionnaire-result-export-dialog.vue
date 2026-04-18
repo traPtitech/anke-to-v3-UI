@@ -114,7 +114,7 @@ const handleDownloadExportText = () => {
         </div>
 
         <label class="export-option-label">
-          <span>出力プレビュー（readonly）</span>
+          <span>出力プレビュー</span>
           <textarea
             :value="exportPreviewText"
             class="export-preview"

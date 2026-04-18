@@ -12,7 +12,7 @@ withDefaults(
 <template>
   <span class="answer-empty">
     <br v-if="breakBefore" />
-    （未回答）
+    (未回答)
   </span>
 </template>
 
