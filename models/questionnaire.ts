@@ -41,14 +41,15 @@ export const canViewResults = (
   >,
 ) => {
   if (!questionnaire.is_published) return false;
-  if (questionnaire.response_viewable_by === 'anyone') return true;
-  if (questionnaire.is_administrated_by_me) return true;
-  if (
-    questionnaire.response_viewable_by === 'respondents' &&
-    questionnaire.has_my_response
-  )
-    return true;
-  return false;
+
+  const canViewResultMatrix: Record<GatewayResponseShareType, boolean> = {
+    anyone: true,
+    respondents:
+      questionnaire.has_my_response || questionnaire.is_administrated_by_me,
+    admins: questionnaire.is_administrated_by_me,
+  };
+
+  return canViewResultMatrix[questionnaire.response_viewable_by];
 };
 
 export const canRespond = (
