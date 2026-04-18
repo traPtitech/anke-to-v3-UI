@@ -17,6 +17,15 @@ const { results } = useQuestionnaireResult(
   props.questionnaire,
   props.responses,
 );
+
+const firstResponsePath = computed(() => {
+  const firstResponseId = props.responses[0]?.response_id;
+  if (firstResponseId === undefined) {
+    return null;
+  }
+
+  return `/questionnaires/${props.questionnaire.questionnaire_id}/result/${firstResponseId}`;
+});
 </script>
 
 <template>
@@ -30,10 +39,21 @@ const { results } = useQuestionnaireResult(
         <span>アンケート詳細画面に戻る</span>
       </ButtonLink>
 
-      <QuestionnaireResultExportDialog
-        :questionnaire="props.questionnaire"
-        :responses="props.responses"
-      />
+      <div class="result-header-actions">
+        <ButtonLink
+          v-if="firstResponsePath && !props.questionnaire.is_anonymous"
+          variant="secondary"
+          :to="firstResponsePath"
+        >
+          <Icon name="mdi:file-document-multiple-outline" size="18px" />
+          <span>個別の回答を見る ({{ props.responses.length }}件)</span>
+        </ButtonLink>
+
+        <QuestionnaireResultExportDialog
+          :questionnaire="props.questionnaire"
+          :responses="props.responses"
+        />
+      </div>
     </div>
 
     <section class="result-info-section">
@@ -53,6 +73,7 @@ const { results } = useQuestionnaireResult(
         :index="i + 1"
         :total="results.length"
         :is-anonymous="props.questionnaire.is_anonymous"
+        :questionnaire-id="props.questionnaire.questionnaire_id"
       />
     </section>
   </div>
@@ -74,6 +95,13 @@ const { results } = useQuestionnaireResult(
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.result-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
 }
 

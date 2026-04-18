@@ -5,10 +5,21 @@ import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
 import { useResponseBodies } from './composables/use-question-responses';
 
-const props = defineProps<{
-  questionnaire: GatewayQuestionnaire;
-  response: GatewayResponse;
-}>();
+const props = withDefaults(
+  defineProps<{
+    questionnaire: GatewayQuestionnaire;
+    response: GatewayResponse;
+    backTo?: string;
+    backLabel?: string;
+    showBackNavigation?: boolean;
+    showEditAction?: boolean;
+  }>(),
+  {
+    backLabel: 'アンケート詳細画面に戻る',
+    showBackNavigation: true,
+    showEditAction: true,
+  },
+);
 
 const { bodies } = useResponseBodies(props.questionnaire, props.response);
 
@@ -21,17 +32,19 @@ const isDueOver = computed(() => {
 
   return new Date(due).getTime() < Date.now();
 });
+
+const resolvedBackTo = computed(
+  () =>
+    props.backTo ?? `/questionnaires/${props.questionnaire.questionnaire_id}`,
+);
 </script>
 
 <template>
   <div class="response-detail-container">
-    <div class="response-detail-nav">
-      <ButtonLink
-        variant="secondary"
-        :to="`/questionnaires/${questionnaire.questionnaire_id}`"
-      >
+    <div v-if="props.showBackNavigation" class="response-detail-nav">
+      <ButtonLink variant="secondary" :to="resolvedBackTo">
         <Icon name="mdi:chevron-left" size="24px" />
-        <span>アンケート詳細画面に戻る</span>
+        <span>{{ props.backLabel }}</span>
       </ButtonLink>
     </div>
 
@@ -60,7 +73,7 @@ const isDueOver = computed(() => {
       />
     </div>
 
-    <div class="response-detail-footer">
+    <div v-if="props.showEditAction" class="response-detail-footer">
       <ButtonLink
         v-if="!isDueOver"
         variant="primary"

@@ -251,6 +251,49 @@
   overflow: visible;
 }
 
+.clickable-user-chip-link {
+  display: inline-flex;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.14s ease;
+}
+
+.clickable-user-chip-link .ui-chip {
+  cursor: pointer;
+  border-color: color-mix(
+    in srgb,
+    var(--p-primary-500) 24%,
+    var(--p-surface-300)
+  );
+  transition:
+    background-color 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease,
+    box-shadow 0.14s ease;
+}
+
+.clickable-user-chip-link:hover .ui-chip {
+  background-color: color-mix(
+    in srgb,
+    var(--p-primary-500) 12%,
+    var(--p-surface-0)
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--p-primary-500) 48%,
+    var(--p-surface-300)
+  );
+  color: var(--p-primary-700);
+}
+
+.clickable-user-chip-link:focus-visible {
+  outline: none;
+}
+
+.clickable-user-chip-link:focus-visible .ui-chip {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-500) 22%, white);
+}
+
 svg.iconify {
   flex-shrink: 0;
 }

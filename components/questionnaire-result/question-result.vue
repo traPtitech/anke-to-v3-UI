@@ -13,6 +13,7 @@ const props = defineProps<{
   index: number;
   total: number;
   isAnonymous: boolean;
+  questionnaireId: number;
 }>();
 
 const hasResponses = computed(() => props.result.responses.length > 0);
@@ -66,31 +67,37 @@ const questionTypeLabelMap = {
         v-if="result.question_type === 'Text'"
         :result="result"
         :is-anonymous="props.isAnonymous"
+        :questionnaire-id="props.questionnaireId"
       />
       <TextLongResult
         v-else-if="result.question_type === 'TextLong'"
         :result="result"
         :is-anonymous="props.isAnonymous"
+        :questionnaire-id="props.questionnaireId"
       />
       <NumberResult
         v-else-if="result.question_type === 'Number'"
         :result="result"
         :is-anonymous="props.isAnonymous"
+        :questionnaire-id="props.questionnaireId"
       />
       <SingleChoiceResult
         v-else-if="result.question_type === 'SingleChoice'"
         :result="result"
         :is-anonymous="props.isAnonymous"
+        :questionnaire-id="props.questionnaireId"
       />
       <MultipleChoiceResult
         v-else-if="result.question_type === 'MultipleChoice'"
         :result="result"
         :is-anonymous="props.isAnonymous"
+        :questionnaire-id="props.questionnaireId"
       />
       <ScaleResult
         v-else-if="result.question_type === 'Scale'"
         :result="result"
         :is-anonymous="props.isAnonymous"
+        :questionnaire-id="props.questionnaireId"
       />
     </template>
   </section>
