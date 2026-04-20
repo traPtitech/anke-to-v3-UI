@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import ButtonLink from '~/components/ui/button-link.vue';
 import QuestionElement from '~/components/ui/question-element/question-element.vue';
+import UserChip from '~/components/ui/user-chip.vue';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
 import { useResponseBodies } from './composables/use-question-responses';
@@ -24,6 +25,7 @@ const props = withDefaults(
 const { bodies } = useResponseBodies(props.questionnaire, props.response);
 
 const isDraft = computed(() => props.response.is_draft);
+const respondent = computed(() => props.response.respondent);
 const isDueOver = computed(() => {
   const due = props.questionnaire.response_due_date_time;
   if (due === undefined) {
@@ -61,6 +63,10 @@ const resolvedBackTo = computed(
           </span>
         </div>
         <h1 class="response-detail-title">{{ questionnaire.title }}</h1>
+        <div v-if="respondent" class="response-detail-respondent-row">
+          <span class="response-detail-respondent-label">回答者</span>
+          <UserChip :username="respondent" />
+        </div>
       </div>
     </div>
 
@@ -155,6 +161,20 @@ const resolvedBackTo = computed(
   color: var(--p-text-color);
   margin: 0;
   line-height: 1.4;
+}
+
+.response-detail-respondent-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.response-detail-respondent-label {
+  color: var(--p-text-muted-color);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .response-edit-button {
