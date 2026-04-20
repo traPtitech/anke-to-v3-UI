@@ -213,7 +213,10 @@ export const applyAdvancedFilterState = ({
 };
 
 export const findSelectedTab = (set: Set<FilterKey>): TabKey | null => {
-  const current = [...set].sort().join(',');
+  const current = [...set]
+    .filter((filterKey) => filterKey !== 'due')
+    .sort()
+    .join(',');
 
   for (const tab of tabs) {
     const preset = tabFilterPresets[tab.key];

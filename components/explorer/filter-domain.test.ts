@@ -86,7 +86,8 @@ describe('filter-domain core state', () => {
     ).toBe('unanswered');
     expect(
       findSelectedTab(new Set<FilterKey>(['targeting', 'unanswered', 'due'])),
-    ).toBeNull();
+    ).toBe('unanswered');
+    expect(findSelectedTab(new Set<FilterKey>(['due']))).toBe('all');
   });
 
   it('keeps filter meaning metadata in sync with filter keys', () => {
