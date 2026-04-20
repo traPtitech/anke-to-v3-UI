@@ -29,8 +29,7 @@ export const buildListQuery = ({
     onlyTargetingMe:
       advancedFilter.targetScope === 'targetingMe' ? true : undefined,
     onlyAdministratedByMe: administrationScope !== 'all' ? true : undefined,
-    notOverDue:
-      filters.has('due') || responseScope === 'unanswered' ? true : undefined,
+    notOverDue: filters.has('due') ? true : undefined,
     hasMyResponse:
       responseScope === 'answered'
         ? true
