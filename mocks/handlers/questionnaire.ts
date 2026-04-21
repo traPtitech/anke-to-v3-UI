@@ -488,4 +488,23 @@ export const questionnaireHandlers = [
     questionnairesData.splice(index, 1);
     return HttpResponse.json({ message: 'Questionnaire deleted' });
   }),
+
+  http.post('/api/questionnaires/:id/close', (req) => {
+    const { id } = req.params;
+    const index = questionnairesData.findIndex(
+      (q) => q.questionnaire_id === Number(id),
+    );
+    if (index === -1) {
+      return HttpResponse.json(
+        { error: 'Questionnaire not found' },
+        { status: 404 },
+      );
+    }
+    questionnairesData[index] = {
+      ...questionnairesData[index],
+      response_due_date_time: new Date().toISOString(),
+      modified_at: new Date().toISOString(),
+    };
+    return HttpResponse.json(questionnairesData[index]);
+  }),
 ];
