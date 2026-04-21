@@ -5,8 +5,6 @@ import {
   deleteQuestionnaireById,
   patchMyRemindStatus,
   type PatchMyRemindStatusBody,
-  type PatchQuestionnaireBody,
-  patchQuestionnaireById,
 } from '~/composables/type-fetch/anke-to/client';
 import type { QuestionnaireDetail } from './type';
 
