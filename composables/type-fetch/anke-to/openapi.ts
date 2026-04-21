@@ -41,6 +41,23 @@ export interface paths {
         patch: operations["editQuestionnaire"];
         trace?: never;
     };
+    "/questionnaires/{questionnaireID}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description アンケートをサーバー時刻で即座に終了します。 */
+        post: operations["closeQuestionnaire"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/questionnaires/{questionnaireID}/myRemindStatus": {
         parameters: {
             query?: never;
@@ -540,7 +557,7 @@ export interface components {
         pageInQuery: number;
         /** @description 自分がターゲットになっているもののみ取得 (true), ターゲットになっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
         onlyTargetingMeInQuery: boolean;
-        /** @description 自分が管理者になっていないもののみ取得 (true), 管理者になっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
+        /** @description 自分が管理者になっているもののみ取得 (true), 管理者になっていないものも含めてすべて取得 (false)。デフォルトはfalse。 */
         onlyAdministratedByMeInQuery: boolean;
         /** @description 自分の回答のみ取得 (true), 自分の回答以外も含めてすべて取得 (false)。デフォルトはfalse。 */
         onlyMyResponseInQuery: boolean;
@@ -592,7 +609,7 @@ export interface operations {
                 page?: components["parameters"]["pageInQuery"];
                 /** @description 自分がターゲットになっているもののみ取得 (true), ターゲットになっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
                 onlyTargetingMe?: components["parameters"]["onlyTargetingMeInQuery"];
-                /** @description 自分が管理者になっていないもののみ取得 (true), 管理者になっているものも含めてすべて取得 (false)。デフォルトはfalse。 */
+                /** @description 自分が管理者になっているもののみ取得 (true), 管理者になっていないものも含めてすべて取得 (false)。デフォルトはfalse。 */
                 onlyAdministratedByMe?: components["parameters"]["onlyAdministratedByMeInQuery"];
                 /** @description 回答期限が過ぎていないもののみ取得 (true), 回答期限が過ぎているものも含めてすべて取得 (false)。デフォルトはfalse。 */
                 notOverDue?: components["parameters"]["notOverDueInQuery"];
@@ -810,6 +827,55 @@ export interface operations {
                 content?: never;
             };
             /** @description 正常にアンケートを変更できませんでした */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    closeQuestionnaire: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description アンケートID */
+                questionnaireID: components["parameters"]["questionnaireIDInPath"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 正常にアンケートを終了できました。 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description アンケートのIDが無効です */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description アンケートの管理者ではありません */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description アンケートが存在しません */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description アンケートを正常に終了できませんでした */
             500: {
                 headers: {
                     [name: string]: unknown;

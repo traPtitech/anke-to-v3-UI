@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "npx nuxi test",
-    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/fix/openapi/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
+    "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
   },
   "devDependencies": {
     "@nuxt/devtools": "^3.2.4",
