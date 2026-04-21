@@ -261,6 +261,20 @@ export const questionnairesData: GatewayQuestionnaire[] = [
       'anonymous5',
     ],
   },
+  {
+    ...defaultQuestionnaire,
+    questionnaire_id: 14,
+    title: '未回答者がいるアンケート',
+    description:
+      '未回答者の表示とメンションコピーを確認するためのダミーアンケートです。',
+    response_due_date_time: oneDayAfter,
+    admins: [myUserId],
+    admin: { users: [myUserId], groups: [] },
+    targets: ['cp20', 'kaitoyama', 'Eraxyso', myUserId],
+    target: { users: ['cp20', 'kaitoyama', 'Eraxyso', myUserId], groups: [] },
+    // only the current user has responded, others are 未回答
+    respondents: [myUserId],
+  },
   ...generatedQuestionnaires,
 ];
 

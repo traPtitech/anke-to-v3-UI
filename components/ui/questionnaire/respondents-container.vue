@@ -26,6 +26,26 @@ const nonAnsweredTargets = computed(() =>
       user !== ALL_MENTION_USER,
   ),
 );
+
+const toast = useToast();
+
+const handleCopyMentions = async () => {
+  const mentions = nonAnsweredTargets.value.map((u) => `@${u}`).join(' ');
+  try {
+    await navigator.clipboard.writeText(mentions);
+    toast.add({
+      severity: 'success',
+      summary: '未回答者一覧をコピーしました',
+      life: 3000,
+    });
+  } catch {
+    toast.add({
+      severity: 'error',
+      summary: 'コピーに失敗しました',
+      life: 4000,
+    });
+  }
+};
 </script>
 
 <template>
@@ -58,7 +78,18 @@ const nonAnsweredTargets = computed(() =>
         <div v-if="nonAnsweredTargets.length === 0">
           <NoContentMessage>いません</NoContentMessage>
         </div>
-        <QuestionnaireLabel>未回答</QuestionnaireLabel>
+        <div class="sidebar-people-header">
+          <QuestionnaireLabel>未回答</QuestionnaireLabel>
+          <Button
+            v-if="nonAnsweredTargets.length > 0"
+            class="copy-mentions-trigger"
+            severity="secondary"
+            outlined
+            @click="handleCopyMentions"
+          >
+            <Icon name="mdi:content-copy" size="14px" />
+          </Button>
+        </div>
         <UserList
           :users="nonAnsweredTargets"
           dialog-title="未回答ユーザー一覧"
@@ -97,5 +128,18 @@ const nonAnsweredTargets = computed(() =>
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.sidebar-people-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copy-mentions-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
 }
 </style>
