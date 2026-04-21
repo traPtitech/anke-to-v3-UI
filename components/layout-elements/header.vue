@@ -40,12 +40,10 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
         to="/questionnaires/new"
         variant="primary"
         class="header-create-button"
+        aria-label="新規作成"
       >
         <Icon name="mdi:plus" size="20px" class="header-create-button-icon" />
-        <span>
-          <span class="label-desktop">新規作成</span>
-          <span class="label-mobile">新規</span>
-        </span>
+        <span>新規作成</span>
       </ButtonLink>
       <NuxtLink
         class="header-action-responses"
@@ -174,15 +172,53 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
   .search-field {
     width: 100%;
   }
+
+  .header {
+    padding: 12px 16px;
+  }
+
+  .logo-image {
+    width: 120px;
+  }
+
+  .top-actions {
+    gap: 8px;
+  }
+
+  :deep(.header-create-button) {
+    height: 32px;
+    padding: 0 8px;
+    font-size: 14px;
+  }
+
+  .header-create-button-icon {
+    transform: translateX(0);
+  }
+
+  .header-action-responses {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+  }
 }
 
 @media screen and (max-width: 480px) {
-  .label-desktop {
-    display: none;
+  .header {
+    padding: 8px 12px;
   }
 
-  .label-mobile {
-    display: inline;
+  .logo-image {
+    width: 90px;
+  }
+
+  .top-actions {
+    gap: 6px;
+  }
+
+  .header-action-responses {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
   }
 }
 </style>
