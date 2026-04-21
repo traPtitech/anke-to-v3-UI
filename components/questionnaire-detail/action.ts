@@ -1,6 +1,7 @@
 import { useStoreNewQuestionnaireForm } from '~/components/questionnaire-form/store';
 
 import {
+  closeQuestionnaire,
   deleteQuestionnaireById,
   patchMyRemindStatus,
   type PatchMyRemindStatusBody,
@@ -80,12 +81,8 @@ export const useQuestionnaireActions = () => {
     }
   };
   const actionClose = async (detail: QuestionnaireDetail) => {
-    const body: PatchQuestionnaireBody = {
-      ...detail,
-      response_due_date_time: toISOStringWithTZ(new Date()),
-    };
     try {
-      await patchQuestionnaireById(detail.questionnaire_id, body);
+      await closeQuestionnaire(detail.questionnaire_id);
       toast.add({
         summary: 'アンケートを締め切りました。',
         severity: 'success',

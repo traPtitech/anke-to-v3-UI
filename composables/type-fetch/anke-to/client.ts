@@ -277,6 +277,18 @@ export const deleteResponse = async (
   }
 };
 
+export const closeQuestionnaire = async (questionnaireID: number) => {
+  const res = await client.POST('/questionnaires/{questionnaireID}/close', {
+    params: { path: { questionnaireID } },
+  });
+  if (!res.response.ok) {
+    throw new Error('Failed to close questionnaire');
+  }
+
+  await refreshGetQuestionnaires();
+  await refreshNuxtData(`/questionnaires/${questionnaireID}`);
+};
+
 export const useMe = () =>
   useAsyncData('/me', async () => {
     const res = await client.GET('/traq/users/me');
