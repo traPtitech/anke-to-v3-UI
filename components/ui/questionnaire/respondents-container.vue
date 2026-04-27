@@ -46,6 +46,26 @@ const handleCopyMentions = async () => {
     });
   }
 };
+
+const handleCopyRespondents = async () => {
+  const mentions = props.questionnaire.respondents
+    .map((u) => `@${u}`)
+    .join(' ');
+  try {
+    await navigator.clipboard.writeText(mentions);
+    toast.add({
+      severity: 'success',
+      summary: '回答者一覧をコピーしました',
+      life: 3000,
+    });
+  } catch {
+    toast.add({
+      severity: 'error',
+      summary: 'コピーに失敗しました',
+      life: 4000,
+    });
+  }
+};
 </script>
 
 <template>
@@ -68,7 +88,18 @@ const handleCopyMentions = async () => {
         <div v-if="props.questionnaire.respondents.length === 0">
           <NoContentMessage>いません</NoContentMessage>
         </div>
-        <QuestionnaireLabel>回答済み</QuestionnaireLabel>
+        <div class="sidebar-people-header">
+          <QuestionnaireLabel>回答済み</QuestionnaireLabel>
+          <Button
+            v-if="props.questionnaire.respondents.length > 0"
+            class="copy-mentions-trigger"
+            severity="secondary"
+            outlined
+            @click="handleCopyRespondents"
+          >
+            <Icon name="mdi:content-copy" size="14px" />
+          </Button>
+        </div>
         <UserList
           :users="props.questionnaire.respondents"
           dialog-title="回答済みユーザー一覧"
