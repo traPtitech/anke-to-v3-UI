@@ -106,11 +106,11 @@ const handleCopyRespondents = async () => {
         />
       </div>
       <div class="sidebar-people-item">
-        <div v-if="nonAnsweredTargets.length === 0">
-          <NoContentMessage>いません</NoContentMessage>
-        </div>
         <div class="sidebar-people-header">
           <QuestionnaireLabel>未回答</QuestionnaireLabel>
+          <div v-if="nonAnsweredTargets.length === 0">
+            <NoContentMessage>いません</NoContentMessage>
+          </div>
           <Button
             v-if="nonAnsweredTargets.length > 0"
             class="copy-mentions-trigger"
