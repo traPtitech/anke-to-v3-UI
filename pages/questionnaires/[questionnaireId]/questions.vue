@@ -50,10 +50,7 @@ const handleRetry = async () => {
       </div>
 
       <header class="question-list-header">
-        <h1 class="question-list-title">質問一覧</h1>
-        <p class="question-list-subtitle">
-          {{ data.title }}
-        </p>
+        <h1 class="question-list-title">{{ data.title }}</h1>
       </header>
 
       <div v-if="data.questions.length === 0" class="question-list-empty">質問がありません</div>
@@ -134,11 +131,6 @@ const handleRetry = async () => {
   margin: 0;
   font-size: 24px;
   line-height: 1.3;
-}
-
-.question-list-subtitle {
-  margin: 6px 0 0;
-  color: var(--p-text-muted-color);
 }
 
 .question-list-empty {
