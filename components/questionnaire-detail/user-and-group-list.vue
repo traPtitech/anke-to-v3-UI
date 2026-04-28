@@ -21,8 +21,16 @@ const { restUsers, groups } = useResolveUserSpecifier(
     <div v-if="groups.length === 0 && restUsers.length === 0">
       <NoContentMessage>いません</NoContentMessage>
     </div>
-    <GroupList :groups="groups" :dialog-title="props.groupDialogTitle" />
-    <UserList :users="restUsers" :dialog-title="props.userDialogTitle" />
+    <GroupList
+      v-if="groups.length > 0"
+      :groups="groups"
+      :dialog-title="props.groupDialogTitle"
+    />
+    <UserList
+      v-if="restUsers.length > 0"
+      :users="restUsers"
+      :dialog-title="props.userDialogTitle"
+    />
   </div>
 </template>
 
