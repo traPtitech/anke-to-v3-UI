@@ -9,22 +9,14 @@ const props = defineProps<{
   questionnaireId: number;
 }>();
 
-const toResponsePath = (responseId: number) =>
-  `/questionnaires/${props.questionnaireId}/result/${responseId}`;
+const toResponsePath = (responseId: number) => `/questionnaires/${props.questionnaireId}/result/${responseId}`;
 </script>
 
 <template>
   <div class="text-long-result-container">
-    <div
-      v-for="response in props.result.responses"
-      :key="response.response_id"
-      class="text-long-result-element"
-    >
+    <div v-for="response in props.result.responses" :key="response.response_id" class="text-long-result-element">
       <div v-if="!props.isAnonymous" class="text-long-result-element-user">
-        <NuxtLink
-          class="clickable-user-chip-link"
-          :to="toResponsePath(response.response_id)"
-        >
+        <NuxtLink class="clickable-user-chip-link" :to="toResponsePath(response.response_id)">
           <UserChip :username="response.respondent" />
         </NuxtLink>
       </div>

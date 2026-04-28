@@ -1,11 +1,6 @@
 import { ref } from 'vue';
 
-export const setTime = (
-  date: Date,
-  hours: number,
-  minutes: number,
-  seconds: number,
-) => {
+export const setTime = (date: Date, hours: number, minutes: number, seconds: number) => {
   const newDate = new Date(date);
   newDate.setHours(hours);
   newDate.setMinutes(minutes);
@@ -73,9 +68,7 @@ const formatFutureRelativeDate = (diff: number) => {
 export const formatRelativeDate = (date: Date) => {
   startNowTicker();
   const diff = nowTimestamp.value - date.getTime();
-  return diff > 0
-    ? formatPastRelativeDate(diff)
-    : formatFutureRelativeDate(-diff);
+  return diff > 0 ? formatPastRelativeDate(diff) : formatFutureRelativeDate(-diff);
 };
 
 export const toISOStringWithTZ = (date: Date): string => {

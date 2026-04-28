@@ -11,9 +11,7 @@ import type {
   QuestionSettingsTextLong,
 } from './type';
 
-const getDefaultQuestionnaireFormSettings = (
-  adminUser?: string,
-): QuestionnaireFormSettings => ({
+const getDefaultQuestionnaireFormSettings = (adminUser?: string): QuestionnaireFormSettings => ({
   title: '',
   description: '',
   response_due_date_time: undefined,
@@ -79,11 +77,8 @@ const defaultQuestionSettingsByType = {
 export const useStoreNewQuestionnaireForm = defineStore(
   'NewQuestionnaireForm',
   () => {
-    const state = ref<QuestionnaireFormSettings>(
-      getDefaultQuestionnaireFormSettings(),
-    );
-    const getStateSnapshot = (value: QuestionnaireFormSettings) =>
-      JSON.stringify(value);
+    const state = ref<QuestionnaireFormSettings>(getDefaultQuestionnaireFormSettings());
+    const getStateSnapshot = (value: QuestionnaireFormSettings) => JSON.stringify(value);
     const cleanSnapshot = ref(getStateSnapshot(state.value));
     const isDirty = ref(false);
     const reset = (adminUser?: string) => {
@@ -123,11 +118,7 @@ export const addQuestion = (
   return newQuestion.question_id;
 };
 
-export const copyQuestion = (
-  state: QuestionnaireFormSettings,
-  id: number,
-  index?: number,
-) => {
+export const copyQuestion = (state: QuestionnaireFormSettings, id: number, index?: number) => {
   const question = state.questions.find((q) => q.question_id === id);
   if (question === undefined) return false;
 
@@ -145,10 +136,7 @@ export const copyQuestion = (
   return true;
 };
 
-export const removeQuestion = (
-  state: QuestionnaireFormSettings,
-  id: number,
-) => {
+export const removeQuestion = (state: QuestionnaireFormSettings, id: number) => {
   const index = state.questions.findIndex((q) => q.question_id === id);
   if (index === -1) return false;
   state.questions.splice(index, 1);
@@ -159,26 +147,18 @@ type Error = { message: string };
 
 type Validity = { ok: false; errors: Error[] } | { ok: true };
 
-export const getValidationErrors = (
-  state: QuestionnaireFormSettings,
-): Error[] => {
+export const getValidationErrors = (state: QuestionnaireFormSettings): Error[] => {
   const errors: Error[] = [];
 
   if (state.title.trim() === '') {
     errors.push({ message: 'アンケートのタイトルを入力してください' });
   }
 
-  if (
-    state.response_due_date_time !== undefined &&
-    new Date(state.response_due_date_time) < new Date()
-  ) {
+  if (state.response_due_date_time !== undefined && new Date(state.response_due_date_time) < new Date()) {
     errors.push({ message: '回答期限は未来の日時を指定してください' });
   }
 
-  if (
-    (state.target.users.length > 0 || state.target.groups.length > 0) &&
-    state.response_due_date_time === undefined
-  ) {
+  if ((state.target.users.length > 0 || state.target.groups.length > 0) && state.response_due_date_time === undefined) {
     errors.push({
       message: '対象者が設定されている場合、回答期限は設定必須です',
     });
@@ -198,10 +178,7 @@ export const getValidationErrors = (
 
   if (
     state.questions.some(
-      (q) =>
-        (q.question_type === 'SingleChoice' ||
-          q.question_type === 'MultipleChoice') &&
-        q.options.length === 0,
+      (q) => (q.question_type === 'SingleChoice' || q.question_type === 'MultipleChoice') && q.options.length === 0,
     )
   ) {
     errors.push({ message: '選択肢がない質問があります' });
@@ -210,8 +187,7 @@ export const getValidationErrors = (
   if (
     state.questions.some(
       (q) =>
-        (q.question_type === 'SingleChoice' ||
-          q.question_type === 'MultipleChoice') &&
+        (q.question_type === 'SingleChoice' || q.question_type === 'MultipleChoice') &&
         q.options.some((o) => o.trim() === ''),
     )
   ) {
@@ -221,8 +197,7 @@ export const getValidationErrors = (
   if (
     state.questions.some(
       (q) =>
-        (q.question_type === 'SingleChoice' ||
-          q.question_type === 'MultipleChoice') &&
+        (q.question_type === 'SingleChoice' || q.question_type === 'MultipleChoice') &&
         new Set(q.options).size !== q.options.length,
     )
   ) {

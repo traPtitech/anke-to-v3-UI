@@ -8,12 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <Button
-    :severity="variant"
-    :disabled="props.disabled"
-    :pt="{ root: { title: props.title } }"
-    class="icon-button"
-  >
+  <Button :severity="variant" :disabled="props.disabled" :pt="{ root: { title: props.title } }" class="icon-button">
     <Icon :name="props.icon" size="24px" />
     <slot />
   </Button>

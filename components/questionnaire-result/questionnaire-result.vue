@@ -13,10 +13,7 @@ const props = defineProps<{
   responses: GatewayResponse[];
 }>();
 
-const { results } = useQuestionnaireResult(
-  props.questionnaire,
-  props.responses,
-);
+const { results } = useQuestionnaireResult(props.questionnaire, props.responses);
 
 const firstResponsePath = computed(() => {
   const firstResponseId = props.responses[0]?.response_id;
@@ -31,10 +28,7 @@ const firstResponsePath = computed(() => {
 <template>
   <div class="questionnaire-result-container">
     <div class="result-header">
-      <ButtonLink
-        variant="secondary"
-        :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
-      >
+      <ButtonLink variant="secondary" :to="`/questionnaires/${props.questionnaire.questionnaire_id}`">
         <Icon name="mdi:chevron-left" size="24px" />
         <span>アンケート詳細画面に戻る</span>
       </ButtonLink>
@@ -49,10 +43,7 @@ const firstResponsePath = computed(() => {
           <span>個別の回答を見る ({{ props.responses.length }}件)</span>
         </ButtonLink>
 
-        <QuestionnaireResultExportDialog
-          :questionnaire="props.questionnaire"
-          :responses="props.responses"
-        />
+        <QuestionnaireResultExportDialog :questionnaire="props.questionnaire" :responses="props.responses" />
       </div>
     </div>
 

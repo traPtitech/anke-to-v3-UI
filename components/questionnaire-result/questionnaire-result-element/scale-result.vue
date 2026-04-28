@@ -8,8 +8,7 @@ const props = defineProps<{
   questionnaireId: number;
 }>();
 
-const toResponsePath = (responseId: number) =>
-  `/questionnaires/${props.questionnaireId}/result/${responseId}`;
+const toResponsePath = (responseId: number) => `/questionnaires/${props.questionnaireId}/result/${responseId}`;
 
 const aggregatedResponses = computed(() => {
   const responses = props.result.responses.map((res) => res.answer);
@@ -47,21 +46,10 @@ const aggregatedResponses = computed(() => {
 </script>
 
 <template>
-  <DataTable
-    :value="aggregatedResponses"
-    sort-field="answer"
-    :sort-order="1"
-    scrollable
-    scrollable-height="500px"
-  >
+  <DataTable :value="aggregatedResponses" sort-field="answer" :sort-order="1" scrollable scrollable-height="500px">
     <Column field="answer" header="回答" sortable />
     <Column field="countAndRate" header="回答数・回答率" sortable />
-    <Column
-      v-if="!props.isAnonymous"
-      field="respondentsText"
-      header="回答者"
-      sortable
-    >
+    <Column v-if="!props.isAnonymous" field="respondentsText" header="回答者" sortable>
       <template #body="{ data }">
         <div class="respondents-chip-list">
           <NuxtLink

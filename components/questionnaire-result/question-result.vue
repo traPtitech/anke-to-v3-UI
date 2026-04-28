@@ -36,10 +36,7 @@ const questionTypeLabelMap = {
           {{ result.title }}
         </div>
         <div class="question-result-meta-chips">
-          <span
-            class="question-result-chip"
-            :class="result.is_required ? 'is-required' : 'is-optional'"
-          >
+          <span class="question-result-chip" :class="result.is_required ? 'is-required' : 'is-optional'">
             {{ result.is_required ? '必須' : '任意' }}
           </span>
           <span class="question-result-chip is-type">
@@ -48,14 +45,9 @@ const questionTypeLabelMap = {
         </div>
       </div>
 
-      <span class="question-result-count">
-        回答 {{ result.responses.length }} 件
-      </span>
+      <span class="question-result-count">回答 {{ result.responses.length }} 件</span>
     </div>
-    <MarkdownBlock
-      class="question-result-description"
-      :content="result.description"
-    />
+    <MarkdownBlock class="question-result-description" :content="result.description" />
 
     <div v-if="!hasResponses" class="question-result-empty">
       <Icon name="mdi:message-outline" size="20px" />

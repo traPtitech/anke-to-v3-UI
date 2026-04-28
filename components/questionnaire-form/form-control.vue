@@ -21,9 +21,7 @@ const isQuestionTitleFocused = ref(false);
 const showQuestionTitleRequiredErrorAfterBlur = computed(
   () => !isQuestionTitleFocused.value && question.value.title.trim() === '',
 );
-const showChoiceOptionRequiredErrorAfterBlur = computed(
-  () => hasQuestionCardBeenBlurred.value,
-);
+const showChoiceOptionRequiredErrorAfterBlur = computed(() => hasQuestionCardBeenBlurred.value);
 
 const handleCardFocusIn = () => {
   hasFocusedInsideCard.value = true;
@@ -32,10 +30,7 @@ const handleCardFocusIn = () => {
 const handleCardFocusOut = (event: FocusEvent) => {
   if (!hasFocusedInsideCard.value) return;
   const nextFocusedElement = event.relatedTarget as Node | null;
-  if (
-    nextFocusedElement &&
-    formControlContainer.value?.contains(nextFocusedElement)
-  ) {
+  if (nextFocusedElement && formControlContainer.value?.contains(nextFocusedElement)) {
     return;
   }
   hasQuestionCardBeenBlurred.value = true;
@@ -62,9 +57,7 @@ watch(
   (shouldFocus) => {
     if (!shouldFocus) return;
     nextTick(() => {
-      document
-        .getElementById(`question-title-input-${question.value.question_id}`)
-        ?.focus();
+      document.getElementById(`question-title-input-${question.value.question_id}`)?.focus();
     });
   },
   { immediate: true },
@@ -87,10 +80,7 @@ watch(
       @focus="isQuestionTitleFocused = true"
       @blur="isQuestionTitleFocused = false"
     />
-    <small
-      v-if="showQuestionTitleRequiredErrorAfterBlur"
-      class="invalid-message"
-    >
+    <small v-if="showQuestionTitleRequiredErrorAfterBlur" class="invalid-message">
       <Icon name="mdi:alert-circle" size="20px" />
       <span>質問のタイトルを入力してください</span>
     </small>
@@ -101,53 +91,29 @@ watch(
       auto-resize
     />
 
-    <FormControlElementTextInput
-      v-if="question.question_type === 'Text'"
-      v-model="question"
-    />
-    <FormControlElementTextLongInput
-      v-if="question.question_type === 'TextLong'"
-      v-model="question"
-    />
-    <FormControlElementNumberInput
-      v-if="question.question_type === 'Number'"
-      v-model="question"
-    />
+    <FormControlElementTextInput v-if="question.question_type === 'Text'" v-model="question" />
+    <FormControlElementTextLongInput v-if="question.question_type === 'TextLong'" v-model="question" />
+    <FormControlElementNumberInput v-if="question.question_type === 'Number'" v-model="question" />
     <FormControlElementSingleChoiceInput
       v-if="question.question_type === 'SingleChoice'"
       v-model="question"
-      :show-choice-option-required-error="
-        showChoiceOptionRequiredErrorAfterBlur
-      "
+      :show-choice-option-required-error="showChoiceOptionRequiredErrorAfterBlur"
     />
     <FormControlElementMultipleChoiceInput
       v-if="question.question_type === 'MultipleChoice'"
       v-model="question"
-      :show-choice-option-required-error="
-        showChoiceOptionRequiredErrorAfterBlur
-      "
+      :show-choice-option-required-error="showChoiceOptionRequiredErrorAfterBlur"
     />
-    <FormControlElementScaleInput
-      v-if="question.question_type === 'Scale'"
-      v-model="question"
-    />
+    <FormControlElementScaleInput v-if="question.question_type === 'Scale'" v-model="question" />
 
     <div class="form-control-footer">
       <div>質問タイプ: {{ questionType }}</div>
       <div class="form-control-footer-actions">
         <div class="form-control-footer-buttons">
-          <Button
-            class="p-button-icon-only p-button-text"
-            title="質問を複製"
-            @click="$emit('copy')"
-          >
+          <Button class="p-button-icon-only p-button-text" title="質問を複製" @click="$emit('copy')">
             <Icon size="24px" name="mdi:content-copy" />
           </Button>
-          <Button
-            class="p-button-icon-only p-button-text"
-            title="質問を削除"
-            @click="$emit('delete')"
-          >
+          <Button class="p-button-icon-only p-button-text" title="質問を削除" @click="$emit('delete')">
             <Icon size="24px" name="mdi:trash-can-outline" />
           </Button>
         </div>

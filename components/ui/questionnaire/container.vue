@@ -5,11 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    :class="
-      props.grid ? 'questionnaire-grid-container' : 'questionnaire-container'
-    "
-  >
+  <div :class="props.grid ? 'questionnaire-grid-container' : 'questionnaire-container'">
     <slot />
   </div>
 </template>

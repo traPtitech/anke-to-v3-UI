@@ -10,11 +10,7 @@ const { response, responseError, questionnaire, questionnaireError, refresh } =
   useGetResponseWithQuestionnaire(responseId);
 
 usePageSeo({
-  title: computed(() =>
-    questionnaire.value
-      ? `「${questionnaire.value.title}」への回答を編集`
-      : '読み込み中...',
-  ),
+  title: computed(() => (questionnaire.value ? `「${questionnaire.value.title}」への回答を編集` : '読み込み中...')),
   description: '送信済み回答の内容を編集します。',
 });
 </script>
@@ -28,15 +24,8 @@ usePageSeo({
       :show-retry="true"
       @retry="refresh"
     />
-    <DetailLoadingIndicator
-      v-else-if="!questionnaire || !response"
-      variant="response"
-    />
-    <EditResponseForm
-      v-else
-      :questionnaire="questionnaire"
-      :response="response"
-    />
+    <DetailLoadingIndicator v-else-if="!questionnaire || !response" variant="response" />
+    <EditResponseForm v-else :questionnaire="questionnaire" :response="response" />
   </div>
 </template>
 

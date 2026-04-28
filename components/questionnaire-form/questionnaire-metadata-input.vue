@@ -1,31 +1,22 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
-import {
-  responseViewableByOptionsMap,
-  type GatewayResponseShareType,
-} from '~/models/questionnaire';
+import { responseViewableByOptionsMap, type GatewayResponseShareType } from '~/models/questionnaire';
 import ResponseDueDateTimeInput from './response-due-date-time-input.vue';
 import type { QuestionnaireFormSettings } from './type';
 import UserSpecifierInput from './user-specifier-input.vue';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
 const isTitleFocused = ref(false);
-const showTitleRequiredErrorAfterBlur = computed(
-  () => state.value.title.trim() === '' && !isTitleFocused.value,
-);
+const showTitleRequiredErrorAfterBlur = computed(() => state.value.title.trim() === '' && !isTitleFocused.value);
 const showAdminRequiredError = computed(
-  () =>
-    state.value.admin.users.length === 0 &&
-    state.value.admin.groups.length === 0,
+  () => state.value.admin.users.length === 0 && state.value.admin.groups.length === 0,
 );
 
 onMounted(() => {
   document.getElementById('questionnaire-title-input')?.focus();
 });
 
-const responseViewableByOptions = Object.entries(
-  responseViewableByOptionsMap,
-).map(([value, label]) => ({
+const responseViewableByOptions = Object.entries(responseViewableByOptionsMap).map(([value, label]) => ({
   label,
   value: value as GatewayResponseShareType,
 }));
@@ -90,19 +81,11 @@ const isAnonymousId = useId();
       </div>
       <div class="form-element">
         <label class="form-bottom-switch" :for="allowDuplicateId">
-          <Checkbox
-            v-model="state.is_duplicate_answer_allowed"
-            :input-id="allowDuplicateId"
-            binary
-          />
+          <Checkbox v-model="state.is_duplicate_answer_allowed" :input-id="allowDuplicateId" binary />
           <p class="form-label">複数回答を許可</p>
         </label>
         <label class="form-element form-bottom-switch" :for="isAnonymousId">
-          <Checkbox
-            v-model="state.is_anonymous"
-            :input-id="isAnonymousId"
-            binary
-          />
+          <Checkbox v-model="state.is_anonymous" :input-id="isAnonymousId" binary />
           <p class="form-label">匿名回答</p>
         </label>
       </div>

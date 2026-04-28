@@ -20,18 +20,11 @@ const props = withDefaults(
 
 <template>
   <Chip :highlighted="props.highlighted">
-    <img
-      v-if="props.showAvatar"
-      class="user-chip-avatar"
-      :src="getUserAvatarUrl(props.username)"
-      aria-hidden="true"
-    />
+    <img v-if="props.showAvatar" class="user-chip-avatar" :src="getUserAvatarUrl(props.username)" aria-hidden="true" />
     <span class="user-chip-name">
       {{ props.prefixAt ? '@' + props.username : props.username }}
     </span>
-    <span v-if="props.count > 1" class="user-chip-count">
-      ({{ props.count }})
-    </span>
+    <span v-if="props.count > 1" class="user-chip-count">({{ props.count }})</span>
   </Chip>
 </template>
 

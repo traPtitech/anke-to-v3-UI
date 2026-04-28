@@ -3,11 +3,7 @@ import IconButton from '~/components/ui/icon-button.vue';
 import { postNewResponse } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import ResponseFormBase from './response-form-base.vue';
-import {
-  convertToBody,
-  getInitialResponseFormState,
-  useResponseFormStore,
-} from './store';
+import { convertToBody, getInitialResponseFormState, useResponseFormStore } from './store';
 
 const toast = useToast();
 
@@ -107,9 +103,7 @@ const handleSend = async () => {
         variant="secondary"
         icon="mdi:close"
         :disabled="!atLeastOneFilled"
-        :title="
-          !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''
-        "
+        :title="!atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''"
         @click="handleSave"
       >
         <span>一時保存</span>
@@ -119,11 +113,7 @@ const handleSend = async () => {
         icon="mdi:content-save"
         :disabled="!valid || !atLeastOneFilled"
         :title="
-          !atLeastOneFilled
-            ? '少なくとも1つの質問に回答してください'
-            : !valid
-              ? '必須項目を回答してください'
-              : ''
+          !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : !valid ? '必須項目を回答してください' : ''
         "
         @click="handleSend"
       >

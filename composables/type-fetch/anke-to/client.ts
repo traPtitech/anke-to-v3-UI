@@ -11,8 +11,7 @@ const hashOption = (option: object | undefined) => {
     .join('&')}`;
 };
 
-export type GetQuestionnairesOption =
-  paths['/questionnaires']['get']['parameters']['query'];
+export type GetQuestionnairesOption = paths['/questionnaires']['get']['parameters']['query'];
 
 const cachedGetQuestionnairesKeys = new Set<string>();
 
@@ -38,8 +37,7 @@ export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
   return res.data;
 };
 
-export const useGetQuestionnaire = (id: number) =>
-  useAsyncData(`/questionnaires/${id}`, () => fetchQuestionnaire(id));
+export const useGetQuestionnaire = (id: number) => useAsyncData(`/questionnaires/${id}`, () => fetchQuestionnaire(id));
 
 export const fetchQuestionnaire = async (questionnaireID: number) => {
   const res = await client.GET('/questionnaires/{questionnaireID}', {
@@ -52,12 +50,9 @@ export const fetchQuestionnaire = async (questionnaireID: number) => {
 };
 
 export const fetchMyRemindStatus = async (questionnaireID: number) => {
-  const res = await client.GET(
-    '/questionnaires/{questionnaireID}/myRemindStatus',
-    {
-      params: { path: { questionnaireID } },
-    },
-  );
+  const res = await client.GET('/questionnaires/{questionnaireID}/myRemindStatus', {
+    params: { path: { questionnaireID } },
+  });
   if (res.data === undefined) {
     throw new Error('No data returned from the API');
   }
@@ -65,12 +60,9 @@ export const fetchMyRemindStatus = async (questionnaireID: number) => {
 };
 
 export const useGetMyRemindStatus = (questionnaireID: number) =>
-  useAsyncData(`/questionnaires/${questionnaireID}/myRemindStatus`, async () =>
-    fetchMyRemindStatus(questionnaireID),
-  );
+  useAsyncData(`/questionnaires/${questionnaireID}/myRemindStatus`, async () => fetchMyRemindStatus(questionnaireID));
 
-export type PostQuestionnaireBody =
-  paths['/questionnaires']['post']['requestBody']['content']['application/json'];
+export type PostQuestionnaireBody = paths['/questionnaires']['post']['requestBody']['content']['application/json'];
 export const postNewQuestionnaire = async (data: PostQuestionnaireBody) => {
   const res = await client.POST('/questionnaires', { body: data });
   if (res.data === undefined) {
@@ -84,17 +76,11 @@ export const postNewQuestionnaire = async (data: PostQuestionnaireBody) => {
 
 export type PatchMyRemindStatusBody =
   paths['/questionnaires/{questionnaireID}/myRemindStatus']['patch']['requestBody']['content']['application/json'];
-export const patchMyRemindStatus = async (
-  questionnaireID: number,
-  body: PatchMyRemindStatusBody,
-) => {
-  const res = await client.PATCH(
-    '/questionnaires/{questionnaireID}/myRemindStatus',
-    {
-      params: { path: { questionnaireID } },
-      body,
-    },
-  );
+export const patchMyRemindStatus = async (questionnaireID: number, body: PatchMyRemindStatusBody) => {
+  const res = await client.PATCH('/questionnaires/{questionnaireID}/myRemindStatus', {
+    params: { path: { questionnaireID } },
+    body,
+  });
 
   if (!res.response.ok) {
     throw new Error('Failed to patch remind status');
@@ -117,10 +103,7 @@ export const deleteQuestionnaireById = async (questionnaireID: number) => {
 
 export type PatchQuestionnaireBody =
   paths['/questionnaires/{questionnaireID}']['patch']['requestBody']['content']['application/json'];
-export const patchQuestionnaireById = async (
-  questionnaireID: number,
-  body: PatchQuestionnaireBody,
-) => {
+export const patchQuestionnaireById = async (questionnaireID: number, body: PatchQuestionnaireBody) => {
   const res = await client.PATCH('/questionnaires/{questionnaireID}', {
     params: { path: { questionnaireID } },
     body,
@@ -160,15 +143,10 @@ const refreshGetQuestionnaireResponses = async (questionnaireID: number) => {
   await Promise.all(keys.map((key) => refreshNuxtData(key)));
 };
 
-export const useGetQuestionnaireResponses = (
-  questionnaireID: number,
-  params?: GetQuestionnaireResponsesParams,
-) => {
+export const useGetQuestionnaireResponses = (questionnaireID: number, params?: GetQuestionnaireResponsesParams) => {
   const key = `/questionnaires/${questionnaireID}/responses!${hashOption(params)}`;
   cachedGetQuestionnaireResponsesKeys.add(key);
-  return useAsyncData(key, () =>
-    fetchQuestionnaireResponses(questionnaireID, params),
-  );
+  return useAsyncData(key, () => fetchQuestionnaireResponses(questionnaireID, params));
 };
 
 export const useGetResponse = (responseID: number) =>
@@ -183,15 +161,9 @@ export const useGetResponse = (responseID: number) =>
   });
 
 export const useGetResponseWithQuestionnaire = (responseID: number) => {
-  const {
-    data: response,
-    error: responseError,
-    refresh: refreshResponse,
-  } = useGetResponse(responseID);
+  const { data: response, error: responseError, refresh: refreshResponse } = useGetResponse(responseID);
 
-  const questionnaireID = computed(
-    () => response.value?.questionnaire_id ?? null,
-  );
+  const questionnaireID = computed(() => response.value?.questionnaire_id ?? null);
 
   const {
     data: questionnaire,
@@ -223,10 +195,7 @@ export const useGetResponseWithQuestionnaire = (responseID: number) => {
 
 export type PostNewResponseBody =
   paths['/questionnaires/{questionnaireID}/responses']['post']['requestBody']['content']['application/json'];
-export const postNewResponse = async (
-  questionnaireID: number,
-  data: PostNewResponseBody,
-) => {
+export const postNewResponse = async (questionnaireID: number, data: PostNewResponseBody) => {
   const res = await client.POST('/questionnaires/{questionnaireID}/responses', {
     params: { path: { questionnaireID } },
     body: data,
@@ -241,12 +210,8 @@ export const postNewResponse = async (
   return res.data;
 };
 
-export type PatchResponseBody =
-  paths['/responses/{responseID}']['patch']['requestBody']['content']['application/json'];
-export const patchResponse = async (
-  responseID: number,
-  data: PatchResponseBody,
-) => {
+export type PatchResponseBody = paths['/responses/{responseID}']['patch']['requestBody']['content']['application/json'];
+export const patchResponse = async (responseID: number, data: PatchResponseBody) => {
   const res = await client.PATCH('/responses/{responseID}', {
     params: { path: { responseID } },
     body: data,
@@ -259,10 +224,7 @@ export const patchResponse = async (
   await refreshNuxtData(`/responses/${responseID}`);
 };
 
-export const deleteResponse = async (
-  responseID: number,
-  questionnaireId?: number,
-) => {
+export const deleteResponse = async (responseID: number, questionnaireId?: number) => {
   const res = await client.DELETE('/responses/{responseID}', {
     params: { path: { responseID } },
   });

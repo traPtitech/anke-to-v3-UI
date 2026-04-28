@@ -9,10 +9,7 @@ const question = defineModel<QuestionSettingsText>({
 <template>
   <div class="form-control-element-text-input">
     <InputText placeholder="回答 (1行テキスト)" disabled />
-    <InputNumber
-      v-model="question.max_length"
-      placeholder="最大文字数 (任意)"
-    />
+    <InputNumber v-model="question.max_length" placeholder="最大文字数 (任意)" />
   </div>
 </template>
 

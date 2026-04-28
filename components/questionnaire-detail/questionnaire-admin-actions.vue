@@ -9,14 +9,10 @@ const props = defineProps<{ detail: QuestionnaireDetail }>();
 const { data: me } = useMe();
 const { actionDelete, actionClose } = useQuestionnaireActions();
 
-const canEdit = computed(() =>
-  props.detail.admins.includes(me.value?.name ?? ''),
-);
+const canEdit = computed(() => props.detail.admins.includes(me.value?.name ?? ''));
 
 const canAnswer = computed(
-  () =>
-    props.detail.response_due_date_time === undefined ||
-    new Date(props.detail.response_due_date_time) > new Date(),
+  () => props.detail.response_due_date_time === undefined || new Date(props.detail.response_due_date_time) > new Date(),
 );
 </script>
 
@@ -27,11 +23,7 @@ const canAnswer = computed(
       <span>管理</span>
     </h3>
     <div class="admin-actions-body">
-      <ButtonLink
-        variant="secondary"
-        :to="`/questionnaires/${detail.questionnaire_id}/edit`"
-        :disabled="!canEdit"
-      >
+      <ButtonLink variant="secondary" :to="`/questionnaires/${detail.questionnaire_id}/edit`" :disabled="!canEdit">
         <Icon name="mdi:pencil-outline" size="20px" />
         <span>編集する</span>
       </ButtonLink>

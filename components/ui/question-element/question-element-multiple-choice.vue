@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import {
-  type QuestionElementMode,
-  type QuestionElementMultipleChoice,
-  useQuestionValidity,
-} from './composables';
+import { type QuestionElementMode, type QuestionElementMultipleChoice, useQuestionValidity } from './composables';
 import QuestionAnswerChip from './question-answer-chip.vue';
 import QuestionAnswerEmpty from './question-answer-empty.vue';
 import QuestionAnswerView from './question-answer-view.vue';
@@ -33,16 +29,8 @@ const name = `question-element-multiple-choice-${useId()}`;
       :break-before="question.options.length > 0"
     />
   </QuestionAnswerView>
-  <CheckboxGroup
-    v-else
-    v-model="question.answer"
-    class="question-element-multiple-choice-container"
-  >
-    <div
-      v-for="(option, i) in question.options"
-      :key="optionIds[i]"
-      class="question-element-multiple-choice-element"
-    >
+  <CheckboxGroup v-else v-model="question.answer" class="question-element-multiple-choice-container">
+    <div v-for="(option, i) in question.options" :key="optionIds[i]" class="question-element-multiple-choice-element">
       <Checkbox
         :value="option"
         :input-id="`${optionIds[i]}`"
@@ -50,10 +38,7 @@ const name = `question-element-multiple-choice-${useId()}`;
         :required="question.is_required"
         :class="{ 'p-invalid': !valid }"
       />
-      <label
-        :for="`${optionIds[i]}`"
-        class="question-element-multiple-choice-label"
-      >
+      <label :for="`${optionIds[i]}`" class="question-element-multiple-choice-label">
         {{ option }}
       </label>
     </div>

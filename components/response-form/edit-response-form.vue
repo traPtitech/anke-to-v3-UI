@@ -4,11 +4,7 @@ import { patchResponse } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 import type { GatewayResponse } from '~/models/response';
 import ResponseFormBase from './response-form-base.vue';
-import {
-  convertToBody,
-  getExistingResponseFormState,
-  useResponseFormStore,
-} from './store';
+import { convertToBody, getExistingResponseFormState, useResponseFormStore } from './store';
 
 const toast = useToast();
 
@@ -17,18 +13,11 @@ const props = defineProps<{
   response: GatewayResponse;
 }>();
 
-const initialState = getExistingResponseFormState(
-  props.questionnaire,
-  props.response,
-);
+const initialState = getExistingResponseFormState(props.questionnaire, props.response);
 const { state, valid, atLeastOneFilled } = useResponseFormStore(initialState);
 const isEditingDraft = computed(() => props.response.is_draft);
-const saveButtonLabel = computed(() =>
-  isEditingDraft.value ? '一時保存' : '下書きに戻す',
-);
-const saveButtonIcon = computed(() =>
-  isEditingDraft.value ? 'mdi:close' : 'mdi:file-undo-outline',
-);
+const saveButtonLabel = computed(() => (isEditingDraft.value ? '一時保存' : '下書きに戻す'));
+const saveButtonIcon = computed(() => (isEditingDraft.value ? 'mdi:close' : 'mdi:file-undo-outline'));
 
 const handleSave = async () => {
   if (!atLeastOneFilled.value) {
@@ -48,18 +37,14 @@ const handleSave = async () => {
       is_draft: true,
     });
     toast.add({
-      summary: isEditingDraftSnapshot
-        ? '回答を一時保存しました'
-        : '回答を下書きに戻しました',
+      summary: isEditingDraftSnapshot ? '回答を一時保存しました' : '回答を下書きに戻しました',
       severity: 'success',
       life: 3000,
     });
   } catch (err) {
     console.error(err);
     toast.add({
-      summary: isEditingDraft.value
-        ? '回答の一時保存に失敗しました'
-        : '回答を下書きに戻せませんでした',
+      summary: isEditingDraft.value ? '回答の一時保存に失敗しました' : '回答を下書きに戻せませんでした',
       severity: 'error',
       life: 3000,
     });
@@ -116,9 +101,7 @@ const handleSend = async () => {
         variant="secondary"
         :icon="saveButtonIcon"
         :disabled="!atLeastOneFilled"
-        :title="
-          !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''
-        "
+        :title="!atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''"
         @click="handleSave"
       >
         <span>{{ saveButtonLabel }}</span>
@@ -128,11 +111,7 @@ const handleSend = async () => {
         icon="mdi:content-save"
         :disabled="!valid || !atLeastOneFilled"
         :title="
-          !atLeastOneFilled
-            ? '少なくとも1つの質問に回答してください'
-            : !valid
-              ? '必須項目を回答してください'
-              : ''
+          !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : !valid ? '必須項目を回答してください' : ''
         "
         @click="handleSend"
       >

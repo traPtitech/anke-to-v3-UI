@@ -16,9 +16,7 @@ const props = withDefaults(
   },
 );
 
-const severity = computed(() =>
-  props.variant === 'primary' ? 'primary' : 'secondary',
-);
+const severity = computed(() => (props.variant === 'primary' ? 'primary' : 'secondary'));
 
 const buttonVariant = computed(() => {
   if (props.variant === 'secondary') {

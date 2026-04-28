@@ -36,12 +36,7 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
     </div>
 
     <div class="top-actions">
-      <ButtonLink
-        to="/questionnaires/new"
-        variant="primary"
-        class="header-create-button"
-        aria-label="新規作成"
-      >
+      <ButtonLink to="/questionnaires/new" variant="primary" class="header-create-button" aria-label="新規作成">
         <Icon name="mdi:plus" size="20px" class="header-create-button-icon" />
         <span>新規作成</span>
       </ButtonLink>
@@ -56,12 +51,7 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
         title="自分の回答一覧へ"
         aria-label="自分の回答一覧へ"
       >
-        <img
-          v-if="userIconSrc"
-          :src="userIconSrc"
-          alt=""
-          class="header-action-user-icon"
-        />
+        <img v-if="userIconSrc" :src="userIconSrc" alt="" class="header-action-user-icon" />
         <Icon v-else name="mdi:account" size="40px" />
       </NuxtLink>
     </div>

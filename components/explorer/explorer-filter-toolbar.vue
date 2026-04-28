@@ -40,11 +40,7 @@ const toggleActiveId = useId();
       >
         <span class="sort-menu-trigger-label">並べ方</span>
         <span class="sort-menu-trigger-current">{{ props.sortMenuLabel }}</span>
-        <Icon
-          name="mdi:chevron-down"
-          size="16px"
-          :class="['sort-menu-trigger-chevron', { open: isSortMenuOpen }]"
-        />
+        <Icon name="mdi:chevron-down" size="16px" :class="['sort-menu-trigger-chevron', { open: isSortMenuOpen }]" />
       </button>
 
       <Menu
@@ -67,12 +63,7 @@ const toggleActiveId = useId();
               class="sort-menu-item-check"
               :class="{ visible: props.isSortMenuItemSelected(item) }"
             />
-            <Icon
-              v-if="item.icon"
-              :name="item.icon"
-              size="22px"
-              class="sort-menu-order-icon"
-            />
+            <Icon v-if="item.icon" :name="item.icon" size="22px" class="sort-menu-order-icon" />
             <span>{{ item.label }}</span>
           </a>
         </template>
@@ -93,26 +84,11 @@ const toggleActiveId = useId();
         class="advanced-filter-toggle"
         severity="secondary"
         outlined
-        :aria-label="
-          props.isFilterExpanded
-            ? '高度なフィルタを閉じる'
-            : '高度なフィルタを開く'
-        "
-        :title="
-          props.isFilterExpanded
-            ? '高度なフィルタを閉じる'
-            : '高度なフィルタを開く'
-        "
+        :aria-label="props.isFilterExpanded ? '高度なフィルタを閉じる' : '高度なフィルタを開く'"
+        :title="props.isFilterExpanded ? '高度なフィルタを閉じる' : '高度なフィルタを開く'"
         @click="emit('toggleFilterExpanded')"
       >
-        <Icon
-          :name="
-            props.isFilterExpanded
-              ? 'mdi:filter-minus-outline'
-              : 'mdi:filter-plus-outline'
-          "
-          size="18px"
-        />
+        <Icon :name="props.isFilterExpanded ? 'mdi:filter-minus-outline' : 'mdi:filter-plus-outline'" size="18px" />
       </Button>
     </div>
   </div>

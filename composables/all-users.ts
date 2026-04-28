@@ -4,9 +4,7 @@ export const useAllUsers = () => {
   const { data: users } = useUsers();
 
   const allUserNames = computed(() => {
-    return (
-      users.value?.filter((user) => !user.is_bot).map((user) => user.name) ?? []
-    );
+    return users.value?.filter((user) => !user.is_bot).map((user) => user.name) ?? [];
   });
 
   return {

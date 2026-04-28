@@ -16,9 +16,7 @@ const toSortedArray = (set: Set<FilterKey>) => [...set].sort();
 
 describe('filter-domain core state', () => {
   it('parses advanced state with precedence rules', () => {
-    const state = parseAdvancedFilterState(
-      new Set<FilterKey>(['answered', 'unanswered', 'draft', 'unpublished']),
-    );
+    const state = parseAdvancedFilterState(new Set<FilterKey>(['answered', 'unanswered', 'draft', 'unpublished']));
 
     expect(state).toEqual({
       targetScope: 'all',
@@ -36,24 +34,13 @@ describe('filter-domain core state', () => {
       administrationScope: 'published',
     };
 
-    expect(toSortedArray(buildFilterSetFromAdvancedState(state))).toEqual([
-      'administered',
-      'answered',
-      'targeting',
-    ]);
+    expect(toSortedArray(buildFilterSetFromAdvancedState(state))).toEqual(['administered', 'answered', 'targeting']);
   });
 
   it('normalizes filter set and preserves due filter', () => {
-    const normalized = normalizeFilterSet(
-      new Set<FilterKey>(['answered', 'unanswered', 'due', 'unpublished']),
-    );
+    const normalized = normalizeFilterSet(new Set<FilterKey>(['answered', 'unanswered', 'due', 'unpublished']));
 
-    expect(toSortedArray(normalized)).toEqual([
-      'administered',
-      'due',
-      'unanswered',
-      'unpublished',
-    ]);
+    expect(toSortedArray(normalized)).toEqual(['administered', 'due', 'unanswered', 'unpublished']);
   });
 
   it('updates individual filters through state operation', () => {
@@ -81,12 +68,8 @@ describe('filter-domain core state', () => {
   });
 
   it('resolves selected tab from normalized filters', () => {
-    expect(
-      findSelectedTab(new Set<FilterKey>(['targeting', 'unanswered'])),
-    ).toBe('unanswered');
-    expect(
-      findSelectedTab(new Set<FilterKey>(['targeting', 'unanswered', 'due'])),
-    ).toBe('unanswered');
+    expect(findSelectedTab(new Set<FilterKey>(['targeting', 'unanswered']))).toBe('unanswered');
+    expect(findSelectedTab(new Set<FilterKey>(['targeting', 'unanswered', 'due']))).toBe('unanswered');
     expect(findSelectedTab(new Set<FilterKey>(['due']))).toBe('all');
   });
 
@@ -95,8 +78,6 @@ describe('filter-domain core state', () => {
   });
 
   it('serializes filter set deterministically', () => {
-    expect(serializeFilterSet(new Set<FilterKey>(['targeting', 'due']))).toBe(
-      'due,targeting',
-    );
+    expect(serializeFilterSet(new Set<FilterKey>(['targeting', 'due']))).toBe('due,targeting');
   });
 });

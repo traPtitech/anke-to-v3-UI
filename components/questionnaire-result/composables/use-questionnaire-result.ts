@@ -40,10 +40,7 @@ export type QuestionResult =
   | QuestionResultMultipleChoice
   | QuestionResultScale;
 
-const getResultForQuestion = (
-  question: GatewayQuestion,
-  responses: GatewayResponse[],
-): QuestionResult => {
+const getResultForQuestion = (question: GatewayQuestion, responses: GatewayResponse[]): QuestionResult => {
   const questionResponses = responses.map((r) => {
     if (r.is_draft) return undefined;
     const body = r.body.find((b) => b.question_id === question.question_id);
@@ -61,13 +58,8 @@ const getResultForQuestion = (
   // ^^^ answer の型が合わないためアサーションする
 };
 
-export const useQuestionnaireResult = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-) => {
-  const results = computed(() =>
-    questionnaire.questions.map((q) => getResultForQuestion(q, responses)),
-  );
+export const useQuestionnaireResult = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]) => {
+  const results = computed(() => questionnaire.questions.map((q) => getResultForQuestion(q, responses)));
 
   return {
     results,

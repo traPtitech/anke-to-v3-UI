@@ -2,10 +2,7 @@
 import ButtonLink from '~/components/ui/button-link.vue';
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
 import QuestionElement from '~/components/ui/question-element/question-element.vue';
-import {
-  responseViewableByOptionsMap,
-  type GatewayQuestionnaire,
-} from '~/models/questionnaire';
+import { responseViewableByOptionsMap, type GatewayQuestionnaire } from '~/models/questionnaire';
 import type { ResponseFormState } from './store';
 
 const props = defineProps<{
@@ -15,8 +12,7 @@ const props = defineProps<{
 const state = defineModel<ResponseFormState>({ required: true });
 
 const dueDateString = computed(() => {
-  if (props.questionnaire.response_due_date_time === undefined)
-    return '期限なし';
+  if (props.questionnaire.response_due_date_time === undefined) return '期限なし';
   return formatDate(new Date(props.questionnaire.response_due_date_time));
 });
 </script>
@@ -24,10 +20,7 @@ const dueDateString = computed(() => {
 <template>
   <form class="response-form-container">
     <div class="response-form-nav">
-      <ButtonLink
-        variant="secondary"
-        :to="`/questionnaires/${props.questionnaire.questionnaire_id}`"
-      >
+      <ButtonLink variant="secondary" :to="`/questionnaires/${props.questionnaire.questionnaire_id}`">
         <Icon name="mdi:chevron-left" size="24px" />
         <span>アンケート詳細画面に戻る</span>
       </ButtonLink>
@@ -42,17 +35,12 @@ const dueDateString = computed(() => {
           </span>
           <span class="meta-chip">
             <Icon name="mdi:eye-outline" size="13px" />
-            {{
-              responseViewableByOptionsMap[
-                props.questionnaire.response_viewable_by
-              ]
-            }}公開
+            {{ responseViewableByOptionsMap[props.questionnaire.response_viewable_by] }}公開
           </span>
           <span
             class="meta-chip"
             :class="{
-              'meta-chip-deadline':
-                props.questionnaire.response_due_date_time !== undefined,
+              'meta-chip-deadline': props.questionnaire.response_due_date_time !== undefined,
             }"
           >
             <Icon name="mdi:clock-outline" size="13px" />
@@ -69,12 +57,7 @@ const dueDateString = computed(() => {
     </div>
 
     <div class="question-elements">
-      <QuestionElement
-        v-for="(_, i) in state.body"
-        :key="i"
-        v-model="state.body[i]"
-        :mode="'edit'"
-      />
+      <QuestionElement v-for="(_, i) in state.body" :key="i" v-model="state.body[i]" :mode="'edit'" />
     </div>
 
     <div class="form-action-buttons-container">
@@ -136,11 +119,7 @@ const dueDateString = computed(() => {
   border-radius: 999px;
   font-size: 12px;
   font-weight: 500;
-  background-color: color-mix(
-    in srgb,
-    var(--p-surface-0) 70%,
-    var(--p-surface-100)
-  );
+  background-color: color-mix(in srgb, var(--p-surface-0) 70%, var(--p-surface-100));
   color: var(--p-text-muted-color);
   border: 1px solid var(--p-surface-200);
 }

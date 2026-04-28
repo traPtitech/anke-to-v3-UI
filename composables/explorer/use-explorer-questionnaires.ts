@@ -2,10 +2,7 @@ import { getQueryValue } from '~/components/explorer/filter-query';
 import { setRouteQueryParams } from '~/components/explorer/filter-route';
 import type { ExplorerFilterPayload } from '~/components/explorer/filter-types';
 import { explorerQueryKeys } from './query-params';
-import {
-  fetchQuestionnaires,
-  type GetQuestionnairesOption,
-} from '~/composables/type-fetch/anke-to/client';
+import { fetchQuestionnaires, type GetQuestionnairesOption } from '~/composables/type-fetch/anke-to/client';
 
 export const EXPLORER_PAGE_SIZE = 20;
 
@@ -62,13 +59,9 @@ export const useExplorerQuestionnaires = ({
     { watch: [apiQuery] },
   );
 
-  const pageMax = computed(() =>
-    Math.max(1, questionnairePage.value?.page_max ?? 1),
-  );
+  const pageMax = computed(() => Math.max(1, questionnairePage.value?.page_max ?? 1));
 
-  const totalRecordsForPaginator = computed(
-    () => questionnairePage.value?.total_records ?? 0,
-  );
+  const totalRecordsForPaginator = computed(() => questionnairePage.value?.total_records ?? 0);
 
   const handlePageChange = (event: { page: number }) => {
     currentPage.value = event.page + 1;

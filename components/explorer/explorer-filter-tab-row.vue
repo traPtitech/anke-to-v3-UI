@@ -27,12 +27,7 @@ const handleSelectTab = (key: string) => {
 
 <template>
   <div class="tab-row">
-    <ChipSelectRow
-      :items="tabChipItems"
-      :selected-key="props.selectedTab"
-      :wrap="false"
-      @select="handleSelectTab"
-    />
+    <ChipSelectRow :items="tabChipItems" :selected-key="props.selectedTab" :wrap="false" @select="handleSelectTab" />
   </div>
 </template>
 

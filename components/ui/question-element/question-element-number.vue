@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import {
-  useQuestionValidity,
-  type QuestionElementMode,
-  type QuestionElementNumber,
-} from './composables';
+import { useQuestionValidity, type QuestionElementMode, type QuestionElementNumber } from './composables';
 import QuestionAnswerEmpty from './question-answer-empty.vue';
 import QuestionAnswerText from './question-answer-text.vue';
 import QuestionAnswerView from './question-answer-view.vue';
@@ -29,10 +25,7 @@ const answerModel = computed({
 
 <template>
   <QuestionAnswerView v-if="props.mode === 'view'">
-    <QuestionAnswerText
-      v-if="question.answer !== undefined"
-      :value="question.answer"
-    />
+    <QuestionAnswerText v-if="question.answer !== undefined" :value="question.answer" />
     <QuestionAnswerEmpty v-else />
   </QuestionAnswerView>
   <InputNumber

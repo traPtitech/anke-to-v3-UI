@@ -16,11 +16,7 @@ const props = withDefaults(
 <template>
   <span
     class="ui-chip"
-    :class="[
-      `ui-chip--${props.tone}`,
-      `ui-chip--${props.size}`,
-      { 'ui-chip--highlighted': props.highlighted },
-    ]"
+    :class="[`ui-chip--${props.tone}`, `ui-chip--${props.size}`, { 'ui-chip--highlighted': props.highlighted }]"
   >
     <slot />
   </span>

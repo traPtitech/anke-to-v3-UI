@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import ButtonLink from '~/components/ui/button-link.vue';
-import {
-  useGetMyRemindStatus,
-  useMe,
-} from '~/composables/type-fetch/anke-to/client';
+import { useGetMyRemindStatus, useMe } from '~/composables/type-fetch/anke-to/client';
 import { useQuestionnaireActions } from './action';
 import type { QuestionnaireDetail, ResShareType } from './type';
 
@@ -18,27 +15,19 @@ const props = defineProps<{
 
 const { data: me } = useMe();
 const { actionRespondLater, actionNotRespond } = useQuestionnaireActions();
-const { data: myRemindStatus } = useGetMyRemindStatus(
-  props.detail.questionnaire_id,
-);
+const { data: myRemindStatus } = useGetMyRemindStatus(props.detail.questionnaire_id);
 
 const latestDraft = computed(() => {
   const drafts = props.myResponses.filter((r) => r.is_draft);
   if (drafts.length === 0) return null;
   return drafts.reduce(
-    (latest, current) =>
-      new Date(current.modified_at) > new Date(latest.modified_at)
-        ? current
-        : latest,
+    (latest, current) => (new Date(current.modified_at) > new Date(latest.modified_at) ? current : latest),
     drafts[0],
   );
 });
 
 const canRespond = computed(() => {
-  if (
-    !props.detail.is_duplicate_answer_allowed &&
-    props.detail.respondents.includes(me.value?.name ?? '')
-  )
+  if (!props.detail.is_duplicate_answer_allowed && props.detail.respondents.includes(me.value?.name ?? ''))
     return false;
 
   if (props.detail.response_due_date_time === undefined) return true;
@@ -61,13 +50,9 @@ const canViewResult = computed(() => {
   return canViewResultMatrix[props.detail.response_viewable_by];
 });
 
-const isRemindEnabled = computed(
-  () => myRemindStatus.value?.is_remind_enabled ?? false,
-);
+const isRemindEnabled = computed(() => myRemindStatus.value?.is_remind_enabled ?? false);
 
-const remindSwitchId = computed(
-  () => `questionnaire-remind-switch-${props.detail.questionnaire_id}`,
-);
+const remindSwitchId = computed(() => `questionnaire-remind-switch-${props.detail.questionnaire_id}`);
 
 const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
   const isEnabled = nextValue ?? false;
@@ -88,11 +73,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
 <template>
   <div class="questionnaire-actions-container">
     <div class="questionnaire-actions-row-primary">
-      <ButtonLink
-        v-if="latestDraft && canRespond"
-        variant="primary"
-        :to="`/responses/${latestDraft.response_id}/edit`"
-      >
+      <ButtonLink v-if="latestDraft && canRespond" variant="primary" :to="`/responses/${latestDraft.response_id}/edit`">
         <Icon name="mdi:file-document-edit" size="20px" />
         <span>下書きの続きを書く</span>
       </ButtonLink>
@@ -115,11 +96,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
       </ButtonLink>
     </div>
     <div class="questionnaire-actions-row-secondary">
-      <ButtonLink
-        variant="secondary"
-        size="sm"
-        :to="`/questionnaires/${detail.questionnaire_id}/questions`"
-      >
+      <ButtonLink variant="secondary" size="sm" :to="`/questionnaires/${detail.questionnaire_id}/questions`">
         <Icon name="mdi:format-list-bulleted" size="18px" />
         <span>質問一覧を見る</span>
       </ButtonLink>
@@ -130,9 +107,7 @@ const handleRemindSwitchUpdate = (nextValue: boolean | undefined) => {
           :model-value="isRemindEnabled"
           @update:model-value="handleRemindSwitchUpdate"
         />
-        <label class="remind-switch-label" :for="remindSwitchId">
-          このアンケートに関するリマインドを受け取る
-        </label>
+        <label class="remind-switch-label" :for="remindSwitchId">このアンケートに関するリマインドを受け取る</label>
       </div>
     </div>
   </div>

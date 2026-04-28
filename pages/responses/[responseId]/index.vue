@@ -10,11 +10,7 @@ const { response, responseError, questionnaire, questionnaireError, refresh } =
   useGetResponseWithQuestionnaire(responseId);
 
 usePageSeo({
-  title: computed(() =>
-    questionnaire.value
-      ? `「${questionnaire.value.title}」への回答`
-      : '読み込み中...',
-  ),
+  title: computed(() => (questionnaire.value ? `「${questionnaire.value.title}」への回答` : '読み込み中...')),
   description: '回答内容の詳細を確認できます。',
 });
 </script>
@@ -28,15 +24,8 @@ usePageSeo({
       :show-retry="true"
       @retry="refresh"
     />
-    <DetailLoadingIndicator
-      v-else-if="!questionnaire || !response"
-      variant="response"
-    />
-    <ResponseDetail
-      v-else
-      :questionnaire="questionnaire"
-      :response="response"
-    />
+    <DetailLoadingIndicator v-else-if="!questionnaire || !response" variant="response" />
+    <ResponseDetail v-else :questionnaire="questionnaire" :response="response" />
   </div>
 </template>
 

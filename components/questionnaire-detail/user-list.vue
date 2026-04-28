@@ -27,13 +27,9 @@ const userCounts = computed(() => {
   });
 });
 
-const visibleUserCounts = computed(() =>
-  userCounts.value.slice(0, MAX_VISIBLE_USERS),
-);
+const visibleUserCounts = computed(() => userCounts.value.slice(0, MAX_VISIBLE_USERS));
 
-const hiddenUserCount = computed(
-  () => userCounts.value.length - visibleUserCounts.value.length,
-);
+const hiddenUserCount = computed(() => userCounts.value.length - visibleUserCounts.value.length);
 </script>
 
 <template>
@@ -47,12 +43,7 @@ const hiddenUserCount = computed(
         :highlighted="me?.name === user"
       />
 
-      <button
-        v-if="hiddenUserCount > 0"
-        type="button"
-        class="user-chip-more"
-        @click="isDialogVisible = true"
-      >
+      <button v-if="hiddenUserCount > 0" type="button" class="user-chip-more" @click="isDialogVisible = true">
         +{{ hiddenUserCount }}
       </button>
     </div>
@@ -71,11 +62,7 @@ const hiddenUserCount = computed(
           class="dialog-user-item"
           :class="{ 'dialog-user-item-me': me?.name === user }"
         >
-          <img
-            class="dialog-user-avatar"
-            :src="getUserAvatarUrl(user)"
-            aria-hidden="true"
-          />
+          <img class="dialog-user-avatar" :src="getUserAvatarUrl(user)" aria-hidden="true" />
           <span class="dialog-user-name">{{ '@' + user }}</span>
           <span v-if="count > 1" class="dialog-user-count">({{ count }})</span>
         </div>

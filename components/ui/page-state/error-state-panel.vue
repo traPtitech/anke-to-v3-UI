@@ -26,12 +26,7 @@ defineEmits<{
     <p class="error-state-title">{{ props.title }}</p>
     <p v-if="props.message" class="error-state-message">{{ props.message }}</p>
     <slot name="actions">
-      <Button
-        v-if="props.showRetry"
-        class="error-state-retry"
-        severity="secondary"
-        @click="$emit('retry')"
-      >
+      <Button v-if="props.showRetry" class="error-state-retry" severity="secondary" @click="$emit('retry')">
         <Icon name="mdi:refresh" size="18px" />
         <span>{{ props.retryLabel }}</span>
       </Button>

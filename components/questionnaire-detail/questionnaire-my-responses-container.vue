@@ -37,22 +37,11 @@ const handleDelete = async (responseId: number) => {
       <Icon name="mdi:file-document-edit-outline" size="18px" />
       <span>あなたの回答</span>
     </h3>
-    <small v-if="isDueOver" class="due-over-note">
-      回答期限を過ぎているため、回答の編集・削除はできません。
-    </small>
-    <div v-if="responses.length === 0" class="status-text">
-      まだ回答していません
-    </div>
+    <small v-if="isDueOver" class="due-over-note">回答期限を過ぎているため、回答の編集・削除はできません。</small>
+    <div v-if="responses.length === 0" class="status-text">まだ回答していません</div>
     <div v-else class="response-list">
-      <div
-        v-for="response in responses"
-        :key="response.response_id"
-        class="response-item"
-      >
-        <NuxtLink
-          :to="`/responses/${response.response_id}`"
-          class="response-link"
-        >
+      <div v-for="response in responses" :key="response.response_id" class="response-item">
+        <NuxtLink :to="`/responses/${response.response_id}`" class="response-link">
           <div class="response-main">
             <div class="response-header">
               <span v-if="response.is_draft" class="draft-chip">下書き</span>

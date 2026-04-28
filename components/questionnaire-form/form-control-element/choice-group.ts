@@ -13,11 +13,9 @@ const toInternal = (value: string[]): InternalOption[] => {
   return [...converted, { id: createId(), label: '' }];
 };
 
-const fromInternal = (value: InternalOption[]): string[] =>
-  value.slice(0, -1).map((option) => option.label);
+const fromInternal = (value: InternalOption[]): string[] => value.slice(0, -1).map((option) => option.label);
 
-const isSameOptions = (a: string[], b: string[]) =>
-  a.length === b.length && a.every((v, i) => v === b[i]);
+const isSameOptions = (a: string[], b: string[]) => a.length === b.length && a.every((v, i) => v === b[i]);
 
 export const useChoiceGroupFromControl = (options: Ref<string[]>) => {
   const internalOptions = ref<InternalOption[]>(toInternal(options.value));

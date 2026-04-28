@@ -18,9 +18,7 @@ const props = defineProps<{
 
 const { data: me } = useMe();
 const { actionDuplicate } = useQuestionnaireActions();
-const isQuestionnaireAdmin = computed(() =>
-  props.detail.admins.includes(me.value?.name ?? ''),
-);
+const isQuestionnaireAdmin = computed(() => props.detail.admins.includes(me.value?.name ?? ''));
 </script>
 
 <template>
@@ -40,18 +38,10 @@ const isQuestionnaireAdmin = computed(() =>
         </section>
 
         <section class="main-section">
-          <QuestionnaireMyResponsesContainer
-            :detail="detail"
-            :responses="myResponses"
-          />
+          <QuestionnaireMyResponsesContainer :detail="detail" :responses="myResponses" />
         </section>
 
-        <Button
-          severity="secondary"
-          outlined
-          @click="actionDuplicate(detail)"
-          class="duplicate-button"
-        >
+        <Button severity="secondary" outlined @click="actionDuplicate(detail)" class="duplicate-button">
           <Icon name="mdi:content-copy" size="20px" />
           <span>コピーして新しいアンケートを作る</span>
         </Button>

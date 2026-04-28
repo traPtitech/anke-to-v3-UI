@@ -4,10 +4,7 @@ import { questionnairesData, toSummary } from '~/mocks/handlers/questionnaire';
 import { myUserId, oneHourBefore } from '~/mocks/handlers/util';
 import type { GatewayResponse } from '~/models/response';
 
-const defaultResponse: Omit<
-  GatewayResponse,
-  'response_id' | 'questionnaire_id'
-> = {
+const defaultResponse: Omit<GatewayResponse, 'response_id' | 'questionnaire_id'> = {
   is_draft: false,
   is_anonymous: false,
   modified_at: oneHourBefore,
@@ -16,13 +13,8 @@ const defaultResponse: Omit<
   body: [],
 };
 
-const generateBulkResponses = (
-  startResponseId: number,
-  questionnaireId: number,
-) => {
-  const questionnaire = questionnairesData.find(
-    (q) => q.questionnaire_id === questionnaireId,
-  );
+const generateBulkResponses = (startResponseId: number, questionnaireId: number) => {
+  const questionnaire = questionnairesData.find((q) => q.questionnaire_id === questionnaireId);
   if (questionnaire === undefined) {
     throw new Error(`Questionnaire with ID=${questionnaireId} not found`);
   }
@@ -58,10 +50,7 @@ const generateBulkResponses = (
         body.push({
           question_id: question.question_id,
           question_type: 'SingleChoice',
-          answer:
-            question.options[
-              Math.floor(Math.random() * question.options.length)
-            ],
+          answer: question.options[Math.floor(Math.random() * question.options.length)],
         });
       } else if (question.question_type === 'MultipleChoice') {
         body.push({
@@ -97,26 +86,15 @@ const generateBulkResponses = (
   return responses;
 };
 
-const generateAnonymousResponses = (
-  startResponseId: number,
-  questionnaireId: number,
-) => {
-  const questionnaire = questionnairesData.find(
-    (q) => q.questionnaire_id === questionnaireId,
-  );
+const generateAnonymousResponses = (startResponseId: number, questionnaireId: number) => {
+  const questionnaire = questionnairesData.find((q) => q.questionnaire_id === questionnaireId);
   if (questionnaire === undefined) {
     throw new Error(`Questionnaire with ID=${questionnaireId} not found`);
   }
 
   const responses: GatewayResponse[] = [];
 
-  const anonymousUsers = [
-    'anonymous1',
-    'anonymous2',
-    'anonymous3',
-    'anonymous4',
-    'anonymous5',
-  ];
+  const anonymousUsers = ['anonymous1', 'anonymous2', 'anonymous3', 'anonymous4', 'anonymous5'];
 
   for (let i = 0; i < anonymousUsers.length; i++) {
     const responseId = startResponseId + i;
@@ -194,8 +172,7 @@ export const responsesData: GatewayResponse[] = [
       {
         question_id: 2,
         question_type: 'TextLong',
-        answer:
-          '長いテキスト回答1\nこれは複数行のテキストです。\n改行も含まれています。',
+        answer: '長いテキスト回答1\nこれは複数行のテキストです。\n改行も含まれています。',
       },
       { question_id: 3, question_type: 'Number', answer: 85 },
       { question_id: 4, question_type: 'SingleChoice', answer: '選択肢1' },
@@ -306,25 +283,16 @@ export const responsesData: GatewayResponse[] = [
   ...generateAnonymousResponses(2000, 13),
 ];
 
-export const responsesSortFunc: Record<
-  string,
-  (a: GatewayResponse, b: GatewayResponse) => number
-> = {
-  submitted_at: (a, b) =>
-    new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime(),
-  modified_at: (a, b) =>
-    new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime(),
-  '-submitted_at': (a, b) =>
-    new Date(a.submitted_at).getTime() - new Date(b.submitted_at).getTime(),
-  '-modified_at': (a, b) =>
-    new Date(a.modified_at).getTime() - new Date(b.modified_at).getTime(),
+export const responsesSortFunc: Record<string, (a: GatewayResponse, b: GatewayResponse) => number> = {
+  submitted_at: (a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime(),
+  modified_at: (a, b) => new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime(),
+  '-submitted_at': (a, b) => new Date(a.submitted_at).getTime() - new Date(b.submitted_at).getTime(),
+  '-modified_at': (a, b) => new Date(a.modified_at).getTime() - new Date(b.modified_at).getTime(),
 };
 
-type GetResponseResponse =
-  paths['/responses/{responseID}']['get']['responses']['200']['content']['application/json'];
+type GetResponseResponse = paths['/responses/{responseID}']['get']['responses']['200']['content']['application/json'];
 
-type GetMyResponsesResponse =
-  paths['/responses/myResponses']['get']['responses']['200']['content']['application/json'];
+type GetMyResponsesResponse = paths['/responses/myResponses']['get']['responses']['200']['content']['application/json'];
 
 type GetQuestionnaireResponsesResponse =
   paths['/questionnaires/{questionnaireID}/responses']['get']['responses']['200']['content']['application/json'];
@@ -332,9 +300,7 @@ type GetQuestionnaireResponsesResponse =
 type PostQuestionnaireResponseRequest =
   paths['/questionnaires/{questionnaireID}/responses']['post']['requestBody']['content']['application/json'];
 
-const maskAnonymousRespondent = (
-  response: GatewayResponse,
-): GatewayResponse => {
+const maskAnonymousRespondent = (response: GatewayResponse): GatewayResponse => {
   if (!response.is_anonymous) return response;
   return {
     ...response,
@@ -344,18 +310,13 @@ const maskAnonymousRespondent = (
 
 export const responseHandlers = [
   http.get('/api/responses/myResponses', (req) => {
-    const sort =
-      new URL(req.request.url).searchParams.get('sort') ?? 'submitted_at';
-    const page = Number(
-      new URL(req.request.url).searchParams.get('page') ?? '1',
-    );
+    const sort = new URL(req.request.url).searchParams.get('sort') ?? 'submitted_at';
+    const page = Number(new URL(req.request.url).searchParams.get('page') ?? '1');
     const pageSize = 20;
 
     const sortedResponses = questionnairesData
       .map((q) => {
-        const responses = responsesData.filter(
-          (r) => r.questionnaire_id === q.questionnaire_id,
-        );
+        const responses = responsesData.filter((r) => r.questionnaire_id === q.questionnaire_id);
 
         const myResponses = responses
           .filter((r) => r.respondent === myUserId)
@@ -370,10 +331,7 @@ export const responseHandlers = [
       .filter((qr) => qr.responses.length > 0);
 
     const startIndex = (page - 1) * pageSize;
-    const pagedResponses = sortedResponses.slice(
-      startIndex,
-      startIndex + pageSize,
-    );
+    const pagedResponses = sortedResponses.slice(startIndex, startIndex + pageSize);
     const totalPage = Math.ceil(sortedResponses.length / pageSize);
 
     const response: GetMyResponsesResponse = {
@@ -386,19 +344,12 @@ export const responseHandlers = [
 
   http.get('/api/responses/:id', (req) => {
     const { id } = req.params;
-    const questionnaireResponse = responsesData.find(
-      (r) => r.response_id === Number(id),
-    );
+    const questionnaireResponse = responsesData.find((r) => r.response_id === Number(id));
     if (!questionnaireResponse) {
-      return HttpResponse.json(
-        { message: 'Response not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ message: 'Response not found' }, { status: 404 });
     }
 
-    const response: GetResponseResponse = maskAnonymousRespondent(
-      questionnaireResponse,
-    );
+    const response: GetResponseResponse = maskAnonymousRespondent(questionnaireResponse);
     return HttpResponse.json(response);
   }),
 
@@ -406,14 +357,9 @@ export const responseHandlers = [
     const { id } = req.params;
     const reqBody = (await req.request.json()) as Partial<GatewayResponse>;
 
-    const responseIndex = responsesData.findIndex(
-      (r) => r.response_id === Number(id),
-    );
+    const responseIndex = responsesData.findIndex((r) => r.response_id === Number(id));
     if (responseIndex === -1) {
-      return HttpResponse.json(
-        { message: 'Response not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ message: 'Response not found' }, { status: 404 });
     }
 
     const mergedQuestionIds = [
@@ -423,19 +369,13 @@ export const responseHandlers = [
       ]),
     ];
     const mergedResponseBody = mergedQuestionIds.map((question_id) => {
-      const newAnswer = reqBody.body?.find(
-        (a) => a.question_id === question_id,
-      );
+      const newAnswer = reqBody.body?.find((a) => a.question_id === question_id);
       if (newAnswer) return newAnswer;
 
-      const existingAnswer = responsesData[responseIndex].body.find(
-        (a) => a.question_id === question_id,
-      );
+      const existingAnswer = responsesData[responseIndex].body.find((a) => a.question_id === question_id);
       if (existingAnswer) return existingAnswer;
 
-      throw new Error(
-        `Question ID ${question_id} not found in existing or new body`,
-      );
+      throw new Error(`Question ID ${question_id} not found in existing or new body`);
     });
 
     const updatedResponse = {
@@ -453,14 +393,9 @@ export const responseHandlers = [
   http.delete('/api/responses/:id', (req) => {
     const { id } = req.params;
 
-    const responseIndex = responsesData.findIndex(
-      (r) => r.response_id === Number(id),
-    );
+    const responseIndex = responsesData.findIndex((r) => r.response_id === Number(id));
     if (responseIndex === -1) {
-      return HttpResponse.json(
-        { message: 'Response not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ message: 'Response not found' }, { status: 404 });
     }
 
     responsesData.splice(responseIndex, 1);
@@ -470,24 +405,15 @@ export const responseHandlers = [
 
   http.get('/api/questionnaires/:id/responses', (req) => {
     const { id } = req.params;
-    const sort =
-      new URL(req.request.url).searchParams.get('sort') ?? 'submitted_at';
-    const onlyMyResponse =
-      new URL(req.request.url).searchParams.get('onlyMyResponse') === 'true';
+    const sort = new URL(req.request.url).searchParams.get('sort') ?? 'submitted_at';
+    const onlyMyResponse = new URL(req.request.url).searchParams.get('onlyMyResponse') === 'true';
 
-    const questionnaire = questionnairesData.find(
-      (q) => q.questionnaire_id === Number(id),
-    );
+    const questionnaire = questionnairesData.find((q) => q.questionnaire_id === Number(id));
     if (!questionnaire) {
-      return HttpResponse.json(
-        { message: 'Questionnaire not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ message: 'Questionnaire not found' }, { status: 404 });
     }
 
-    const responses = responsesData.filter(
-      (r) => r.questionnaire_id === Number(id),
-    );
+    const responses = responsesData.filter((r) => r.questionnaire_id === Number(id));
 
     const filteredResponses = responses
       .filter((r) => {
@@ -511,21 +437,13 @@ export const responseHandlers = [
     const { id } = req.params;
     const body = (await req.request.json()) as PostQuestionnaireResponseRequest;
 
-    const questionnaire = questionnairesData.find(
-      (q) => q.questionnaire_id === Number(id),
-    );
+    const questionnaire = questionnairesData.find((q) => q.questionnaire_id === Number(id));
     if (!questionnaire) {
-      return HttpResponse.json(
-        { message: 'Questionnaire not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ message: 'Questionnaire not found' }, { status: 404 });
     }
 
     const lastResponseIndex = responsesData.findIndex(
-      (r) =>
-        r.questionnaire_id === Number(id) &&
-        r.respondent === myUserId &&
-        !r.is_draft,
+      (r) => r.questionnaire_id === Number(id) && r.respondent === myUserId && !r.is_draft,
     );
 
     const newResponse: GatewayResponse = {
@@ -539,10 +457,7 @@ export const responseHandlers = [
       submitted_at: new Date().toISOString(),
     };
 
-    if (
-      !questionnaire.is_duplicate_answer_allowed &&
-      lastResponseIndex !== -1
-    ) {
+    if (!questionnaire.is_duplicate_answer_allowed && lastResponseIndex !== -1) {
       responsesData.splice(lastResponseIndex, 1);
     }
 

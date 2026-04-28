@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import IconButton from '~/components/ui/icon-button.vue';
-import {
-  postNewQuestionnaire,
-  useMe,
-} from '~/composables/type-fetch/anke-to/client';
+import { postNewQuestionnaire, useMe } from '~/composables/type-fetch/anke-to/client';
 import { convertToBody } from './converter';
 import QuestionnaireFormBase from './questionnaire-form-base.vue';
 import { checkValidity, useStoreNewQuestionnaireForm } from './store';
@@ -39,9 +36,7 @@ const handleSave = async () => {
   }
 
   try {
-    const result = await postNewQuestionnaire(
-      convertToBody({ ...state.value, is_published: false }),
-    );
+    const result = await postNewQuestionnaire(convertToBody({ ...state.value, is_published: false }));
     if (!result) {
       throw new Error('Failed to create questionnaire');
     }
@@ -68,9 +63,7 @@ const handleSend = async () => {
   if (!isValidQuestionnaire.value) return;
 
   try {
-    const result = await postNewQuestionnaire(
-      convertToBody({ ...state.value, is_published: true }),
-    );
+    const result = await postNewQuestionnaire(convertToBody({ ...state.value, is_published: true }));
     if (!result) {
       throw new Error('Failed to create questionnaire');
     }
@@ -97,23 +90,13 @@ const handleSend = async () => {
 <template>
   <QuestionnaireFormBase v-model="state">
     <template #buttons>
-      <IconButton
-        variant="secondary"
-        icon="mdi:arrow-u-left-bottom"
-        :disabled="!isDirty"
-        @click="handleReset"
-      >
+      <IconButton variant="secondary" icon="mdi:arrow-u-left-bottom" :disabled="!isDirty" @click="handleReset">
         <span>リセット</span>
       </IconButton>
       <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
         <span>一時保存</span>
       </IconButton>
-      <IconButton
-        variant="primary"
-        icon="mdi:content-save"
-        :disabled="!isValidQuestionnaire"
-        @click="handleSend"
-      >
+      <IconButton variant="primary" icon="mdi:content-save" :disabled="!isValidQuestionnaire" @click="handleSend">
         <span>送信</span>
       </IconButton>
     </template>

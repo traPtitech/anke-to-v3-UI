@@ -51,8 +51,7 @@ export const filterMeanings: Record<FilterKey, FilterMeaning> = {
   },
   unpublished: {
     label: '管理中 (下書き)',
-    description:
-      '自分が管理中のうち未公開 (下書き) のアンケートのみを表示します。',
+    description: '自分が管理中のうち未公開 (下書き) のアンケートのみを表示します。',
   },
 };
 
@@ -84,9 +83,7 @@ const resolveResponseScope = (filters: Set<FilterKey>): ResponseScope => {
   return 'all';
 };
 
-const resolveAdministrationScope = (
-  filters: Set<FilterKey>,
-): AdministrationScope => {
+const resolveAdministrationScope = (filters: Set<FilterKey>): AdministrationScope => {
   if (filters.has('unpublished')) {
     return 'draft';
   }
@@ -106,9 +103,7 @@ const resolveDraftScope = (filters: Set<FilterKey>): DraftScope => {
   return filters.has('draft') ? 'hasMyDraft' : 'all';
 };
 
-export const parseAdvancedFilterState = (
-  filters: Set<FilterKey>,
-): ExplorerAdvancedFilterState => {
+export const parseAdvancedFilterState = (filters: Set<FilterKey>): ExplorerAdvancedFilterState => {
   const responseScope = resolveResponseScope(filters);
 
   return {
@@ -119,9 +114,7 @@ export const parseAdvancedFilterState = (
   };
 };
 
-export const buildFilterSetFromAdvancedState = (
-  state: ExplorerAdvancedFilterState,
-): Set<FilterKey> => {
+export const buildFilterSetFromAdvancedState = (state: ExplorerAdvancedFilterState): Set<FilterKey> => {
   const next = new Set<FilterKey>();
 
   if (state.targetScope === 'targetingMe') {
@@ -152,9 +145,7 @@ export const buildFilterSetFromAdvancedState = (
   return next;
 };
 
-export const normalizeAdvancedFilterSet = (
-  filters: Set<FilterKey>,
-): Set<FilterKey> => {
+export const normalizeAdvancedFilterSet = (filters: Set<FilterKey>): Set<FilterKey> => {
   return buildFilterSetFromAdvancedState(parseAdvancedFilterState(filters));
 };
 

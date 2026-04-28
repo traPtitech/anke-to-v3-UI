@@ -4,10 +4,7 @@ import NewResponseForm from '~/components/response-form/new-response-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
-import {
-  useGetQuestionnaire,
-  useMe,
-} from '~/composables/type-fetch/anke-to/client';
+import { useGetQuestionnaire, useMe } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
 const { data, error } = useGetQuestionnaire(questionnaireId);
@@ -41,37 +38,23 @@ const cannotRespondReason = computed(() => {
 const canRespond = computed(() => cannotRespondReason.value === undefined);
 
 usePageSeo({
-  title: computed(() =>
-    data.value ? `「${data.value.title}」に回答` : '読み込み中...',
-  ),
+  title: computed(() => (data.value ? `「${data.value.title}」に回答` : '読み込み中...')),
   description: 'アンケートへの新規回答を作成します。',
 });
 </script>
 
 <template>
-  <ErrorStatePanel
-    v-if="error"
-    title="アンケートの取得に失敗しました"
-    :message="error.message"
-  />
+  <ErrorStatePanel v-if="error" title="アンケートの取得に失敗しました" :message="error.message" />
   <div v-else-if="!data">
     <DetailLoadingIndicator variant="questionnaire" />
   </div>
-  <div
-    v-else-if="!canRespond"
-    class="state-panel state-panel-warning"
-    role="alert"
-  >
+  <div v-else-if="!canRespond" class="state-panel state-panel-warning" role="alert">
     <Icon name="mdi:alert-outline" size="72px" class="state-panel-icon" />
     <p class="state-panel-title">現在このアンケートには回答できません</p>
     <p class="state-panel-message">
       {{ cannotRespondReason ?? '現在このアンケートには回答できません。' }}
     </p>
-    <ButtonLink
-      variant="secondary"
-      :to="`/questionnaires/${questionnaireId}`"
-      class="back-to-detail-link"
-    >
+    <ButtonLink variant="secondary" :to="`/questionnaires/${questionnaireId}`" class="back-to-detail-link">
       <Icon name="mdi:chevron-left" size="20px" />
       <span>アンケート詳細画面に戻る</span>
     </ButtonLink>

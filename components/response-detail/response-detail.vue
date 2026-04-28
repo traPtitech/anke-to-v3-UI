@@ -35,10 +35,7 @@ const isDueOver = computed(() => {
   return new Date(due).getTime() < Date.now();
 });
 
-const resolvedBackTo = computed(
-  () =>
-    props.backTo ?? `/questionnaires/${props.questionnaire.questionnaire_id}`,
-);
+const resolvedBackTo = computed(() => props.backTo ?? `/questionnaires/${props.questionnaire.questionnaire_id}`);
 </script>
 
 <template>
@@ -71,26 +68,15 @@ const resolvedBackTo = computed(
     </div>
 
     <div class="question-elements">
-      <QuestionElement
-        v-for="(body, index) in bodies"
-        :key="index"
-        :model-value="body"
-        :mode="'view'"
-      />
+      <QuestionElement v-for="(body, index) in bodies" :key="index" :model-value="body" :mode="'view'" />
     </div>
 
     <div v-if="props.showEditAction" class="response-detail-footer">
-      <ButtonLink
-        v-if="!isDueOver"
-        variant="primary"
-        :to="`/responses/${response.response_id}/edit`"
-      >
+      <ButtonLink v-if="!isDueOver" variant="primary" :to="`/responses/${response.response_id}/edit`">
         <Icon name="mdi:pencil" size="18px" />
         <span>{{ isDraft ? '回答を続ける' : '編集する' }}</span>
       </ButtonLink>
-      <small v-else class="response-edit-note">
-        回答期限を過ぎているため、この回答は編集できません。
-      </small>
+      <small v-else class="response-edit-note">回答期限を過ぎているため、この回答は編集できません。</small>
     </div>
   </div>
 </template>

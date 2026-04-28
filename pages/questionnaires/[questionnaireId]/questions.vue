@@ -11,9 +11,7 @@ const questionnaireId = useRouteQuestionnaireId();
 const { data, error, refresh } = useGetQuestionnaire(questionnaireId);
 
 usePageSeo({
-  title: computed(() =>
-    data.value ? `「${data.value.title}」の質問一覧` : '読み込み中...',
-  ),
+  title: computed(() => (data.value ? `「${data.value.title}」の質問一覧` : '読み込み中...')),
   description: 'アンケートに含まれる質問を一覧で確認できます。',
 });
 
@@ -26,8 +24,7 @@ const questionTypeLabelMap = {
   Scale: '評価',
 } as const;
 
-const getQuestionTypeLabel = (question: GatewayQuestion) =>
-  questionTypeLabelMap[question.question_type];
+const getQuestionTypeLabel = (question: GatewayQuestion) => questionTypeLabelMap[question.question_type];
 
 const handleRetry = async () => {
   await refresh();
@@ -43,17 +40,10 @@ const handleRetry = async () => {
       :show-retry="true"
       @retry="handleRetry"
     />
-    <DetailLoadingIndicator
-      v-else-if="data === undefined"
-      variant="questionnaire"
-    />
+    <DetailLoadingIndicator v-else-if="data === undefined" variant="questionnaire" />
     <div v-else class="question-list-page">
       <div class="question-list-nav">
-        <ButtonLink
-          variant="secondary"
-          size="sm"
-          :to="`/questionnaires/${data.questionnaire_id}`"
-        >
+        <ButtonLink variant="secondary" size="sm" :to="`/questionnaires/${data.questionnaire_id}`">
           <Icon name="mdi:chevron-left" size="20px" />
           <span>アンケート詳細に戻る</span>
         </ButtonLink>
@@ -66,15 +56,9 @@ const handleRetry = async () => {
         </p>
       </header>
 
-      <div v-if="data.questions.length === 0" class="question-list-empty">
-        質問がありません
-      </div>
+      <div v-if="data.questions.length === 0" class="question-list-empty">質問がありません</div>
       <ol v-else class="question-list">
-        <li
-          v-for="(question, index) in data.questions"
-          :key="question.question_id"
-          class="question-item"
-        >
+        <li v-for="(question, index) in data.questions" :key="question.question_id" class="question-item">
           <div class="question-item-head">
             <span class="question-index">{{ index + 1 }}.</span>
             <h2 class="question-title">{{ question.title }}</h2>
@@ -91,16 +75,10 @@ const handleRetry = async () => {
             </span>
           </div>
 
-          <MarkdownBlock
-            :content="question.description"
-            class="question-description"
-          />
+          <MarkdownBlock :content="question.description" class="question-description" />
 
           <ul
-            v-if="
-              question.question_type === 'SingleChoice' ||
-              question.question_type === 'MultipleChoice'
-            "
+            v-if="question.question_type === 'SingleChoice' || question.question_type === 'MultipleChoice'"
             class="question-options"
           >
             <li v-for="option in question.options" :key="option">

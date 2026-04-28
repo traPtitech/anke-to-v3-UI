@@ -22,12 +22,8 @@ const sortedGroups = computed(() => {
   });
 });
 
-const visibleGroups = computed(() =>
-  sortedGroups.value.slice(0, MAX_VISIBLE_GROUPS),
-);
-const hiddenGroupCount = computed(
-  () => sortedGroups.value.length - visibleGroups.value.length,
-);
+const visibleGroups = computed(() => sortedGroups.value.slice(0, MAX_VISIBLE_GROUPS));
+const hiddenGroupCount = computed(() => sortedGroups.value.length - visibleGroups.value.length);
 </script>
 
 <template>
@@ -40,12 +36,7 @@ const hiddenGroupCount = computed(
         :highlighted="group.members.includes(me?.name || '')"
       />
 
-      <button
-        v-if="hiddenGroupCount > 0"
-        type="button"
-        class="group-chip-more"
-        @click="isDialogVisible = true"
-      >
+      <button v-if="hiddenGroupCount > 0" type="button" class="group-chip-more" @click="isDialogVisible = true">
         +{{ hiddenGroupCount }}
       </button>
     </div>

@@ -54,11 +54,7 @@ export const useQuestionnaireActions = () => {
   };
 
   const actionDelete = async (detail: QuestionnaireDetail) => {
-    if (
-      !confirm(
-        `本当に「${detail.title}」を削除しますか？ (この操作は取り消せません)`,
-      )
-    ) {
+    if (!confirm(`本当に「${detail.title}」を削除しますか？ (この操作は取り消せません)`)) {
       return;
     }
     try {

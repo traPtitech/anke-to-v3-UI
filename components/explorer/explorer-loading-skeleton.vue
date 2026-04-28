@@ -18,11 +18,7 @@ const props = withDefaults(
     />
 
     <div class="skeleton-card-list">
-      <article
-        v-for="index in props.cardCount"
-        :key="`skeleton-${index}`"
-        class="skeleton-card"
-      >
+      <article v-for="index in props.cardCount" :key="`skeleton-${index}`" class="skeleton-card">
         <div class="skeleton-line skeleton-badge" />
         <div class="skeleton-line skeleton-title" />
         <div class="skeleton-line skeleton-desc" />

@@ -1,21 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import type {
-  GatewayQuestionnaireSummary,
-  GatewayResponseShareType,
-} from './questionnaire';
+import type { GatewayQuestionnaireSummary, GatewayResponseShareType } from './questionnaire';
 import { canViewResults } from './questionnaire';
 
 type CanViewInput = Pick<
   GatewayQuestionnaireSummary,
-  | 'is_published'
-  | 'response_viewable_by'
-  | 'is_administrated_by_me'
-  | 'has_my_response'
+  'is_published' | 'response_viewable_by' | 'is_administrated_by_me' | 'has_my_response'
 >;
 
-const buildCanViewInput = (
-  overrides: Partial<CanViewInput> = {},
-): CanViewInput => ({
+const buildCanViewInput = (overrides: Partial<CanViewInput> = {}): CanViewInput => ({
   is_published: true,
   response_viewable_by: 'admins',
   is_administrated_by_me: false,

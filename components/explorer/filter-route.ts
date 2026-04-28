@@ -12,9 +12,7 @@ type QueryRouter = {
   replace: (to: { query: Record<string, string> }) => unknown;
 };
 
-export const toStringQueryRecord = (
-  query: Record<string, unknown>,
-): Record<string, string> => {
+export const toStringQueryRecord = (query: Record<string, unknown>): Record<string, string> => {
   const record: Record<string, string> = {};
 
   Object.entries(query).forEach(([key, value]) => {
@@ -27,10 +25,7 @@ export const toStringQueryRecord = (
   return record;
 };
 
-const hasQueryChanged = (
-  currentQuery: Record<string, string>,
-  nextQuery: Record<string, string>,
-): boolean => {
+const hasQueryChanged = (currentQuery: Record<string, string>, nextQuery: Record<string, string>): boolean => {
   const currentKeys = Object.keys(currentQuery);
   const nextKeys = Object.keys(nextQuery);
 

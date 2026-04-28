@@ -43,12 +43,7 @@ const {
 
 <template>
   <div class="explorer-filter-panel">
-    <ExplorerFilterTabRow
-      :tabs="tabs"
-      :selected-tab="selectedTab"
-      :tab-count="tabCount"
-      @select-tab="selectTab"
-    />
+    <ExplorerFilterTabRow :tabs="tabs" :selected-tab="selectedTab" :tab-count="tabCount" @select-tab="selectTab" />
 
     <section class="filter-shell">
       <ExplorerFilterToolbar
@@ -61,14 +56,9 @@ const {
         @toggle-filter-expanded="isFilterExpanded = !isFilterExpanded"
       />
 
-      <Accordion
-        :value="isFilterExpanded ? 'advanced' : undefined"
-        class="advanced-filter-accordion"
-      >
+      <Accordion :value="isFilterExpanded ? 'advanced' : undefined" class="advanced-filter-accordion">
         <AccordionPanel value="advanced">
-          <AccordionHeader class="advanced-filter-hidden-header">
-            高度なフィルタ
-          </AccordionHeader>
+          <AccordionHeader class="advanced-filter-hidden-header">高度なフィルタ</AccordionHeader>
           <AccordionContent>
             <ExplorerAdvancedFilterGrid
               v-model:advanced-filter-state="advancedFilterState"

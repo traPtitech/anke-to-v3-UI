@@ -1,10 +1,6 @@
 <script lang="ts" setup>
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
-import {
-  useQuestionValidity,
-  type QuestionElement,
-  type QuestionElementMode,
-} from './composables';
+import { useQuestionValidity, type QuestionElement, type QuestionElementMode } from './composables';
 import QuestionElementMultipleChoice from './question-element-multiple-choice.vue';
 import QuestionElementNumber from './question-element-number.vue';
 import QuestionElementScale from './question-element-scale.vue';
@@ -27,9 +23,7 @@ const questionTypeLabelMap = {
   Scale: '評価',
 } satisfies Record<QuestionElement['question_type'], string>;
 
-const questionTypeLabel = computed(
-  () => questionTypeLabelMap[question.value.question_type],
-);
+const questionTypeLabel = computed(() => questionTypeLabelMap[question.value.question_type]);
 </script>
 
 <template>
@@ -39,36 +33,16 @@ const questionTypeLabel = computed(
         <span class="question-element-title-main">
           {{ question.title }}
         </span>
-        <span
-          v-if="question.is_required"
-          class="question-element-required-chip"
-        >
-          必須
-        </span>
+        <span v-if="question.is_required" class="question-element-required-chip">必須</span>
         <span v-else class="question-element-non-required-chip">任意</span>
         <span class="question-element-type-chip">{{ questionTypeLabel }}</span>
       </p>
     </div>
-    <MarkdownBlock
-      class="question-element-description"
-      :content="question.description"
-    />
+    <MarkdownBlock class="question-element-description" :content="question.description" />
 
-    <QuestionElementText
-      v-if="question.question_type === 'Text'"
-      v-model="question"
-      :mode="props.mode"
-    />
-    <QuestionElementTextLong
-      v-if="question.question_type === 'TextLong'"
-      v-model="question"
-      :mode="props.mode"
-    />
-    <QuestionElementNumber
-      v-if="question.question_type === 'Number'"
-      v-model="question"
-      :mode="props.mode"
-    />
+    <QuestionElementText v-if="question.question_type === 'Text'" v-model="question" :mode="props.mode" />
+    <QuestionElementTextLong v-if="question.question_type === 'TextLong'" v-model="question" :mode="props.mode" />
+    <QuestionElementNumber v-if="question.question_type === 'Number'" v-model="question" :mode="props.mode" />
     <QuestionElementSingleChoice
       v-if="question.question_type === 'SingleChoice'"
       v-model="question"
@@ -79,11 +53,7 @@ const questionTypeLabel = computed(
       v-model="question"
       :mode="props.mode"
     />
-    <QuestionElementScale
-      v-if="question.question_type === 'Scale'"
-      v-model="question"
-      :mode="props.mode"
-    />
+    <QuestionElementScale v-if="question.question_type === 'Scale'" v-model="question" :mode="props.mode" />
     <p v-if="!valid" class="error-message">
       <small>回答必須の質問です</small>
     </p>

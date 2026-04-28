@@ -2,8 +2,7 @@ import type { components } from '~/composables/type-fetch/anke-to/openapi';
 
 export type GatewayQuestionnaire = components['schemas']['QuestionnaireDetail'];
 
-export type GatewayQuestionnaireSummary =
-  components['schemas']['QuestionnaireSummary'];
+export type GatewayQuestionnaireSummary = components['schemas']['QuestionnaireSummary'];
 
 export type GatewayResponseShareType = components['schemas']['ResShareType'];
 
@@ -22,9 +21,7 @@ export const formatResponseDueDateTime = (
   return formatRelativeDate(date);
 };
 
-export const checkIsDueOver = (
-  questionnaire: Pick<GatewayQuestionnaireSummary, 'response_due_date_time'>,
-) => {
+export const checkIsDueOver = (questionnaire: Pick<GatewayQuestionnaireSummary, 'response_due_date_time'>) => {
   const due = questionnaire.response_due_date_time;
   if (due === undefined) return false;
   const date = new Date(due);
@@ -34,18 +31,14 @@ export const checkIsDueOver = (
 export const canViewResults = (
   questionnaire: Pick<
     GatewayQuestionnaireSummary,
-    | 'is_published'
-    | 'response_viewable_by'
-    | 'is_administrated_by_me'
-    | 'has_my_response'
+    'is_published' | 'response_viewable_by' | 'is_administrated_by_me' | 'has_my_response'
   >,
 ) => {
   if (!questionnaire.is_published) return false;
 
   const canViewResultMatrix: Record<GatewayResponseShareType, boolean> = {
     anyone: true,
-    respondents:
-      questionnaire.has_my_response || questionnaire.is_administrated_by_me,
+    respondents: questionnaire.has_my_response || questionnaire.is_administrated_by_me,
     admins: questionnaire.is_administrated_by_me,
   };
 
@@ -55,10 +48,7 @@ export const canViewResults = (
 export const canRespond = (
   questionnaire: Pick<
     GatewayQuestionnaireSummary,
-    | 'is_published'
-    | 'is_duplicate_answer_allowed'
-    | 'response_due_date_time'
-    | 'has_my_response'
+    'is_published' | 'is_duplicate_answer_allowed' | 'response_due_date_time' | 'has_my_response'
   >,
 ) => {
   if (!questionnaire.is_published) return false;

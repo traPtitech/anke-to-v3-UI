@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import {
-  useQuestionValidity,
-  type QuestionElementMode,
-  type QuestionElementTextLong,
-} from './composables';
+import { useQuestionValidity, type QuestionElementMode, type QuestionElementTextLong } from './composables';
 import QuestionAnswerEmpty from './question-answer-empty.vue';
 import QuestionAnswerText from './question-answer-text.vue';
 import QuestionAnswerView from './question-answer-view.vue';

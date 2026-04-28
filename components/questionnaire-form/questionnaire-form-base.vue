@@ -3,22 +3,14 @@ import { Container, Draggable } from 'vue3-smooth-dnd';
 import AddQuestionButtons from './add-question-buttons.vue';
 import FormControl from './form-control.vue';
 import QuestionnaireMetadataInput from './questionnaire-metadata-input.vue';
-import {
-  addQuestion,
-  copyQuestion,
-  getValidationErrors,
-  removeQuestion,
-} from './store';
+import { addQuestion, copyQuestion, getValidationErrors, removeQuestion } from './store';
 import type { QuestionnaireFormSettings } from './type';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
 const validationErrors = computed(() => getValidationErrors(state.value));
 const focusedQuestionId = ref<number | null>(null);
 
-const handleAddQuestion = (
-  type: Parameters<typeof addQuestion>[1],
-  index?: number,
-) => {
+const handleAddQuestion = (type: Parameters<typeof addQuestion>[1], index?: number) => {
   focusedQuestionId.value = addQuestion(state.value, type, index);
 };
 </script>
@@ -30,19 +22,9 @@ const handleAddQuestion = (
       class="questions-container"
       drag-handle-selector=".drag-handle"
       lock-axis="y"
-      @drop="
-        state.questions = moveInArray(
-          state.questions,
-          $event.removedIndex,
-          $event.addedIndex,
-        )
-      "
+      @drop="state.questions = moveInArray(state.questions, $event.removedIndex, $event.addedIndex)"
     >
-      <Draggable
-        v-for="(question, i) in state.questions"
-        :key="question.question_id"
-        class="question-container"
-      >
+      <Draggable v-for="(question, i) in state.questions" :key="question.question_id" class="question-container">
         <div class="question-card">
           <div class="question-card-number">{{ i + 1 }} 問目</div>
           <div class="question-card-required-switch">
@@ -52,11 +34,7 @@ const handleAddQuestion = (
           <div class="question-card-body">
             <div class="question-side-buttons">
               <div class="drag-handle">
-                <Icon
-                  size="24px"
-                  name="ic:outline-drag-indicator"
-                  class="drag-icon"
-                />
+                <Icon size="24px" name="ic:outline-drag-indicator" class="drag-icon" />
               </div>
               <Button
                 text
@@ -84,15 +62,8 @@ const handleAddQuestion = (
       <div class="form-action-buttons">
         <slot name="buttons" />
       </div>
-      <div
-        v-if="validationErrors.length > 0"
-        class="form-validation-error-messages"
-      >
-        <small
-          v-for="{ message } in validationErrors"
-          :key="message"
-          class="form-validation-error-message"
-        >
+      <div v-if="validationErrors.length > 0" class="form-validation-error-messages">
+        <small v-for="{ message } in validationErrors" :key="message" class="form-validation-error-message">
           <Icon size="20px" name="mdi:alert-circle" />
           <span>
             {{ message }}

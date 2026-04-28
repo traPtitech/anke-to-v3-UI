@@ -3,16 +3,10 @@ import ExplorerFilterPanel from '~/components/explorer/explorer-filter-panel.vue
 import ExplorerLoadingSkeleton from '~/components/explorer/explorer-loading-skeleton.vue';
 import { toApiSort } from '~/components/explorer/filter-sort';
 import type { ExplorerFilterPayload } from '~/components/explorer/filter-types';
-import {
-  DEFAULT_SORT_CATEGORY,
-  DEFAULT_SORT_DIRECTION,
-} from '~/components/explorer/filter-types';
+import { DEFAULT_SORT_CATEGORY, DEFAULT_SORT_DIRECTION } from '~/components/explorer/filter-types';
 import QuestionnaireList from '~/components/ui/questionnaire-list/questionnaire-list.vue';
 import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
-import {
-  EXPLORER_PAGE_SIZE,
-  useExplorerQuestionnaires,
-} from '~/composables/explorer/use-explorer-questionnaires';
+import { EXPLORER_PAGE_SIZE, useExplorerQuestionnaires } from '~/composables/explorer/use-explorer-questionnaires';
 import { useExplorerTabCounts } from '~/composables/explorer/use-explorer-tab-counts';
 import type { components } from '~/composables/type-fetch/anke-to/openapi';
 
@@ -35,25 +29,16 @@ const handleFilterChange = (payload: ExplorerFilterPayload) => {
   activeFilterPayload.value = payload;
 };
 
-const {
-  currentPage,
-  questionnairePage,
-  error,
-  pending,
-  totalRecordsForPaginator,
-  handlePageChange,
-  handleRetry,
-} = useExplorerQuestionnaires({
-  activeFilterPayload,
-});
+const { currentPage, questionnairePage, error, pending, totalRecordsForPaginator, handlePageChange, handleRetry } =
+  useExplorerQuestionnaires({
+    activeFilterPayload,
+  });
 
 const { normalizedTabCounts, tabCountsLoading } = useExplorerTabCounts({
   activeFilterPayload,
 });
 
-const sortedQuestionnaires = computed<QuestionnaireSummary[]>(
-  () => questionnairePage.value?.questionnaires ?? [],
-);
+const sortedQuestionnaires = computed<QuestionnaireSummary[]>(() => questionnairePage.value?.questionnaires ?? []);
 </script>
 
 <template>

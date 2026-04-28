@@ -2,21 +2,9 @@ import type { GetQuestionnairesOption } from '~/composables/type-fetch/anke-to/c
 
 export type QuestionnairesQuery = NonNullable<GetQuestionnairesOption>;
 
-export type TabKey =
-  | 'unanswered'
-  | 'all'
-  | 'answered'
-  | 'administered'
-  | 'draft';
+export type TabKey = 'unanswered' | 'all' | 'answered' | 'administered' | 'draft';
 
-export type FilterKey =
-  | 'targeting'
-  | 'administered'
-  | 'answered'
-  | 'unanswered'
-  | 'draft'
-  | 'due'
-  | 'unpublished';
+export type FilterKey = 'targeting' | 'administered' | 'answered' | 'unanswered' | 'draft' | 'due' | 'unpublished';
 
 export type TargetScope = 'all' | 'targetingMe';
 

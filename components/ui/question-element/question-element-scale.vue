@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import {
-  useQuestionValidity,
-  type QuestionElementMode,
-  type QuestionElementScale,
-} from './composables';
+import { useQuestionValidity, type QuestionElementMode, type QuestionElementScale } from './composables';
 import QuestionAnswerEmpty from './question-answer-empty.vue';
 import QuestionAnswerText from './question-answer-text.vue';
 import QuestionAnswerView from './question-answer-view.vue';
@@ -24,9 +20,7 @@ const name = `scale-input-${useId()}`;
       <Icon name="mdi:star" size="16px" class="scale-answer-star" />
       <QuestionAnswerText>
         {{ question.answer }} / {{ question.max_value }}
-        <span class="scale-answer-sub">
-          ({{ question.min_label }} — {{ question.max_label }})
-        </span>
+        <span class="scale-answer-sub">({{ question.min_label }} — {{ question.max_label }})</span>
       </QuestionAnswerText>
     </span>
     <QuestionAnswerEmpty v-else />

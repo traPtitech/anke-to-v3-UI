@@ -9,9 +9,7 @@ const questionnaireId = useRouteQuestionnaireId();
 const { data, error, refresh } = useGetQuestionnaire(questionnaireId);
 
 usePageSeo({
-  title: computed(() =>
-    data.value ? `「${data.value.title}」を編集` : '読み込み中...',
-  ),
+  title: computed(() => (data.value ? `「${data.value.title}」を編集` : '読み込み中...')),
   description: 'アンケートのタイトルや質問内容を編集します。',
 });
 

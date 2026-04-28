@@ -12,12 +12,9 @@ type SelectOption<T extends string> = {
   value: T;
 };
 
-const advancedFilterState = defineModel<ExplorerAdvancedFilterState>(
-  'advancedFilterState',
-  {
-    required: true,
-  },
-);
+const advancedFilterState = defineModel<ExplorerAdvancedFilterState>('advancedFilterState', {
+  required: true,
+});
 
 const searchText = defineModel<string>('search', {
   required: true,

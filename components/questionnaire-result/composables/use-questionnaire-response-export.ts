@@ -36,23 +36,13 @@ type SummaryTextItem = {
   samples: string[];
 };
 
-type SummaryQuestionItem =
-  | SummaryChoiceItem
-  | SummaryNumberItem
-  | SummaryTextItem;
+type SummaryQuestionItem = SummaryChoiceItem | SummaryNumberItem | SummaryTextItem;
 
-const isChoiceSummary = (
-  item: SummaryQuestionItem,
-): item is SummaryChoiceItem => {
-  return (
-    item.question_type === 'SingleChoice' ||
-    item.question_type === 'MultipleChoice'
-  );
+const isChoiceSummary = (item: SummaryQuestionItem): item is SummaryChoiceItem => {
+  return item.question_type === 'SingleChoice' || item.question_type === 'MultipleChoice';
 };
 
-const isNumberSummary = (
-  item: SummaryQuestionItem,
-): item is SummaryNumberItem => {
+const isNumberSummary = (item: SummaryQuestionItem): item is SummaryNumberItem => {
   return item.question_type === 'Number' || item.question_type === 'Scale';
 };
 
@@ -85,9 +75,7 @@ const escapeMarkdownCell = (value: unknown): string => {
 const toMarkdownTable = (headers: string[], rows: string[][]): string => {
   const headerRow = `| ${headers.map(escapeMarkdownCell).join(' | ')} |`;
   const separatorRow = `| ${headers.map(() => '---').join(' | ')} |`;
-  const dataRows = rows.map(
-    (row) => `| ${row.map((cell) => escapeMarkdownCell(cell)).join(' | ')} |`,
-  );
+  const dataRows = rows.map((row) => `| ${row.map((cell) => escapeMarkdownCell(cell)).join(' | ')} |`);
 
   return [headerRow, separatorRow, ...dataRows].join('\n');
 };
@@ -158,15 +146,10 @@ const normalizeAnswer = (value: unknown): string => {
 };
 
 const buildAnswerMap = (response: GatewayResponse): Map<number, unknown> => {
-  return new Map(
-    response.body.map((answer) => [answer.question_id, answer.answer]),
-  );
+  return new Map(response.body.map((answer) => [answer.question_id, answer.answer]));
 };
 
-const getAnswerList = (
-  question: GatewayQuestion,
-  responses: GatewayResponse[],
-): unknown[] => {
+const getAnswerList = (question: GatewayQuestion, responses: GatewayResponse[]): unknown[] => {
   const questionId = question.question_id;
   if (questionId === undefined) {
     return [];
@@ -181,16 +164,10 @@ const getAnswerList = (
     .filter((answer) => answer !== undefined);
 };
 
-const getSummaryQuestionItem = (
-  question: GatewayQuestion,
-  responses: GatewayResponse[],
-): SummaryQuestionItem => {
+const getSummaryQuestionItem = (question: GatewayQuestion, responses: GatewayResponse[]): SummaryQuestionItem => {
   const answers = getAnswerList(question, responses);
 
-  if (
-    question.question_type === 'SingleChoice' ||
-    question.question_type === 'MultipleChoice'
-  ) {
+  if (question.question_type === 'SingleChoice' || question.question_type === 'MultipleChoice') {
     const optionCounts = new Map<string, number>();
 
     answers.forEach((answer) => {
@@ -215,13 +192,8 @@ const getSummaryQuestionItem = (
     };
   }
 
-  if (
-    question.question_type === 'Number' ||
-    question.question_type === 'Scale'
-  ) {
-    const numbers = answers
-      .map((answer) => Number(answer))
-      .filter((value) => Number.isFinite(value));
+  if (question.question_type === 'Number' || question.question_type === 'Scale') {
+    const numbers = answers.map((answer) => Number(answer)).filter((value) => Number.isFinite(value));
 
     const sum = numbers.reduce((acc, value) => acc + value, 0);
     const avg = numbers.length > 0 ? sum / numbers.length : null;
@@ -246,10 +218,7 @@ const getSummaryQuestionItem = (
   };
 };
 
-const toSummaryJson = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-): string => {
+const toSummaryJson = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]): string => {
   const payload = {
     questionnaire: {
       questionnaire_id: questionnaire.questionnaire_id,
@@ -262,30 +231,20 @@ const toSummaryJson = (
     exported_at: new Date().toISOString(),
     summary: {
       response_count: responses.filter((response) => !response.is_draft).length,
-      questions: questionnaire.questions.map((question) =>
-        getSummaryQuestionItem(question, responses),
-      ),
+      questions: questionnaire.questions.map((question) => getSummaryQuestionItem(question, responses)),
     },
   };
 
   return JSON.stringify(payload, null, 2);
 };
 
-const toSummaryMarkdown = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-): string => {
-  const totalResponses = responses.filter(
-    (response) => !response.is_draft,
-  ).length;
+const toSummaryMarkdown = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]): string => {
+  const totalResponses = responses.filter((response) => !response.is_draft).length;
   const lines: string[] = [`# ${questionnaire.title} 集計結果`];
 
   questionnaire.questions.forEach((question) => {
     const entries = buildQuestionAnswerEntries(question, responses);
-    const answerMap = new Map<
-      string,
-      { count: number; respondents: string[] }
-    >();
+    const answerMap = new Map<string, { count: number; respondents: string[] }>();
 
     entries.forEach((entry) => {
       const current = answerMap.get(entry.answer) ?? {
@@ -307,43 +266,23 @@ const toSummaryMarkdown = (
         return a[0].localeCompare(b[0]);
       })
       .map(([answer, value]) => {
-        const base = [
-          answer,
-          String(value.count),
-          value.respondents.join(', '),
-        ];
+        const base = [answer, String(value.count), value.respondents.join(', ')];
 
-        if (
-          question.question_type === 'Text' ||
-          question.question_type === 'TextLong'
-        ) {
+        if (question.question_type === 'Text' || question.question_type === 'TextLong') {
           return base;
         }
 
-        return [
-          answer,
-          String(value.count),
-          formatRate(value.count, totalResponses),
-          value.respondents.join(', '),
-        ];
+        return [answer, String(value.count), formatRate(value.count, totalResponses), value.respondents.join(', ')];
       });
 
-    const isTextQuestion =
-      question.question_type === 'Text' ||
-      question.question_type === 'TextLong';
+    const isTextQuestion = question.question_type === 'Text' || question.question_type === 'TextLong';
 
     const headers = isTextQuestion
       ? ['回答', '回答数', 'その回答をした人']
       : ['回答', '回答数', '選択率', 'その回答をした人'];
 
     const rows =
-      sortedRows.length > 0
-        ? sortedRows
-        : [
-            isTextQuestion
-              ? ['回答なし', '0', '-']
-              : ['回答なし', '0', '0.00%', '-'],
-          ];
+      sortedRows.length > 0 ? sortedRows : [isTextQuestion ? ['回答なし', '0', '-'] : ['回答なし', '0', '0.00%', '-']];
 
     lines.push('');
     lines.push(`# ${question.title}`);
@@ -353,10 +292,7 @@ const toSummaryMarkdown = (
   return lines.join('\n');
 };
 
-const buildSummaryRows = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-): string[][] => {
+const buildSummaryRows = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]): string[][] => {
   const rows: string[][] = [];
 
   questionnaire.questions.forEach((question) => {
@@ -419,23 +355,11 @@ const buildSummaryRows = (
   return rows;
 };
 
-const toSummaryCsv = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-): string => {
-  const header = [
-    'question_id',
-    'title',
-    'question_type',
-    'response_count',
-    'metric_key',
-    'metric_value',
-  ];
+const toSummaryCsv = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]): string => {
+  const header = ['question_id', 'title', 'question_type', 'response_count', 'metric_key', 'metric_value'];
   const rows = buildSummaryRows(questionnaire, responses);
 
-  return [header, ...rows]
-    .map((row) => row.map(escapeCsvCell).join(','))
-    .join('\n');
+  return [header, ...rows].map((row) => row.map(escapeCsvCell).join(',')).join('\n');
 };
 
 const buildResponsesTable = (
@@ -445,16 +369,8 @@ const buildResponsesTable = (
   header: string[];
   rows: string[][];
 } => {
-  const questionColumns = questionnaire.questions.map(
-    (question) => `${question.question_id}:${question.title}`,
-  );
-  const header = [
-    'response_id',
-    'respondent',
-    'submitted_at',
-    'is_draft',
-    ...questionColumns,
-  ];
+  const questionColumns = questionnaire.questions.map((question) => `${question.question_id}:${question.title}`);
+  const header = ['response_id', 'respondent', 'submitted_at', 'is_draft', ...questionColumns];
 
   const rows = responses.map((response) => {
     const answerMap = buildAnswerMap(response);
@@ -479,10 +395,7 @@ const buildResponsesTable = (
   return { header, rows };
 };
 
-const toResponsesJson = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-): string => {
+const toResponsesJson = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]): string => {
   const payload = {
     questionnaire: {
       questionnaire_id: questionnaire.questionnaire_id,
@@ -505,21 +418,13 @@ const toResponsesJson = (
   return JSON.stringify(payload, null, 2);
 };
 
-const toResponsesCsv = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-): string => {
+const toResponsesCsv = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]): string => {
   const { header, rows } = buildResponsesTable(questionnaire, responses);
 
-  return [header, ...rows]
-    .map((row) => row.map(escapeCsvCell).join(','))
-    .join('\n');
+  return [header, ...rows].map((row) => row.map(escapeCsvCell).join(',')).join('\n');
 };
 
-const toResponsesMarkdown = (
-  questionnaire: GatewayQuestionnaire,
-  responses: GatewayResponse[],
-): string => {
+const toResponsesMarkdown = (questionnaire: GatewayQuestionnaire, responses: GatewayResponse[]): string => {
   const { header, rows } = buildResponsesTable(questionnaire, responses);
 
   const lines: string[] = [
@@ -575,15 +480,7 @@ const createExportText = (
   return toResponsesMarkdown(questionnaire, responses);
 };
 
-const downloadTextFile = ({
-  text,
-  fileName,
-  mimeType,
-}: {
-  text: string;
-  fileName: string;
-  mimeType: string;
-}) => {
+const downloadTextFile = ({ text, fileName, mimeType }: { text: string; fileName: string; mimeType: string }) => {
   const blob = new Blob([text], { type: mimeType });
   const url = URL.createObjectURL(blob);
 
@@ -607,9 +504,7 @@ export const useQuestionnaireResponseExport = ({
 }) => {
   const fileNameBase = computed(() => {
     const value = toValue(questionnaire);
-    return sanitizeFileName(
-      `questionnaire-${value.questionnaire_id}-${value.title}-responses`,
-    );
+    return sanitizeFileName(`questionnaire-${value.questionnaire_id}-${value.title}-responses`);
   });
 
   const createPreviewText = (option: ExportOption): string => {

@@ -8,8 +8,7 @@ const props = defineProps<{
   questionnaireId: number;
 }>();
 
-const toResponsePath = (responseId: number) =>
-  `/questionnaires/${props.questionnaireId}/result/${responseId}`;
+const toResponsePath = (responseId: number) => `/questionnaires/${props.questionnaireId}/result/${responseId}`;
 </script>
 
 <template>
@@ -24,10 +23,7 @@ const toResponsePath = (responseId: number) =>
         {{ response.answer }}
       </div>
       <div v-if="!props.isAnonymous" class="text-result-element-user">
-        <NuxtLink
-          class="clickable-user-chip-link"
-          :to="toResponsePath(response.response_id)"
-        >
+        <NuxtLink class="clickable-user-chip-link" :to="toResponsePath(response.response_id)">
           <UserChip :username="response.respondent" />
         </NuxtLink>
       </div>

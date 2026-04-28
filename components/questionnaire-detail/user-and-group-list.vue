@@ -10,10 +10,7 @@ const props = defineProps<{
   groupDialogTitle?: string;
 }>();
 
-const { restUsers, groups } = useResolveUserSpecifier(
-  props.specifier,
-  props.actualUsers,
-);
+const { restUsers, groups } = useResolveUserSpecifier(props.specifier, props.actualUsers);
 </script>
 
 <template>
@@ -21,16 +18,8 @@ const { restUsers, groups } = useResolveUserSpecifier(
     <div v-if="groups.length === 0 && restUsers.length === 0">
       <NoContentMessage>いません</NoContentMessage>
     </div>
-    <GroupList
-      v-if="groups.length > 0"
-      :groups="groups"
-      :dialog-title="props.groupDialogTitle"
-    />
-    <UserList
-      v-if="restUsers.length > 0"
-      :users="restUsers"
-      :dialog-title="props.userDialogTitle"
-    />
+    <GroupList v-if="groups.length > 0" :groups="groups" :dialog-title="props.groupDialogTitle" />
+    <UserList v-if="restUsers.length > 0" :users="restUsers" :dialog-title="props.userDialogTitle" />
   </div>
 </template>
 

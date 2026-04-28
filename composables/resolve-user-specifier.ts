@@ -5,21 +5,16 @@ export const useResolveUserSpecifier = (
   },
   actualUsers: string[],
 ) => {
-  const { getGroupMembersFromGroupID, getGroupNameFromGroupID } =
-    useTraqGroup();
+  const { getGroupMembersFromGroupID, getGroupNameFromGroupID } = useTraqGroup();
   const { getTraqIDFromUserID } = useTraqId();
   const { allUserNames } = useAllUsers();
 
   const restUsers = computed(() => {
     if (specifier.users.includes(ALL_MENTION_USER)) return [];
 
-    const _groupMemberIds = specifier.groups.flatMap((group) =>
-      getGroupMembersFromGroupID(group),
-    );
+    const _groupMemberIds = specifier.groups.flatMap((group) => getGroupMembersFromGroupID(group));
     const groupMemberIds = excludeFalsy(_groupMemberIds);
-    const _groupMemberNames = groupMemberIds.map((id) =>
-      getTraqIDFromUserID(id),
-    );
+    const _groupMemberNames = groupMemberIds.map((id) => getTraqIDFromUserID(id));
     const groupMemberNames = excludeFalsy(_groupMemberNames);
     const groupMemberNamesSet = new Set(groupMemberNames);
 

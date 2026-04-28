@@ -1,23 +1,12 @@
 import { http, HttpResponse } from 'msw';
-import type {
-  components,
-  paths,
-} from '~/composables/type-fetch/anke-to/openapi';
+import type { components, paths } from '~/composables/type-fetch/anke-to/openapi';
 import { responsesData } from '~/mocks/handlers/response';
-import {
-  myUserId,
-  oneDayAfter,
-  oneDayBefore,
-  twoWeeksAfter,
-} from '~/mocks/handlers/util';
+import { myUserId, oneDayAfter, oneDayBefore, twoWeeksAfter } from '~/mocks/handlers/util';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
 
 type QuestionnaireSummary = components['schemas']['QuestionnaireSummary'];
 
-const defaultQuestionnaire: Omit<
-  GatewayQuestionnaire,
-  'questionnaire_id' | 'title'
-> = {
+const defaultQuestionnaire: Omit<GatewayQuestionnaire, 'questionnaire_id' | 'title'> = {
   description: '',
   response_due_date_time: undefined,
   created_at: oneDayBefore,
@@ -89,38 +78,33 @@ const defaultQuestionnaire: Omit<
   respondents: [],
 };
 
-const generatedQuestionnaires: GatewayQuestionnaire[] = Array.from(
-  { length: 52 },
-  (_, i) => {
-    const id = 100 + i;
-    const isPublished = i % 6 !== 0;
-    const isAnonymous = i % 9 === 0;
-    const isDuplicateAllowed = i % 5 === 0;
-    const myTargetIncluded = i % 4 !== 0;
-    const myResponded = myTargetIncluded && i % 3 === 0;
+const generatedQuestionnaires: GatewayQuestionnaire[] = Array.from({ length: 52 }, (_, i) => {
+  const id = 100 + i;
+  const isPublished = i % 6 !== 0;
+  const isAnonymous = i % 9 === 0;
+  const isDuplicateAllowed = i % 5 === 0;
+  const myTargetIncluded = i % 4 !== 0;
+  const myResponded = myTargetIncluded && i % 3 === 0;
 
-    const targetUsers = myTargetIncluded
-      ? [myUserId, `dummy-user-${id}`]
-      : [`dummy-user-${id}`];
+  const targetUsers = myTargetIncluded ? [myUserId, `dummy-user-${id}`] : [`dummy-user-${id}`];
 
-    const respondents = myResponded ? [myUserId, `dummy-user-${id}`] : [];
+  const respondents = myResponded ? [myUserId, `dummy-user-${id}`] : [];
 
-    return {
-      ...defaultQuestionnaire,
-      questionnaire_id: id,
-      title: `ダミーアンケート ${id}`,
-      description: `ページネーション確認用のダミーアンケート ${id}`,
-      is_published: isPublished,
-      is_anonymous: isAnonymous,
-      is_duplicate_answer_allowed: isDuplicateAllowed,
-      target: { users: targetUsers, groups: [] },
-      targets: targetUsers,
-      respondents,
-      admins: [myUserId],
-      admin: { users: [myUserId], groups: [] },
-    };
-  },
-);
+  return {
+    ...defaultQuestionnaire,
+    questionnaire_id: id,
+    title: `ダミーアンケート ${id}`,
+    description: `ページネーション確認用のダミーアンケート ${id}`,
+    is_published: isPublished,
+    is_anonymous: isAnonymous,
+    is_duplicate_answer_allowed: isDuplicateAllowed,
+    target: { users: targetUsers, groups: [] },
+    targets: targetUsers,
+    respondents,
+    admins: [myUserId],
+    admin: { users: [myUserId], groups: [] },
+  };
+});
 
 export const questionnairesData: GatewayQuestionnaire[] = [
   {
@@ -231,42 +215,22 @@ export const questionnairesData: GatewayQuestionnaire[] = [
     ...defaultQuestionnaire,
     questionnaire_id: 13,
     title: '匿名回答のアンケート',
-    description:
-      'このアンケートは匿名で回答できます。回答者の情報は表示されません。',
+    description: 'このアンケートは匿名で回答できます。回答者の情報は表示されません。',
     is_anonymous: true,
     admins: [myUserId],
     admin: { users: [myUserId], groups: [] },
-    targets: [
-      'anonymous1',
-      'anonymous2',
-      'anonymous3',
-      'anonymous4',
-      'anonymous5',
-    ],
+    targets: ['anonymous1', 'anonymous2', 'anonymous3', 'anonymous4', 'anonymous5'],
     target: {
-      users: [
-        'anonymous1',
-        'anonymous2',
-        'anonymous3',
-        'anonymous4',
-        'anonymous5',
-      ],
+      users: ['anonymous1', 'anonymous2', 'anonymous3', 'anonymous4', 'anonymous5'],
       groups: [],
     },
-    respondents: [
-      'anonymous1',
-      'anonymous2',
-      'anonymous3',
-      'anonymous4',
-      'anonymous5',
-    ],
+    respondents: ['anonymous1', 'anonymous2', 'anonymous3', 'anonymous4', 'anonymous5'],
   },
   {
     ...defaultQuestionnaire,
     questionnaire_id: 14,
     title: '未回答者がいるアンケート',
-    description:
-      '未回答者の表示とメンションコピーを確認するためのダミーアンケートです。',
+    description: '未回答者の表示とメンションコピーを確認するためのダミーアンケートです。',
     response_due_date_time: oneDayAfter,
     admins: [myUserId],
     admin: { users: [myUserId], groups: [] },
@@ -294,43 +258,28 @@ export const toSummary = (q: GatewayQuestionnaire): QuestionnaireSummary => ({
   modified_at: q.modified_at,
   all_responded: q.targets.every((user) => q.respondents.includes(user)),
   has_my_draft: responsesData.some(
-    (r) =>
-      r.questionnaire_id === q.questionnaire_id &&
-      r.is_draft &&
-      r.respondent === myUserId,
+    (r) => r.questionnaire_id === q.questionnaire_id && r.is_draft && r.respondent === myUserId,
   ),
   is_targeting_me: q.targets.includes(myUserId),
   has_my_response: q.respondents.includes(myUserId),
   is_administrated_by_me: q.admins.includes(myUserId),
   responded_date_time_by_me: responsesData.find(
-    (r) =>
-      r.questionnaire_id === q.questionnaire_id &&
-      r.respondent === myUserId &&
-      !r.is_draft,
+    (r) => r.questionnaire_id === q.questionnaire_id && r.respondent === myUserId && !r.is_draft,
   )?.submitted_at,
 });
 
-const questionnairesSortFunc: Record<
-  string,
-  (a: QuestionnaireSummary, b: QuestionnaireSummary) => number
-> = {
-  created_at: (a, b) =>
-    new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-  modified_at: (a, b) =>
-    new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime(),
+const questionnairesSortFunc: Record<string, (a: QuestionnaireSummary, b: QuestionnaireSummary) => number> = {
+  created_at: (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+  modified_at: (a, b) => new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime(),
   title: (a, b) => a.title.localeCompare(b.title),
-  '-created_at': (a, b) =>
-    new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-  '-modified_at': (a, b) =>
-    new Date(a.modified_at).getTime() - new Date(b.modified_at).getTime(),
+  '-created_at': (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+  '-modified_at': (a, b) => new Date(a.modified_at).getTime() - new Date(b.modified_at).getTime(),
   '-title': (a, b) => b.title.localeCompare(a.title),
 };
 
-type GetQuestionnairesResponse =
-  paths['/questionnaires']['get']['responses']['200']['content']['application/json'];
+type GetQuestionnairesResponse = paths['/questionnaires']['get']['responses']['200']['content']['application/json'];
 
-type PostQuestionnaireRequest =
-  paths['/questionnaires']['post']['requestBody']['content']['application/json'];
+type PostQuestionnaireRequest = paths['/questionnaires']['post']['requestBody']['content']['application/json'];
 
 type PatchQuestionnaireBody =
   paths['/questionnaires/{questionnaireID}']['patch']['requestBody']['content']['application/json'];
@@ -348,54 +297,30 @@ export const questionnaireHandlers = [
     const search = searchParams.get('search') ?? '';
     const page = parseInt(searchParams.get('page') ?? '1');
     const onlyTargetingMe = searchParams.get('onlyTargetingMe') === 'true';
-    const onlyAdministratedByMe =
-      searchParams.get('onlyAdministratedByMe') === 'true';
+    const onlyAdministratedByMe = searchParams.get('onlyAdministratedByMe') === 'true';
     const notOverDue = searchParams.get('notOverDue') === 'true';
     const isDraftRaw = searchParams.get('isDraft');
-    const isDraft =
-      isDraftRaw === 'true' ? true : isDraftRaw === 'false' ? false : undefined;
+    const isDraft = isDraftRaw === 'true' ? true : isDraftRaw === 'false' ? false : undefined;
     const hasMyDraftRaw = searchParams.get('hasMyDraft');
-    const hasMyDraft =
-      hasMyDraftRaw === 'true'
-        ? true
-        : hasMyDraftRaw === 'false'
-          ? false
-          : undefined;
+    const hasMyDraft = hasMyDraftRaw === 'true' ? true : hasMyDraftRaw === 'false' ? false : undefined;
     const hasMyResponseRaw = searchParams.get('hasMyResponse');
-    const hasMyResponse =
-      hasMyResponseRaw === 'true'
-        ? true
-        : hasMyResponseRaw === 'false'
-          ? false
-          : undefined;
+    const hasMyResponse = hasMyResponseRaw === 'true' ? true : hasMyResponseRaw === 'false' ? false : undefined;
 
-    const questionnaires: QuestionnaireSummary[] =
-      questionnairesData.map(toSummary);
+    const questionnaires: QuestionnaireSummary[] = questionnairesData.map(toSummary);
 
     const filteredQuestionnaires = questionnaires
       .filter((q) => {
-        const detail = questionnairesData.find(
-          (data) => data.questionnaire_id === q.questionnaire_id,
-        );
+        const detail = questionnairesData.find((data) => data.questionnaire_id === q.questionnaire_id);
 
-        const matchesSearch = q.title
-          .toLowerCase()
-          .includes(search.toLowerCase());
+        const matchesSearch = q.title.toLowerCase().includes(search.toLowerCase());
         const isTargetingMe = !onlyTargetingMe || q.is_targeting_me;
-        const isAdministeredByMe =
-          !onlyAdministratedByMe || detail?.admins.includes(myUserId);
+        const isAdministeredByMe = !onlyAdministratedByMe || detail?.admins.includes(myUserId);
         const isNotOverDue =
-          !notOverDue ||
-          !q.response_due_date_time ||
-          new Date(q.response_due_date_time) > new Date();
-        const matchesIsDraft =
-          isDraft === undefined || detail?.is_published === !isDraft;
-        const matchesHasMyDraft =
-          hasMyDraft === undefined ||
-          (hasMyDraft === true ? q.has_my_draft : !q.has_my_draft);
+          !notOverDue || !q.response_due_date_time || new Date(q.response_due_date_time) > new Date();
+        const matchesIsDraft = isDraft === undefined || detail?.is_published === !isDraft;
+        const matchesHasMyDraft = hasMyDraft === undefined || (hasMyDraft === true ? q.has_my_draft : !q.has_my_draft);
         const matchesHasMyResponse =
-          hasMyResponse === undefined ||
-          (hasMyResponse === true ? q.has_my_response : !q.has_my_response);
+          hasMyResponse === undefined || (hasMyResponse === true ? q.has_my_response : !q.has_my_response);
         return (
           matchesSearch &&
           isTargetingMe &&
@@ -408,10 +333,7 @@ export const questionnaireHandlers = [
       })
       .toSorted(questionnairesSortFunc[sort]);
 
-    const pagedQuestionnaires = filteredQuestionnaires.slice(
-      (page - 1) * pageSize,
-      page * pageSize,
-    );
+    const pagedQuestionnaires = filteredQuestionnaires.slice((page - 1) * pageSize, page * pageSize);
 
     const response: GetQuestionnairesResponse = {
       page_max: Math.ceil(filteredQuestionnaires.length / pageSize),
@@ -436,10 +358,7 @@ export const questionnaireHandlers = [
       questionnaire_id: questionnairesData.length + 1,
       created_at: new Date().toISOString(),
       modified_at: new Date().toISOString(),
-      questions: questionsData.slice(
-        questionsData.length - body.questions.length,
-        questionsData.length,
-      ),
+      questions: questionsData.slice(questionsData.length - body.questions.length, questionsData.length),
       targets: body.target?.users ?? [],
       admins: body.admin?.users ?? [],
       respondents: [],
@@ -450,14 +369,9 @@ export const questionnaireHandlers = [
 
   http.get('/api/questionnaires/:id', (req) => {
     const { id } = req.params;
-    const questionnaire = questionnairesData.find(
-      (q) => q.questionnaire_id === Number(id),
-    );
+    const questionnaire = questionnairesData.find((q) => q.questionnaire_id === Number(id));
     if (!questionnaire) {
-      return HttpResponse.json(
-        { error: 'Questionnaire not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ error: 'Questionnaire not found' }, { status: 404 });
     }
 
     const response: GetQuestionnaireResponse = questionnaire;
@@ -468,14 +382,9 @@ export const questionnaireHandlers = [
   http.patch('/api/questionnaires/:id', async (req) => {
     const id = Number(req.params.id);
     const body = (await req.request.json()) as PatchQuestionnaireBody;
-    const index = questionnairesData.findIndex(
-      (q) => q.questionnaire_id === id,
-    );
+    const index = questionnairesData.findIndex((q) => q.questionnaire_id === id);
     if (index === -1) {
-      return HttpResponse.json(
-        { error: 'Questionnaire not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ error: 'Questionnaire not found' }, { status: 404 });
     }
     const questionnaire = questionnairesData[index];
     questionnairesData[index] = {
@@ -490,14 +399,9 @@ export const questionnaireHandlers = [
 
   http.delete('/api/questionnaires/:id', (req) => {
     const { id } = req.params;
-    const index = questionnairesData.findIndex(
-      (q) => q.questionnaire_id === Number(id),
-    );
+    const index = questionnairesData.findIndex((q) => q.questionnaire_id === Number(id));
     if (index === -1) {
-      return HttpResponse.json(
-        { error: 'Questionnaire not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ error: 'Questionnaire not found' }, { status: 404 });
     }
     questionnairesData.splice(index, 1);
     return HttpResponse.json({ message: 'Questionnaire deleted' });
@@ -505,14 +409,9 @@ export const questionnaireHandlers = [
 
   http.post('/api/questionnaires/:id/close', (req) => {
     const { id } = req.params;
-    const index = questionnairesData.findIndex(
-      (q) => q.questionnaire_id === Number(id),
-    );
+    const index = questionnairesData.findIndex((q) => q.questionnaire_id === Number(id));
     if (index === -1) {
-      return HttpResponse.json(
-        { error: 'Questionnaire not found' },
-        { status: 404 },
-      );
+      return HttpResponse.json({ error: 'Questionnaire not found' }, { status: 404 });
     }
     questionnairesData[index] = {
       ...questionnairesData[index],

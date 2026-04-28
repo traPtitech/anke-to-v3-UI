@@ -20,11 +20,7 @@ const targets = computed(() => {
 });
 
 const nonAnsweredTargets = computed(() =>
-  targets.value.filter(
-    (user) =>
-      !props.questionnaire.respondents.includes(user) &&
-      user !== ALL_MENTION_USER,
-  ),
+  targets.value.filter((user) => !props.questionnaire.respondents.includes(user) && user !== ALL_MENTION_USER),
 );
 
 const toast = useToast();
@@ -48,9 +44,7 @@ const handleCopyMentions = async () => {
 };
 
 const handleCopyRespondents = async () => {
-  const mentions = props.questionnaire.respondents
-    .map((u) => `@${u}`)
-    .join(' ');
+  const mentions = props.questionnaire.respondents.map((u) => `@${u}`).join(' ');
   try {
     await navigator.clipboard.writeText(mentions);
     toast.add({
@@ -119,11 +113,7 @@ const handleCopyRespondents = async () => {
             <Icon name="mdi:content-copy" size="14px" />
           </Button>
         </div>
-        <UserList
-          v-if="nonAnsweredTargets.length > 0"
-          :users="nonAnsweredTargets"
-          dialog-title="未回答ユーザー一覧"
-        />
+        <UserList v-if="nonAnsweredTargets.length > 0" :users="nonAnsweredTargets" dialog-title="未回答ユーザー一覧" />
         <div v-else>
           <NoContentMessage>いません</NoContentMessage>
         </div>

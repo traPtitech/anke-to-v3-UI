@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import type {
-  MultiSelectAllChangeEvent,
-  MultiSelectChangeEvent,
-  MultiSelectFilterEvent,
-} from 'primevue/multiselect';
+import type { MultiSelectAllChangeEvent, MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primevue/multiselect';
 
 type Item = {
   label: string;
@@ -29,18 +25,14 @@ const filteredOptionValues = computed(() => {
     .filter(({ label, value }) => {
       const normalizedLabel = label.toLowerCase();
       const normalizedValue = value.toLowerCase();
-      return (
-        normalizedLabel.includes(keyword) || normalizedValue.includes(keyword)
-      );
+      return normalizedLabel.includes(keyword) || normalizedValue.includes(keyword);
     })
     .map(({ value }) => value);
 });
 
 const isAllSelected = computed(() => {
   if (filteredOptionValues.value.length === 0) return false;
-  return filteredOptionValues.value.every((value) =>
-    items.value.includes(value),
-  );
+  return filteredOptionValues.value.every((value) => items.value.includes(value));
 });
 
 const onSelectAllChange = (event: MultiSelectAllChangeEvent) => {

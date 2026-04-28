@@ -6,23 +6,17 @@ export type QuestionSettingsBase = components['schemas']['QuestionBase'] & {
   question_id: number;
 };
 
-export type QuestionSettingsText =
-  components['schemas']['QuestionSettingsText'];
+export type QuestionSettingsText = components['schemas']['QuestionSettingsText'];
 
-export type QuestionSettingsTextLong =
-  components['schemas']['QuestionSettingsTextLong'];
+export type QuestionSettingsTextLong = components['schemas']['QuestionSettingsTextLong'];
 
-export type QuestionSettingsNumber =
-  components['schemas']['QuestionSettingsNumber'];
+export type QuestionSettingsNumber = components['schemas']['QuestionSettingsNumber'];
 
-export type QuestionSettingsSingleChoice =
-  components['schemas']['QuestionSettingsSingleChoice'];
+export type QuestionSettingsSingleChoice = components['schemas']['QuestionSettingsSingleChoice'];
 
-export type QuestionSettingsMultipleChoice =
-  components['schemas']['QuestionSettingsMultipleChoice'];
+export type QuestionSettingsMultipleChoice = components['schemas']['QuestionSettingsMultipleChoice'];
 
-export type QuestionSettingsScale =
-  components['schemas']['QuestionSettingsScale'];
+export type QuestionSettingsScale = components['schemas']['QuestionSettingsScale'];
 
 export type QuestionSettingsByType =
   | QuestionSettingsText
@@ -34,9 +28,6 @@ export type QuestionSettingsByType =
 
 export type QuestionSettings = QuestionSettingsBase & QuestionSettingsByType;
 
-export type QuestionnaireFormSettings = Omit<
-  components['schemas']['NewQuestionnaire'],
-  'questions'
-> & {
+export type QuestionnaireFormSettings = Omit<components['schemas']['NewQuestionnaire'], 'questions'> & {
   questions: QuestionSettings[];
 };

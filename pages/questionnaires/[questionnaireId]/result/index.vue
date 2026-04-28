@@ -3,10 +3,7 @@ import QuestionnaireResult from '~/components/questionnaire-result/questionnaire
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
-import {
-  useGetQuestionnaire,
-  useGetQuestionnaireResponses,
-} from '~/composables/type-fetch/anke-to/client';
+import { useGetQuestionnaire, useGetQuestionnaireResponses } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
 const {
@@ -21,11 +18,7 @@ const {
 } = useGetQuestionnaireResponses(questionnaireId);
 
 usePageSeo({
-  title: computed(() =>
-    questionnaire.value
-      ? `「${questionnaire.value.title}」の結果`
-      : '読み込み中...',
-  ),
+  title: computed(() => (questionnaire.value ? `「${questionnaire.value.title}」の結果` : '読み込み中...')),
   description: 'アンケートの集計結果と回答一覧を確認できます。',
 });
 
@@ -43,15 +36,8 @@ const handleRetry = async () => {
       :show-retry="true"
       @retry="handleRetry"
     />
-    <DetailLoadingIndicator
-      v-else-if="!questionnaire || !responses"
-      variant="questionnaire"
-    />
-    <QuestionnaireResult
-      v-else
-      :questionnaire="questionnaire"
-      :responses="responses"
-    />
+    <DetailLoadingIndicator v-else-if="!questionnaire || !responses" variant="questionnaire" />
+    <QuestionnaireResult v-else :questionnaire="questionnaire" :responses="responses" />
   </div>
 </template>
 

@@ -19,10 +19,7 @@ const options = computed({
 </script>
 
 <template>
-  <ChoiceGroup
-    v-model="options"
-    :show-choice-option-required-error="showChoiceOptionRequiredError"
-  >
+  <ChoiceGroup v-model="options" :show-choice-option-required-error="showChoiceOptionRequiredError">
     <RadioButton :model-value="false" disabled />
   </ChoiceGroup>
 </template>

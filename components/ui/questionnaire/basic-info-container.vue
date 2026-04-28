@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  type GatewayQuestionnaire,
-  responseViewableByOptionsMap,
-} from '~/models/questionnaire';
+import { type GatewayQuestionnaire, responseViewableByOptionsMap } from '~/models/questionnaire';
 import QuestionnaireLabel from './label.vue';
 
 const props = defineProps<{
@@ -14,12 +11,8 @@ const dueDateString = computed(() => {
     return '期限なし';
   }
 
-  const relativeDue = formatRelativeDate(
-    new Date(props.questionnaire.response_due_date_time),
-  );
-  const absoluteDue = formatDate(
-    new Date(props.questionnaire.response_due_date_time),
-  );
+  const relativeDue = formatRelativeDate(new Date(props.questionnaire.response_due_date_time));
+  const absoluteDue = formatDate(new Date(props.questionnaire.response_due_date_time));
   return `${relativeDue} (${absoluteDue})`;
 });
 
@@ -45,10 +38,7 @@ const responseViewableByString = computed(() => {
           {{ responseViewableByString }}公開
         </span>
         <span class="attribute-chip">
-          <Icon
-            :name="questionnaire.is_anonymous ? 'mdi:incognito' : 'mdi:account'"
-            size="14px"
-          />
+          <Icon :name="questionnaire.is_anonymous ? 'mdi:incognito' : 'mdi:account'" size="14px" />
           {{ questionnaire.is_anonymous ? '匿名' : '記名' }}
         </span>
         <span class="attribute-chip">
@@ -60,9 +50,7 @@ const responseViewableByString = computed(() => {
             "
             size="14px"
           />
-          {{
-            questionnaire.is_duplicate_answer_allowed ? '複数回答' : '単一回答'
-          }}
+          {{ questionnaire.is_duplicate_answer_allowed ? '複数回答' : '単一回答' }}
         </span>
       </div>
     </div>

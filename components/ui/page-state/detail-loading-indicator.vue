@@ -18,18 +18,8 @@ const loadingText = computed(() => {
 </script>
 
 <template>
-  <div
-    class="detail-loading-indicator"
-    :class="props.variant"
-    role="status"
-    aria-live="polite"
-  >
-    <ProgressSpinner
-      class="detail-loading-spinner"
-      stroke-width="4"
-      animation-duration="0.8s"
-      fill="transparent"
-    />
+  <div class="detail-loading-indicator" :class="props.variant" role="status" aria-live="polite">
+    <ProgressSpinner class="detail-loading-spinner" stroke-width="4" animation-duration="0.8s" fill="transparent" />
     <p class="loading-text">{{ loadingText }}</p>
   </div>
 </template>

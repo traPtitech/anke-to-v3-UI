@@ -1,11 +1,6 @@
 import { parseAdvancedFilterState, serializeFilterSet } from './filter-domain';
 import { toApiSort } from './filter-sort';
-import type {
-  ExplorerFilterPayload,
-  FilterKey,
-  SortCategory,
-  SortDirection,
-} from './filter-types';
+import type { ExplorerFilterPayload, FilterKey, SortCategory, SortDirection } from './filter-types';
 
 export const buildListQuery = ({
   searchQuery,
@@ -26,16 +21,10 @@ export const buildListQuery = ({
   return {
     search: trimmedSearch || undefined,
     sort: toApiSort(sortCategory, sortDirection),
-    onlyTargetingMe:
-      advancedFilter.targetScope === 'targetingMe' ? true : undefined,
+    onlyTargetingMe: advancedFilter.targetScope === 'targetingMe' ? true : undefined,
     onlyAdministratedByMe: administrationScope !== 'all' ? true : undefined,
     notOverDue: filters.has('due') ? true : undefined,
-    hasMyResponse:
-      responseScope === 'answered'
-        ? true
-        : responseScope === 'unanswered'
-          ? false
-          : undefined,
+    hasMyResponse: responseScope === 'answered' ? true : responseScope === 'unanswered' ? false : undefined,
     hasMyDraft: advancedFilter.draftScope === 'hasMyDraft' ? true : undefined,
     isDraft:
       administrationScope === 'draft'

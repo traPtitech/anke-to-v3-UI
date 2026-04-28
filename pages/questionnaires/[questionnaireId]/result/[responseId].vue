@@ -4,10 +4,7 @@ import ButtonLink from '~/components/ui/button-link.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
-import {
-  useGetQuestionnaire,
-  useGetQuestionnaireResponses,
-} from '~/composables/type-fetch/anke-to/client';
+import { useGetQuestionnaire, useGetQuestionnaireResponses } from '~/composables/type-fetch/anke-to/client';
 
 const route = useRoute();
 const questionnaireId = useRouteQuestionnaireId();
@@ -33,9 +30,7 @@ const responseIndex = computed(() => {
     return -1;
   }
 
-  return responses.value.findIndex(
-    (response) => response.response_id === responseId.value,
-  );
+  return responses.value.findIndex((response) => response.response_id === responseId.value);
 });
 
 const response = computed(() => {
@@ -50,29 +45,19 @@ const totalResponses = computed(() => responses.value?.length ?? 0);
 
 const paginatorFirst = computed(() => Math.max(0, responseIndex.value));
 
-const toResultPagePath = computed(
-  () => `/questionnaires/${questionnaireId}/result`,
-);
+const toResultPagePath = computed(() => `/questionnaires/${questionnaireId}/result`);
 
-const toResponsePath = (targetResponseId: number) =>
-  `/questionnaires/${questionnaireId}/result/${targetResponseId}`;
+const toResponsePath = (targetResponseId: number) => `/questionnaires/${questionnaireId}/result/${targetResponseId}`;
 
 const hasInvalidResponseId = computed(() => responseId.value === null);
 
 const isResponseMissing = computed(
-  () =>
-    !hasInvalidResponseId.value &&
-    !!responses.value &&
-    !responsesError.value &&
-    response.value === null,
+  () => !hasInvalidResponseId.value && !!responses.value && !responsesError.value && response.value === null,
 );
 
 const handlePageChange = (event: { page: number }) => {
   const targetResponseId = responses.value?.[event.page]?.response_id;
-  if (
-    targetResponseId === undefined ||
-    targetResponseId === response.value?.response_id
-  ) {
+  if (targetResponseId === undefined || targetResponseId === response.value?.response_id) {
     return;
   }
 
@@ -110,24 +95,15 @@ usePageSeo({
       @retry="handleRetry"
     />
 
-    <div
-      v-else-if="hasInvalidResponseId || isResponseMissing"
-      class="not-found"
-    >
-      <ErrorStatePanel
-        title="回答が見つかりません"
-        message="指定された回答は存在しないか、閲覧権限がありません。"
-      />
+    <div v-else-if="hasInvalidResponseId || isResponseMissing" class="not-found">
+      <ErrorStatePanel title="回答が見つかりません" message="指定された回答は存在しないか、閲覧権限がありません。" />
       <ButtonLink variant="secondary" :to="toResultPagePath">
         <Icon name="mdi:chart-box-outline" size="20px" />
         <span>結果画面に戻る</span>
       </ButtonLink>
     </div>
 
-    <DetailLoadingIndicator
-      v-else-if="!questionnaire || !responses || !response"
-      variant="response"
-    />
+    <DetailLoadingIndicator v-else-if="!questionnaire || !responses || !response" variant="response" />
 
     <div v-else class="result-response-page-content">
       <div class="result-response-navigation">

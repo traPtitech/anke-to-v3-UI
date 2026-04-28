@@ -33,9 +33,7 @@ const emit = defineEmits<{
       @click="emit('select', item.key)"
     >
       {{ item.label }}
-      <span v-if="item.count !== undefined" class="chip-count">
-        ({{ item.count }})
-      </span>
+      <span v-if="item.count !== undefined" class="chip-count">({{ item.count }})</span>
     </button>
   </div>
 </template>

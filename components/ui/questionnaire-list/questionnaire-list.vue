@@ -1,12 +1,7 @@
 <script lang="ts" setup>
 import type { MenuItem } from 'primevue/menuitem';
 import type { GatewayQuestionnaireSummary } from '~/models/questionnaire';
-import {
-  canRespond,
-  canViewResults,
-  checkIsDueOver,
-  formatResponseDueDateTime,
-} from '~/models/questionnaire';
+import { canRespond, canViewResults, checkIsDueOver, formatResponseDueDateTime } from '~/models/questionnaire';
 import ButtonLink from '../button-link.vue';
 import MarkdownBlock from '../markdown/markdown-block.vue';
 
@@ -33,9 +28,7 @@ const statusClass = (questionnaire: GatewayQuestionnaireSummary) => {
   return 'is-open';
 };
 
-const buildActionMenuItems = (
-  questionnaire: GatewayQuestionnaireSummary,
-): MenuItem[] => {
+const buildActionMenuItems = (questionnaire: GatewayQuestionnaireSummary): MenuItem[] => {
   return [
     {
       label: '結果を見る',
@@ -52,10 +45,7 @@ const buildActionMenuItems = (
   ];
 };
 
-const toggleActionMenu = (
-  event: MouseEvent,
-  questionnaire: GatewayQuestionnaireSummary,
-) => {
+const toggleActionMenu = (event: MouseEvent, questionnaire: GatewayQuestionnaireSummary) => {
   actionMenuItems.value = buildActionMenuItems(questionnaire);
   actionMenuRef.value?.toggle(event);
 };
@@ -64,10 +54,7 @@ const toggleActionMenu = (
 <template>
   <div class="questionnaire-list-root">
     <ul class="card-list">
-      <li
-        v-for="questionnaire in questionnaires"
-        :key="questionnaire.questionnaire_id"
-      >
+      <li v-for="questionnaire in questionnaires" :key="questionnaire.questionnaire_id">
         <article class="card" :class="statusClass(questionnaire)">
           <div class="card-main">
             <div class="card-title-row">
@@ -75,18 +62,12 @@ const toggleActionMenu = (
                 {{ statusLabel(questionnaire) }}
               </span>
 
-              <NuxtLink
-                class="card-title"
-                :to="`/questionnaires/${questionnaire.questionnaire_id}`"
-              >
+              <NuxtLink class="card-title" :to="`/questionnaires/${questionnaire.questionnaire_id}`">
                 {{ questionnaire.title }}
               </NuxtLink>
             </div>
 
-            <MarkdownBlock
-              class="card-description"
-              :content="questionnaire.description"
-            />
+            <MarkdownBlock class="card-description" :content="questionnaire.description" />
           </div>
 
           <div class="card-side">
@@ -133,11 +114,7 @@ const toggleActionMenu = (
           <Icon v-if="item.icon" :name="item.icon" size="18px" />
           <span>{{ item.label }}</span>
         </NuxtLink>
-        <span
-          v-else
-          class="action-menu-item-link is-disabled"
-          aria-disabled="true"
-        >
+        <span v-else class="action-menu-item-link is-disabled" aria-disabled="true">
           <Icon v-if="item.icon" :name="item.icon" size="18px" />
           <span>{{ item.label }}</span>
         </span>
@@ -296,11 +273,7 @@ const toggleActionMenu = (
   right: 0;
   top: 2.5rem;
   height: 1.5rem;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0),
-    var(--card-status-surface)
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--card-status-surface));
   pointer-events: none;
 }
 

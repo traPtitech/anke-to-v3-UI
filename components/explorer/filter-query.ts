@@ -1,9 +1,4 @@
-import {
-  filterKeys,
-  normalizeFilterSet,
-  serializeFilterSet,
-  tabFilterPresets,
-} from './filter-domain';
+import { filterKeys, normalizeFilterSet, serializeFilterSet, tabFilterPresets } from './filter-domain';
 import { isSortCategory } from './filter-sort';
 import {
   DEFAULT_SORT_CATEGORY,
@@ -30,9 +25,7 @@ export const getQueryValue = (value: unknown): string | undefined => {
   return typeof value === 'string' ? value : undefined;
 };
 
-export const parseFilterSet = (
-  query: Record<string, unknown>,
-): Set<FilterKey> => {
+export const parseFilterSet = (query: Record<string, unknown>): Set<FilterKey> => {
   const raw = getQueryValue(query[explorerQueryKeys.filter]);
   const set = new Set<FilterKey>();
 
@@ -55,9 +48,7 @@ const isSortDirection = (value: string): value is SortDirection => {
   return value === 'asc' || value === 'desc';
 };
 
-const parseSortToken = (
-  token: string,
-): { category: SortCategory; direction: SortDirection } | null => {
+const parseSortToken = (token: string): { category: SortCategory; direction: SortDirection } | null => {
   const parts = token.split(':');
   if (parts.length !== 2) {
     return null;
@@ -100,9 +91,6 @@ export const parseSortState = (
   return parsed;
 };
 
-export const buildSortQueryValue = (
-  category: SortCategory,
-  direction: SortDirection,
-): string => {
+export const buildSortQueryValue = (category: SortCategory, direction: SortDirection): string => {
   return `${category}:${direction}`;
 };

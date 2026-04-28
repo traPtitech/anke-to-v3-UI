@@ -6,11 +6,7 @@ import {
   parseFilterSet,
   parseSortState,
 } from './filter-query';
-import {
-  DEFAULT_SORT_CATEGORY,
-  DEFAULT_SORT_DIRECTION,
-  type FilterKey,
-} from './filter-types';
+import { DEFAULT_SORT_CATEGORY, DEFAULT_SORT_DIRECTION, type FilterKey } from './filter-types';
 
 const toSortedArray = (set: Set<FilterKey>) => [...set].sort();
 

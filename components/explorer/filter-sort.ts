@@ -1,9 +1,5 @@
 import type { GetQuestionnairesOption } from '~/composables/type-fetch/anke-to/client';
-import type {
-  SortCategory,
-  SortDirection,
-  SortFieldOption,
-} from './filter-types';
+import type { SortCategory, SortDirection, SortFieldOption } from './filter-types';
 
 export const sortFieldOptions: SortFieldOption[] = [
   { label: '作成日時', value: 'createdAt' },
@@ -33,10 +29,7 @@ export const isSortCategory = (value: string): value is SortCategory => {
   return value === 'createdAt' || value === 'modifiedAt' || value === 'title';
 };
 
-export const getSortDirectionLabel = (
-  direction: SortDirection,
-  category: SortCategory,
-): string => {
+export const getSortDirectionLabel = (direction: SortDirection, category: SortCategory): string => {
   if (category === 'createdAt' || category === 'modifiedAt') {
     return dateSortDirectionLabelMap[direction];
   }
@@ -44,10 +37,7 @@ export const getSortDirectionLabel = (
   return defaultSortDirectionLabelMap[direction];
 };
 
-export const getSortDirectionIcon = (
-  direction: SortDirection,
-  category: SortCategory,
-): string => {
+export const getSortDirectionIcon = (direction: SortDirection, category: SortCategory): string => {
   if (category === 'createdAt' || category === 'modifiedAt') {
     return `mdi:sort-clock-${direction}ending-outline`;
   }
@@ -55,14 +45,8 @@ export const getSortDirectionIcon = (
   return `mdi:sort-alphabetical-${direction}ending`;
 };
 
-export const buildSortMenuLabel = (
-  category: SortCategory,
-  direction: SortDirection,
-): string => {
-  return `${sortFieldLabelMap[category]} (${getSortDirectionLabel(
-    direction,
-    category,
-  )})`;
+export const buildSortMenuLabel = (category: SortCategory, direction: SortDirection): string => {
+  return `${sortFieldLabelMap[category]} (${getSortDirectionLabel(direction, category)})`;
 };
 
 export const toApiSort = (

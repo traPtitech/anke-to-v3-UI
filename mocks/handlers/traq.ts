@@ -2,20 +2,15 @@ import { http, HttpResponse } from 'msw';
 import type { paths } from '~/composables/type-fetch/anke-to/openapi';
 import { myUserId } from '~/mocks/handlers/util';
 
-type GetTraqUsersResponse =
-  paths['/traq/users']['get']['responses']['200']['content']['application/json'];
+type GetTraqUsersResponse = paths['/traq/users']['get']['responses']['200']['content']['application/json'];
 
-type GetTraqUsersMeResponse =
-  paths['/traq/users/me']['get']['responses']['200']['content']['application/json'];
+type GetTraqUsersMeResponse = paths['/traq/users/me']['get']['responses']['200']['content']['application/json'];
 
-type GetTraqGroupsResponse =
-  paths['/traq/groups']['get']['responses']['200']['content']['application/json'];
+type GetTraqGroupsResponse = paths['/traq/groups']['get']['responses']['200']['content']['application/json'];
 
-type GetTraqStampsResponse =
-  paths['/traq/stamps']['get']['responses']['200']['content']['application/json'];
+type GetTraqStampsResponse = paths['/traq/stamps']['get']['responses']['200']['content']['application/json'];
 
-type GetTraqChannelsResponse =
-  paths['/traq/channels']['get']['responses']['200']['content']['application/json'];
+type GetTraqChannelsResponse = paths['/traq/channels']['get']['responses']['200']['content']['application/json'];
 
 const myUser = {
   id: '00000000-0000-0000-0000-000000000001',

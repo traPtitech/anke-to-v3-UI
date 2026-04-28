@@ -3,10 +3,7 @@ import QuestionnaireDetail from '~/components/questionnaire-detail/questionnaire
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
-import {
-  useGetQuestionnaire,
-  useGetQuestionnaireResponses,
-} from '~/composables/type-fetch/anke-to/client';
+import { useGetQuestionnaire, useGetQuestionnaireResponses } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
 const {
@@ -23,9 +20,7 @@ const {
 });
 
 usePageSeo({
-  title: computed(() =>
-    questionnaire.value ? questionnaire.value.title : '読み込み中...',
-  ),
+  title: computed(() => (questionnaire.value ? questionnaire.value.title : '読み込み中...')),
   description: 'アンケートの詳細・回答状況・各種操作を確認できます。',
 });
 
@@ -47,11 +42,7 @@ const handleRetry = async () => {
       v-else-if="questionnaire === undefined || myResponses === undefined"
       variant="questionnaire"
     />
-    <QuestionnaireDetail
-      v-else
-      :detail="questionnaire"
-      :my-responses="myResponses"
-    />
+    <QuestionnaireDetail v-else :detail="questionnaire" :my-responses="myResponses" />
   </div>
 </template>
 

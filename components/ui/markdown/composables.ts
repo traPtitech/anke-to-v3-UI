@@ -1,11 +1,5 @@
 import { type Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
-import {
-  useChannels,
-  useGroups,
-  useMe,
-  useStamps,
-  useUsers,
-} from '~/composables/type-fetch/anke-to/client';
+import { useChannels, useGroups, useMe, useStamps, useUsers } from '~/composables/type-fetch/anke-to/client';
 
 type User = {
   id: string;
@@ -72,20 +66,14 @@ const createMarkdownRenderer = () => {
 
   const store: Store = {
     getUser: (userId) => traqUsers.value?.find((u) => u.id === userId),
-    getChannel: (channelId: string) =>
-      channels.value?.find((c) => c.id === channelId),
-    getUserGroup: (groupId: string) =>
-      groups.value?.find((g) => g.id === groupId),
+    getChannel: (channelId: string) => channels.value?.find((c) => c.id === channelId),
+    getUserGroup: (groupId: string) => groups.value?.find((g) => g.id === groupId),
     getMe: () => me.value ?? undefined,
-    getStampByName: (name: string) =>
-      traqStamps.value?.find((s) => s.name === name),
-    getUserByName: (name: string) =>
-      traqUsers.value?.find((u) => u.name === name),
+    getStampByName: (name: string) => traqStamps.value?.find((s) => s.name === name),
+    getUserByName: (name: string) => traqUsers.value?.find((u) => u.name === name),
     generateUserHref: (userId: string) => `https://q.trap.jp/user/${userId}`,
-    generateUserGroupHref: (groupId: string) =>
-      `https://q.trap.jp/group/${groupId}`,
-    generateChannelHref: (channelId: string) =>
-      `https://q.trap.jp/channel/${channelId}`,
+    generateUserGroupHref: (groupId: string) => `https://q.trap.jp/group/${groupId}`,
+    generateChannelHref: (channelId: string) => `https://q.trap.jp/channel/${channelId}`,
     generateStampHref: (fileId: string) => {
       const user = userIconFileIdMap.value?.get(fileId);
       if (user) return getUserAvatarUrl(user.name);
@@ -115,8 +103,7 @@ export const provideMarkdownRenderer = () => {
 };
 
 export const useMarkdownRenderer = () => {
-  const renderer =
-    inject<ReturnType<typeof createMarkdownRenderer>>('markdownRenderer');
+  const renderer = inject<ReturnType<typeof createMarkdownRenderer>>('markdownRenderer');
   if (!renderer) {
     throw new Error('Markdown renderer is not provided');
   }

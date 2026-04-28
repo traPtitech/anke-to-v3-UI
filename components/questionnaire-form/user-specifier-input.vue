@@ -21,11 +21,7 @@ const { data: groups } = useGroups();
 const groupIds = computed(() =>
   groups.value
     ?.map((group) => ({ label: group.name, value: group.id }))
-    .concat(
-      props.allowAllMentionGroup
-        ? [{ label: ALL_MENTION_USER, value: ALL_MENTION_USER }]
-        : [],
-    )
+    .concat(props.allowAllMentionGroup ? [{ label: ALL_MENTION_USER, value: ALL_MENTION_USER }] : [])
     .toSorted((a, b) => a.label.localeCompare(b.label)),
 );
 </script>
@@ -40,12 +36,7 @@ const groupIds = computed(() =>
     >
       <template #option="{ option }">
         <div class="user-option">
-          <img
-            :src="getUserAvatarUrl(option.value)"
-            alt=""
-            width="24"
-            height="24"
-          />
+          <img :src="getUserAvatarUrl(option.value)" alt="" width="24" height="24" />
           <div>{{ option.label }}</div>
         </div>
       </template>

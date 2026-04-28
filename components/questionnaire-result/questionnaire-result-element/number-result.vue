@@ -8,8 +8,7 @@ const props = defineProps<{
   questionnaireId: number;
 }>();
 
-const toResponsePath = (responseId: number) =>
-  `/questionnaires/${props.questionnaireId}/result/${responseId}`;
+const toResponsePath = (responseId: number) => `/questionnaires/${props.questionnaireId}/result/${responseId}`;
 
 const data = computed(() =>
   props.result.responses.map((res) => ({
@@ -22,24 +21,11 @@ const data = computed(() =>
 </script>
 
 <template>
-  <DataTable
-    :value="data"
-    sort-field="answer"
-    scrollable
-    scrollable-height="500px"
-  >
+  <DataTable :value="data" sort-field="answer" scrollable scrollable-height="500px">
     <Column field="answer" header="回答" sortable />
-    <Column
-      v-if="!props.isAnonymous"
-      field="respondentText"
-      header="回答者"
-      sortable
-    >
+    <Column v-if="!props.isAnonymous" field="respondentText" header="回答者" sortable>
       <template #body="{ data }">
-        <NuxtLink
-          class="clickable-user-chip-link"
-          :to="toResponsePath(data.responseId)"
-        >
+        <NuxtLink class="clickable-user-chip-link" :to="toResponsePath(data.responseId)">
           <UserChip :username="data.respondent" />
         </NuxtLink>
       </template>

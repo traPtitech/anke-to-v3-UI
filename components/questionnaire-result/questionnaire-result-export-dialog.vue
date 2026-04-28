@@ -14,11 +14,10 @@ const props = defineProps<{
 
 const toast = useToast();
 
-const { createPreviewText, downloadExportText } =
-  useQuestionnaireResponseExport({
-    questionnaire: computed(() => props.questionnaire),
-    responses: computed(() => props.responses),
-  });
+const { createPreviewText, downloadExportText } = useQuestionnaireResponseExport({
+  questionnaire: computed(() => props.questionnaire),
+  responses: computed(() => props.responses),
+});
 
 const isExportDialogVisible = ref(false);
 const exportTarget = ref<ExportTarget>('summary');
@@ -71,12 +70,7 @@ const handleDownloadExportText = () => {
 
 <template>
   <div class="questionnaire-result-export-dialog">
-    <Button
-      class="result-export-trigger"
-      severity="secondary"
-      outlined
-      @click="isExportDialogVisible = true"
-    >
+    <Button class="result-export-trigger" severity="secondary" outlined @click="isExportDialogVisible = true">
       <Icon name="mdi:file-export-outline" size="18px" />
       <span>出力</span>
     </Button>
@@ -115,11 +109,7 @@ const handleDownloadExportText = () => {
 
         <label class="export-option-label">
           <span>出力プレビュー</span>
-          <textarea
-            :value="exportPreviewText"
-            class="export-preview"
-            readonly
-          />
+          <textarea :value="exportPreviewText" class="export-preview" readonly />
         </label>
 
         <div class="export-dialog-actions">

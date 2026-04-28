@@ -35,14 +35,9 @@ const getMatchingDueDatePreset = (date: Date): DueDatePreset | null => {
 const isResponseDueDateTimeInvalidForTargets = computed(() => {
   if (state.value.response_due_date_time !== undefined) return false;
 
-  return (
-    state.value.target.users.length > 0 || state.value.target.groups.length > 0
-  );
+  return state.value.target.users.length > 0 || state.value.target.groups.length > 0;
 });
-const hasTargets = computed(
-  () =>
-    state.value.target.users.length > 0 || state.value.target.groups.length > 0,
-);
+const hasTargets = computed(() => state.value.target.users.length > 0 || state.value.target.groups.length > 0);
 const isResponseDueDateTimeInvalidForDate = computed(() => {
   if (state.value.response_due_date_time === undefined) return false;
 
@@ -53,9 +48,7 @@ const getDefaultDueDate = () => addDays(today, 7);
 
 const useCustomDueTime = ref(state.value.response_due_date_time !== undefined);
 const responseDueDateTimeInput = ref<Date>(
-  state.value.response_due_date_time === undefined
-    ? getDefaultDueDate()
-    : new Date(state.value.response_due_date_time),
+  state.value.response_due_date_time === undefined ? getDefaultDueDate() : new Date(state.value.response_due_date_time),
 );
 const selectedDueDatePreset = computed<DueDatePreset | null>(() =>
   state.value.response_due_date_time === undefined
@@ -104,8 +97,7 @@ watch(
   useCustomDueTime,
   (value) => {
     if (value) {
-      state.value.response_due_date_time =
-        responseDueDateTimeInput.value.toISOString();
+      state.value.response_due_date_time = responseDueDateTimeInput.value.toISOString();
     } else {
       state.value.response_due_date_time = undefined;
     }
@@ -176,19 +168,9 @@ const dueMinute = computed({
     >
       <template #footer>
         <div class="custom-time-picker">
-          <InputNumber
-            v-model="dueHour"
-            :step="1"
-            show-buttons
-            button-layout="vertical"
-          />
+          <InputNumber v-model="dueHour" :step="1" show-buttons button-layout="vertical" />
           <span class="time-colon">:</span>
-          <InputNumber
-            v-model="dueMinute"
-            :step="1"
-            show-buttons
-            button-layout="vertical"
-          />
+          <InputNumber v-model="dueMinute" :step="1" show-buttons button-layout="vertical" />
         </div>
       </template>
     </DatePicker>
@@ -199,10 +181,7 @@ const dueMinute = computed({
       :selected-key="selectedDueDatePreset"
       @select="handleSelectDueDatePresetByValue"
     />
-    <small
-      v-if="isResponseDueDateTimeInvalidForTargets"
-      class="invalid-message"
-    >
+    <small v-if="isResponseDueDateTimeInvalidForTargets" class="invalid-message">
       <Icon name="mdi:alert-circle" size="20px" />
       <span>対象者を設定する場合「期限なし」にすることはできません</span>
     </small>

@@ -10,57 +10,27 @@ defineEmits<{
   <div class="add-question-toolbar">
     <p class="add-question-toolbar-label">+ 質問を追加</p>
     <div class="add-question-buttons">
-      <Button
-        class="add-question-button"
-        outlined
-        size="small"
-        @click="$emit('add-question', 'Text')"
-      >
+      <Button class="add-question-button" outlined size="small" @click="$emit('add-question', 'Text')">
         <Icon size="18px" name="ic:outline-short-text" />
         <span>1行テキスト</span>
       </Button>
-      <Button
-        class="add-question-button"
-        outlined
-        size="small"
-        @click="$emit('add-question', 'TextLong')"
-      >
+      <Button class="add-question-button" outlined size="small" @click="$emit('add-question', 'TextLong')">
         <Icon size="18px" name="mdi:text" />
         <span>長文テキスト</span>
       </Button>
-      <Button
-        class="add-question-button"
-        outlined
-        size="small"
-        @click="$emit('add-question', 'Number')"
-      >
+      <Button class="add-question-button" outlined size="small" @click="$emit('add-question', 'Number')">
         <Icon size="18px" name="mdi:numeric" />
         <span>数値</span>
       </Button>
-      <Button
-        class="add-question-button"
-        outlined
-        size="small"
-        @click="$emit('add-question', 'MultipleChoice')"
-      >
+      <Button class="add-question-button" outlined size="small" @click="$emit('add-question', 'MultipleChoice')">
         <Icon size="18px" name="mdi:checkbox-outline" />
         <span>チェックボックス</span>
       </Button>
-      <Button
-        class="add-question-button"
-        outlined
-        size="small"
-        @click="$emit('add-question', 'SingleChoice')"
-      >
+      <Button class="add-question-button" outlined size="small" @click="$emit('add-question', 'SingleChoice')">
         <Icon size="18px" name="mdi:radiobox-marked" />
         <span>ラジオボタン</span>
       </Button>
-      <Button
-        class="add-question-button"
-        outlined
-        size="small"
-        @click="$emit('add-question', 'Scale')"
-      >
+      <Button class="add-question-button" outlined size="small" @click="$emit('add-question', 'Scale')">
         <Icon size="18px" name="ic:outline-linear-scale" />
         <span>目盛り</span>
       </Button>

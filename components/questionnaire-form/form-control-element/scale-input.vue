@@ -17,11 +17,7 @@ const question = defineModel<QuestionSettingsScale>({
         scroll-height="320px"
         panel-class="scale-input-Select-panel"
       />
-      <InputText
-        v-model="question.min_label"
-        placeholder="最小値のラベル (任意)"
-        class="scale-input-label-input"
-      />
+      <InputText v-model="question.min_label" placeholder="最小値のラベル (任意)" class="scale-input-label-input" />
     </div>
     <div class="scale-input-group">
       <Select
@@ -30,11 +26,7 @@ const question = defineModel<QuestionSettingsScale>({
         :options="[2, 3, 4, 5, 6, 7, 8, 9, 10]"
         scroll-height="320px"
       />
-      <InputText
-        v-model="question.max_label"
-        placeholder="最大値のラベル (任意)"
-        class="scale-input-label-input"
-      />
+      <InputText v-model="question.max_label" placeholder="最大値のラベル (任意)" class="scale-input-label-input" />
     </div>
   </div>
 </template>

@@ -33,11 +33,7 @@ export default defineNuxtRouteMiddleware((to, _from) => {
     // before: /questionnaires/:id?tab=questions
     // after: /questionnaires/:id/questions
     const match = to.path.match(/\/questionnaires\/(\d+)/);
-    if (
-      match !== null &&
-      to.query[questionnaireDetailQueryKeys.tab] ===
-        questionnaireDetailTabValues.questions
-    ) {
+    if (match !== null && to.query[questionnaireDetailQueryKeys.tab] === questionnaireDetailTabValues.questions) {
       return {
         path: `${to.path}/questions`,
         query: {

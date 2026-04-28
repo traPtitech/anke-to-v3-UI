@@ -6,19 +6,11 @@ import {
 import type { PostNewResponseBody } from '~/composables/type-fetch/anke-to/client';
 import type { GatewayQuestion } from '~/models/question';
 import type { GatewayQuestionnaire } from '~/models/questionnaire';
-import type {
-  GatewayNewResponseBody,
-  GatewayResponse,
-} from '~/models/response';
+import type { GatewayNewResponseBody, GatewayResponse } from '~/models/response';
 
-export type ResponseFormState = { body: QuestionElement[] } & Pick<
-  GatewayResponse,
-  'questionnaire_id' | 'response_id'
->;
+export type ResponseFormState = { body: QuestionElement[] } & Pick<GatewayResponse, 'questionnaire_id' | 'response_id'>;
 
-const getDefaultQuestionValue = (
-  question: GatewayQuestion,
-): QuestionElement => {
+const getDefaultQuestionValue = (question: GatewayQuestion): QuestionElement => {
   switch (question.question_type) {
     case 'Text':
       return { ...question, answer: '' };
@@ -39,9 +31,7 @@ const getDefaultQuestionValue = (
   }
 };
 
-export const getInitialResponseFormState = (
-  questionnaire: GatewayQuestionnaire,
-): ResponseFormState => ({
+export const getInitialResponseFormState = (questionnaire: GatewayQuestionnaire): ResponseFormState => ({
   questionnaire_id: questionnaire.questionnaire_id,
   response_id: createId(),
   body: questionnaire.questions.map((question) => {
@@ -56,9 +46,7 @@ export const getExistingResponseFormState = (
   questionnaire_id: questionnaire.questionnaire_id,
   response_id: response.response_id,
   body: questionnaire.questions.map((question) => {
-    const existingAnswer = response.body.find(
-      (answer) => answer.question_id === question.question_id,
-    );
+    const existingAnswer = response.body.find((answer) => answer.question_id === question.question_id);
     if (existingAnswer) {
       return { ...question, answer: existingAnswer.answer } as QuestionElement;
     }
@@ -69,20 +57,14 @@ export const getExistingResponseFormState = (
 export const useResponseFormStore = (initialState: ResponseFormState) => {
   const state = ref<ResponseFormState>(initialState);
 
-  const atLeastOneFilled = computed(() =>
-    state.value.body.some((q) => checkQuestionFilled(q)),
-  );
+  const atLeastOneFilled = computed(() => state.value.body.some((q) => checkQuestionFilled(q)));
 
-  const valid = computed(() =>
-    state.value.body.every((q) => checkQuestionValidity(q)),
-  );
+  const valid = computed(() => state.value.body.every((q) => checkQuestionValidity(q)));
 
   return { state, valid, atLeastOneFilled };
 };
 
-export const convertToBody = (
-  state: ResponseFormState,
-): Omit<PostNewResponseBody, 'is_draft'> => ({
+export const convertToBody = (state: ResponseFormState): Omit<PostNewResponseBody, 'is_draft'> => ({
   body: state.body
     .filter((q) => checkQuestionFilled(q))
     .map(

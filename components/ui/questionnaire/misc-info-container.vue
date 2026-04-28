@@ -28,18 +28,14 @@ const props = defineProps<{
         <QuestionnaireLabel>最終更新</QuestionnaireLabel>
         <div class="sidebar-info-value">
           {{ formatRelativeDate(new Date(props.questionnaire.modified_at)) }}
-          <span class="sidebar-info-sub">
-            ({{ formatDate(new Date(props.questionnaire.modified_at)) }})
-          </span>
+          <span class="sidebar-info-sub">({{ formatDate(new Date(props.questionnaire.modified_at)) }})</span>
         </div>
       </div>
       <div class="sidebar-info-item">
         <QuestionnaireLabel>作成日時</QuestionnaireLabel>
         <div class="sidebar-info-value">
           {{ formatRelativeDate(new Date(props.questionnaire.created_at)) }}
-          <span class="sidebar-info-sub">
-            ({{ formatDate(new Date(props.questionnaire.created_at)) }})
-          </span>
+          <span class="sidebar-info-sub">({{ formatDate(new Date(props.questionnaire.created_at)) }})</span>
         </div>
       </div>
     </div>

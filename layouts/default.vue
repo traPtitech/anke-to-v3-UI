@@ -9,9 +9,7 @@ const route = useRoute();
 const isExplorerRoute = computed(() => route.path.startsWith('/explorer'));
 const SEARCH_DEBOUNCE_MS = 300;
 
-const searchInputText = ref(
-  getQueryValue(route.query[explorerQueryKeys.search]) ?? '',
-);
+const searchInputText = ref(getQueryValue(route.query[explorerQueryKeys.search]) ?? '');
 let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 const applySearchToQuery = (value: string) => {

@@ -12,15 +12,8 @@ const props = withDefaults(
 </script>
 
 <template>
-  <span
-    class="answer-chip"
-    :class="{ 'answer-chip-unselected': !props.selected }"
-  >
-    <Icon
-      v-if="props.selected && props.showCheck"
-      name="mdi:check-circle"
-      size="14px"
-    />
+  <span class="answer-chip" :class="{ 'answer-chip-unselected': !props.selected }">
+    <Icon v-if="props.selected && props.showCheck" name="mdi:check-circle" size="14px" />
     <slot />
   </span>
 </template>
