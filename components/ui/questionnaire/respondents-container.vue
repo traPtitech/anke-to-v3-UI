@@ -85,9 +85,6 @@ const handleCopyRespondents = async () => {
         />
       </div>
       <div class="sidebar-people-item">
-        <div v-if="props.questionnaire.respondents.length === 0">
-          <NoContentMessage>いません</NoContentMessage>
-        </div>
         <div class="sidebar-people-header">
           <QuestionnaireLabel>回答済み</QuestionnaireLabel>
           <Button
@@ -100,6 +97,9 @@ const handleCopyRespondents = async () => {
             <Icon name="mdi:content-copy" size="14px" />
           </Button>
         </div>
+        <div v-if="props.questionnaire.respondents.length === 0">
+          <NoContentMessage>いません</NoContentMessage>
+        </div>
         <UserList
           :users="props.questionnaire.respondents"
           dialog-title="回答済みユーザー一覧"
@@ -108,9 +108,6 @@ const handleCopyRespondents = async () => {
       <div class="sidebar-people-item">
         <div class="sidebar-people-header">
           <QuestionnaireLabel>未回答</QuestionnaireLabel>
-          <div v-if="nonAnsweredTargets.length === 0">
-            <NoContentMessage>いません</NoContentMessage>
-          </div>
           <Button
             v-if="nonAnsweredTargets.length > 0"
             class="copy-mentions-trigger"
@@ -120,6 +117,9 @@ const handleCopyRespondents = async () => {
           >
             <Icon name="mdi:content-copy" size="14px" />
           </Button>
+        </div>
+        <div v-if="nonAnsweredTargets.length === 0">
+          <NoContentMessage>いません</NoContentMessage>
         </div>
         <UserList
           :users="nonAnsweredTargets"
