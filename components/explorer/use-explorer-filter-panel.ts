@@ -5,6 +5,7 @@ import {
   findSelectedTab,
   parseAdvancedFilterState,
   setFilterEnabled,
+  tabFilterPresets,
   tabs,
 } from './filter-domain';
 import {
@@ -48,7 +49,6 @@ export const useExplorerFilterPanel = ({
     setFilterSet,
     setSearchQuery,
     setSortState,
-    setTab,
   } = useExplorerFilterUrlSync();
 
   const isFilterExpanded = ref(false);
@@ -238,7 +238,12 @@ export const useExplorerFilterPanel = ({
   );
 
   const selectTab = (tab: TabKey) => {
-    void setTab(tab);
+    const nextSet = new Set(tabFilterPresets[tab]);
+    if (currentFilterSet.value.has('due')) {
+      nextSet.add('due');
+    }
+
+    void setFilterSet(nextSet);
   };
 
   const listQuery = computed(() =>
