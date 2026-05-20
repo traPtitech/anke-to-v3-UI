@@ -13,7 +13,7 @@
     "format": "prettier --write --ignore-path .gitignore \"**/*.{js,ts,vue,json,md}\"",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "npx nuxi test",
+    "test": "vitest run",
     "openapi:anke-to": "npx openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
   },
   "devDependencies": {
