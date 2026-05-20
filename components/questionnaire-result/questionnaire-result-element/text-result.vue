@@ -61,6 +61,7 @@ const toResponsePath = (responseId: number) => `/questionnaires/${props.question
   flex: 1;
   min-width: 0;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .text-result-element-user {

@@ -14,9 +14,12 @@ defineProps<{
 
 <style lang="scss" scoped>
 .answer-text {
+  display: inline-block;
+  max-width: 100%;
   font-size: 15px;
   color: var(--p-text-color);
   line-height: 1.6;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 </style>

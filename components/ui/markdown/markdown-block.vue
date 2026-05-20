@@ -46,11 +46,13 @@ const { initialized, renderToHtml } = useMarkdownRenderer();
 .markdown-block :deep(p) {
   margin: 0.5em 0;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .markdown-block :deep(a) {
   color: #0969da;
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
 .markdown-block :deep(a:hover) {
@@ -63,6 +65,7 @@ const { initialized, renderToHtml } = useMarkdownRenderer();
   font-size: 0.9em;
   background-color: #f6f8fa;
   border-radius: 3px;
+  overflow-wrap: anywhere;
 }
 
 .markdown-block :deep(pre) {
