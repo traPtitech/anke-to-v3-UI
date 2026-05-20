@@ -18,6 +18,19 @@ const { state, valid, atLeastOneFilled } = useResponseFormStore(initialState);
 const isEditingDraft = computed(() => props.response.is_draft);
 const saveButtonLabel = computed(() => (isEditingDraft.value ? '一時保存' : '下書きに戻す'));
 const saveButtonIcon = computed(() => (isEditingDraft.value ? 'mdi:close' : 'mdi:file-undo-outline'));
+const cannotSendReason = computed(() => {
+  if (!props.questionnaire.is_published) {
+    return 'このアンケートはまだ公開されていないため送信できません';
+  }
+
+  const due = props.questionnaire.response_due_date_time;
+  if (due !== undefined && new Date(due).getTime() < Date.now()) {
+    return '回答期限を過ぎているため送信できません';
+  }
+
+  return undefined;
+});
+const canSend = computed(() => cannotSendReason.value === undefined);
 
 const handleSave = async () => {
   if (!atLeastOneFilled.value) {
@@ -52,6 +65,15 @@ const handleSave = async () => {
 };
 
 const handleSend = async () => {
+  if (!canSend.value) {
+    toast.add({
+      summary: cannotSendReason.value ?? '現在このアンケートには回答できません',
+      severity: 'error',
+      life: 3000,
+    });
+    return;
+  }
+
   if (!valid.value) {
     toast.add({
       summary: '必須項目を回答していません',
@@ -109,9 +131,15 @@ const handleSend = async () => {
       <IconButton
         variant="primary"
         icon="mdi:content-save"
-        :disabled="!valid || !atLeastOneFilled"
+        :disabled="!canSend || !valid || !atLeastOneFilled"
         :title="
-          !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : !valid ? '必須項目を回答してください' : ''
+          !canSend
+            ? cannotSendReason
+            : !atLeastOneFilled
+              ? '少なくとも1つの質問に回答してください'
+              : !valid
+                ? '必須項目を回答してください'
+                : ''
         "
         @click="handleSend"
       >

@@ -27,6 +27,8 @@ const latestDraft = computed(() => {
 });
 
 const canRespond = computed(() => {
+  if (!props.detail.is_published) return false;
+
   if (!props.detail.is_duplicate_answer_allowed && props.detail.respondents.includes(me.value?.name ?? ''))
     return false;
 
