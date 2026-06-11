@@ -5,7 +5,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/test-utils',
     '@nuxt/eslint',
-    '@nuxtjs/stylelint-module',
     'pinia-plugin-persistedstate/nuxt',
     '@nuxt/icon',
     '@primevue/nuxt-module',
@@ -31,9 +30,7 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
   eslint: {
-    checker: {
-      cache: true,
-    },
+    checker: false,
     config: {
       stylistic: true,
     },
@@ -53,8 +50,5 @@ export default defineNuxtConfig({
         },
       },
     },
-  },
-  stylelint: {
-    cache: true,
   },
 });
