@@ -13,8 +13,13 @@ const props = defineProps<{
 
 const initialState = getInitialResponseFormState(props.questionnaire);
 const { state, valid, atLeastOneFilled } = useResponseFormStore(initialState);
+const saveLoading = ref(false);
+const sendLoading = ref(false);
+const isSubmitting = computed(() => saveLoading.value || sendLoading.value);
 
 const handleSave = async () => {
+  if (isSubmitting.value) return;
+
   if (!atLeastOneFilled.value) {
     toast.add({
       summary: '少なくとも1つの質問に回答してください',
@@ -24,6 +29,7 @@ const handleSave = async () => {
     return;
   }
 
+  saveLoading.value = true;
   try {
     const result = await postNewResponse(props.questionnaire.questionnaire_id, {
       ...convertToBody(state.value),
@@ -47,10 +53,14 @@ const handleSave = async () => {
       severity: 'error',
       life: 3000,
     });
+  } finally {
+    saveLoading.value = false;
   }
 };
 
 const handleSend = async () => {
+  if (isSubmitting.value) return;
+
   if (!valid.value) {
     toast.add({
       summary: '必須項目を回答していません',
@@ -69,6 +79,7 @@ const handleSend = async () => {
     return;
   }
 
+  sendLoading.value = true;
   try {
     const result = await postNewResponse(props.questionnaire.questionnaire_id, {
       ...convertToBody(state.value),
@@ -92,6 +103,8 @@ const handleSend = async () => {
       severity: 'error',
       life: 3000,
     });
+  } finally {
+    sendLoading.value = false;
   }
 };
 </script>
@@ -102,7 +115,8 @@ const handleSend = async () => {
       <IconButton
         variant="secondary"
         icon="mdi:close"
-        :disabled="!atLeastOneFilled"
+        :disabled="!atLeastOneFilled || isSubmitting"
+        :loading="saveLoading"
         :title="!atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''"
         @click="handleSave"
       >
@@ -111,7 +125,8 @@ const handleSend = async () => {
       <IconButton
         variant="primary"
         icon="mdi:content-save"
-        :disabled="!valid || !atLeastOneFilled"
+        :disabled="!valid || !atLeastOneFilled || isSubmitting"
+        :loading="sendLoading"
         :title="
           !atLeastOneFilled ? '少なくとも1つの質問に回答してください' : !valid ? '必須項目を回答してください' : ''
         "

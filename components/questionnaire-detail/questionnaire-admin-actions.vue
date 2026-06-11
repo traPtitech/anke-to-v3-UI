@@ -8,12 +8,24 @@ const props = defineProps<{ detail: QuestionnaireDetail }>();
 
 const { data: me } = useMe();
 const { actionDelete, actionClose } = useQuestionnaireActions();
+const closeLoading = ref(false);
 
 const canEdit = computed(() => props.detail.admins.includes(me.value?.name ?? ''));
 
 const canAnswer = computed(
   () => props.detail.response_due_date_time === undefined || new Date(props.detail.response_due_date_time) > new Date(),
 );
+
+const handleClose = async () => {
+  if (closeLoading.value) return;
+
+  closeLoading.value = true;
+  try {
+    await actionClose(props.detail);
+  } finally {
+    closeLoading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -30,21 +42,26 @@ const canAnswer = computed(
       <Button
         severity="secondary"
         outlined
-        :disabled="!canEdit || !canAnswer"
-        @click="actionClose(detail)"
+        :disabled="!canEdit || !canAnswer || closeLoading"
         title="締め切る"
         aria-label="締め切る"
+        :aria-busy="closeLoading ? 'true' : undefined"
+        @click="handleClose"
       >
-        <Icon name="mdi:alarm-check" size="20px" />
+        <Icon
+          :name="closeLoading ? 'mdi:loading' : 'mdi:alarm-check'"
+          size="20px"
+          :class="{ 'loading-icon': closeLoading }"
+        />
       </Button>
       <Button
         class="admin-action-btn-danger"
         severity="warn"
         outlined
         :disabled="!canEdit"
-        @click="actionDelete(detail)"
         title="削除する"
         aria-label="削除する"
+        @click="actionDelete(detail)"
       >
         <Icon name="mdi:trash-can-outline" size="20px" />
       </Button>
@@ -83,6 +100,20 @@ const canAnswer = computed(
 .admin-action-btn-danger:hover:not(:disabled) {
   background-color: var(--p-orange-50);
   border-color: var(--p-orange-500);
+}
+
+.loading-icon {
+  animation: admin-action-spin 0.8s linear infinite;
+}
+
+@keyframes admin-action-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @container (max-width: 600px) {

@@ -12,6 +12,9 @@ const { state, isDirty } = storeToRefs(newQuestionnaireFormStore);
 const { reset } = newQuestionnaireFormStore;
 const isValidQuestionnaire = computed(() => checkValidity(state.value).ok);
 const { data: me } = useMe();
+const saveLoading = ref(false);
+const sendLoading = ref(false);
+const isSubmitting = computed(() => saveLoading.value || sendLoading.value);
 
 onMounted(() => {
   if (me.value === undefined) return;
@@ -26,6 +29,8 @@ const handleReset = () => {
 };
 
 const handleSave = async () => {
+  if (isSubmitting.value) return;
+
   if (state.value.title.trim() === '') {
     toast.add({
       summary: 'アンケートのタイトルを入力してください。',
@@ -35,6 +40,7 @@ const handleSave = async () => {
     return;
   }
 
+  saveLoading.value = true;
   try {
     const result = await postNewQuestionnaire(convertToBody({ ...state.value, is_published: false }));
     if (!result) {
@@ -56,12 +62,16 @@ const handleSave = async () => {
       severity: 'error',
       life: 3000,
     });
+  } finally {
+    saveLoading.value = false;
   }
 };
 
 const handleSend = async () => {
+  if (isSubmitting.value) return;
   if (!isValidQuestionnaire.value) return;
 
+  sendLoading.value = true;
   try {
     const result = await postNewQuestionnaire(convertToBody({ ...state.value, is_published: true }));
     if (!result) {
@@ -83,6 +93,8 @@ const handleSend = async () => {
       severity: 'error',
       life: 3000,
     });
+  } finally {
+    sendLoading.value = false;
   }
 };
 </script>
@@ -90,13 +102,30 @@ const handleSend = async () => {
 <template>
   <QuestionnaireFormBase v-model="state">
     <template #buttons>
-      <IconButton variant="secondary" icon="mdi:arrow-u-left-bottom" :disabled="!isDirty" @click="handleReset">
+      <IconButton
+        variant="secondary"
+        icon="mdi:arrow-u-left-bottom"
+        :disabled="!isDirty || isSubmitting"
+        @click="handleReset"
+      >
         <span>リセット</span>
       </IconButton>
-      <IconButton variant="secondary" icon="mdi:close" @click="handleSave">
+      <IconButton
+        variant="secondary"
+        icon="mdi:close"
+        :disabled="isSubmitting"
+        :loading="saveLoading"
+        @click="handleSave"
+      >
         <span>一時保存</span>
       </IconButton>
-      <IconButton variant="primary" icon="mdi:content-save" :disabled="!isValidQuestionnaire" @click="handleSend">
+      <IconButton
+        variant="primary"
+        icon="mdi:content-save"
+        :disabled="!isValidQuestionnaire || isSubmitting"
+        :loading="sendLoading"
+        @click="handleSend"
+      >
         <span>送信</span>
       </IconButton>
     </template>

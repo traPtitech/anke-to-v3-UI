@@ -31,8 +31,13 @@ const cannotSendReason = computed(() => {
   return undefined;
 });
 const canSend = computed(() => cannotSendReason.value === undefined);
+const saveLoading = ref(false);
+const sendLoading = ref(false);
+const isSubmitting = computed(() => saveLoading.value || sendLoading.value);
 
 const handleSave = async () => {
+  if (isSubmitting.value) return;
+
   if (!atLeastOneFilled.value) {
     toast.add({
       summary: '少なくとも1つの質問に回答してください',
@@ -42,6 +47,7 @@ const handleSave = async () => {
     return;
   }
 
+  saveLoading.value = true;
   try {
     // patchResponse の後だと既に isEditingDraft が変わってしまっている場合がある
     const isEditingDraftSnapshot = isEditingDraft.value;
@@ -61,10 +67,14 @@ const handleSave = async () => {
       severity: 'error',
       life: 3000,
     });
+  } finally {
+    saveLoading.value = false;
   }
 };
 
 const handleSend = async () => {
+  if (isSubmitting.value) return;
+
   if (!canSend.value) {
     toast.add({
       summary: cannotSendReason.value ?? '現在このアンケートには回答できません',
@@ -92,6 +102,7 @@ const handleSend = async () => {
     return;
   }
 
+  sendLoading.value = true;
   try {
     await patchResponse(state.value.response_id, {
       ...convertToBody(state.value),
@@ -112,6 +123,8 @@ const handleSend = async () => {
       severity: 'error',
       life: 3000,
     });
+  } finally {
+    sendLoading.value = false;
   }
 };
 </script>
@@ -122,7 +135,8 @@ const handleSend = async () => {
       <IconButton
         variant="secondary"
         :icon="saveButtonIcon"
-        :disabled="!atLeastOneFilled"
+        :disabled="!atLeastOneFilled || isSubmitting"
+        :loading="saveLoading"
         :title="!atLeastOneFilled ? '少なくとも1つの質問に回答してください' : ''"
         @click="handleSave"
       >
@@ -131,7 +145,8 @@ const handleSend = async () => {
       <IconButton
         variant="primary"
         icon="mdi:content-save"
-        :disabled="!canSend || !valid || !atLeastOneFilled"
+        :disabled="!canSend || !valid || !atLeastOneFilled || isSubmitting"
+        :loading="sendLoading"
         :title="
           !canSend
             ? cannotSendReason
