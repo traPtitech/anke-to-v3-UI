@@ -7,6 +7,7 @@ import NoContentMessage from '~/components/ui/no-content-message.vue';
 
 const props = defineProps<{
   questionnaire: GatewayQuestionnaire;
+  responseCount?: number;
 }>();
 
 const { allUserNames } = useAllUsers();
@@ -19,8 +20,24 @@ const targets = computed(() => {
   }
 });
 
+const respondents = computed(() =>
+  Array.isArray(props.questionnaire.respondents) ? props.questionnaire.respondents : [],
+);
+
+const submittedResponseCount = computed(
+  () =>
+    props.responseCount ??
+    props.questionnaire.response_count ??
+    props.questionnaire.respondent_count ??
+    respondents.value.length,
+);
+
+const answeredDisplayCount = computed(() =>
+  props.questionnaire.is_anonymous ? submittedResponseCount.value : respondents.value.length,
+);
+
 const nonAnsweredTargets = computed(() =>
-  targets.value.filter((user) => !props.questionnaire.respondents.includes(user) && user !== ALL_MENTION_USER),
+  targets.value.filter((user) => !respondents.value.includes(user) && user !== ALL_MENTION_USER),
 );
 
 const toast = useToast();
@@ -44,7 +61,7 @@ const handleCopyMentions = async () => {
 };
 
 const handleCopyRespondents = async () => {
-  const mentions = props.questionnaire.respondents.map((u) => `@${u}`).join(' ');
+  const mentions = respondents.value.map((u) => `@${u}`).join(' ');
   try {
     await navigator.clipboard.writeText(mentions);
     toast.add({
@@ -80,9 +97,9 @@ const handleCopyRespondents = async () => {
       </div>
       <div class="sidebar-people-item">
         <div class="sidebar-people-header">
-          <QuestionnaireLabel>回答済み</QuestionnaireLabel>
+          <QuestionnaireLabel>回答済み ({{ answeredDisplayCount }})</QuestionnaireLabel>
           <Button
-            v-if="props.questionnaire.respondents.length > 0"
+            v-if="!props.questionnaire.is_anonymous && respondents.length > 0"
             class="copy-mentions-trigger"
             severity="secondary"
             outlined
@@ -92,15 +109,15 @@ const handleCopyRespondents = async () => {
           </Button>
         </div>
         <UserList
-          v-if="props.questionnaire.respondents.length > 0"
-          :users="props.questionnaire.respondents"
+          v-if="!props.questionnaire.is_anonymous && respondents.length > 0"
+          :users="respondents"
           dialog-title="回答済みユーザー一覧"
         />
-        <div v-else>
+        <div v-else-if="!props.questionnaire.is_anonymous">
           <NoContentMessage>いません</NoContentMessage>
         </div>
       </div>
-      <div class="sidebar-people-item">
+      <div v-if="!props.questionnaire.is_anonymous" class="sidebar-people-item">
         <div class="sidebar-people-header">
           <QuestionnaireLabel>未回答</QuestionnaireLabel>
           <Button

@@ -398,7 +398,20 @@ export const responseHandlers = [
       return HttpResponse.json({ message: 'Response not found' }, { status: 404 });
     }
 
+    const response = responsesData[responseIndex];
     responsesData.splice(responseIndex, 1);
+
+    if (!response.is_draft) {
+      const questionnaire = questionnairesData.find((q) => q.questionnaire_id === response.questionnaire_id);
+      const hasRemainingSubmittedResponse = responsesData.some(
+        (r) => r.questionnaire_id === response.questionnaire_id && r.respondent === response.respondent && !r.is_draft,
+      );
+      if (questionnaire && !hasRemainingSubmittedResponse) {
+        questionnaire.respondents = questionnaire.respondents.filter(
+          (respondent) => respondent !== response.respondent,
+        );
+      }
+    }
 
     return HttpResponse.json({ message: 'Response deleted' });
   }),
@@ -407,6 +420,8 @@ export const responseHandlers = [
     const { id } = req.params;
     const sort = new URL(req.request.url).searchParams.get('sort') ?? 'submitted_at';
     const onlyMyResponse = new URL(req.request.url).searchParams.get('onlyMyResponse') === 'true';
+    const isDraftRaw = new URL(req.request.url).searchParams.get('isDraft');
+    const isDraft = isDraftRaw === 'true' ? true : isDraftRaw === 'false' ? false : undefined;
 
     const questionnaire = questionnairesData.find((q) => q.questionnaire_id === Number(id));
     if (!questionnaire) {
@@ -422,6 +437,7 @@ export const responseHandlers = [
         }
         return true;
       })
+      .filter((r) => isDraft === undefined || r.is_draft === isDraft)
       .toSorted(responsesSortFunc[sort]);
 
     const returnedResponses = questionnaire.is_anonymous
@@ -462,7 +478,9 @@ export const responseHandlers = [
     }
 
     responsesData.push(newResponse);
-    questionnaire.respondents.push(myUserId);
+    if (!body.is_draft && !questionnaire.respondents.includes(myUserId)) {
+      questionnaire.respondents.push(myUserId);
+    }
 
     return HttpResponse.json(newResponse, { status: 201 });
   }),

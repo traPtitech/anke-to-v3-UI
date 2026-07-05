@@ -15,6 +15,8 @@ const props = defineProps<{
 
 const { results } = useQuestionnaireResult(props.questionnaire, props.responses);
 
+const submittedResponseCount = computed(() => props.responses.filter((response) => !response.is_draft).length);
+
 const firstResponsePath = computed(() => {
   const firstResponseId = props.responses[0]?.response_id;
   if (firstResponseId === undefined) {
@@ -49,7 +51,10 @@ const firstResponsePath = computed(() => {
 
     <section class="result-info-section">
       <ResultTitleContainer :questionnaire="props.questionnaire" />
-      <QuestionnaireRespondentsContainer :questionnaire="props.questionnaire" />
+      <QuestionnaireRespondentsContainer
+        :questionnaire="props.questionnaire"
+        :response-count="submittedResponseCount"
+      />
     </section>
 
     <section class="result-questions-section">

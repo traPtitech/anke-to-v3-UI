@@ -257,8 +257,22 @@ export interface components {
       components['schemas']['QuestionnaireModifiedAt'] &
       components['schemas']['QuestionnaireTargetsAndAdmins'] & {
         questions: components['schemas']['Question'][];
-        /** @description 回答者の一覧。匿名アンケートでも返る。 */
+        /** @description 回答者の一覧。匿名アンケートの場合は空配列。 */
         respondents: components['schemas']['TraqId'][];
+        /**
+         * @description 回答した人数（ユニークな回答者数）。匿名アンケートでも実際の人数を返す。
+         *     重複回答が許可されている場合でも、同一ユーザーは1人として数える。
+         *     （respondents 配列は匿名時に空になるため、人数はこちらを参照する。）
+         * @example 3
+         */
+        respondent_count?: number;
+        /**
+         * @description 回答（提出）の総数。匿名アンケートでも実際の数を返す。
+         *     重複回答が許可されている場合は、同一ユーザーが複数回提出した回答もすべて数える。
+         *     重複が許可されていない場合は respondent_count と一致する。
+         * @example 5
+         */
+        response_count?: number;
         /** @description 対象者の一覧。（前回対象者を編集した時点で解析したグループ情報に基づいて作成されたもの） */
         targets: components['schemas']['TraqId'][];
         /** @description 管理者の一覧。（前回対象者を編集した時点で解析したグループ情報に基づいて作成されたもの） */

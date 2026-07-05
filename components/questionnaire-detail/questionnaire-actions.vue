@@ -26,11 +26,12 @@ const latestDraft = computed(() => {
   );
 });
 
+const hasSubmittedResponse = computed(() => props.myResponses.some((response) => !response.is_draft));
+
 const canRespond = computed(() => {
   if (!props.detail.is_published) return false;
 
-  if (!props.detail.is_duplicate_answer_allowed && props.detail.respondents.includes(me.value?.name ?? ''))
-    return false;
+  if (!props.detail.is_duplicate_answer_allowed && hasSubmittedResponse.value) return false;
 
   if (props.detail.response_due_date_time === undefined) return true;
 
@@ -40,12 +41,11 @@ const canRespond = computed(() => {
 });
 
 const canViewResult = computed(() => {
-  const isRespondent = props.detail.respondents.includes(me.value?.name ?? '');
   const isAdmin = props.detail.admins.includes(me.value?.name ?? '');
 
   const canViewResultMatrix: Record<ResShareType, boolean> = {
     anyone: true,
-    respondents: isRespondent || isAdmin,
+    respondents: hasSubmittedResponse.value || isAdmin,
     admins: isAdmin,
   };
 

@@ -4,11 +4,14 @@ import NewResponseForm from '~/components/response-form/new-response-form.vue';
 import DetailLoadingIndicator from '~/components/ui/page-state/detail-loading-indicator.vue';
 import ErrorStatePanel from '~/components/ui/page-state/error-state-panel.vue';
 import { usePageSeo } from '~/composables/use-page-seo';
-import { useGetQuestionnaire, useMe } from '~/composables/type-fetch/anke-to/client';
+import { useGetQuestionnaire, useGetQuestionnaireResponses } from '~/composables/type-fetch/anke-to/client';
 
 const questionnaireId = useRouteQuestionnaireId();
 const { data, error } = useGetQuestionnaire(questionnaireId);
-const { data: me } = useMe();
+const { data: myResponses, error: myResponsesError } = useGetQuestionnaireResponses(questionnaireId, {
+  onlyMyResponse: true,
+  isDraft: false,
+});
 
 const cannotRespondReason = computed(() => {
   const questionnaire = data.value;
@@ -25,9 +28,7 @@ const cannotRespondReason = computed(() => {
     return '回答期限を過ぎているため回答できません。';
   }
 
-  const hasMyResponse = Array.isArray(questionnaire.respondents)
-    ? questionnaire.respondents.includes(me.value?.name ?? '')
-    : false;
+  const hasMyResponse = myResponses.value?.some((response) => !response.is_draft) ?? false;
   if (!questionnaire.is_duplicate_answer_allowed && hasMyResponse) {
     return 'すでに回答済みです。重複回答は許可されていないため、再度回答することができません。';
   }
@@ -44,8 +45,12 @@ usePageSeo({
 </script>
 
 <template>
-  <ErrorStatePanel v-if="error" title="アンケートの取得に失敗しました" :message="error.message" />
-  <div v-else-if="!data">
+  <ErrorStatePanel
+    v-if="error || myResponsesError"
+    title="アンケートの取得に失敗しました"
+    :message="error?.message || myResponsesError?.message"
+  />
+  <div v-else-if="!data || myResponses === undefined">
     <DetailLoadingIndicator variant="questionnaire" />
   </div>
   <div v-else-if="!canRespond" class="state-panel state-panel-warning" role="alert">

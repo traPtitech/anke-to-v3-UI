@@ -245,6 +245,22 @@ export const questionnairesData: GatewayQuestionnaire[] = [
 type Question = components['schemas']['Question'];
 export const questionsData: Question[] = [];
 
+const submittedResponses = (questionnaireId: number) =>
+  responsesData.filter((response) => response.questionnaire_id === questionnaireId && !response.is_draft);
+
+export const toDetail = (q: GatewayQuestionnaire): GatewayQuestionnaire => {
+  const responses = submittedResponses(q.questionnaire_id);
+  const responseRespondents = responses.map((response) => response.respondent);
+  const respondentIds = responseRespondents.length > 0 ? responseRespondents : q.respondents;
+
+  return {
+    ...q,
+    respondents: q.is_anonymous ? [] : q.respondents,
+    respondent_count: new Set(respondentIds).size,
+    response_count: responses.length > 0 ? responses.length : q.respondents.length,
+  };
+};
+
 export const toSummary = (q: GatewayQuestionnaire): QuestionnaireSummary => ({
   questionnaire_id: q.questionnaire_id,
   title: q.title,
@@ -364,7 +380,7 @@ export const questionnaireHandlers = [
       respondents: [],
     };
     questionnairesData.push(newQuestionnaire);
-    return HttpResponse.json(newQuestionnaire, { status: 201 });
+    return HttpResponse.json(toDetail(newQuestionnaire), { status: 201 });
   }),
 
   http.get('/api/questionnaires/:id', (req) => {
@@ -374,7 +390,7 @@ export const questionnaireHandlers = [
       return HttpResponse.json({ error: 'Questionnaire not found' }, { status: 404 });
     }
 
-    const response: GetQuestionnaireResponse = questionnaire;
+    const response: GetQuestionnaireResponse = toDetail(questionnaire);
 
     return HttpResponse.json(response);
   }),
@@ -394,7 +410,7 @@ export const questionnaireHandlers = [
       // TODO: update questionsData accordingly
     };
 
-    return HttpResponse.json(questionnairesData[index]);
+    return HttpResponse.json(toDetail(questionnairesData[index]));
   }),
 
   http.delete('/api/questionnaires/:id', (req) => {
@@ -418,6 +434,6 @@ export const questionnaireHandlers = [
       response_due_date_time: new Date().toISOString(),
       modified_at: new Date().toISOString(),
     };
-    return HttpResponse.json(questionnairesData[index]);
+    return HttpResponse.json(toDetail(questionnairesData[index]));
   }),
 ];
