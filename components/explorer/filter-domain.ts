@@ -89,7 +89,7 @@ const resolveAdministrationScope = (filters: Set<FilterKey>): AdministrationScop
   }
 
   if (filters.has('administered')) {
-    return 'published';
+    return 'administered';
   }
 
   return 'all';
@@ -133,7 +133,7 @@ export const buildFilterSetFromAdvancedState = (state: ExplorerAdvancedFilterSta
     next.add('draft');
   }
 
-  if (state.administrationScope === 'published') {
+  if (state.administrationScope === 'administered') {
     next.add('administered');
   }
 

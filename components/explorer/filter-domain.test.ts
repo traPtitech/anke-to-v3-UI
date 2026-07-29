@@ -31,7 +31,7 @@ describe('filter-domain core state', () => {
       targetScope: 'targetingMe',
       responseScope: 'answered',
       draftScope: 'all',
-      administrationScope: 'published',
+      administrationScope: 'administered',
     };
 
     expect(toSortedArray(buildFilterSetFromAdvancedState(state))).toEqual(['administered', 'answered', 'targeting']);

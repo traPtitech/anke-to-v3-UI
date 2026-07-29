@@ -78,7 +78,7 @@ const draftScopeOptions = [
 
 const administrationScopeOptions = [
   { label: 'フィルタなし', value: 'all' },
-  { label: '管理中 (公開済み)', value: 'published' },
+  { label: '管理中 (全て)', value: 'administered' },
   { label: '管理中 (下書き)', value: 'draft' },
 ] satisfies SelectOption<AdministrationScope>[];
 </script>
