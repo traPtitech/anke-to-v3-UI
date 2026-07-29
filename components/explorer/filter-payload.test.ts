@@ -37,4 +37,24 @@ describe('filter-payload query builder', () => {
     expect(withDue.notOverDue).toBe(true);
     expect(withoutDue.notOverDue).toBeUndefined();
   });
+
+  it('includes both published and draft questionnaires for the administered filter', () => {
+    const administered = buildListQuery({
+      searchQuery: '',
+      filters: new Set<FilterKey>(['administered']),
+      sortCategory: 'createdAt',
+      sortDirection: 'desc',
+    });
+
+    const draft = buildListQuery({
+      searchQuery: '',
+      filters: new Set<FilterKey>(['administered', 'unpublished']),
+      sortCategory: 'createdAt',
+      sortDirection: 'desc',
+    });
+
+    expect(administered.onlyAdministratedByMe).toBe(true);
+    expect(administered.isDraft).toBeUndefined();
+    expect(draft.isDraft).toBe(true);
+  });
 });

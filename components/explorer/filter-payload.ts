@@ -29,7 +29,7 @@ export const buildListQuery = ({
     isDraft:
       administrationScope === 'draft'
         ? true
-        : administrationScope === 'published' || responseScope === 'unanswered'
+        : responseScope === 'unanswered'
           ? false
           : undefined,
   };

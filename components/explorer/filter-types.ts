@@ -12,7 +12,7 @@ export type ResponseScope = 'all' | 'answered' | 'unanswered';
 
 export type DraftScope = 'all' | 'hasMyDraft';
 
-export type AdministrationScope = 'all' | 'published' | 'draft';
+export type AdministrationScope = 'all' | 'administered' | 'draft';
 
 export type ExplorerAdvancedFilterState = {
   targetScope: TargetScope;
