@@ -1,5 +1,7 @@
-import { type Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
+import type { Store, traQMarkdownIt as TraQMarkdownIt } from '@traptitech/traq-markdown-it';
 import { useChannels, useGroups, useMe, useStamps, useUsers } from '~/composables/type-fetch/anke-to/client';
+
+type MarkdownIt = InstanceType<typeof TraQMarkdownIt>;
 
 type User = {
   id: string;
@@ -18,15 +20,6 @@ const createMarkdownRenderer = () => {
   const { data: channels } = useChannels();
   const { data: groups } = useGroups();
   const { data: stamps } = useStamps();
-
-  const initialized = computed(
-    () =>
-      me.value !== undefined &&
-      users.value !== undefined &&
-      channels.value !== undefined &&
-      groups.value !== undefined &&
-      stamps.value !== undefined,
-  );
 
   const traqUsers = computed<User[]>(() => {
     return (
@@ -84,10 +77,23 @@ const createMarkdownRenderer = () => {
     },
   };
 
-  const markdownIt = new traQMarkdownIt(store, undefined, 'https://q.trap.jp');
+  const markdownIt = shallowRef<MarkdownIt>();
+  void import('@traptitech/traq-markdown-it').then(({ traQMarkdownIt }) => {
+    markdownIt.value = new traQMarkdownIt(store, undefined, 'https://q.trap.jp');
+  });
+
+  const initialized = computed(
+    () =>
+      markdownIt.value !== undefined &&
+      me.value !== undefined &&
+      users.value !== undefined &&
+      channels.value !== undefined &&
+      groups.value !== undefined &&
+      stamps.value !== undefined,
+  );
 
   const renderToHtml = (content: string) => {
-    return markdownIt.render(content).renderedText;
+    return markdownIt.value?.render(content).renderedText ?? '';
   };
 
   return {
