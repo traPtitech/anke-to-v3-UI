@@ -6,6 +6,7 @@ const props = defineProps<{
   sortMenuItems: MenuItem[];
   onlyActiveDue: boolean;
   isFilterExpanded: boolean;
+  advancedFilterId: string;
   isSortMenuItemSelected: (item: MenuItem) => boolean;
 }>();
 
@@ -26,7 +27,7 @@ const updateOnlyActiveDue = (value: boolean | undefined) => {
 
 const toggleActiveId = useId();
 const sortMenuId = useId();
-let sortActionFrame: number | undefined;
+let sortActionTimer: ReturnType<typeof setTimeout> | undefined;
 
 const itemLabel = (item: MenuItem) => (typeof item.label === 'function' ? item.label() : (item.label ?? ''));
 
@@ -114,25 +115,23 @@ const handleSortMenuKeydown = (event: KeyboardEvent) => {
   }
 };
 
-const handleSortMenuFocusOut = () => {
-  void nextTick(() => {
-    const activeElement = document.activeElement;
-    if (activeElement instanceof Node && !sortMenuRootRef.value?.contains(activeElement)) {
-      closeSortMenu();
-    }
-  });
+const handleSortMenuFocusOut = (event: FocusEvent) => {
+  const nextTarget = event.relatedTarget;
+  if (nextTarget instanceof Node && sortMenuRootRef.value?.contains(nextTarget)) return;
+
+  closeSortMenu();
 };
 
 const selectSortMenuItem = (item: MenuItem, event: MouseEvent) => {
+  const command = item.command;
   closeSortMenu(true);
 
-  // Paint the menu closing before Vue Router and the filter watchers update.
-  // This keeps the interaction responsive even on a busy main thread.
-  sortActionFrame = requestAnimationFrame(() => {
-    sortActionFrame = requestAnimationFrame(() => {
-      item.command?.({ originalEvent: event, item });
-      sortActionFrame = undefined;
-    });
+  // Let Vue commit the closed menu before the route and list update start.
+  // Capture the command now because the menu item proxy is replaced when the
+  // computed sort options update.
+  sortActionTimer = setTimeout(() => {
+    command?.({ originalEvent: event, item });
+    sortActionTimer = undefined;
   });
 };
 
@@ -146,8 +145,8 @@ const closeSortMenuFromOutside = (event: PointerEvent) => {
 onMounted(() => document.addEventListener('pointerdown', closeSortMenuFromOutside));
 onBeforeUnmount(() => {
   document.removeEventListener('pointerdown', closeSortMenuFromOutside);
-  if (sortActionFrame !== undefined) {
-    cancelAnimationFrame(sortActionFrame);
+  if (sortActionTimer !== undefined) {
+    clearTimeout(sortActionTimer);
   }
 });
 </script>
@@ -228,8 +227,10 @@ onBeforeUnmount(() => {
 
       <button
         type="button"
-        class="advanced-filter-toggle"
-        :aria-label="props.isFilterExpanded ? '高度なフィルタを閉じる' : '高度なフィルタを開く'"
+      class="advanced-filter-toggle"
+      :aria-controls="props.advancedFilterId"
+      :aria-expanded="props.isFilterExpanded"
+      :aria-label="props.isFilterExpanded ? '高度なフィルタを閉じる' : '高度なフィルタを開く'"
         :title="props.isFilterExpanded ? '高度なフィルタを閉じる' : '高度なフィルタを開く'"
         @click="emit('toggleFilterExpanded')"
       >

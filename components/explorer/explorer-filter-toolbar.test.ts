@@ -5,14 +5,14 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 import ExplorerFilterToolbar from './explorer-filter-toolbar.vue';
 
-const createWrapper = () => {
+const createWrapper = (titleCommand = vi.fn()) => {
   const sortMenuItems: MenuItem[] = [
     {
       label: '並べ替え項目',
       items: [
         { label: '作成日時', command: vi.fn() },
         { label: '更新日時', command: vi.fn() },
-        { label: 'タイトル', command: vi.fn() },
+        { label: 'タイトル', command: titleCommand },
       ],
     },
     {
@@ -31,6 +31,7 @@ const createWrapper = () => {
       sortMenuItems,
       onlyActiveDue: false,
       isFilterExpanded: false,
+      advancedFilterId: 'advanced-filter-test',
       isSortMenuItemSelected: (item) => item.label === '作成日時' || item.label === '新しい順',
     },
     global: {
@@ -42,6 +43,50 @@ const createWrapper = () => {
 };
 
 describe('ExplorerFilterToolbar', () => {
+  it('runs the selected sort command after closing the menu', async () => {
+    vi.useFakeTimers();
+    const titleCommand = vi.fn();
+    const wrapper = createWrapper(titleCommand);
+
+    await wrapper.get('.sort-menu-trigger').trigger('click');
+    await wrapper.findAll('[role="menuitemradio"]')[2]?.trigger('click');
+
+    expect(wrapper.get('.sort-menu-trigger').attributes('aria-expanded')).toBe('false');
+    expect(titleCommand).not.toHaveBeenCalled();
+
+    vi.runAllTimers();
+    expect(titleCommand).toHaveBeenCalledOnce();
+
+    wrapper.unmount();
+    vi.useRealTimers();
+  });
+
+  it('keeps the menu open while focus moves between sort items', async () => {
+    const wrapper = createWrapper();
+    const trigger = wrapper.get<HTMLButtonElement>('.sort-menu-trigger');
+
+    await trigger.trigger('click');
+    const menuItems = wrapper.findAll<HTMLButtonElement>('[role="menuitemradio"]');
+    await menuItems[0]?.trigger('focusout', { relatedTarget: menuItems[1]?.element });
+
+    expect(trigger.attributes('aria-expanded')).toBe('true');
+
+    wrapper.unmount();
+  });
+
+  it('exposes the advanced filter accordion state', async () => {
+    const wrapper = createWrapper();
+    const trigger = wrapper.get<HTMLButtonElement>('.advanced-filter-toggle');
+
+    expect(trigger.attributes('aria-controls')).toBe('advanced-filter-test');
+    expect(trigger.attributes('aria-expanded')).toBe('false');
+
+    await wrapper.setProps({ isFilterExpanded: true });
+    expect(trigger.attributes('aria-expanded')).toBe('true');
+
+    wrapper.unmount();
+  });
+
   it('supports menu keyboard navigation and restores focus on Escape', async () => {
     const wrapper = createWrapper();
     const trigger = wrapper.get<HTMLButtonElement>('.sort-menu-trigger');
