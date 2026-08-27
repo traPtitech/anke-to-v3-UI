@@ -49,8 +49,10 @@ export const useExplorerTabCounts = ({ activeFilterPayload }: { activeFilterPayl
   const tabCountsQueued = ref(true);
   const tabCountsLoading = computed(() => tabCountsQueued.value || tabCountsPending.value);
   let tabCountTimer: ReturnType<typeof setTimeout> | undefined;
+  let tabCountScheduleId = 0;
 
   const scheduleTabCountLoad = () => {
+    const scheduleId = ++tabCountScheduleId;
     tabCountsQueued.value = true;
     if (tabCountTimer !== undefined) {
       clearTimeout(tabCountTimer);
@@ -63,7 +65,9 @@ export const useExplorerTabCounts = ({ activeFilterPayload }: { activeFilterPayl
       try {
         await loadTabCounts({ dedupe: 'cancel' });
       } finally {
-        tabCountsQueued.value = false;
+        if (scheduleId === tabCountScheduleId) {
+          tabCountsQueued.value = false;
+        }
       }
     }, 500);
   };
@@ -71,6 +75,7 @@ export const useExplorerTabCounts = ({ activeFilterPayload }: { activeFilterPayl
   watch(tabCountWatchKey, scheduleTabCountLoad);
   onMounted(scheduleTabCountLoad);
   onBeforeUnmount(() => {
+    tabCountScheduleId += 1;
     if (tabCountTimer !== undefined) {
       clearTimeout(tabCountTimer);
     }
