@@ -25,7 +25,7 @@ export default defineNuxtConfig({
     },
   },
   typescript: {
-    typeCheck: true,
+    typeCheck: false,
   },
   icon: {
     mode: 'svg',

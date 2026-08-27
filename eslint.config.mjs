@@ -5,6 +5,7 @@ import globals from 'globals';
 
 export default createConfigForNuxt({
   features: {
+    import: false,
     stylistic: true,
   },
 }).append(

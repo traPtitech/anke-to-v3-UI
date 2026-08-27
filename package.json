@@ -15,9 +15,9 @@
     "postinstall": "nuxt prepare",
     "typecheck": "nuxi typecheck",
     "format": "prettier --write --ignore-path .gitignore \"**/*.{js,ts,vue,json,md}\"",
-    "lint": "eslint .",
+    "lint": "eslint --cache --cache-location .cache/eslint/.eslintcache --cache-strategy content .",
     "lint:fix": "eslint --fix .",
-    "stylelint": "stylelint \"{assets,components,layouts,pages}/**/*.{css,scss,vue}\" \"app.vue\"",
+    "stylelint": "stylelint --cache --cache-location .cache/stylelint/.stylelintcache --cache-strategy content \"{assets,components,layouts,pages}/**/*.{css,scss,vue}\" \"app.vue\"",
     "stylelint:fix": "stylelint --fix \"{assets,components,layouts,pages}/**/*.{css,scss,vue}\" \"app.vue\"",
     "test": "vitest run",
     "openapi:anke-to": "openapi-typescript https://raw.githubusercontent.com/traPtitech/anke-to/main/docs/swagger/swagger.yaml --output ./composables/type-fetch/anke-to/openapi.ts"
