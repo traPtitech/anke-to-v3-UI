@@ -2,6 +2,10 @@
   "name": "anke-to-v3-ui",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.24.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "build": "nuxt build",
     "start": "node .output/server/index.mjs",
