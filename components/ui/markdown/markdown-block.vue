@@ -5,13 +5,19 @@ const props = defineProps<{
   content: string;
 }>();
 
-const { initialized, renderToHtml } = useMarkdownRenderer();
+const { initialized, initializationError, initialize, renderToHtml } = useMarkdownRenderer();
+void initialize();
 </script>
 
 <template>
   <div class="markdown-block">
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-if="initialized" v-html="renderToHtml(props.content)" />
+    <div v-else-if="initializationError" class="markdown-fallback" role="alert">
+      <p>Markdown の表示に失敗しました。</p>
+      <button type="button" class="markdown-retry" @click="initialize">再試行</button>
+      <pre>{{ props.content }}</pre>
+    </div>
   </div>
 </template>
 
@@ -106,6 +112,25 @@ const { initialized, renderToHtml } = useMarkdownRenderer();
 
 .markdown-block :deep(mark) {
   background-color: #eee260;
+}
+
+.markdown-fallback {
+  color: var(--p-red-700);
+}
+
+.markdown-fallback p {
+  margin: 0 0 0.5em;
+}
+
+.markdown-fallback pre {
+  color: initial;
+  white-space: pre-wrap;
+}
+
+.markdown-retry {
+  padding: 0.25em 0.75em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
 }
 
 .markdown-block :deep(table) {

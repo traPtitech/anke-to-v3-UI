@@ -4,21 +4,22 @@
 
 ### 環境構築
 
-Node.js v20 / npm v10 以上が必要です。
+Node.js v24.15.0 以上の v24 系が必要です。Corepack を有効化すると、`package.json` で固定された pnpm を利用できます。
 
 ```
-npm install
+corepack enable
+pnpm install
 ```
 
 で依存パッケージをインストールします。
 
 ```
 # 開発サーバーを起動
-npm run dev
+pnpm dev
 # ビルド
-npm run build
+pnpm build
 # ビルドしたものを起動
-npm run start
+pnpm start
 ```
 
 ### VSCodeの設定
@@ -59,7 +60,7 @@ npm run start
 ## 技術スタック
 
 - TypeScript
-- Nuxt.js v3 (Vue.js v3)
+- Nuxt v4 (Vue v3)
 - Pinia
 - Prettier
 - ESLint
