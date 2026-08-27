@@ -23,6 +23,7 @@ const createEditableState = () => ({
 });
 
 const state = reactive(createEditableState());
+const disableAnonymousOption = computed(() => props.questionnaire.is_anonymous);
 const isValidQuestionnaire = computed(() => checkValidity(state).ok);
 const isEditingDraft = computed(() => !state.is_published);
 const saveButtonLabel = computed(() => (isEditingDraft.value ? '一時保存' : '下書きに戻す'));
@@ -136,7 +137,7 @@ const handleSend = async () => {
       </div>
     </div>
 
-    <QuestionnaireFormBase v-model="state">
+    <QuestionnaireFormBase v-model="state" :disable-anonymous-option="disableAnonymousOption">
       <template #buttons>
         <IconButton
           variant="secondary"

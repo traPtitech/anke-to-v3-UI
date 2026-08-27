@@ -6,6 +6,14 @@ import type { QuestionnaireFormSettings } from './type';
 import UserSpecifierInput from './user-specifier-input.vue';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
+const props = withDefaults(
+  defineProps<{
+    disableAnonymousOption?: boolean;
+  }>(),
+  {
+    disableAnonymousOption: false,
+  },
+);
 const isTitleFocused = ref(false);
 const showTitleRequiredErrorAfterBlur = computed(() => state.value.title.trim() === '' && !isTitleFocused.value);
 const showAdminRequiredError = computed(
@@ -84,10 +92,23 @@ const isAnonymousId = useId();
           <Checkbox v-model="state.is_duplicate_answer_allowed" :input-id="allowDuplicateId" binary />
           <p class="form-label">複数回答を許可</p>
         </label>
-        <label class="form-element form-bottom-switch" :for="isAnonymousId">
-          <Checkbox v-model="state.is_anonymous" :input-id="isAnonymousId" binary />
-          <p class="form-label">匿名回答</p>
-        </label>
+        <div class="form-element anonymous-option">
+          <label class="form-bottom-switch" :for="isAnonymousId">
+            <Checkbox
+              v-model="state.is_anonymous"
+              :input-id="isAnonymousId"
+              :disabled="props.disableAnonymousOption"
+              binary
+            />
+            <p class="form-label">匿名回答</p>
+          </label>
+          <small v-if="props.disableAnonymousOption" class="anonymous-warning">
+            一度匿名回答にしたアンケートは、公開回答に変更できません
+            <br />
+            公開回答にしたい場合は、このアンケートを複製して匿名回答をオフにしたアンケートを新しく作成してください
+          </small>
+          <small v-else>匿名回答にすると、公開回答に戻すことはできません</small>
+        </div>
       </div>
     </div>
   </div>
@@ -138,6 +159,14 @@ const isAnonymousId = useId();
 
 .form-label {
   font-weight: bold;
+}
+
+.anonymous-option {
+  gap: 8px;
+}
+
+.anonymous-warning {
+  color: var(--p-orange-600);
 }
 
 .radio-group {

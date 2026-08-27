@@ -7,6 +7,14 @@ import { addQuestion, copyQuestion, getValidationErrors, removeQuestion } from '
 import type { QuestionnaireFormSettings } from './type';
 
 const state = defineModel<QuestionnaireFormSettings>({ required: true });
+const props = withDefaults(
+  defineProps<{
+    disableAnonymousOption?: boolean;
+  }>(),
+  {
+    disableAnonymousOption: false,
+  },
+);
 const validationErrors = computed(() => getValidationErrors(state.value));
 const focusedQuestionId = ref<number | null>(null);
 
@@ -17,7 +25,7 @@ const handleAddQuestion = (type: Parameters<typeof addQuestion>[1], index?: numb
 
 <template>
   <form class="questionnaire-form-container">
-    <QuestionnaireMetadataInput v-model="state" />
+    <QuestionnaireMetadataInput v-model="state" :disable-anonymous-option="props.disableAnonymousOption" />
     <Container
       class="questions-container"
       drag-handle-selector=".drag-handle"
