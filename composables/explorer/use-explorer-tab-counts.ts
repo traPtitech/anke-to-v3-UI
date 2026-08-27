@@ -1,41 +1,38 @@
 import type { ExplorerFilterPayload, TabKey } from '~/components/explorer/filter-types';
 import { fetchQuestionnaires, type GetQuestionnairesOption } from '~/composables/type-fetch/anke-to/client';
 
-const fetchQuestionnaireCount = async (option: GetQuestionnairesOption) => {
-  const firstPage = await fetchQuestionnaires(option);
+const fetchQuestionnaireCount = async (option: GetQuestionnairesOption, signal: AbortSignal) => {
+  const firstPage = await fetchQuestionnaires(option, signal);
 
   return firstPage.total_records;
 };
 
 export const useExplorerTabCounts = ({ activeFilterPayload }: { activeFilterPayload: Ref<ExplorerFilterPayload> }) => {
   const tabCountWatchKey = computed(() => JSON.stringify(activeFilterPayload.value.tabCountQuery));
+  let scheduledQuery: GetQuestionnairesOption = {};
 
-  const { data: tabCounts, pending: tabCountsLoading } = useAsyncData(
-    () => `/questionnaires/explorer/tab-counts?${JSON.stringify(activeFilterPayload.value.tabCountQuery)}`,
-    async () => {
-      const base = activeFilterPayload.value.tabCountQuery;
+  const {
+    data: tabCounts,
+    pending: tabCountsPending,
+    execute: loadTabCounts,
+  } = useAsyncData(
+    '/questionnaires/explorer/tab-counts',
+    async (_nuxtApp, { signal }) => {
+      const base = { ...scheduledQuery };
 
       const [unanswered, all, answered, administered, draft] = await Promise.all([
-        fetchQuestionnaireCount({
-          ...base,
-          onlyTargetingMe: true,
-          hasMyResponse: false,
-        }),
-        fetchQuestionnaireCount({
-          ...base,
-        }),
-        fetchQuestionnaireCount({
-          ...base,
-          hasMyResponse: true,
-        }),
-        fetchQuestionnaireCount({
-          ...base,
-          onlyAdministratedByMe: true,
-        }),
-        fetchQuestionnaireCount({
-          ...base,
-          hasMyDraft: true,
-        }),
+        fetchQuestionnaireCount(
+          {
+            ...base,
+            onlyTargetingMe: true,
+            hasMyResponse: false,
+          },
+          signal,
+        ),
+        fetchQuestionnaireCount({ ...base }, signal),
+        fetchQuestionnaireCount({ ...base, hasMyResponse: true }, signal),
+        fetchQuestionnaireCount({ ...base, onlyAdministratedByMe: true }, signal),
+        fetchQuestionnaireCount({ ...base, hasMyDraft: true }, signal),
       ]);
 
       return {
@@ -46,8 +43,38 @@ export const useExplorerTabCounts = ({ activeFilterPayload }: { activeFilterPayl
         draft,
       };
     },
-    { watch: [tabCountWatchKey] },
+    { immediate: false },
   );
+
+  const tabCountsQueued = ref(true);
+  const tabCountsLoading = computed(() => tabCountsQueued.value || tabCountsPending.value);
+  let tabCountTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const scheduleTabCountLoad = () => {
+    tabCountsQueued.value = true;
+    if (tabCountTimer !== undefined) {
+      clearTimeout(tabCountTimer);
+    }
+
+    // Counts are useful context, but the questionnaire list is the content the
+    // user came for. Give its request a head start and coalesce filter changes.
+    tabCountTimer = setTimeout(async () => {
+      scheduledQuery = { ...activeFilterPayload.value.tabCountQuery };
+      try {
+        await loadTabCounts({ dedupe: 'cancel' });
+      } finally {
+        tabCountsQueued.value = false;
+      }
+    }, 500);
+  };
+
+  watch(tabCountWatchKey, scheduleTabCountLoad);
+  onMounted(scheduleTabCountLoad);
+  onBeforeUnmount(() => {
+    if (tabCountTimer !== undefined) {
+      clearTimeout(tabCountTimer);
+    }
+  });
 
   const normalizedTabCounts = computed<Partial<Record<TabKey, number | string>>>(() => {
     if (tabCountsLoading.value) {

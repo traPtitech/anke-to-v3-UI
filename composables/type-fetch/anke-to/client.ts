@@ -27,9 +27,10 @@ export const useGetQuestionnaires = (option?: GetQuestionnairesOption) => {
   return useAsyncData(key, () => fetchQuestionnaires(option));
 };
 
-export const fetchQuestionnaires = async (option?: GetQuestionnairesOption) => {
+export const fetchQuestionnaires = async (option?: GetQuestionnairesOption, signal?: AbortSignal) => {
   const res = await client.GET('/questionnaires', {
     params: { query: option },
+    signal,
   });
   if (res.data === undefined) {
     throw new Error('No data returned from the API');
@@ -251,47 +252,71 @@ export const closeQuestionnaire = async (questionnaireID: number) => {
   await refreshNuxtData(`/questionnaires/${questionnaireID}`);
 };
 
-export const useMe = () =>
-  useAsyncData('/me', async () => {
-    const res = await client.GET('/traq/users/me');
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
-  });
+type TraqResourceOptions = {
+  immediate?: boolean;
+};
 
-export const useUsers = () =>
-  useAsyncData('/users', async () => {
-    const res = await client.GET('/traq/users');
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
-  });
+export const useMe = (options: TraqResourceOptions = {}) =>
+  useAsyncData(
+    '/me',
+    async () => {
+      const res = await client.GET('/traq/users/me');
+      if (res.data === undefined) {
+        throw new Error('No data returned from the API');
+      }
+      return res.data;
+    },
+    options,
+  );
 
-export const useGroups = () =>
-  useAsyncData('/groups', async () => {
-    const res = await client.GET('/traq/groups');
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
-  });
+export const useUsers = (options: TraqResourceOptions = {}) =>
+  useAsyncData(
+    '/users',
+    async () => {
+      const res = await client.GET('/traq/users');
+      if (res.data === undefined) {
+        throw new Error('No data returned from the API');
+      }
+      return res.data;
+    },
+    options,
+  );
 
-export const useStamps = () =>
-  useAsyncData('/stamps', async () => {
-    const res = await client.GET('/traq/stamps');
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
-  });
+export const useGroups = (options: TraqResourceOptions = {}) =>
+  useAsyncData(
+    '/groups',
+    async () => {
+      const res = await client.GET('/traq/groups');
+      if (res.data === undefined) {
+        throw new Error('No data returned from the API');
+      }
+      return res.data;
+    },
+    options,
+  );
 
-export const useChannels = () =>
-  useAsyncData('/channels', async () => {
-    const res = await client.GET('/traq/channels');
-    if (res.data === undefined) {
-      throw new Error('No data returned from the API');
-    }
-    return res.data;
-  });
+export const useStamps = (options: TraqResourceOptions = {}) =>
+  useAsyncData(
+    '/stamps',
+    async () => {
+      const res = await client.GET('/traq/stamps');
+      if (res.data === undefined) {
+        throw new Error('No data returned from the API');
+      }
+      return res.data;
+    },
+    options,
+  );
+
+export const useChannels = (options: TraqResourceOptions = {}) =>
+  useAsyncData(
+    '/channels',
+    async () => {
+      const res = await client.GET('/traq/channels');
+      if (res.data === undefined) {
+        throw new Error('No data returned from the API');
+      }
+      return res.data;
+    },
+    options,
+  );

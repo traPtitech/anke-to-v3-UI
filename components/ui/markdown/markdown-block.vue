@@ -6,7 +6,27 @@ const props = defineProps<{
 }>();
 
 const { initialized, initializationError, initialize, renderToHtml } = useMarkdownRenderer();
-void initialize();
+
+let idleCallbackId: number | undefined;
+let initializeTimer: ReturnType<typeof setTimeout> | undefined;
+
+onMounted(() => {
+  if ('requestIdleCallback' in window) {
+    idleCallbackId = window.requestIdleCallback(() => void initialize(), { timeout: 1500 });
+    return;
+  }
+
+  initializeTimer = setTimeout(() => void initialize(), 0);
+});
+
+onBeforeUnmount(() => {
+  if (idleCallbackId !== undefined && 'cancelIdleCallback' in window) {
+    window.cancelIdleCallback(idleCallbackId);
+  }
+  if (initializeTimer !== undefined) {
+    clearTimeout(initializeTimer);
+  }
+});
 </script>
 
 <template>
@@ -18,6 +38,7 @@ void initialize();
       <button type="button" class="markdown-retry" @click="initialize">再試行</button>
       <pre>{{ props.content }}</pre>
     </div>
+    <div v-else class="markdown-plain-text">{{ props.content }}</div>
   </div>
 </template>
 
@@ -116,6 +137,12 @@ void initialize();
 
 .markdown-fallback {
   color: var(--p-red-700);
+}
+
+.markdown-plain-text {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .markdown-fallback p {

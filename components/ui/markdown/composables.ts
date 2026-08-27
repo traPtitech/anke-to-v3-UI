@@ -15,11 +15,11 @@ type Stamp = {
 };
 
 const createMarkdownRenderer = () => {
-  const { data: me } = useMe();
-  const { data: users } = useUsers();
-  const { data: channels } = useChannels();
-  const { data: groups } = useGroups();
-  const { data: stamps } = useStamps();
+  const { data: me, error: meError, execute: loadMe } = useMe({ immediate: false });
+  const { data: users, error: usersError, execute: loadUsers } = useUsers({ immediate: false });
+  const { data: channels, error: channelsError, execute: loadChannels } = useChannels({ immediate: false });
+  const { data: groups, error: groupsError, execute: loadGroups } = useGroups({ immediate: false });
+  const { data: stamps, error: stampsError, execute: loadStamps } = useStamps({ immediate: false });
 
   const traqUsers = computed<User[]>(() => {
     return (
@@ -86,8 +86,22 @@ const createMarkdownRenderer = () => {
     if (initializationPromise) return initializationPromise;
 
     initializationError.value = undefined;
-    initializationPromise = import('@traptitech/traq-markdown-it')
-      .then(({ traQMarkdownIt }) => {
+    initializationPromise = Promise.all([
+      import('@traptitech/traq-markdown-it'),
+      loadMe({ dedupe: 'defer' }),
+      loadUsers({ dedupe: 'defer' }),
+      loadChannels({ dedupe: 'defer' }),
+      loadGroups({ dedupe: 'defer' }),
+      loadStamps({ dedupe: 'defer' }),
+    ])
+      .then(([{ traQMarkdownIt }]) => {
+        const resourceError = [meError, usersError, channelsError, groupsError, stampsError]
+          .map((error) => error.value)
+          .find((error) => error !== undefined);
+        if (resourceError) {
+          throw resourceError;
+        }
+
         markdownIt.value = new traQMarkdownIt(store, undefined, 'https://q.trap.jp');
       })
       .catch((error: unknown) => {

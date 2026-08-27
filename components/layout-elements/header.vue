@@ -6,7 +6,28 @@ import { useMe } from '~/composables/type-fetch/anke-to/client';
 
 const searchText = defineModel<string>('search', { default: '' });
 
-const { data: me } = useMe();
+const { data: me, execute: loadMe } = useMe({ immediate: false });
+
+let meIdleCallbackId: number | undefined;
+let meLoadTimer: ReturnType<typeof setTimeout> | undefined;
+
+onMounted(() => {
+  if ('requestIdleCallback' in window) {
+    meIdleCallbackId = window.requestIdleCallback(() => void loadMe({ dedupe: 'defer' }), { timeout: 1500 });
+    return;
+  }
+
+  meLoadTimer = setTimeout(() => void loadMe({ dedupe: 'defer' }), 300);
+});
+
+onBeforeUnmount(() => {
+  if (meIdleCallbackId !== undefined && 'cancelIdleCallback' in window) {
+    window.cancelIdleCallback(meIdleCallbackId);
+  }
+  if (meLoadTimer !== undefined) {
+    clearTimeout(meLoadTimer);
+  }
+});
 
 const userIconSrc = computed(() => {
   const name = me.value?.name;
@@ -26,8 +47,9 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
     <div class="header-center">
       <div class="search-field search-field-with-icon">
         <Icon class="search-icon" name="mdi:magnify" size="24px" />
-        <InputText
+        <input
           v-model="searchText"
+          type="search"
           placeholder="タイトルで検索"
           aria-label="アンケートのタイトルで検索"
           class="search-input"
@@ -114,7 +136,24 @@ const answeredFilterQuery = buildTabFilterQuery('answered');
 
 .search-input {
   width: 100%;
-  padding-left: 42px;
+  min-height: 40px;
+  padding: 8px 12px 8px 42px;
+  border: 1px solid var(--p-form-field-border-color);
+  border-radius: var(--p-form-field-border-radius);
+  background: var(--p-form-field-background);
+  color: var(--p-form-field-color);
+  font: inherit;
+  transition: border-color var(--p-form-field-transition-duration);
+}
+
+.search-input:hover,
+.search-input:focus {
+  border-color: var(--p-primary-color);
+}
+
+.search-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-primary-500) 24%, white);
 }
 
 :deep(.header-create-button) {
