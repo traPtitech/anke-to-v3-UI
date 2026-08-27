@@ -25,17 +25,26 @@ const mountMarkdownBlock = (renderer: ReturnType<typeof createRenderer>) =>
   });
 
 describe('MarkdownBlock', () => {
-  it('renders Markdown after initialization', () => {
+  it('renders Markdown after initialization', async () => {
     const renderer = createRenderer({ initialized: true });
     const wrapper = mountMarkdownBlock(renderer);
 
-    expect(renderer.initialize).toHaveBeenCalledOnce();
+    await vi.waitFor(() => expect(renderer.initialize).toHaveBeenCalledOnce());
     expect(wrapper.html()).toContain('<strong>original markdown</strong>');
+  });
+
+  it('shows readable plain text while the renderer is deferred', () => {
+    const renderer = createRenderer();
+    const wrapper = mountMarkdownBlock(renderer);
+
+    expect(wrapper.get('.markdown-plain-text').text()).toBe('original markdown');
   });
 
   it('shows the original content and allows retrying after initialization fails', async () => {
     const renderer = createRenderer({ error: new Error('load failed') });
     const wrapper = mountMarkdownBlock(renderer);
+
+    await vi.waitFor(() => expect(renderer.initialize).toHaveBeenCalledOnce());
 
     expect(wrapper.get('[role="alert"]').text()).toContain('Markdown の表示に失敗しました。');
     expect(wrapper.get('pre').text()).toBe('original markdown');

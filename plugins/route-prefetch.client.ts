@@ -1,0 +1,27 @@
+export default defineNuxtPlugin(() => {
+  const router = useRouter();
+
+  const preloadTouchedRoute = (event: PointerEvent) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const anchor = target.closest<HTMLAnchorElement>('a[href]');
+    if (!anchor || anchor.download || anchor.target === '_blank') return;
+
+    const url = new URL(anchor.href, window.location.href);
+    if (url.origin !== window.location.origin) return;
+
+    const destination = `${url.pathname}${url.search}${url.hash}`;
+    if (router.resolve(destination).matched.length === 0) return;
+
+    void preloadRouteComponents(destination);
+  };
+
+  // NuxtLink's interaction prefetch starts on hover/focus. Pointerdown gives
+  // touch navigation a head start without prefetching every visible route.
+  document.addEventListener('pointerdown', preloadTouchedRoute, { capture: true, passive: true });
+
+  if (import.meta.hot) {
+    import.meta.hot.dispose(() => document.removeEventListener('pointerdown', preloadTouchedRoute, { capture: true }));
+  }
+});

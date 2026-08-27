@@ -9,6 +9,19 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   css: ['ress', '~/assets/style/global.css', '~/assets/style/hljs-github.css'],
+  spaLoadingTemplate: 'spa-loading-template.html',
+  experimental: {
+    defaults: {
+      nuxtLink: {
+        // Loading a destination on intent keeps navigation fast without
+        // competing with the initial route for bandwidth and main-thread time.
+        prefetchOn: {
+          visibility: false,
+          interaction: true,
+        },
+      },
+    },
+  },
   compatibilityDate: '2025-05-15',
   vite: {
     css: {
@@ -22,6 +35,15 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: false,
   },
+  hooks: {
+    'build:manifest': (manifest) => {
+      // The SPA entry otherwise emits prefetch hints for every page, PrimeVue
+      // component and the 500 KiB-gzip Markdown renderer in the initial HTML.
+      for (const chunk of Object.values(manifest)) {
+        chunk.prefetch = false;
+      }
+    },
+  },
   icon: {
     mode: 'svg',
     clientBundle: {
@@ -31,10 +53,6 @@ export default defineNuxtConfig({
   primevue: {
     components: {
       include: [
-        'Accordion',
-        'AccordionContent',
-        'AccordionHeader',
-        'AccordionPanel',
         'Button',
         'Checkbox',
         'CheckboxGroup',

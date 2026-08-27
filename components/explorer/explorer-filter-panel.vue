@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import ExplorerAdvancedFilterGrid from './explorer-advanced-filter-grid.vue';
 import ExplorerFilterTabRow from './explorer-filter-tab-row.vue';
 import ExplorerFilterToolbar from './explorer-filter-toolbar.vue';
 import type { ExplorerFilterPayload, TabKey } from './filter-types';
 import { useExplorerFilterPanel } from './use-explorer-filter-panel';
+
+const ExplorerAdvancedFilterGrid = defineAsyncComponent(() => import('./explorer-advanced-filter-grid.vue'));
 
 const props = withDefaults(
   defineProps<{
@@ -56,17 +57,13 @@ const {
         @toggle-filter-expanded="isFilterExpanded = !isFilterExpanded"
       />
 
-      <Accordion :value="isFilterExpanded ? 'advanced' : undefined" class="advanced-filter-accordion">
-        <AccordionPanel value="advanced">
-          <AccordionHeader class="advanced-filter-hidden-header">高度なフィルタ</AccordionHeader>
-          <AccordionContent>
-            <ExplorerAdvancedFilterGrid
-              v-model:advanced-filter-state="advancedFilterState"
-              v-model:search="mobileSearchText"
-            />
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
+      <Transition name="advanced-filter">
+        <ExplorerAdvancedFilterGrid
+          v-if="isFilterExpanded"
+          v-model:advanced-filter-state="advancedFilterState"
+          v-model:search="mobileSearchText"
+        />
+      </Transition>
     </section>
   </div>
 </template>
@@ -86,34 +83,14 @@ const {
   overflow: hidden;
 }
 
-.advanced-filter-accordion :deep(.p-accordionpanel),
-.advanced-filter-accordion :deep(.p-accordioncontent) {
-  border: none;
+.advanced-filter-enter-active,
+.advanced-filter-leave-active {
+  transition: opacity 0.12s ease-out;
 }
 
-.advanced-filter-accordion :deep(.p-accordioncontent) {
-  transition: max-height 0.12s ease-out;
-}
-
-.advanced-filter-accordion :deep(.p-accordionheader) {
-  display: none;
-}
-
-.advanced-filter-accordion :deep(.p-accordioncontent-content) {
-  padding: 0;
-  border: none;
-}
-
-.advanced-filter-hidden-header {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+.advanced-filter-enter-from,
+.advanced-filter-leave-to {
+  opacity: 0;
 }
 
 @media screen and (max-width: 560px) {
