@@ -3,8 +3,6 @@ import { BrandPreset } from './theme/preset';
 export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
-    '@nuxt/test-utils',
-    '@nuxt/eslint',
     'pinia-plugin-persistedstate/nuxt',
     '@nuxt/icon',
     '@primevue/nuxt-module',
@@ -28,12 +26,6 @@ export default defineNuxtConfig({
   },
   typescript: {
     typeCheck: true,
-  },
-  eslint: {
-    checker: false,
-    config: {
-      stylistic: true,
-    },
   },
   icon: {
     mode: 'svg',

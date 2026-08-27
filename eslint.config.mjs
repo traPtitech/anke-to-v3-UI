@@ -1,10 +1,13 @@
-import nuxtESLintPlugin from '@nuxt/eslint-plugin';
+import { createConfigForNuxt } from '@nuxt/eslint-config/flat';
 import prettier from 'eslint-config-prettier';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
-import withNuxt from './.nuxt/eslint.config.mjs';
 
-export default withNuxt(
+export default createConfigForNuxt({
+  features: {
+    stylistic: true,
+  },
+}).append(
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.vue'],
     languageOptions: {
@@ -15,7 +18,6 @@ export default withNuxt(
     },
     plugins: {
       'unused-imports': eslintPluginUnusedImports,
-      '@nuxt/eslint-plugin': nuxtESLintPlugin,
     },
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
