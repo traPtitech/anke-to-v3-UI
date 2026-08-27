@@ -78,9 +78,29 @@ const createMarkdownRenderer = () => {
   };
 
   const markdownIt = shallowRef<MarkdownIt>();
-  void import('@traptitech/traq-markdown-it').then(({ traQMarkdownIt }) => {
-    markdownIt.value = new traQMarkdownIt(store, undefined, 'https://q.trap.jp');
-  });
+  const initializationError = shallowRef<Error>();
+  let initializationPromise: Promise<void> | undefined;
+
+  const initialize = () => {
+    if (markdownIt.value) return Promise.resolve();
+    if (initializationPromise) return initializationPromise;
+
+    initializationError.value = undefined;
+    initializationPromise = import('@traptitech/traq-markdown-it')
+      .then(({ traQMarkdownIt }) => {
+        markdownIt.value = new traQMarkdownIt(store, undefined, 'https://q.trap.jp');
+      })
+      .catch((error: unknown) => {
+        initializationError.value =
+          error instanceof Error ? error : new Error('Markdown renderer initialization failed', { cause: error });
+        console.error('Failed to initialize Markdown renderer', error);
+      })
+      .finally(() => {
+        initializationPromise = undefined;
+      });
+
+    return initializationPromise;
+  };
 
   const initialized = computed(
     () =>
@@ -98,6 +118,8 @@ const createMarkdownRenderer = () => {
 
   return {
     initialized,
+    initializationError,
+    initialize,
     renderToHtml,
   };
 };
