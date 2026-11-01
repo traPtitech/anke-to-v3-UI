@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { QuestionResult } from '~/components/questionnaire-result/composables/use-questionnaire-result';
 import MarkdownBlock from '~/components/ui/markdown/markdown-block.vue';
+import CopyRespondentsButton from './copy-respondents-button.vue';
 import MultipleChoiceResult from './questionnaire-result-element/multiple-choice-result.vue';
 import NumberResult from './questionnaire-result-element/number-result.vue';
 import ScaleResult from './questionnaire-result-element/scale-result.vue';
@@ -45,7 +46,15 @@ const questionTypeLabelMap = {
         </div>
       </div>
 
-      <span class="question-result-count">回答 {{ result.responses.length }} 件</span>
+      <div class="question-result-summary">
+        <span class="question-result-count">回答 {{ result.responses.length }} 件</span>
+        <CopyRespondentsButton
+          v-if="hasResponses && !props.isAnonymous"
+          :respondents="result.responses.map((response) => response.respondent)"
+          :action-label="`Q${index} の回答者をコピー`"
+          show-label
+        />
+      </div>
     </div>
     <MarkdownBlock class="question-result-description" :content="result.description" />
 
@@ -153,6 +162,12 @@ const questionTypeLabelMap = {
 .question-result-chip.is-type {
   background-color: var(--p-surface-100);
   color: var(--p-text-secondary);
+}
+
+.question-result-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .question-result-count {

@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import type { QuestionResultMultipleChoice } from '../composables/use-questionnaire-result';
-import UserChip from '~/components/ui/user-chip.vue';
+import RespondentsCell from '../respondents-cell.vue';
 
 const props = defineProps<{
   result: QuestionResultMultipleChoice;
   isAnonymous: boolean;
   questionnaireId: number;
 }>();
-
-const toResponsePath = (responseId: number) => `/questionnaires/${props.questionnaireId}/result/${responseId}`;
 
 const aggregatedResponses = computed(() => {
   const responses = props.result.responses.map((res) => res.answer);
@@ -59,25 +57,12 @@ const aggregatedResponses = computed(() => {
     <Column field="countAndRate" header="回答数・回答率" sortable />
     <Column v-if="!props.isAnonymous" field="respondentsText" header="回答者" sortable>
       <template #body="{ data }">
-        <div class="respondents-chip-list">
-          <NuxtLink
-            v-for="respondent in data.respondents"
-            :key="`${respondent.name}-${respondent.responseId}`"
-            class="clickable-user-chip-link"
-            :to="toResponsePath(respondent.responseId)"
-          >
-            <UserChip :username="respondent.name" />
-          </NuxtLink>
-        </div>
+        <RespondentsCell
+          :respondents="data.respondents"
+          :answer="data.answer"
+          :questionnaire-id="props.questionnaireId"
+        />
       </template>
     </Column>
   </DataTable>
 </template>
-
-<style lang="scss" scoped>
-.respondents-chip-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-</style>
