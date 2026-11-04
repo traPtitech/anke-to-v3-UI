@@ -53,6 +53,7 @@ const handleClose = async () => {
           size="20px"
           :class="{ 'loading-icon': closeLoading }"
         />
+        <span>締め切る</span>
       </Button>
       <Button
         class="admin-action-btn-danger"

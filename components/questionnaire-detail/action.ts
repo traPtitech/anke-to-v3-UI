@@ -75,6 +75,13 @@ export const useQuestionnaireActions = () => {
     }
   };
   const actionClose = async (detail: QuestionnaireDetail) => {
+    if (
+      !confirm(
+        `「${detail.title}」を締め切りますか？\n締め切ると回答を受け付けなくなります。再開するには、編集画面で回答期限を変更してください。`,
+      )
+    ) {
+      return;
+    }
     try {
       await closeQuestionnaire(detail.questionnaire_id);
       toast.add({
