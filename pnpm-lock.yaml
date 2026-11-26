@@ -26,8 +26,8 @@ importers:
         specifier: 4.5.5
         version: 4.5.5(vue@3.5.41(typescript@5.9.3))
       '@traptitech/traq-markdown-it':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.1.2
+        version: 7.1.2
       openapi-fetch:
         specifier: 0.17.0
         version: 0.17.0
@@ -1458,8 +1458,8 @@ packages:
   '@traptitech/markdown-it-spoiler@1.1.6':
     resolution: {integrity: sha512-tH/Fk1WMsnSuLpuRsXw8iHtdivoCEI5V08hQ7doVm6WmzAnBf/cUzyH9+GbOldPq9Hwv9v9tuy5t/MxmdNAGXg==}
 
-  '@traptitech/traq-markdown-it@7.1.0':
-    resolution: {integrity: sha512-BCjrVyxytzu5oPHWcjl6+Vre4UGu16YrqoCVq4KgDPWus7stgjVRKul37fIAUcejal04jGiMwVoiTzsKqqlRaQ==}
+  '@traptitech/traq-markdown-it@7.1.2':
+    resolution: {integrity: sha512-N/iLLVJmTnQKDMNsJsM3pRUatHDGrBg81Admd/2QPXoAD6h+zMX5tfB+YzI4jCUnyg9wcIAr2ZM7kNSGH/LcHA==}
     engines: {node: '>=20'}
 
   '@tybys/wasm-util@0.10.3':
@@ -3015,8 +3015,8 @@ packages:
   headers-polyfill@5.0.1:
     resolution: {integrity: sha512-1TJ6Fih/b8h5TIcv+1+Hw0PDQWJTKDKzFZzcKOiW1wJza3XoAQlkCuXLbymPYB8+ZQyw8mHvdw560e8zVFIWyA==}
 
-  highlight.js@11.12.0:
-    resolution: {integrity: sha512-nbfWpyRMcMrPMmDwJB+dhX/eiaPKtc2RB+0QZskqJ3WjRA/FDS0e9hZrx8EC/lbEv8gXy98FcDbNa/dspAaJMg==}
+  highlight.js@11.11.1:
+    resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
     engines: {node: '>=12.0.0'}
 
   hookable@5.5.3:
@@ -3277,6 +3277,10 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  katex@0.16.28:
+    resolution: {integrity: sha512-YHzO7721WbmAL6Ov1uzN/l5mY5WWWhJBSW+jq4tkfZfsxmo1hu6frS0EOswvjBUnWE6NtjEs48SFn5CQESRLZg==}
+    hasBin: true
+
   katex@0.16.47:
     resolution: {integrity: sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==}
     hasBin: true
@@ -3466,8 +3470,8 @@ packages:
   markdown-it-mark@4.0.0:
     resolution: {integrity: sha512-YLhzaOsU9THO/cal0lUjfMjrqSMPjjyjChYM7oyj4DnyaXEzA8gnW6cVJeyCrCVeyesrY2PlEdUYJSPFYL4Nkg==}
 
-  markdown-it@14.3.0:
-    resolution: {integrity: sha512-RCEsPjR+sr0x+AuYp601tKTkgFG4YEPLCzHST3cQ/fhlJkqAkz1L2/Qbp1j9qw5SBwQHFBoW8+hoN5xssOF0Tw==}
+  markdown-it@14.3.3:
+    resolution: {integrity: sha512-L//tDAkjTjJCU6pBUSBTgs3Kg4InVaZuUZog/b6V12UKhcDQ7S78877ibbCanRExwPuYP1CZD7Gd2dxSy1GXRg==}
     hasBin: true
 
   mathml-tag-names@4.0.0:
@@ -6791,13 +6795,13 @@ snapshots:
 
   '@traptitech/markdown-it-spoiler@1.1.6': {}
 
-  '@traptitech/traq-markdown-it@7.1.0':
+  '@traptitech/traq-markdown-it@7.1.2':
     dependencies:
       '@traptitech/markdown-it-katex': 3.6.0
       '@traptitech/markdown-it-spoiler': 1.1.6
-      highlight.js: 11.12.0
-      katex: 0.16.47
-      markdown-it: 14.3.0
+      highlight.js: 11.11.1
+      katex: 0.16.28
+      markdown-it: 14.3.3
       markdown-it-container: 4.0.0
       markdown-it-image-filter: 1.1.0
       markdown-it-json: 1.0.2
@@ -8465,7 +8469,7 @@ snapshots:
       '@types/set-cookie-parser': 2.4.10
       set-cookie-parser: 3.1.2
 
-  highlight.js@11.12.0: {}
+  highlight.js@11.11.1: {}
 
   hookable@5.5.3: {}
 
@@ -8695,6 +8699,10 @@ snapshots:
 
   json5@2.2.3: {}
 
+  katex@0.16.28:
+    dependencies:
+      commander: 8.3.0
+
   katex@0.16.47:
     dependencies:
       commander: 8.3.0
@@ -8867,7 +8875,7 @@ snapshots:
 
   markdown-it-mark@4.0.0: {}
 
-  markdown-it@14.3.0:
+  markdown-it@14.3.3:
     dependencies:
       argparse: 2.0.1
       entities: 4.5.0
