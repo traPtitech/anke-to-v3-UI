@@ -57,7 +57,7 @@
   "dependencies": {
     "@primeuix/themes": "2.0.3",
     "@primevue/forms": "4.5.5",
-    "@traptitech/traq-markdown-it": "7.1.0",
+    "@traptitech/traq-markdown-it": "7.1.2",
     "openapi-fetch": "0.17.0",
     "primevue": "4.5.5",
     "smooth-dnd": "0.12.1",
